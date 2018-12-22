@@ -1,0 +1,17 @@
+{
+  "name": "evstore",
+  "version": "0.0.1",
+  "description": "Relational Event Store",
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aditya Mukhopadhyay",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jiff": "^0.7.3"
+  }
+}

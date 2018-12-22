@@ -1,0 +1,24 @@
+{
+    "name": "eventstore",
+    "version": "0.0.1",
+    "description": "Relational Event Store.",
+    "engines": {
+        "arangodb": "^3.3.8"
+    },
+    "author": "Aditya Mukhopadhyay",
+    "license": "Apache-2.0",
+    "main": "main.js",
+    "scripts": {
+        "setup": "scripts/setup.js",
+        "teardown": "scripts/teardown.js"
+    },
+    "tests": "test/**/*.js",
+    "configuration": {
+        "snapshot-interval": {
+            "description": "The interval (number of command hops) between two consecutive snapshots.",
+            "default": "10",
+            "type": "integer",
+            "required": true
+        }
+    }
+}
