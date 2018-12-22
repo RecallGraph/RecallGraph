@@ -1,7 +1,17 @@
 'use strict';
 const db = require('@arangodb').db;
-const documentCollections = ['_events', '_snapshots'];
-const edgeCollections = ['_commands', '_snapshot_link', '_evt_ss_link'];
+const collections = require('../collections.json');
+
+const {
+  'event-coll-suffix': events,
+  'snapshot-coll-suffix': snapshots,
+  'command-coll-suffix': commands,
+  'snapshot-link-coll-suffix': snapshotLinks,
+  'event-snapshot-link-coll-suffix': evtSSLinks
+} = collections;
+
+const documentCollections = [events, snapshots];
+const edgeCollections = [commands, snapshotLinks, evtSSLinks];
 
 for (const localName of documentCollections) {
   const qualifiedName = module.context.collectionName(localName);
