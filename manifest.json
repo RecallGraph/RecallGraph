@@ -14,10 +14,42 @@
     },
     "tests": "test/**/*.js",
     "configuration": {
-        "snapshot-interval": {
-            "description": "The interval (number of command hops) between two consecutive snapshots.",
-            "default": "10",
-            "type": "integer",
+        "snapshot-intervals": {
+            "description": "The interval (number of command hops) between two consecutive snapshots. This can be specified per-collection, apart from a default fallback.",
+            "default": {
+                "_default": 10
+            },
+            "type": "json",
+            "required": true
+        },
+        "event-coll-suffix": {
+            "description": "The suffix suffix of the (vertex) collection where events are stored.",
+            "default": "_events",
+            "type": "string",
+            "required": true
+        },
+        "snapshot-coll-suffix": {
+            "description": "The suffix suffix of the (vertex) collection where snapshots are stored.",
+            "default": "_snapshots",
+            "type": "string",
+            "required": true
+        },
+        "command-coll-suffix": {
+            "description": "The suffix suffix of the (edge) collection where commands are stored.",
+            "default": "_commands",
+            "type": "string",
+            "required": true
+        },
+        "snapshot-link-coll-suffix": {
+            "description": "The suffix suffix of the (edge) collection where snapshot links are stored.",
+            "default": "_snapshot_links",
+            "type": "string",
+            "required": true
+        },
+        "event-snapshot-link-coll-suffix": {
+            "description": "The suffix suffix of the (edge) collection where event-snapshot links are stored.",
+            "default": "_event_snapshot_links",
+            "type": "string",
             "required": true
         }
     }

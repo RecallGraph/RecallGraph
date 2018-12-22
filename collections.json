@@ -1,7 +1,0 @@
-{
-  "event-coll-suffix": "_events",
-  "snapshot-coll-suffix": "_snapshots",
-  "command-coll-suffix": "_commands",
-  "snapshot-link-coll-suffix": "_snapshot_links",
-  "event-snapshot-link-coll-suffix": "_event_snapshot_links"
-}

@@ -1,15 +1,8 @@
 'use strict';
 const db = require('@arangodb').db;
-const collections = require('../collections.json');
+const helpers = require('../lib/routes/document/helpers');
 
-const {
-  'event-coll-suffix': events,
-  'snapshot-coll-suffix': snapshots,
-  'command-coll-suffix': commands,
-  'snapshot-link-coll-suffix': snapshotLinks,
-  'event-snapshot-link-coll-suffix': evtSSLinks
-} = collections;
-
+const {events, commands, snapshots, evtSSLinks, snapshotLinks} = helpers.serviceCollections;
 const documentCollections = [events, snapshots];
 const edgeCollections = [commands, snapshotLinks, evtSSLinks];
 
