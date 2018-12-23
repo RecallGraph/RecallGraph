@@ -1,6 +1,6 @@
 'use strict';
 const db = require('@arangodb').db;
-const helpers = require('../lib/routes/document/helpers');
+const helpers = require('../lib/helpers');
 
 const {events, commands, snapshots, evtSSLinks, snapshotLinks} = helpers.serviceCollections;
 const documentCollections = [events, snapshots];
