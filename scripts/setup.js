@@ -7,19 +7,17 @@ const documentCollections = [events, snapshots];
 const edgeCollections = [commands, snapshotLinks, evtSSLinks];
 
 for (const localName of documentCollections) {
-  const qualifiedName = module.context.collectionName(localName);
-  if (!db._collection(qualifiedName)) {
-    db._createDocumentCollection(qualifiedName);
+  if (!db._collection(localName)) {
+    db._createDocumentCollection(localName);
   } else if (module.context.isProduction) {
-    console.debug(`collection ${qualifiedName} already exists. Leaving it untouched.`)
+    console.debug(`collection ${localName} already exists. Leaving it untouched.`)
   }
 }
 
 for (const localName of edgeCollections) {
-  const qualifiedName = module.context.collectionName(localName);
-  if (!db._collection(qualifiedName)) {
-    db._createEdgeCollection(qualifiedName);
+  if (!db._collection(localName)) {
+    db._createEdgeCollection(localName);
   } else if (module.context.isProduction) {
-    console.debug(`collection ${qualifiedName} already exists. Leaving it untouched.`)
+    console.debug(`collection ${localName} already exists. Leaving it untouched.`)
   }
 }
