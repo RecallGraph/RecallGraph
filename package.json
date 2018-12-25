@@ -12,7 +12,6 @@
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
   "dependencies": {
-    "arangodb-error-codes": "^1.0.6",
     "jiff": "^0.7.3"
   }
 }
