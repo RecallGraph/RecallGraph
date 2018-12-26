@@ -2,7 +2,7 @@
 const db = require('@arangodb').db;
 const helpers = require('../lib/helpers');
 
-const {events, commands, snapshots, evtSSLinks, snapshotLinks} = helpers.serviceCollections;
+const { events, commands, snapshots, evtSSLinks, snapshotLinks } = helpers.SERVICE_COLLECTIONS;
 const documentCollections = [events, snapshots];
 const edgeCollections = [commands, snapshotLinks, evtSSLinks];
 
