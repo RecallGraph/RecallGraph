@@ -23,7 +23,6 @@ describe('Create Handlers', () => {
     expect(node).to.have.property('_id');
     expect(node).to.have.property('_key');
     expect(node).to.have.property('_rev');
-    expect(node).to.have.property('k1');
     expect(node.k1).to.equal('v1');
   });
 
@@ -49,7 +48,6 @@ describe('Create Handlers', () => {
       expect(node).to.have.property('_id');
       expect(node).to.have.property('_key');
       expect(node).to.have.property('_rev');
-      expect(node).to.have.property('k1');
       expect(node.k1).to.equal('v1');
     });
   });
@@ -70,7 +68,8 @@ describe('Create Handlers', () => {
 
     const ebody = {
       _from: vnodes[0]._id,
-      _to: vnodes[1]._id
+      _to: vnodes[1]._id,
+      k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createHandlers.createSingle({ pathParams, body: ebody });
@@ -79,10 +78,9 @@ describe('Create Handlers', () => {
     expect(enode).to.have.property('_id');
     expect(enode).to.have.property('_key');
     expect(enode).to.have.property('_rev');
-    expect(enode).to.have.property('_from');
-    expect(enode).to.have.property('_to');
     expect(enode._from).to.equal(vnodes[0]._id);
     expect(enode._to).to.equal(vnodes[1]._id);
+    expect(enode.k1).to.equal('v1');
   });
 
   it('should create two edges.', () => {
@@ -102,11 +100,13 @@ describe('Create Handlers', () => {
     const ebody = [
       {
         _from: vnodes[0]._id,
-        _to: vnodes[1]._id
+        _to: vnodes[1]._id,
+        k1: 'v1'
       },
       {
         _from: vnodes[0]._id,
-        _to: vnodes[1]._id
+        _to: vnodes[1]._id,
+        k1: 'v1'
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -119,10 +119,9 @@ describe('Create Handlers', () => {
       expect(enode).to.have.property('_id');
       expect(enode).to.have.property('_key');
       expect(enode).to.have.property('_rev');
-      expect(enode).to.have.property('_from');
-      expect(enode).to.have.property('_to');
       expect(enode._from).to.equal(vnodes[0]._id);
       expect(enode._to).to.equal(vnodes[1]._id);
+      expect(enode.k1).to.equal('v1');
     });
   });
 });
