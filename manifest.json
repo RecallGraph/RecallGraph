@@ -13,7 +13,10 @@
     "teardown": "scripts/teardown.js",
     "truncate": "scripts/truncate.js"
   },
-  "tests": "test/**/*.js",
+  "tests": [
+    "test/unit/**/*.js",
+    "test/integration/**/*.js"
+  ],
   "configuration": {
     "snapshot-intervals": {
       "description": "The interval (number of command hops) between two consecutive snapshots. This can be specified per-collection, apart from a default fallback.",
