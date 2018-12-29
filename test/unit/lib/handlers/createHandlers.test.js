@@ -3,13 +3,14 @@
 const { expect } = require("chai");
 const init = require('../../../helpers/init');
 const createHandlers = require('../../../../lib/handlers/createHandlers');
+const ARANGO_ERRORS = require('@arangodb').errors;
 
 describe('Create Handlers', () => {
   before(init.setup);
 
   after(init.teardown);
 
-  it('should create a single vertex.', () => {
+  it('should create a single vertex', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
@@ -26,7 +27,7 @@ describe('Create Handlers', () => {
     expect(node.k1).to.equal('v1');
   });
 
-  it('should create two vertices.', () => {
+  it('should create two vertices', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
@@ -52,7 +53,7 @@ describe('Create Handlers', () => {
     });
   });
 
-  it('should create a single edge.', () => {
+  it('should create a single edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
@@ -83,7 +84,7 @@ describe('Create Handlers', () => {
     expect(enode.k1).to.equal('v1');
   });
 
-  it('should create two edges.', () => {
+  it('should create two edges', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
@@ -122,6 +123,108 @@ describe('Create Handlers', () => {
       expect(enode._from).to.equal(vnodes[0]._id);
       expect(enode._to).to.equal(vnodes[1]._id);
       expect(enode.k1).to.equal('v1');
+    });
+  });
+
+  it('should fail when creating a vertex with existing key', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = {
+      k1: 'v1',
+    };
+
+    const node = createHandlers.createSingle({ pathParams, body });
+
+    expect(() => createHandlers.createSingle({ pathParams, body: node })).to.throw();
+  });
+
+  it('should fail when creating two vertices with existing key', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+
+    let nodes = createHandlers.createMultiple({ pathParams, body });
+    nodes = createHandlers.createMultiple({ pathParams, body: nodes });
+
+    expect(nodes).to.be.an.instanceOf(Array);
+    nodes.forEach(node => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+      // noinspection BadExpressionStatementJS
+      expect(node).to.be.not.empty;
+    });
+  });
+
+  it('should fail when creating an edge with existing key', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const enode = createHandlers.createSingle({ pathParams, body: ebody });
+
+    expect(() => createHandlers.createSingle({ pathParams, body: enode })).to.throw();
+  });
+
+  it('should fail when creating two edges with existing key', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const ebody = [
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1'
+      },
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1'
+      }
+    ];
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    let enodes = createHandlers.createMultiple({ pathParams, body: ebody });
+    enodes = createHandlers.createMultiple({ pathParams, body: enodes });
+
+    expect(enodes).to.be.an.instanceOf(Array);
+    enodes.forEach(node => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+      // noinspection BadExpressionStatementJS
+      expect(node).to.be.not.empty;
     });
   });
 });

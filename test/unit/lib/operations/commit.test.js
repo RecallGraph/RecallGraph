@@ -26,6 +26,17 @@ describe('Commit', () => {
     expect(cnode.k1).to.equal('v1');
   });
 
+  it('should fail when creating a vertex with an existing key', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: 'v1'
+    };
+
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw();
+  });
+
   it('should create an edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
@@ -58,6 +69,32 @@ describe('Commit', () => {
     expect(cnode.k1).to.equal('v1');
   });
 
+  it('should fail when creating an edge with an existing key', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const node = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw();
+  });
+
   it('should replace a vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
@@ -74,6 +111,16 @@ describe('Commit', () => {
     expect(rnode).to.have.property('_key');
     expect(rnode.k1).to.equal('v2');
     expect(rnode._rev).to.not.equal(cnode._rev);
+  });
+
+  it('should fail when replacing a vertex with a non-existent key', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: 'v1',
+      _key: 'does-not-exist'
+    };
+
+    expect(() => commit(collName, node, DB_OPS.REPLACE)).to.throw();
   });
 
   it('should replace an edge', () => {
@@ -109,5 +156,30 @@ describe('Commit', () => {
     expect(rnode._to).to.equal(vnodes[1]._id);
     expect(rnode.k1).to.equal('v2');
     expect(rnode._rev).to.not.equal(cnode._rev);
+  });
+
+  it('should fail when replacing an edge with a non-existent key', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const node = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      _key: 'does-not-exist'
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+
+    expect(() => commit(collName, node, DB_OPS.REPLACE)).to.throw();
   });
 });

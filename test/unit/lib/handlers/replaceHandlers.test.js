@@ -4,6 +4,7 @@ const { expect } = require("chai");
 const init = require('../../../helpers/init');
 const replaceHandlers = require('../../../../lib/handlers/replaceHandlers');
 const createHandlers = require('../../../../lib/handlers/createHandlers');
+const ARANGO_ERRORS = require('@arangodb').errors;
 
 describe('Replace Handlers', () => {
   before(init.setup);
@@ -15,7 +16,7 @@ describe('Replace Handlers', () => {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const body = {
-      k1: 'v1',
+      k1: 'v1'
     };
 
     const cnode = createHandlers.createSingle({ pathParams, body });
@@ -36,10 +37,10 @@ describe('Replace Handlers', () => {
     };
     const body = [
       {
-        k1: 'v1',
+        k1: 'v1'
       },
       {
-        k1: 'v1',
+        k1: 'v1'
       }
     ];
 
@@ -65,10 +66,10 @@ describe('Replace Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1',
+        k1: 'v1'
       },
       {
-        k1: 'v1',
+        k1: 'v1'
       }
     ];
     const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
@@ -99,10 +100,10 @@ describe('Replace Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1',
+        k1: 'v1'
       },
       {
-        k1: 'v1',
+        k1: 'v1'
       }
     ];
     const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
@@ -135,6 +136,109 @@ describe('Replace Handlers', () => {
       expect(ernode._to).to.equal(vnodes[1]._id);
       expect(ernode.k1).to.equal('v2');
       expect(ernode._rev).to.not.equal(ecnodes[idx]._rev);
+    });
+  });
+
+  it('should fail to replace a non-existent vertex', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = {
+      _key: 'does-not-exist',
+      k1: 'v1'
+    };
+
+    expect(() => replaceHandlers.replaceSingle({ pathParams, body })).to.throw();
+  });
+
+  it('should fail to replace two non-existent vertices.', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = [
+      {
+        _key: 'does-not-exist',
+        k1: 'v1'
+      },
+      {
+        _key: 'does-not-exist',
+        k1: 'v1'
+      }
+    ];
+
+    const nodes = replaceHandlers.replaceMultiple({ pathParams, body });
+
+    expect(nodes).to.be.an.instanceOf(Array);
+    nodes.forEach(node => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+      // noinspection BadExpressionStatementJS
+      expect(node).to.be.not.empty;
+    });
+  });
+
+  it('should fail to replace a non-existent edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      _key: 'does-not-exist'
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    expect(() => replaceHandlers.replaceSingle({ pathParams, body: ebody })).to.throw();
+  });
+
+  it('should fail when replacing two edges with non-existing keys', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const ebody = [
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1',
+        _key: 'does-not-exist'
+      },
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1',
+        _key: 'does-not-exist'
+      }
+    ];
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const enodes = replaceHandlers.replaceMultiple({ pathParams, body: ebody });
+
+    expect(enodes).to.be.an.instanceOf(Array);
+    enodes.forEach(node => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+      // noinspection BadExpressionStatementJS
+      expect(node).to.be.not.empty;
     });
   });
 });
