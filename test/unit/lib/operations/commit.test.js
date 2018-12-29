@@ -107,8 +107,8 @@ describe('Commit', () => {
     const rnode = commit(collName, cnode, DB_OPS.REPLACE);
 
     expect(rnode).to.be.an.instanceOf(Object);
-    expect(rnode).to.have.property('_id');
-    expect(rnode).to.have.property('_key');
+    expect(rnode._id).to.equal(cnode._id);
+    expect(rnode._key).to.equal(cnode._key);
     expect(rnode.k1).to.equal('v2');
     expect(rnode._rev).to.not.equal(cnode._rev);
   });
@@ -150,8 +150,8 @@ describe('Commit', () => {
     const rnode = commit(collName, cnode, DB_OPS.REPLACE);
 
     expect(rnode).to.be.an.instanceOf(Object);
-    expect(rnode).to.have.property('_id');
-    expect(rnode).to.have.property('_key');
+    expect(rnode._id).to.equal(cnode._id);
+    expect(rnode._key).to.equal(cnode._key);
     expect(rnode._from).to.equal(vnodes[0]._id);
     expect(rnode._to).to.equal(vnodes[1]._id);
     expect(rnode.k1).to.equal('v2');

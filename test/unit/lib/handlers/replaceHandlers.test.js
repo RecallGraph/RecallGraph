@@ -25,8 +25,8 @@ describe('Replace Handlers', () => {
     const rnode = replaceHandlers.replaceSingle({ pathParams, body: cnode });
 
     expect(rnode).to.be.an.instanceOf(Object);
-    expect(rnode).to.have.property('_id');
-    expect(rnode).to.have.property('_key');
+    expect(rnode._id).to.equal(cnode._id);
+    expect(rnode._key).to.equal(cnode._key);
     expect(rnode.k1).to.equal('v2');
     expect(rnode._rev).to.not.equal(cnode._rev);
   });
@@ -53,8 +53,8 @@ describe('Replace Handlers', () => {
     expect(rnodes).to.have.lengthOf(2);
     rnodes.forEach((node, idx) => {
       expect(node).to.be.an.instanceOf(Object);
-      expect(node).to.have.property('_id');
-      expect(node).to.have.property('_key');
+      expect(node._id).to.equal(cnodes[idx]._id);
+      expect(node._key).to.equal(cnodes[idx]._key);
       expect(node.k1).to.equal('v2');
       expect(node._rev).to.not.equal(cnodes[idx]._rev);
     });
@@ -86,8 +86,8 @@ describe('Replace Handlers', () => {
     const ernode = replaceHandlers.replaceSingle({ pathParams, body: ecnode });
 
     expect(ernode).to.be.an.instanceOf(Object);
-    expect(ernode).to.have.property('_id');
-    expect(ernode).to.have.property('_key');
+    expect(ernode._id).to.equal(ecnode._id);
+    expect(ernode._key).to.equal(ecnode._key);
     expect(ernode._from).to.equal(vnodes[0]._id);
     expect(ernode._to).to.equal(vnodes[1]._id);
     expect(ernode.k1).to.equal('v2');
@@ -130,8 +130,8 @@ describe('Replace Handlers', () => {
     expect(ernodes).to.have.lengthOf(2);
     ernodes.forEach((ernode, idx) => {
       expect(ernode).to.be.an.instanceOf(Object);
-      expect(ernode).to.have.property('_id');
-      expect(ernode).to.have.property('_key');
+      expect(ernode._id).to.equal(ecnodes[idx]._id);
+      expect(ernode._key).to.equal(ecnodes[idx]._key);
       expect(ernode._from).to.equal(vnodes[0]._id);
       expect(ernode._to).to.equal(vnodes[1]._id);
       expect(ernode.k1).to.equal('v2');
@@ -173,7 +173,7 @@ describe('Replace Handlers', () => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
       // noinspection BadExpressionStatementJS
-      expect(node).to.be.not.empty;
+      expect(node.errorMessage).to.be.not.empty;
     });
   });
 
@@ -238,7 +238,7 @@ describe('Replace Handlers', () => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
       // noinspection BadExpressionStatementJS
-      expect(node).to.be.not.empty;
+      expect(node.errorMessage).to.be.not.empty;
     });
   });
 });

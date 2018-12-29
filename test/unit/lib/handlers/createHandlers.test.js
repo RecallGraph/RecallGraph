@@ -160,7 +160,7 @@ describe('Create Handlers', () => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       // noinspection BadExpressionStatementJS
-      expect(node).to.be.not.empty;
+      expect(node.errorMessage).to.be.not.empty;
     });
   });
 
@@ -224,7 +224,7 @@ describe('Create Handlers', () => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       // noinspection BadExpressionStatementJS
-      expect(node).to.be.not.empty;
+      expect(node.errorMessage).to.be.not.empty;
     });
   });
 });
