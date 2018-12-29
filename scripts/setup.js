@@ -21,3 +21,12 @@ for (const localName of edgeCollections) {
     console.debug(`collection ${localName} already exists. Leaving it untouched.`)
   }
 }
+
+const eventColl = db._collection(events);
+eventColl.ensureIndex({
+  type: 'hash',
+  sparse: true,
+  unique: false,
+  deduplicate: false,
+  fields: ['meta._id']
+});

@@ -7,7 +7,7 @@ const createHandlers = require('../../../../lib/handlers/createHandlers');
 const replaceHandlers = require('../../../../lib/handlers/replaceHandlers');
 const db = require('@arangodb').db;
 const SERVICE_COLLECTIONS = require('../../../../lib/helpers').SERVICE_COLLECTIONS;
-const _ = require('lodash');
+const omit = require('lodash/omit');
 const jiff = require('jiff');
 
 describe('Commit Helpers - getLatestEvent', () => {
@@ -203,7 +203,7 @@ describe('Commit Helpers - insertCommandEdge', () => {
     const ctime = new Date();
     const latestEvent = commitHelpers.getLatestEvent(node, coll);
     const ssData = commitHelpers.getOrCreateLatestSnapshot(coll.name(), latestEvent, node.new, ctime);
-    const evtNode = commitHelpers.insertEventNode(_.omit(node, 'new'), 'ctime', ctime, 'created', ssData, latestEvent);
+    const evtNode = commitHelpers.insertEventNode(omit(node, 'new'), 'ctime', ctime, 'created', ssData, latestEvent);
 
     const enode = commitHelpers.insertCommandEdge(latestEvent, evtNode, node.old, node.new);
 
@@ -272,6 +272,6 @@ describe('Commit Helpers - getTransientOriginFor', () => {
 
     const origin = commitHelpers.getTransientOriginFor(coll);
 
-    Object.keys(expectedOrigin).forEach(key => expect(origin[key]).to.deep.equal(expectedOrigin[key]));
+    expect(origin).to.deep.equal(expectedOrigin);
   });
 });
