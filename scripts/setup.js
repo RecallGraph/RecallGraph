@@ -30,3 +30,12 @@ eventColl.ensureIndex({
   deduplicate: false,
   fields: ['meta._id']
 });
+
+const commandColl = db._collection(commands);
+commandColl.ensureIndex({
+  type: 'hash',
+  sparse: false,
+  unique: true,
+  deduplicate: false,
+  fields: ['_from', 'meta._key']
+});
