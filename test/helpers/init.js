@@ -2,6 +2,7 @@
 
 const db = require('@arangodb').db;
 const _ = require('lodash');
+const SERVICE_COLLECTIONS = require('../../lib/helpers').SERVICE_COLLECTIONS;
 
 const TEST_DOCUMENT_COLLECTIONS = {
   vertex: module.context.collectionName('_test_vertex')
@@ -13,7 +14,7 @@ const TEST_EDGE_COLLECTIONS = {
 
 const TEST_DATA_COLLECTIONS = _.merge({}, TEST_DOCUMENT_COLLECTIONS, TEST_EDGE_COLLECTIONS);
 
-exports.setupTestCollections = function setupTestCollections() {
+exports.setup = function setup() {
   _.forEach(TEST_DOCUMENT_COLLECTIONS, (collName) => {
     if (!db._collection(collName)) {
       db._createDocumentCollection(collName);
@@ -26,13 +27,13 @@ exports.setupTestCollections = function setupTestCollections() {
     }
   });
 
-  _.forEach(TEST_DATA_COLLECTIONS, (collName) => module.context.service.configuration['snapshot-intervals'][collName] = 1);
+  _.forEach(TEST_DATA_COLLECTIONS, (collName) => module.context.service.configuration['snapshot-intervals'][collName] = 2);
 };
 
-exports.teardownTestCollections = function teardownTestCollections() {
-  _.forEach(TEST_DATA_COLLECTIONS, (collName) => {
-    db._drop(collName);
-    delete module.context.service.configuration['snapshot-intervals'][collName];
+exports.teardown = function teardown() {
+  const COLLECTIONS = _.merge({}, TEST_DATA_COLLECTIONS, SERVICE_COLLECTIONS);
+  _.forEach(COLLECTIONS, (collName) => {
+    db._truncate(collName);
   });
 };
 

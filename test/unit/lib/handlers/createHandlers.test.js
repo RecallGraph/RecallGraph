@@ -5,9 +5,9 @@ const init = require('../../../helpers/init');
 const createHandlers = require('../../../../lib/handlers/createHandlers');
 
 describe('Create Handlers', () => {
-  before(init.setupTestCollections);
+  before(init.setup);
 
-  after(init.teardownTestCollections);
+  after(init.teardown);
 
   it('should create a single vertex.', () => {
     const pathParams = {
@@ -19,7 +19,7 @@ describe('Create Handlers', () => {
 
     const node = createHandlers.createSingle({ pathParams, body });
 
-    expect(node).to.be.an.instanceof(Object);
+    expect(node).to.be.an.instanceOf(Object);
     expect(node).to.have.property('_id');
     expect(node).to.have.property('_key');
     expect(node).to.have.property('_rev');
@@ -41,10 +41,10 @@ describe('Create Handlers', () => {
 
     const nodes = createHandlers.createMultiple({ pathParams, body });
 
-    expect(nodes).to.be.an.instanceof(Array);
+    expect(nodes).to.be.an.instanceOf(Array);
     expect(nodes).to.have.lengthOf(2);
     nodes.forEach(node => {
-      expect(node).to.be.an.instanceof(Object);
+      expect(node).to.be.an.instanceOf(Object);
       expect(node).to.have.property('_id');
       expect(node).to.have.property('_key');
       expect(node).to.have.property('_rev');
@@ -74,7 +74,7 @@ describe('Create Handlers', () => {
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createHandlers.createSingle({ pathParams, body: ebody });
 
-    expect(enode).to.be.an.instanceof(Object);
+    expect(enode).to.be.an.instanceOf(Object);
     expect(enode).to.have.property('_id');
     expect(enode).to.have.property('_key');
     expect(enode).to.have.property('_rev');
@@ -112,10 +112,10 @@ describe('Create Handlers', () => {
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enodes = createHandlers.createMultiple({ pathParams, body: ebody });
 
-    expect(enodes).to.be.an.instanceof(Array);
+    expect(enodes).to.be.an.instanceOf(Array);
     expect(enodes).to.have.lengthOf(2);
     enodes.forEach(enode => {
-      expect(enode).to.be.an.instanceof(Object);
+      expect(enode).to.be.an.instanceOf(Object);
       expect(enode).to.have.property('_id');
       expect(enode).to.have.property('_key');
       expect(enode).to.have.property('_rev');

@@ -7,9 +7,9 @@ const commit = require('../../../../lib/operations/commit');
 const createHandlers = require('../../../../lib/handlers/createHandlers');
 
 describe('Commit', () => {
-  before(init.setupTestCollections);
+  before(init.setup);
 
-  after(init.teardownTestCollections);
+  after(init.teardown);
 
   it('should create a vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
@@ -19,7 +19,7 @@ describe('Commit', () => {
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
 
-    expect(cnode).to.be.an.instanceof(Object);
+    expect(cnode).to.be.an.instanceOf(Object);
     expect(cnode).to.have.property('_id');
     expect(cnode).to.have.property('_key');
     expect(cnode).to.have.property('_rev');
@@ -49,7 +49,7 @@ describe('Commit', () => {
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
 
-    expect(cnode).to.be.an.instanceof(Object);
+    expect(cnode).to.be.an.instanceOf(Object);
     expect(cnode).to.have.property('_id');
     expect(cnode).to.have.property('_key');
     expect(cnode).to.have.property('_rev');
@@ -69,7 +69,7 @@ describe('Commit', () => {
 
     const rnode = commit(collName, cnode, DB_OPS.REPLACE);
 
-    expect(rnode).to.be.an.instanceof(Object);
+    expect(rnode).to.be.an.instanceOf(Object);
     expect(rnode).to.have.property('_id');
     expect(rnode).to.have.property('_key');
     expect(rnode.k1).to.equal('v2');
@@ -102,7 +102,7 @@ describe('Commit', () => {
 
     const rnode = commit(collName, cnode, DB_OPS.REPLACE);
 
-    expect(rnode).to.be.an.instanceof(Object);
+    expect(rnode).to.be.an.instanceOf(Object);
     expect(rnode).to.have.property('_id');
     expect(rnode).to.have.property('_key');
     expect(rnode._from).to.equal(vnodes[0]._id);
