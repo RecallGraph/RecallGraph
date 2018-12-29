@@ -14,6 +14,8 @@ const TEST_EDGE_COLLECTIONS = {
 
 const TEST_DATA_COLLECTIONS = _.merge({}, TEST_DOCUMENT_COLLECTIONS, TEST_EDGE_COLLECTIONS);
 
+const COLLECTION_SNAPSHPOT_INTERVAL = 2;
+
 exports.setup = function setup() {
   _.forEach(TEST_DOCUMENT_COLLECTIONS, (collName) => {
     if (!db._collection(collName)) {
@@ -27,7 +29,7 @@ exports.setup = function setup() {
     }
   });
 
-  _.forEach(TEST_DATA_COLLECTIONS, (collName) => module.context.service.configuration['snapshot-intervals'][collName] = 2);
+  _.forEach(TEST_DATA_COLLECTIONS, (collName) => module.context.service.configuration['snapshot-intervals'][collName] = COLLECTION_SNAPSHPOT_INTERVAL);
 };
 
 exports.teardown = function teardown() {
@@ -38,3 +40,4 @@ exports.teardown = function teardown() {
 };
 
 exports.TEST_DATA_COLLECTIONS = TEST_DATA_COLLECTIONS;
+exports.COLLECTION_SNAPSHPOT_INTERVAL = COLLECTION_SNAPSHPOT_INTERVAL;
