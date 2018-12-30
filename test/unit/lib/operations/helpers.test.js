@@ -117,25 +117,6 @@ describe('Commit Helpers - getOrCreateLatestSnapshot', () => {
   });
 });
 
-describe('Commit Helpers - insertSnapshotLink', () => {
-  before(init.setup);
-
-  after(init.teardown);
-
-  it('should return a new snapshot link', () => {
-    const snapshotCollName = SERVICE_COLLECTIONS.snapshots;
-    const [from, to] = [`${snapshotCollName}/void-1`, `${snapshotCollName}/void-2`];
-    const enode = commitHelpers.insertSnapshotLink(from, to);
-
-    expect(enode).to.be.an.instanceOf(Object);
-    expect(enode).to.have.property('_id');
-    expect(enode).to.have.property('_key');
-    expect(enode).to.have.property('_rev');
-    expect(enode._from).to.equal(from);
-    expect(enode._to).to.equal(to);
-  });
-});
-
 describe('Commit Helpers - insertEventNode', () => {
   before(init.setup);
 

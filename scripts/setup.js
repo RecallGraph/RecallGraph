@@ -2,9 +2,9 @@
 const db = require('@arangodb').db;
 const helpers = require('../lib/helpers');
 
-const { events, commands, snapshots, evtSSLinks, snapshotLinks } = helpers.SERVICE_COLLECTIONS;
+const { events, commands, snapshots, evtSSLinks } = helpers.SERVICE_COLLECTIONS;
 const documentCollections = [events, snapshots];
-const edgeCollections = [commands, snapshotLinks, evtSSLinks];
+const edgeCollections = [commands, evtSSLinks];
 
 for (const localName of documentCollections) {
   if (!db._collection(localName)) {
@@ -28,13 +28,13 @@ eventColl.ensureIndex({
   sparse: true,
   unique: false,
   deduplicate: false,
-  fields: ['meta._id']
+  fields: ['meta._id', 'meta.event']
 });
 
 const commandColl = db._collection(commands);
 commandColl.ensureIndex({
   type: 'hash',
-  sparse: false,
+  sparse: true,
   unique: true,
   deduplicate: false,
   fields: ['_from', 'meta._key']

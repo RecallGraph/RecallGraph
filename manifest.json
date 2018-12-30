@@ -44,12 +44,6 @@
       "type": "string",
       "required": true
     },
-    "snapshot-link-coll-suffix": {
-      "description": "The suffix suffix of the (edge) collection where snapshot links are stored.",
-      "default": "_snapshot_links",
-      "type": "string",
-      "required": true
-    },
     "event-snapshot-link-coll-suffix": {
       "description": "The suffix suffix of the (edge) collection where event-snapshot links are stored.",
       "default": "_event_snapshot_links",
