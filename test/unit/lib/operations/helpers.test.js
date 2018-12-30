@@ -20,7 +20,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     const node = {
       _id: 'does-not-exist'
     };
-    const origin = commitHelpers.getTransientOriginFor(coll);
+    const origin = commitHelpers.getTransientEventOriginFor(coll);
     const latestEvent = commitHelpers.getLatestEvent(node, coll);
 
     expect(latestEvent).to.be.an.instanceOf(Object);
@@ -30,7 +30,7 @@ describe('Commit Helpers - getLatestEvent', () => {
   it('should return the origin event for a non-committed but persisted node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({});
-    const origin = commitHelpers.getTransientOriginFor(coll);
+    const origin = commitHelpers.getTransientEventOriginFor(coll);
     const latestEvent = commitHelpers.getLatestEvent(node, coll);
 
     expect(latestEvent).to.be.an.instanceOf(Object);
@@ -109,9 +109,7 @@ describe('Commit Helpers - getOrCreateLatestSnapshot', () => {
     const ssNode = ssData.ssNode;
 
     expect(ssNode).to.be.an.instanceOf(Object);
-    expect(ssNode.data).to.deep.equal(node);
-    expect(ssNode.meta).to.be.an.instanceOf(Object);
-    expect(ssData.hops).to.equal(1);
+    expect(ssData.hopsFromLast).to.equal(2);
     // noinspection BadExpressionStatementJS
     expect(ssData.prevSSid).to.be.undefined;
   });
@@ -139,7 +137,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode.meta.event).to.equal('created');
     expect(evtNode.meta.ctime).to.equal(time.toISOString());
     expect(evtNode.meta['last-snapshot']).to.equal(ssData.ssNode._id);
-    expect(evtNode.meta['hops-from-last-snapshot']).to.equal(ssData.hops);
+    expect(evtNode.meta['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast);
     // noinspection BadExpressionStatementJS
     expect(evtNode.meta.mtime).to.be.undefined;
   });
@@ -168,7 +166,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode.meta.ctime).to.equal(ctime.toISOString());
     expect(evtNode.meta.mtime).to.equal(mtime.toISOString());
     expect(evtNode.meta['last-snapshot']).to.equal(ssData.ssNode._id);
-    expect(evtNode.meta['hops-from-last-snapshot']).to.equal(ssData.hops);
+    expect(evtNode.meta['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast);
   });
 });
 
@@ -225,7 +223,7 @@ describe('Commit Helpers - ensureOriginNode', () => {
   it('should ensure presence of an origin node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const eventColl = db._collection(SERVICE_COLLECTIONS.events);
-    const origin = commitHelpers.getTransientOriginFor(coll);
+    const origin = commitHelpers.getTransientEventOriginFor(coll);
 
     commitHelpers.ensureOriginNode(coll.name());
     const node = eventColl.document(origin._id);
@@ -236,7 +234,7 @@ describe('Commit Helpers - ensureOriginNode', () => {
   });
 });
 
-describe('Commit Helpers - getTransientOriginFor', () => {
+describe('Commit Helpers - getTransientEventOriginFor', () => {
   before(init.setup);
 
   after(init.teardown);
@@ -251,8 +249,8 @@ describe('Commit Helpers - getTransientOriginFor', () => {
       'origin-for': coll.name()
     };
 
-    const origin = commitHelpers.getTransientOriginFor(coll);
+    const origin = commitHelpers.getTransientEventOriginFor(coll);
 
-    expect(origin).to.deep.equal(expectedOrigin);
+    Object.keys(expectedOrigin).forEach(key => expect(origin[key]).to.deep.equal(expectedOrigin[key]));
   });
 });
