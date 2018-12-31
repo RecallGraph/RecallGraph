@@ -6,9 +6,12 @@ const commitHelpers = require('../../../../lib/operations/helpers');
 const createHandlers = require('../../../../lib/handlers/createHandlers');
 const replaceHandlers = require('../../../../lib/handlers/replaceHandlers');
 const db = require('@arangodb').db;
-const SERVICE_COLLECTIONS = require('../../../../lib/helpers').SERVICE_COLLECTIONS;
+const helpers = require('../../../../lib/helpers');
 const omit = require('lodash/omit');
 const jiff = require('jiff');
+const ARANGO_ERRORS = require('@arangodb').errors;
+
+const SERVICE_COLLECTIONS = helpers.SERVICE_COLLECTIONS;
 
 describe('Commit Helpers - getLatestEvent', () => {
   before(init.setup);
@@ -252,5 +255,419 @@ describe('Commit Helpers - getTransientEventOriginFor', () => {
     const origin = commitHelpers.getTransientEventOriginFor(coll);
 
     Object.keys(expectedOrigin).forEach(key => expect(origin[key]).to.deep.equal(expectedOrigin[key]));
+  });
+});
+
+describe('Commit Helpers - prepInsert', () => {
+  before(init.setup);
+
+  after(init.teardown);
+
+  it('should return a meta node after inserting a vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: 'v1'
+    };
+
+    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepInsert(collName, node);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result).to.have.property('_id');
+    expect(result).to.have.property('_key');
+    expect(result).to.have.property('_rev');
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new.k1).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(result.old).to.be.empty;
+
+    expect(event).to.equal('created');
+    expect(timestampType).to.equal('ctime');
+    expect(time).to.be.an.instanceOf(Date);
+
+    const coll = db._collection(collName);
+    const eventOriginNode = commitHelpers.getTransientEventOriginFor(coll);
+    expect(prevEvent).to.deep.equal(eventOriginNode);
+
+    const snapshotOriginData = commitHelpers.getTransientOrCreateLatestSnapshot(collName, prevEvent, node, time);
+    expect(ssData).to.deep.equal(snapshotOriginData);
+  });
+
+  it('should throw when trying to insert a duplicate vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const pathParams = {
+      collection: collName
+    };
+    const body = {};
+    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+
+    expect(() => commitHelpers.prepInsert(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+  });
+
+  it('should return a meta node after inserting an edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const enode = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+
+    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepInsert(collName, enode);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result).to.have.property('_id');
+    expect(result).to.have.property('_key');
+    expect(result).to.have.property('_rev');
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new._from).to.equal(vnodes[0]._id);
+    expect(result.new._to).to.equal(vnodes[1]._id);
+    expect(result.new.k1).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(result.old).to.be.empty;
+
+    expect(event).to.equal('created');
+    expect(timestampType).to.equal('ctime');
+    expect(time).to.be.an.instanceOf(Date);
+
+    const coll = db._collection(collName);
+    const eventOriginNode = commitHelpers.getTransientEventOriginFor(coll);
+    expect(prevEvent).to.deep.equal(eventOriginNode);
+
+    const snapshotOriginData = commitHelpers.getTransientOrCreateLatestSnapshot(collName, prevEvent, enode, time);
+    expect(ssData).to.deep.equal(snapshotOriginData);
+  });
+
+  it('should throw when trying to insert a duplicate edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const enode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    expect(() => commitHelpers.prepInsert(pathParams.collection, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+  });
+});
+
+describe('Commit Helpers - prepReplace', () => {
+  before(init.setup);
+
+  after(init.teardown);
+
+  it('should return a meta node after replacing a vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1'
+    };
+    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+    node.k1 = 'v2';
+
+    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepReplace(collName, node);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(node._key);
+    expect(result._rev).to.not.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(node._rev);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(timestampType).to.equal('mtime');
+    expect(time).to.be.an.instanceOf(Date);
+
+    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.meta.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time.toISOString());
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const snapshotInterval = helpers.snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(snapshotInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should throw when trying to replace a non-existent vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      _key: 'does-not-exist'
+    };
+
+    expect(() => commitHelpers.prepReplace(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+  });
+
+  it('should return a meta node after replacing an edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1'
+      },
+      {
+        k1: 'v1'
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    ecnode.k1 = 'v2';
+
+    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepReplace(pathParams.collection, ecnode);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(ecnode._id);
+    expect(result._key).to.equal(ecnode._key);
+    expect(result._rev).to.not.equal(ecnode._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new._from).to.equal(ecnode._from);
+    expect(result.new._to).to.equal(ecnode._to);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(ecnode._rev);
+    expect(result.old._from).to.equal(ecnode._from);
+    expect(result.old._to).to.equal(ecnode._to);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(timestampType).to.equal('mtime');
+    expect(time).to.be.an.instanceOf(Date);
+
+    const coll = db._collection(pathParams.collection);
+    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.meta.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time.toISOString());
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const snapshotInterval = helpers.snapshotInterval(pathParams.collection);
+    expect(ssData.hopsTillNext).to.equal(snapshotInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should throw when trying to replace a non-existent edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const enode = {
+      _key: 'does-not-exist',
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+
+    expect(() => commitHelpers.prepReplace(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+  });
+});
+
+describe('Commit Helpers - prepRemove', () => {
+  before(init.setup);
+
+  after(init.teardown);
+
+  it('should return a meta node after removing a vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1'
+    };
+    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+
+    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepRemove(collName, node);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(node._key);
+    expect(result._rev).to.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(result.new).to.be.empty;
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(result._rev);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('deleted');
+    expect(timestampType).to.equal('dtime');
+    expect(time).to.be.an.instanceOf(Date);
+
+    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode._id).to.equal(prevEvent.meta['last-snapshot']);
+    expect(ssData.hopsFromLast).to.equal(prevEvent.meta['hops-from-last-snapshot'] + 1);
+  });
+
+  it('should throw when trying to remove a non-existent vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      _key: 'does-not-exist'
+    };
+
+    expect(() => commitHelpers.prepRemove(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+  });
+
+  it('should return a meta node after removing an edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1'
+      },
+      {
+        k1: 'v1'
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepRemove(pathParams.collection, ecnode);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(ecnode._id);
+    expect(result._key).to.equal(ecnode._key);
+    expect(result._rev).to.equal(ecnode._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(result.new).to.be.empty;
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(result._rev);
+    expect(result.old._from).to.equal(ecnode._from);
+    expect(result.old._to).to.equal(ecnode._to);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('deleted');
+    expect(timestampType).to.equal('dtime');
+    expect(time).to.be.an.instanceOf(Date);
+
+    const coll = db._collection(pathParams.collection);
+    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode._id).to.equal(prevEvent.meta['last-snapshot']);
+    expect(ssData.hopsFromLast).to.equal(prevEvent.meta['hops-from-last-snapshot'] + 1);
+  });
+
+  it('should throw when trying to remove a non-existent edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+      },
+      {
+        k1: 'v1',
+      }
+    ];
+    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+
+    const enode = {
+      _key: 'does-not-exist',
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+
+    expect(() => commitHelpers.prepRemove(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 });

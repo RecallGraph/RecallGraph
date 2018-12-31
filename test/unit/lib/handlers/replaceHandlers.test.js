@@ -158,7 +158,10 @@ describe('Replace Handlers', () => {
       k1: 'v1'
     };
 
-    expect(() => replaceHandlers.replaceSingle({ pathParams, body })).to.throw();
+    expect(() => replaceHandlers.replaceSingle({
+      pathParams,
+      body
+    })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
   it('should fail to replace two non-existent vertices.', () => {
@@ -209,7 +212,10 @@ describe('Replace Handlers', () => {
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
-    expect(() => replaceHandlers.replaceSingle({ pathParams, body: ebody })).to.throw();
+    expect(() => replaceHandlers.replaceSingle({
+      pathParams,
+      body: ebody
+    })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
   it('should fail when replacing two edges with non-existing keys', () => {

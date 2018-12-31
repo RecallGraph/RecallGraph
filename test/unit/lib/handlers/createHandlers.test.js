@@ -136,7 +136,10 @@ describe('Create Handlers', () => {
 
     const node = createHandlers.createSingle({ pathParams, body });
 
-    expect(() => createHandlers.createSingle({ pathParams, body: node })).to.throw();
+    expect(() => createHandlers.createSingle({
+      pathParams,
+      body: node
+    })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
   });
 
   it('should fail when creating two vertices with existing key', () => {
@@ -184,9 +187,12 @@ describe('Create Handlers', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enode = createHandlers.createSingle({ pathParams, body: ebody });
+    const enode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
-    expect(() => createHandlers.createSingle({ pathParams, body: enode })).to.throw();
+    expect(() => createHandlers.createSingle({
+      pathParams,
+      body: enode
+    })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
   });
 
   it('should fail when creating two edges with existing key', () => {
