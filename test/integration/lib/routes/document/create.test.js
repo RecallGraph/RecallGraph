@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const init = require('../../../../helpers/init');
 const request = require("@arangodb/request");
 const { baseUrl } = module.context;
-const ARANGO_ERRORS = require('@arangodb').errors;
+const { errors: ARANGO_ERRORS } = require('@arangodb');
 
 describe('Routes - create', () => {
   before(init.setup);

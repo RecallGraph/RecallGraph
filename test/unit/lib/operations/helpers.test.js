@@ -2,16 +2,16 @@
 
 const { expect } = require("chai");
 const init = require('../../../helpers/init');
-const commitHelpers = require('../../../../lib/operations/helpers');
-const createHandlers = require('../../../../lib/handlers/createHandlers');
-const replaceHandlers = require('../../../../lib/handlers/replaceHandlers');
-const db = require('@arangodb').db;
-const helpers = require('../../../../lib/helpers');
+const {
+  getLatestEvent, getTransientOrCreateLatestSnapshot, getTransientEventOriginFor,
+  insertEventNode, insertCommandEdge, insertEvtSSLink, ensureOriginNode, prepInsert, prepRemove, prepReplace
+} = require('../../../../lib/operations/helpers');
+const { createSingle, createMultiple } = require('../../../../lib/handlers/createHandlers');
+const { replaceSingle } = require('../../../../lib/handlers/replaceHandlers');
+const { db, errors: ARANGO_ERRORS } = require('@arangodb');
+const { SERVICE_COLLECTIONS, snapshotInterval } = require('../../../../lib/helpers');
 const omit = require('lodash/omit');
 const jiff = require('jiff');
-const ARANGO_ERRORS = require('@arangodb').errors;
-
-const SERVICE_COLLECTIONS = helpers.SERVICE_COLLECTIONS;
 
 describe('Commit Helpers - getLatestEvent', () => {
   before(init.setup);
@@ -23,8 +23,8 @@ describe('Commit Helpers - getLatestEvent', () => {
     const node = {
       _id: 'does-not-exist'
     };
-    const origin = commitHelpers.getTransientEventOriginFor(coll);
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
+    const origin = getTransientEventOriginFor(coll);
+    const latestEvent = getLatestEvent(node, coll);
 
     expect(latestEvent).to.be.an.instanceOf(Object);
     expect(latestEvent).to.deep.equal(origin);
@@ -33,8 +33,8 @@ describe('Commit Helpers - getLatestEvent', () => {
   it('should return the origin event for a non-committed but persisted node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({});
-    const origin = commitHelpers.getTransientEventOriginFor(coll);
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
+    const origin = getTransientEventOriginFor(coll);
+    const latestEvent = getLatestEvent(node, coll);
 
     expect(latestEvent).to.be.an.instanceOf(Object);
     expect(latestEvent).to.deep.equal(origin);
@@ -47,8 +47,8 @@ describe('Commit Helpers - getLatestEvent', () => {
       collection: collName
     };
     const body = {};
-    const node = createHandlers.createSingle({ pathParams, body });
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
+    const node = createSingle({ pathParams, body });
+    const latestEvent = getLatestEvent(node, coll);
 
     expect(latestEvent).to.be.an.instanceOf(Object);
     expect(latestEvent.meta).to.be.an.instanceOf(Object);
@@ -64,11 +64,11 @@ describe('Commit Helpers - getLatestEvent', () => {
       collection: collName
     };
     const body = {};
-    let node = createHandlers.createSingle({ pathParams, body });
+    let node = createSingle({ pathParams, body });
     node.k1 = 'v1';
-    node = replaceHandlers.replaceSingle({ pathParams, body: node });
+    node = replaceSingle({ pathParams, body: node });
 
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
+    const latestEvent = getLatestEvent(node, coll);
 
     expect(latestEvent).to.be.an.instanceOf(Object);
     expect(latestEvent.meta).to.be.an.instanceOf(Object);
@@ -86,9 +86,9 @@ describe('Commit Helpers - getLatestEvent', () => {
     };
     let node = coll.insert({});
     node.k1 = 'v1';
-    node = replaceHandlers.replaceSingle({ pathParams, body: node });
+    node = replaceSingle({ pathParams, body: node });
 
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
+    const latestEvent = getLatestEvent(node, coll);
 
     expect(latestEvent).to.be.an.instanceOf(Object);
     expect(latestEvent.meta).to.be.an.instanceOf(Object);
@@ -107,8 +107,8 @@ describe('Commit Helpers - getTransientOrCreateLatestSnapshot', () => {
   it('should return a new snapshot node for a non-committed but persisted node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({});
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    const ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node);
+    const latestEvent = getLatestEvent(node, coll);
+    const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node);
     const ssNode = ssData.ssNode;
 
     expect(ssNode).to.be.an.instanceOf(Object);
@@ -127,9 +127,9 @@ describe('Commit Helpers - insertEventNode', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({});
     const time = new Date();
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    const ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, time);
-    const evtNode = commitHelpers.insertEventNode(node, 'ctime', time, 'created', ssData, latestEvent);
+    const latestEvent = getLatestEvent(node, coll);
+    const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, time);
+    const evtNode = insertEventNode(node, 'ctime', time, 'created', ssData, latestEvent);
 
     expect(evtNode).to.be.an.instanceOf(Object);
     expect(evtNode).to.have.property('_id');
@@ -149,15 +149,15 @@ describe('Commit Helpers - insertEventNode', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     let node = coll.insert({});
     const ctime = new Date();
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    let ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, ctime);
-    let evtNode = commitHelpers.insertEventNode(node, 'ctime', ctime, 'created', ssData, latestEvent);
+    const latestEvent = getLatestEvent(node, coll);
+    let ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, ctime);
+    let evtNode = insertEventNode(node, 'ctime', ctime, 'created', ssData, latestEvent);
 
     node.k1 = 'v1';
     node = coll.replace(node._id, node);
     const mtime = new Date();
-    ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), evtNode, node, ctime, mtime);
-    evtNode = commitHelpers.insertEventNode(node, 'mtime', mtime, 'updated', ssData, evtNode);
+    ssData = getTransientOrCreateLatestSnapshot(coll.name(), evtNode, node, ctime, mtime);
+    evtNode = insertEventNode(node, 'mtime', mtime, 'updated', ssData, evtNode);
 
     expect(evtNode).to.be.an.instanceOf(Object);
     expect(evtNode).to.have.property('_id');
@@ -183,11 +183,11 @@ describe('Commit Helpers - insertCommandEdge', () => {
     const node = coll.insert({ k1: 'v1' }, { returnNew: true });
     node.old = {};
     const ctime = new Date();
-    const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    const ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node.new, ctime);
-    const evtNode = commitHelpers.insertEventNode(omit(node, 'new'), 'ctime', ctime, 'created', ssData, latestEvent);
+    const latestEvent = getLatestEvent(node, coll);
+    const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node.new, ctime);
+    const evtNode = insertEventNode(omit(node, 'new'), 'ctime', ctime, 'created', ssData, latestEvent);
 
-    const enode = commitHelpers.insertCommandEdge(latestEvent, evtNode, node.old, node.new);
+    const enode = insertCommandEdge(latestEvent, evtNode, node.old, node.new);
 
     expect(enode).to.be.an.instanceOf(Object);
     expect(enode).to.have.property('_id');
@@ -207,7 +207,7 @@ describe('Commit Helpers - insertEvtSSLink', () => {
   it('should return a new event-snapshot link', () => {
     const evtSSCollName = SERVICE_COLLECTIONS.evtSSLinks;
     const [from, to] = [`${evtSSCollName}/void-1`, `${evtSSCollName}/void-2`];
-    const enode = commitHelpers.insertEvtSSLink(from, to);
+    const enode = insertEvtSSLink(from, to);
 
     expect(enode).to.be.an.instanceOf(Object);
     expect(enode).to.have.property('_id');
@@ -226,9 +226,9 @@ describe('Commit Helpers - ensureOriginNode', () => {
   it('should ensure presence of an origin node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const eventColl = db._collection(SERVICE_COLLECTIONS.events);
-    const origin = commitHelpers.getTransientEventOriginFor(coll);
+    const origin = getTransientEventOriginFor(coll);
 
-    commitHelpers.ensureOriginNode(coll.name());
+    ensureOriginNode(coll.name());
     const node = eventColl.document(origin._id);
 
     expect(node).to.be.an.instanceOf(Object);
@@ -252,7 +252,7 @@ describe('Commit Helpers - getTransientEventOriginFor', () => {
       'origin-for': coll.name()
     };
 
-    const origin = commitHelpers.getTransientEventOriginFor(coll);
+    const origin = getTransientEventOriginFor(coll);
 
     Object.keys(expectedOrigin).forEach(key => expect(origin[key]).to.deep.equal(expectedOrigin[key]));
   });
@@ -269,7 +269,7 @@ describe('Commit Helpers - prepInsert', () => {
       k1: 'v1'
     };
 
-    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepInsert(collName, node);
+    const { result, event, timestampType, time, prevEvent, ssData } = prepInsert(collName, node);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result).to.have.property('_id');
@@ -289,10 +289,10 @@ describe('Commit Helpers - prepInsert', () => {
     expect(time).to.be.an.instanceOf(Date);
 
     const coll = db._collection(collName);
-    const eventOriginNode = commitHelpers.getTransientEventOriginFor(coll);
+    const eventOriginNode = getTransientEventOriginFor(coll);
     expect(prevEvent).to.deep.equal(eventOriginNode);
 
-    const snapshotOriginData = commitHelpers.getTransientOrCreateLatestSnapshot(collName, prevEvent, node, time);
+    const snapshotOriginData = getTransientOrCreateLatestSnapshot(collName, prevEvent, node, time);
     expect(ssData).to.deep.equal(snapshotOriginData);
   });
 
@@ -302,9 +302,9 @@ describe('Commit Helpers - prepInsert', () => {
       collection: collName
     };
     const body = {};
-    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
-    expect(() => commitHelpers.prepInsert(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+    expect(() => prepInsert(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
   });
 
   it('should return a meta node after inserting an edge', () => {
@@ -319,7 +319,7 @@ describe('Commit Helpers - prepInsert', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const enode = {
       _from: vnodes[0]._id,
@@ -328,7 +328,7 @@ describe('Commit Helpers - prepInsert', () => {
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
-    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepInsert(collName, enode);
+    const { result, event, timestampType, time, prevEvent, ssData } = prepInsert(collName, enode);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result).to.have.property('_id');
@@ -350,10 +350,10 @@ describe('Commit Helpers - prepInsert', () => {
     expect(time).to.be.an.instanceOf(Date);
 
     const coll = db._collection(collName);
-    const eventOriginNode = commitHelpers.getTransientEventOriginFor(coll);
+    const eventOriginNode = getTransientEventOriginFor(coll);
     expect(prevEvent).to.deep.equal(eventOriginNode);
 
-    const snapshotOriginData = commitHelpers.getTransientOrCreateLatestSnapshot(collName, prevEvent, enode, time);
+    const snapshotOriginData = getTransientOrCreateLatestSnapshot(collName, prevEvent, enode, time);
     expect(ssData).to.deep.equal(snapshotOriginData);
   });
 
@@ -369,7 +369,7 @@ describe('Commit Helpers - prepInsert', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = {
       _from: vnodes[0]._id,
@@ -377,9 +377,9 @@ describe('Commit Helpers - prepInsert', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
-    expect(() => commitHelpers.prepInsert(pathParams.collection, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+    expect(() => prepInsert(pathParams.collection, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
   });
 });
 
@@ -397,10 +397,10 @@ describe('Commit Helpers - prepReplace', () => {
     const body = {
       k1: 'v1'
     };
-    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     node.k1 = 'v2';
 
-    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepReplace(collName, node);
+    const { result, event, timestampType, time, prevEvent, ssData } = prepReplace(collName, node);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(node._id);
@@ -421,7 +421,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(timestampType).to.equal('mtime');
     expect(time).to.be.an.instanceOf(Date);
 
-    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    const lastEvent = getLatestEvent(result, coll);
     expect(prevEvent).to.deep.equal(lastEvent);
 
     expect(ssData).to.be.an.instanceOf(Object);
@@ -435,8 +435,8 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode.data).to.deep.equal(result.new);
     expect(ssData.hopsFromLast).to.equal(1);
 
-    const snapshotInterval = helpers.snapshotInterval(collName);
-    expect(ssData.hopsTillNext).to.equal(snapshotInterval + 2 - ssData.hopsFromLast);
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
   });
 
   it('should throw when trying to replace a non-existent vertex', () => {
@@ -445,7 +445,7 @@ describe('Commit Helpers - prepReplace', () => {
       _key: 'does-not-exist'
     };
 
-    expect(() => commitHelpers.prepReplace(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+    expect(() => prepReplace(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
   it('should return a meta node after replacing an edge', () => {
@@ -460,7 +460,7 @@ describe('Commit Helpers - prepReplace', () => {
         k1: 'v1'
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = {
       _from: vnodes[0]._id,
@@ -468,11 +468,11 @@ describe('Commit Helpers - prepReplace', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
     ecnode.k1 = 'v2';
 
-    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepReplace(pathParams.collection, ecnode);
+    const { result, event, timestampType, time, prevEvent, ssData } = prepReplace(pathParams.collection, ecnode);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(ecnode._id);
@@ -498,7 +498,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(time).to.be.an.instanceOf(Date);
 
     const coll = db._collection(pathParams.collection);
-    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    const lastEvent = getLatestEvent(result, coll);
     expect(prevEvent).to.deep.equal(lastEvent);
 
     expect(ssData).to.be.an.instanceOf(Object);
@@ -512,8 +512,8 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode.data).to.deep.equal(result.new);
     expect(ssData.hopsFromLast).to.equal(1);
 
-    const snapshotInterval = helpers.snapshotInterval(pathParams.collection);
-    expect(ssData.hopsTillNext).to.equal(snapshotInterval + 2 - ssData.hopsFromLast);
+    const ssInterval = snapshotInterval(pathParams.collection);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
   });
 
   it('should throw when trying to replace a non-existent edge', () => {
@@ -528,7 +528,7 @@ describe('Commit Helpers - prepReplace', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const enode = {
       _key: 'does-not-exist',
@@ -537,7 +537,7 @@ describe('Commit Helpers - prepReplace', () => {
       k1: 'v1'
     };
 
-    expect(() => commitHelpers.prepReplace(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+    expect(() => prepReplace(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 });
 
@@ -555,9 +555,9 @@ describe('Commit Helpers - prepRemove', () => {
     const body = {
       k1: 'v1'
     };
-    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
-    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepRemove(collName, node);
+    const { result, event, timestampType, time, prevEvent, ssData } = prepRemove(collName, node);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(node._id);
@@ -576,7 +576,7 @@ describe('Commit Helpers - prepRemove', () => {
     expect(timestampType).to.equal('dtime');
     expect(time).to.be.an.instanceOf(Date);
 
-    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    const lastEvent = getLatestEvent(result, coll);
     expect(prevEvent).to.deep.equal(lastEvent);
 
     expect(ssData).to.be.an.instanceOf(Object);
@@ -591,7 +591,7 @@ describe('Commit Helpers - prepRemove', () => {
       _key: 'does-not-exist'
     };
 
-    expect(() => commitHelpers.prepRemove(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+    expect(() => prepRemove(collName, node)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
   it('should return a meta node after removing an edge', () => {
@@ -606,7 +606,7 @@ describe('Commit Helpers - prepRemove', () => {
         k1: 'v1'
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = {
       _from: vnodes[0]._id,
@@ -614,9 +614,9 @@ describe('Commit Helpers - prepRemove', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
-    const { result, event, timestampType, time, prevEvent, ssData } = commitHelpers.prepRemove(pathParams.collection, ecnode);
+    const { result, event, timestampType, time, prevEvent, ssData } = prepRemove(pathParams.collection, ecnode);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(ecnode._id);
@@ -638,7 +638,7 @@ describe('Commit Helpers - prepRemove', () => {
     expect(time).to.be.an.instanceOf(Date);
 
     const coll = db._collection(pathParams.collection);
-    const lastEvent = commitHelpers.getLatestEvent(result, coll);
+    const lastEvent = getLatestEvent(result, coll);
     expect(prevEvent).to.deep.equal(lastEvent);
 
     expect(ssData).to.be.an.instanceOf(Object);
@@ -659,7 +659,7 @@ describe('Commit Helpers - prepRemove', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const enode = {
       _key: 'does-not-exist',
@@ -668,6 +668,6 @@ describe('Commit Helpers - prepRemove', () => {
       k1: 'v1'
     };
 
-    expect(() => commitHelpers.prepRemove(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+    expect(() => prepRemove(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 });

@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const init = require('../../../helpers/init');
 const { removeSingle, removeMultiple } = require('../../../../lib/handlers/removeHandlers');
 const { createSingle, createMultiple } = require('../../../../lib/handlers/createHandlers');
-const ARANGO_ERRORS = require('@arangodb').errors;
+const { errors: ARANGO_ERRORS } = require('@arangodb');
 
 describe('Remove Handlers', () => {
   before(init.setup);

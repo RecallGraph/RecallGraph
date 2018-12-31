@@ -2,10 +2,10 @@
 
 const { expect } = require("chai");
 const init = require('../../../helpers/init');
-const DB_OPS = require('../../../../lib/helpers').DB_OPS;
+const { DB_OPS } = require('../../../../lib/helpers');
 const commit = require('../../../../lib/operations/commit');
-const createHandlers = require('../../../../lib/handlers/createHandlers');
-const ARANGO_ERRORS = require('@arangodb').errors;
+const { createMultiple } = require('../../../../lib/handlers/createHandlers');
+const { errors: ARANGO_ERRORS } = require('@arangodb');
 
 describe('Commit', () => {
   before(init.setup);
@@ -57,7 +57,7 @@ describe('Commit', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const node = {
       _from: vnodes[0]._id,
@@ -96,7 +96,7 @@ describe('Commit', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const node = {
       _from: vnodes[0]._id,
@@ -159,7 +159,7 @@ describe('Commit', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const node = {
       _from: vnodes[0]._id,
@@ -205,7 +205,7 @@ describe('Commit', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const node = {
       _from: vnodes[0]._id,
@@ -259,7 +259,7 @@ describe('Commit', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const node = {
       _from: vnodes[0]._id,
@@ -294,7 +294,7 @@ describe('Commit', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const node = {
       _from: vnodes[0]._id,

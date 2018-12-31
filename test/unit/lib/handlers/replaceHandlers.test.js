@@ -2,9 +2,9 @@
 
 const { expect } = require("chai");
 const init = require('../../../helpers/init');
-const replaceHandlers = require('../../../../lib/handlers/replaceHandlers');
-const createHandlers = require('../../../../lib/handlers/createHandlers');
-const ARANGO_ERRORS = require('@arangodb').errors;
+const { replaceSingle, replaceMultiple } = require('../../../../lib/handlers/replaceHandlers');
+const { createSingle, createMultiple } = require('../../../../lib/handlers/createHandlers');
+const { errors: ARANGO_ERRORS } = require('@arangodb');
 
 describe('Replace Handlers', () => {
   before(init.setup);
@@ -19,10 +19,10 @@ describe('Replace Handlers', () => {
       k1: 'v1'
     };
 
-    const cnode = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+    const cnode = createSingle({ pathParams, body }, { returnNew: true }).new;
 
     cnode.k1 = 'v2';
-    const rnode = replaceHandlers.replaceSingle({ pathParams, body: cnode }, { returnNew: true }).new;
+    const rnode = replaceSingle({ pathParams, body: cnode }, { returnNew: true }).new;
 
     expect(rnode).to.be.an.instanceOf(Object);
     expect(rnode._id).to.equal(cnode._id);
@@ -44,9 +44,9 @@ describe('Replace Handlers', () => {
       }
     ];
 
-    const cnodes = createHandlers.createMultiple({ pathParams, body }, { returnNew: true });
+    const cnodes = createMultiple({ pathParams, body }, { returnNew: true });
 
-    const rnodes = replaceHandlers.replaceMultiple({
+    const rnodes = replaceMultiple({
       pathParams, body: cnodes.map(node => {
         node.new.k1 = 'v2';
 
@@ -77,7 +77,7 @@ describe('Replace Handlers', () => {
         k1: 'v1'
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = {
       _from: vnodes[0]._id,
@@ -85,10 +85,10 @@ describe('Replace Handlers', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
     ecnode.k1 = 'v2';
-    const ernode = replaceHandlers.replaceSingle({ pathParams, body: ecnode }, { returnNew: true }).new;
+    const ernode = replaceSingle({ pathParams, body: ecnode }, { returnNew: true }).new;
 
     expect(ernode).to.be.an.instanceOf(Object);
     expect(ernode._id).to.equal(ecnode._id);
@@ -111,7 +111,7 @@ describe('Replace Handlers', () => {
         k1: 'v1'
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = [
       {
@@ -126,9 +126,9 @@ describe('Replace Handlers', () => {
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnodes = createHandlers.createMultiple({ pathParams, body: ebody }, { returnNew: true });
+    const ecnodes = createMultiple({ pathParams, body: ebody }, { returnNew: true });
 
-    const ernodes = replaceHandlers.replaceMultiple({
+    const ernodes = replaceMultiple({
       pathParams, body: ecnodes.map(node => {
         node.new.k1 = 'v2';
 
@@ -158,7 +158,7 @@ describe('Replace Handlers', () => {
       k1: 'v1'
     };
 
-    expect(() => replaceHandlers.replaceSingle({
+    expect(() => replaceSingle({
       pathParams,
       body
     })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
@@ -179,7 +179,7 @@ describe('Replace Handlers', () => {
       }
     ];
 
-    const nodes = replaceHandlers.replaceMultiple({ pathParams, body });
+    const nodes = replaceMultiple({ pathParams, body });
 
     expect(nodes).to.be.an.instanceOf(Array);
     nodes.forEach(node => {
@@ -202,7 +202,7 @@ describe('Replace Handlers', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = {
       _from: vnodes[0]._id,
@@ -212,7 +212,7 @@ describe('Replace Handlers', () => {
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
-    expect(() => replaceHandlers.replaceSingle({
+    expect(() => replaceSingle({
       pathParams,
       body: ebody
     })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
@@ -230,7 +230,7 @@ describe('Replace Handlers', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = [
       {
@@ -247,7 +247,7 @@ describe('Replace Handlers', () => {
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enodes = replaceHandlers.replaceMultiple({ pathParams, body: ebody });
+    const enodes = replaceMultiple({ pathParams, body: ebody });
 
     expect(enodes).to.be.an.instanceOf(Array);
     enodes.forEach(node => {
