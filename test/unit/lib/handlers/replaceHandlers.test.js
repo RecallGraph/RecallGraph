@@ -19,10 +19,10 @@ describe('Replace Handlers', () => {
       k1: 'v1'
     };
 
-    const cnode = createHandlers.createSingle({ pathParams, body });
+    const cnode = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
 
     cnode.k1 = 'v2';
-    const rnode = replaceHandlers.replaceSingle({ pathParams, body: cnode });
+    const rnode = replaceHandlers.replaceSingle({ pathParams, body: cnode }, { returnNew: true }).new;
 
     expect(rnode).to.be.an.instanceOf(Object);
     expect(rnode._id).to.equal(cnode._id);
@@ -44,14 +44,19 @@ describe('Replace Handlers', () => {
       }
     ];
 
-    const cnodes = createHandlers.createMultiple({ pathParams, body });
+    const cnodes = createHandlers.createMultiple({ pathParams, body }, { returnNew: true });
 
-    cnodes.forEach(node => node.k1 = 'v2');
-    const rnodes = replaceHandlers.replaceMultiple({ pathParams, body: cnodes });
+    const rnodes = replaceHandlers.replaceMultiple({
+      pathParams, body: cnodes.map(node => {
+        node.new.k1 = 'v2';
+
+        return node.new;
+      })
+    }, { returnNew: true });
 
     expect(rnodes).to.be.an.instanceOf(Array);
     expect(rnodes).to.have.lengthOf(2);
-    rnodes.forEach((node, idx) => {
+    rnodes.map(node => node.new).forEach((node, idx) => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node._id).to.equal(cnodes[idx]._id);
       expect(node._key).to.equal(cnodes[idx]._key);
@@ -80,10 +85,10 @@ describe('Replace Handlers', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnode = createHandlers.createSingle({ pathParams, body: ebody });
+    const ecnode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
     ecnode.k1 = 'v2';
-    const ernode = replaceHandlers.replaceSingle({ pathParams, body: ecnode });
+    const ernode = replaceHandlers.replaceSingle({ pathParams, body: ecnode }, { returnNew: true }).new;
 
     expect(ernode).to.be.an.instanceOf(Object);
     expect(ernode._id).to.equal(ecnode._id);
@@ -121,14 +126,19 @@ describe('Replace Handlers', () => {
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnodes = createHandlers.createMultiple({ pathParams, body: ebody });
+    const ecnodes = createHandlers.createMultiple({ pathParams, body: ebody }, { returnNew: true });
 
-    ecnodes.forEach(node => node.k1 = 'v2');
-    const ernodes = replaceHandlers.replaceMultiple({ pathParams, body: ecnodes });
+    const ernodes = replaceHandlers.replaceMultiple({
+      pathParams, body: ecnodes.map(node => {
+        node.new.k1 = 'v2';
+
+        return node.new;
+      })
+    }, { returnNew: true });
 
     expect(ernodes).to.be.an.instanceOf(Array);
     expect(ernodes).to.have.lengthOf(2);
-    ernodes.forEach((ernode, idx) => {
+    ernodes.map(node => node.new).forEach((ernode, idx) => {
       expect(ernode).to.be.an.instanceOf(Object);
       expect(ernode._id).to.equal(ecnodes[idx]._id);
       expect(ernode._key).to.equal(ecnodes[idx]._key);

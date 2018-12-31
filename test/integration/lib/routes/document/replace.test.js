@@ -19,20 +19,26 @@ describe('Routes - replace', () => {
 
     let response = request.post(`${baseUrl}/document/${collName}`, {
       json: true,
-      body: node
+      body: node,
+      qs: {
+        returnNew: true
+      }
     });
 
-    node = JSON.parse(response.body);
+    node = JSON.parse(response.body).new;
     node.k1 = 'v2';
     response = request.put(`${baseUrl}/document/${collName}`, {
       json: true,
-      body: node
+      body: node,
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(200);
 
-    const resBody = JSON.parse(response.body);
+    const resBody = JSON.parse(response.body).new;
     expect(resBody).to.be.an.instanceOf(Object);
     expect(resBody._id).to.equal(node._id);
     expect(resBody._key).to.equal(node._key);
@@ -53,14 +59,23 @@ describe('Routes - replace', () => {
 
     let response = request.post(`${baseUrl}/document/${collName}`, {
       json: true,
-      body: nodes
+      body: nodes,
+      qs: {
+        returnNew: true
+      }
     });
 
     nodes = JSON.parse(response.body);
-    nodes.forEach(node => node.k1 = 'v2');
     response = request.put(`${baseUrl}/document/${collName}`, {
       json: true,
-      body: nodes
+      body: nodes.map(node => {
+        node.new.k1 = 'v2';
+
+        return node.new;
+      }),
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
@@ -68,7 +83,7 @@ describe('Routes - replace', () => {
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
-    resBody.forEach((resNode, idx) => {
+    resBody.map(node => node.new).forEach((resNode, idx) => {
       expect(resNode).to.be.an.instanceOf(Object);
       expect(resNode._id).to.equal(nodes[idx]._id);
       expect(resNode._key).to.equal(nodes[idx]._key);
@@ -95,20 +110,26 @@ describe('Routes - replace', () => {
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enode
+      body: enode,
+      qs: {
+        returnNew: true
+      }
     });
 
-    enode = JSON.parse(response.body);
+    enode = JSON.parse(response.body).new;
     enode.k1 = 'v2';
     response = request.put(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enode
+      body: enode,
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(200);
 
-    const resBody = JSON.parse(response.body);
+    const resBody = JSON.parse(response.body).new;
     expect(resBody).to.be.an.instanceOf(Object);
     expect(resBody._id).to.equal(enode._id);
     expect(resBody._key).to.equal(enode._key);
@@ -143,14 +164,23 @@ describe('Routes - replace', () => {
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enodes
+      body: enodes,
+      qs: {
+        returnNew: true
+      }
     });
 
     enodes = JSON.parse(response.body);
-    enodes.forEach(node => node.k1 = 'v2');
     response = request.put(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enodes
+      body: enodes.map(node => {
+        node.new.k1 = 'v2';
+
+        return node.new;
+      }),
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
@@ -158,7 +188,7 @@ describe('Routes - replace', () => {
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
-    resBody.forEach((resNode, idx) => {
+    resBody.map(node => node.new).forEach((resNode, idx) => {
       expect(resNode).to.be.an.instanceOf(Object);
       expect(resNode._id).to.equal(enodes[idx]._id);
       expect(resNode._key).to.equal(enodes[idx]._key);

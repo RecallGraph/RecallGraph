@@ -19,13 +19,16 @@ describe('Routes - create', () => {
 
     const response = request.post(`${baseUrl}/document/${collName}`, {
       json: true,
-      body: node
+      body: node,
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(200);
 
-    const resBody = JSON.parse(response.body);
+    const resBody = JSON.parse(response.body).new;
     expect(resBody).to.be.an.instanceOf(Object);
     expect(resBody).to.have.property('_id');
     expect(resBody).to.have.property('_key');
@@ -46,7 +49,10 @@ describe('Routes - create', () => {
 
     const response = request.post(`${baseUrl}/document/${collName}`, {
       json: true,
-      body: nodes
+      body: nodes,
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
@@ -54,7 +60,7 @@ describe('Routes - create', () => {
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
-    resBody.forEach(resNode => {
+    resBody.map(node => node.new).forEach(resNode => {
       expect(resNode).to.be.an.instanceOf(Object);
       expect(resNode).to.have.property('_id');
       expect(resNode).to.have.property('_key');
@@ -81,13 +87,16 @@ describe('Routes - create', () => {
 
     const response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enode
+      body: enode,
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(200);
 
-    const resBody = JSON.parse(response.body);
+    const resBody = JSON.parse(response.body).new;
     expect(resBody).to.be.an.instanceOf(Object);
     expect(resBody).to.have.property('_id');
     expect(resBody).to.have.property('_key');
@@ -122,7 +131,10 @@ describe('Routes - create', () => {
 
     const response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enodes
+      body: enodes,
+      qs: {
+        returnNew: true
+      }
     });
 
     expect(response).to.be.an.instanceOf(Object);
@@ -130,7 +142,7 @@ describe('Routes - create', () => {
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
-    resBody.forEach(resNode => {
+    resBody.map(node => node.new).forEach(resNode => {
       expect(resNode).to.be.an.instanceOf(Object);
       expect(resNode).to.have.property('_id');
       expect(resNode).to.have.property('_key');
@@ -215,10 +227,13 @@ describe('Routes - create', () => {
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enode
+      body: enode,
+      qs: {
+        returnNew: true
+      }
     });
 
-    enode = JSON.parse(response.body);
+    enode = JSON.parse(response.body).new;
     response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
       body: enode
@@ -253,13 +268,16 @@ describe('Routes - create', () => {
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enodes
+      body: enodes,
+      qs: {
+        returnNew: true
+      }
     });
 
     enodes = JSON.parse(response.body);
     response = request.post(`${baseUrl}/document/${eCollName}`, {
       json: true,
-      body: enodes
+      body: enodes.map(enode => enode.new)
     });
 
     expect(response).to.be.an.instanceOf(Object);

@@ -18,7 +18,7 @@ describe('Create Handlers', () => {
       k1: 'v1',
     };
 
-    const node = createHandlers.createSingle({ pathParams, body });
+    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
 
     expect(node).to.be.an.instanceOf(Object);
     expect(node).to.have.property('_id');
@@ -40,11 +40,11 @@ describe('Create Handlers', () => {
       }
     ];
 
-    const nodes = createHandlers.createMultiple({ pathParams, body });
+    const nodes = createHandlers.createMultiple({ pathParams, body }, { returnNew: true });
 
     expect(nodes).to.be.an.instanceOf(Array);
     expect(nodes).to.have.lengthOf(2);
-    nodes.forEach(node => {
+    nodes.map(node => node.new).forEach(node => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node).to.have.property('_id');
       expect(node).to.have.property('_key');
@@ -73,7 +73,7 @@ describe('Create Handlers', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enode = createHandlers.createSingle({ pathParams, body: ebody });
+    const enode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
     expect(enode).to.be.an.instanceOf(Object);
     expect(enode).to.have.property('_id');
@@ -111,11 +111,11 @@ describe('Create Handlers', () => {
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enodes = createHandlers.createMultiple({ pathParams, body: ebody });
+    const enodes = createHandlers.createMultiple({ pathParams, body: ebody }, { returnNew: true });
 
     expect(enodes).to.be.an.instanceOf(Array);
     expect(enodes).to.have.lengthOf(2);
-    enodes.forEach(enode => {
+    enodes.map(node => node.new).forEach(enode => {
       expect(enode).to.be.an.instanceOf(Object);
       expect(enode).to.have.property('_id');
       expect(enode).to.have.property('_key');
@@ -216,8 +216,8 @@ describe('Create Handlers', () => {
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    let enodes = createHandlers.createMultiple({ pathParams, body: ebody });
-    enodes = createHandlers.createMultiple({ pathParams, body: enodes });
+    let enodes = createHandlers.createMultiple({ pathParams, body: ebody }, { returnNew: true });
+    enodes = createHandlers.createMultiple({ pathParams, body: enodes.map(node => node.new) });
 
     expect(enodes).to.be.an.instanceOf(Array);
     enodes.forEach(node => {

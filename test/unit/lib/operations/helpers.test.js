@@ -96,7 +96,7 @@ describe('Commit Helpers - getLatestEvent', () => {
   });
 });
 
-describe('Commit Helpers - getOrCreateLatestSnapshot', () => {
+describe('Commit Helpers - getTransientOrCreateLatestSnapshot', () => {
   before(init.setup);
 
   after(init.teardown);
@@ -105,7 +105,7 @@ describe('Commit Helpers - getOrCreateLatestSnapshot', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({});
     const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    const ssData = commitHelpers.getOrCreateLatestSnapshot(coll.name(), latestEvent, node);
+    const ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node);
     const ssNode = ssData.ssNode;
 
     expect(ssNode).to.be.an.instanceOf(Object);
@@ -125,7 +125,7 @@ describe('Commit Helpers - insertEventNode', () => {
     const node = coll.insert({});
     const time = new Date();
     const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    const ssData = commitHelpers.getOrCreateLatestSnapshot(coll.name(), latestEvent, node, time);
+    const ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, time);
     const evtNode = commitHelpers.insertEventNode(node, 'ctime', time, 'created', ssData, latestEvent);
 
     expect(evtNode).to.be.an.instanceOf(Object);
@@ -147,13 +147,13 @@ describe('Commit Helpers - insertEventNode', () => {
     let node = coll.insert({});
     const ctime = new Date();
     const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    let ssData = commitHelpers.getOrCreateLatestSnapshot(coll.name(), latestEvent, node, ctime);
+    let ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, ctime);
     let evtNode = commitHelpers.insertEventNode(node, 'ctime', ctime, 'created', ssData, latestEvent);
 
     node.k1 = 'v1';
     node = coll.replace(node._id, node);
     const mtime = new Date();
-    ssData = commitHelpers.getOrCreateLatestSnapshot(coll.name(), evtNode, node, ctime, mtime);
+    ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), evtNode, node, ctime, mtime);
     evtNode = commitHelpers.insertEventNode(node, 'mtime', mtime, 'updated', ssData, evtNode);
 
     expect(evtNode).to.be.an.instanceOf(Object);
@@ -181,7 +181,7 @@ describe('Commit Helpers - insertCommandEdge', () => {
     node.old = {};
     const ctime = new Date();
     const latestEvent = commitHelpers.getLatestEvent(node, coll);
-    const ssData = commitHelpers.getOrCreateLatestSnapshot(coll.name(), latestEvent, node.new, ctime);
+    const ssData = commitHelpers.getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node.new, ctime);
     const evtNode = commitHelpers.insertEventNode(omit(node, 'new'), 'ctime', ctime, 'created', ssData, latestEvent);
 
     const enode = commitHelpers.insertCommandEdge(latestEvent, evtNode, node.old, node.new);
