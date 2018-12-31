@@ -2,7 +2,7 @@
 
 const { expect } = require("chai");
 const init = require('../../../helpers/init');
-const createHandlers = require('../../../../lib/handlers/createHandlers');
+const { createSingle, createMultiple } = require('../../../../lib/handlers/createHandlers');
 const ARANGO_ERRORS = require('@arangodb').errors;
 
 describe('Create Handlers', () => {
@@ -18,13 +18,20 @@ describe('Create Handlers', () => {
       k1: 'v1',
     };
 
-    const node = createHandlers.createSingle({ pathParams, body }, { returnNew: true }).new;
+    const node = createSingle({ pathParams, body }, { returnNew: true, returnOld: true });
 
     expect(node).to.be.an.instanceOf(Object);
     expect(node).to.have.property('_id');
     expect(node).to.have.property('_key');
     expect(node).to.have.property('_rev');
-    expect(node.k1).to.equal('v1');
+    expect(node.new).to.be.an.instanceOf(Object);
+    expect(node.new._id).to.equal(node._id);
+    expect(node.new._key).to.equal(node._key);
+    expect(node.new._rev).to.equal(node._rev);
+    expect(node.new.k1).to.equal('v1');
+    expect(node.old).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(node.old).to.be.empty;
   });
 
   it('should create two vertices', () => {
@@ -40,16 +47,23 @@ describe('Create Handlers', () => {
       }
     ];
 
-    const nodes = createHandlers.createMultiple({ pathParams, body }, { returnNew: true });
+    const nodes = createMultiple({ pathParams, body }, { returnNew: true, returnOld: true });
 
     expect(nodes).to.be.an.instanceOf(Array);
     expect(nodes).to.have.lengthOf(2);
-    nodes.map(node => node.new).forEach(node => {
+    nodes.forEach(node => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node).to.have.property('_id');
       expect(node).to.have.property('_key');
       expect(node).to.have.property('_rev');
-      expect(node.k1).to.equal('v1');
+      expect(node.new).to.be.an.instanceOf(Object);
+      expect(node.new._id).to.equal(node._id);
+      expect(node.new._key).to.equal(node._key);
+      expect(node.new._rev).to.equal(node._rev);
+      expect(node.new.k1).to.equal('v1');
+      expect(node.old).to.be.an.instanceOf(Object);
+      // noinspection BadExpressionStatementJS
+      expect(node.old).to.be.empty;
     });
   });
 
@@ -65,7 +79,7 @@ describe('Create Handlers', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = {
       _from: vnodes[0]._id,
@@ -73,15 +87,22 @@ describe('Create Handlers', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    const enode = createSingle({ pathParams, body: ebody }, { returnNew: true, returnOld: true });
 
     expect(enode).to.be.an.instanceOf(Object);
     expect(enode).to.have.property('_id');
     expect(enode).to.have.property('_key');
     expect(enode).to.have.property('_rev');
-    expect(enode._from).to.equal(vnodes[0]._id);
-    expect(enode._to).to.equal(vnodes[1]._id);
-    expect(enode.k1).to.equal('v1');
+    expect(enode.new).to.be.an.instanceOf(Object);
+    expect(enode.new._id).to.equal(enode._id);
+    expect(enode.new._key).to.equal(enode._key);
+    expect(enode.new._rev).to.equal(enode._rev);
+    expect(enode.new._from).to.equal(vnodes[0]._id);
+    expect(enode.new._to).to.equal(vnodes[1]._id);
+    expect(enode.new.k1).to.equal('v1');
+    expect(enode.old).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(enode.old).to.be.empty;
   });
 
   it('should create two edges', () => {
@@ -96,7 +117,7 @@ describe('Create Handlers', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = [
       {
@@ -111,18 +132,25 @@ describe('Create Handlers', () => {
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enodes = createHandlers.createMultiple({ pathParams, body: ebody }, { returnNew: true });
+    const enodes = createMultiple({ pathParams, body: ebody }, { returnNew: true, returnOld: true });
 
     expect(enodes).to.be.an.instanceOf(Array);
     expect(enodes).to.have.lengthOf(2);
-    enodes.map(node => node.new).forEach(enode => {
+    enodes.forEach(enode => {
       expect(enode).to.be.an.instanceOf(Object);
       expect(enode).to.have.property('_id');
       expect(enode).to.have.property('_key');
       expect(enode).to.have.property('_rev');
-      expect(enode._from).to.equal(vnodes[0]._id);
-      expect(enode._to).to.equal(vnodes[1]._id);
-      expect(enode.k1).to.equal('v1');
+      expect(enode.new).to.be.an.instanceOf(Object);
+      expect(enode.new._id).to.equal(enode._id);
+      expect(enode.new._key).to.equal(enode._key);
+      expect(enode.new._rev).to.equal(enode._rev);
+      expect(enode.new._from).to.equal(vnodes[0]._id);
+      expect(enode.new._to).to.equal(vnodes[1]._id);
+      expect(enode.new.k1).to.equal('v1');
+      expect(enode.old).to.be.an.instanceOf(Object);
+      // noinspection BadExpressionStatementJS
+      expect(enode.old).to.be.empty;
     });
   });
 
@@ -134,9 +162,9 @@ describe('Create Handlers', () => {
       k1: 'v1',
     };
 
-    const node = createHandlers.createSingle({ pathParams, body });
+    const node = createSingle({ pathParams, body });
 
-    expect(() => createHandlers.createSingle({
+    expect(() => createSingle({
       pathParams,
       body: node
     })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
@@ -155,15 +183,15 @@ describe('Create Handlers', () => {
       }
     ];
 
-    let nodes = createHandlers.createMultiple({ pathParams, body });
-    nodes = createHandlers.createMultiple({ pathParams, body: nodes });
+    let nodes = createMultiple({ pathParams, body });
+    nodes = createMultiple({ pathParams, body: nodes });
 
     expect(nodes).to.be.an.instanceOf(Array);
     nodes.forEach(node => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       // noinspection BadExpressionStatementJS
-      expect(node.errorMessage).to.be.not.empty;
+      expect(node.errorMessage).to.include(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message);
     });
   });
 
@@ -179,7 +207,7 @@ describe('Create Handlers', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = {
       _from: vnodes[0]._id,
@@ -187,9 +215,9 @@ describe('Create Handlers', () => {
       k1: 'v1'
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const enode = createHandlers.createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
-    expect(() => createHandlers.createSingle({
+    expect(() => createSingle({
       pathParams,
       body: enode
     })).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
@@ -207,7 +235,7 @@ describe('Create Handlers', () => {
         k1: 'v1',
       }
     ];
-    const vnodes = createHandlers.createMultiple({ pathParams, body: vbody });
+    const vnodes = createMultiple({ pathParams, body: vbody });
 
     const ebody = [
       {
@@ -222,15 +250,15 @@ describe('Create Handlers', () => {
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    let enodes = createHandlers.createMultiple({ pathParams, body: ebody }, { returnNew: true });
-    enodes = createHandlers.createMultiple({ pathParams, body: enodes.map(node => node.new) });
+    let enodes = createMultiple({ pathParams, body: ebody }, { returnNew: true });
+    enodes = createMultiple({ pathParams, body: enodes.map(node => node.new) });
 
     expect(enodes).to.be.an.instanceOf(Array);
     enodes.forEach(node => {
       expect(node).to.be.an.instanceOf(Object);
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       // noinspection BadExpressionStatementJS
-      expect(node.errorMessage).to.be.not.empty;
+      expect(node.errorMessage).to.include(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message);
     });
   });
 });

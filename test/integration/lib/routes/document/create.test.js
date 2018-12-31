@@ -205,7 +205,7 @@ describe('Routes - create', () => {
       expect(resNode).to.be.an.instanceOf(Object);
       expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       // noinspection BadExpressionStatementJS
-      expect(resNode.errorMessage).to.be.not.empty;
+      expect(resNode.errorMessage).to.include(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message);
     });
   });
 
@@ -289,7 +289,7 @@ describe('Routes - create', () => {
       expect(resNode).to.be.an.instanceOf(Object);
       expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       // noinspection BadExpressionStatementJS
-      expect(resNode.errorMessage).to.be.not.empty;
+      expect(resNode.errorMessage).to.include(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message);
     });
   });
 });
