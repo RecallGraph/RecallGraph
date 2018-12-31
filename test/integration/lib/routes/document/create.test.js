@@ -174,7 +174,7 @@ describe('Routes - create', () => {
     expect(response.statusCode).to.equal(409);
   });
 
-  it('should fail create two vertices with duplicate keys', () => {
+  it('should fail to create two vertices with duplicate keys', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let nodes = [
       {
@@ -243,7 +243,7 @@ describe('Routes - create', () => {
     expect(response.statusCode).to.equal(409);
   });
 
-  it('should fail create two edges with duplicate keys', () => {
+  it('should fail to create two edges with duplicate keys', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{}, {}];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
