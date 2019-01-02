@@ -1,0 +1,230 @@
+[
+  {
+    "Body": "1620 Geographos",
+    "Radius (km)": 885,
+    "Mass (10^12 kg)": 4,
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "1862 Apollo",
+    "Radius (km)": 850,
+    "Mass (10^12 kg)": 5.1,
+    "Type": "NEA · Apollo · Q-type"
+  },
+  {
+    "Body": "9969 Braille",
+    "Radius (km)": 800,
+    "Mass (10^12 kg)": "",
+    "Type": "Mars-crosser asteroid; Deep Space 1 1999 flyby"
+  },
+  {
+    "Body": "(214869) 2007 PA8",
+    "Radius (km)": "~800",
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "100000 Astronautica",
+    "Radius (km)": "~800",
+    "Mass (10^12 kg)": "",
+    "Type": "Inner belt asteroid[92]"
+  },
+  {
+    "Body": "DactylIda I",
+    "Radius (km)": 700,
+    "Mass (10^12 kg)": "",
+    "Type": "Moon of 243 Ida"
+  },
+  {
+    "Body": "1566 Icarus",
+    "Radius (km)": 700,
+    "Mass (10^12 kg)": 2.9,
+    "Type": "NEA · Apollo · U-type"
+  },
+  {
+    "Body": "4769 Castalia",
+    "Radius (km)": 700,
+    "Mass (10^12 kg)": 1.3,
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "(137108) 1999 AN10",
+    "Radius (km)": 650,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "(29075) 1950 DA",
+    "Radius (km)": 600,
+    "Mass (10^12 kg)": 3,
+    "Type": "NEA · Apollo; Earth-radared"
+  },
+  {
+    "Body": "(66391) 1999 KW4",
+    "Radius (km)": 600,
+    "Mass (10^12 kg)": 2.33,
+    "Type": "NEA · Aten · Mercury-crosser"
+  },
+  {
+    "Body": "46P/Wirtanen",
+    "Radius (km)": 600,
+    "Mass (10^12 kg)": "",
+    "Type": "Comet"
+  },
+  {
+    "Body": "103P/HartleyHartley 2",
+    "Radius (km)": "570±80",
+    "Mass (10^12 kg)": 0.3,
+    "Type": "Comet; flyby Deep Impact (spacecraft)"
+  },
+  {
+    "Body": "162173 Ryugu",
+    "Radius (km)": 565,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA ·  visited by Hayabusa2 (2018-)"
+  },
+  {
+    "Body": "3908 Nyx",
+    "Radius (km)": 520,
+    "Mass (10^12 kg)": 5,
+    "Type": "NEA · Amor · V-type"
+  },
+  {
+    "Body": "14827 Hypnos",
+    "Radius (km)": 450,
+    "Mass (10^12 kg)": "",
+    "Type": "Comet · dormant comet[97]"
+  },
+  {
+    "Body": "2062 Aten",
+    "Radius (km)": 450,
+    "Mass (10^12 kg)": 0.76,
+    "Type": "NEA · Aten"
+  },
+  {
+    "Body": "2007 CA19",
+    "Radius (km)": 432,
+    "Mass (10^12 kg)": 1.2,
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "6489 Golevka",
+    "Radius (km)": 350,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "25143 Itokawa",
+    "Radius (km)": 346,
+    "Mass (10^12 kg)": 0.0358,
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "AegaeonSaturn LIII",
+    "Radius (km)": "330±60[82]",
+    "Mass (10^12 kg)": "",
+    "Type": "moon of Saturn"
+  },
+  {
+    "Body": "2004 XP14",
+    "Radius (km)": 300,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "(144898) 2004 VD17",
+    "Radius (km)": 290,
+    "Mass (10^12 kg)": 3,
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "101955 Bennu",
+    "Radius (km)": 275,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo · PHO"
+  },
+  {
+    "Body": "(308635) 2005 YU55",
+    "Radius (km)": 180,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA[102] Apollo · PHO[103]"
+  },
+  {
+    "Body": "4660 Nereus",
+    "Radius (km)": 165,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "(357439) 2004 BL86",
+    "Radius (km)": 162.5,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo · binary"
+  },
+  {
+    "Body": "99942 Apophis",
+    "Radius (km)": 162.5,
+    "Mass (10^12 kg)": 0.05,
+    "Type": "NEA · Aten · PHO"
+  },
+  {
+    "Body": "S/2009 S 1",
+    "Radius (km)": 150,
+    "Mass (10^12 kg)": "",
+    "Type": "moon of Saturn"
+  },
+  {
+    "Body": "2010 TK7",
+    "Radius (km)": 150,
+    "Mass (10^12 kg)": "",
+    "Type": "Earth trojan · Apollo"
+  },
+  {
+    "Body": "2007 TU24",
+    "Radius (km)": 125,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo · PHO"
+  },
+  {
+    "Body": "2002 JE9",
+    "Radius (km)": 100,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo · PHO"
+  },
+  {
+    "Body": "2010 XC15",
+    "Radius (km)": 100,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · Apollo · PHO"
+  },
+  {
+    "Body": "1994 WR12",
+    "Radius (km)": 65,
+    "Mass (10^12 kg)": 0.002,
+    "Type": "NEA · Aten"
+  },
+  {
+    "Body": "(410777) 2009 FD",
+    "Radius (km)": 65,
+    "Mass (10^12 kg)": 0.0028,
+    "Type": "NEA · Apollo"
+  },
+  {
+    "Body": "2008 HJ",
+    "Radius (km)": 18,
+    "Mass (10^12 kg)": 0.000005,
+    "Type": "NEA · fast rotator, LCDB, (43 s)[110]"
+  },
+  {
+    "Body": "367943 Duende",
+    "Radius (km)": 15,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA"
+  },
+  {
+    "Body": "1998 KY26",
+    "Radius (km)": 15,
+    "Mass (10^12 kg)": "",
+    "Type": "NEA · fast rotator (10 min)"
+  }
+]

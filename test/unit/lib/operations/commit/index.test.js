@@ -1,10 +1,10 @@
 'use strict';
 
 const { expect } = require("chai");
-const init = require('../../../helpers/init');
-const { DB_OPS } = require('../../../../lib/helpers');
-const commit = require('../../../../lib/operations/commit');
-const { createMultiple } = require('../../../../lib/handlers/createHandlers');
+const init = require('../../../../helpers/init');
+const { DB_OPS } = require('../../../../../lib/helpers');
+const commit = require('../../../../../lib/operations/commit');
+const { createMultiple } = require('../../../../../lib/handlers/createHandlers');
 const { errors: ARANGO_ERRORS } = require('@arangodb');
 
 describe('Commit', () => {

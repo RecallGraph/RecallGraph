@@ -1,0 +1,482 @@
+[
+  {
+    "Body": "2002 AW19755565",
+    "Radius (km)": "384+20−18",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "other TNO, detached object",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2003 AZ84208996",
+    "Radius (km)": 385,
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino; binary",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2013 FY27",
+    "Radius (km)": "370+45−43",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "Satellite 190 km in diameter"
+  },
+  {
+    "Body": "Varda174567",
+    "Radius (km)": 358,
+    "Mass (10^20 kg)": 2.65,
+    "Density (g/cm3)": 1.25,
+    "Type": "cubewano; binary",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2015 RR245",
+    "Radius (km)": "~350",
+    "Mass (10^20 kg)": "-",
+    "Density (g/cm3)": "-",
+    "Type": "resonant KBO (2:9)",
+    "Remarks": "–"
+  },
+  {
+    "Body": "DysnomiaEris I",
+    "Radius (km)": "342±25",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "moon of Eris",
+    "Remarks": "large range of estimated diameters 100–660 km"
+  },
+  {
+    "Body": "2004 GV990568",
+    "Radius (km)": "340±40",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2005 RN43145452",
+    "Radius (km)": "340±40",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2002 UX2555637",
+    "Radius (km)": "335±17",
+    "Mass (10^20 kg)": 1.25,
+    "Density (g/cm3)": 0.82,
+    "Type": "cubewano; binary",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2007 JJ43278361",
+    "Radius (km)": "335±150[28]",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Varuna20000",
+    "Radius (km)": "334+77−43",
+    "Mass (10^20 kg)": 3.7,
+    "Density (g/cm3)": "0.99[14]",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Ixion28978",
+    "Radius (km)": "325+130−110",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Gǃkúnǁ’hòmdímà229762",
+    "Radius (km)": "316±17",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Chaos19521",
+    "Radius (km)": "300±70",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 KZ39",
+    "Radius (km)": "~300",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano[30]",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2012 VP113",
+    "Radius (km)": "~300",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "sednoid",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 RF43",
+    "Radius (km)": "~300",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2005 RM43145451",
+    "Radius (km)": "~300",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2001 UR16342301",
+    "Radius (km)": "~300",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2002 TC30284522",
+    "Radius (km)": "290±50",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "resonant KBO (2:5)",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2002 XV93",
+    "Radius (km)": "280±10",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2003 UZ413455502",
+    "Radius (km)": "~280",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2008 ST291",
+    "Radius (km)": "~318",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 RE64",
+    "Radius (km)": "~280",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 FX86",
+    "Radius (km)": "~280",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2006 QH181",
+    "Radius (km)": "~280",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2014 UM33472271",
+    "Radius (km)": "~270",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2004 XR190",
+    "Radius (km)": "~270",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Vesta4",
+    "Radius (km)": "262.7±0.1",
+    "Mass (10^20 kg)": 2.59,
+    "Density (g/cm3)": 3.46,
+    "Type": "belt asteroid",
+    "Remarks": "formerly round (not in hydrostatic equilibrium: frozen-in ellipsoidal shape and large impact basins)[31][32]"
+  },
+  {
+    "Body": "2003 VS284922",
+    "Radius (km)": "260±20",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2004 TY364120348",
+    "Radius (km)": "~260",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 VK201",
+    "Radius (km)": "~260",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Pallas2",
+    "Radius (km)": "256±3[34]",
+    "Mass (10^20 kg)": "2.11±0.26[35]",
+    "Density (g/cm3)": "3.0±0.5",
+    "Type": "belt asteroid",
+    "Remarks": "uncertain"
+  },
+  {
+    "Body": "EnceladusSaturn II",
+    "Radius (km)": "252.1±0.2",
+    "Mass (10^20 kg)": 1.08,
+    "Density (g/cm3)": 1.61,
+    "Type": "moon of Saturn",
+    "Remarks": "round (not in hydrostatic equilibrium: frozen-in ellipsoidal shape)"
+  },
+  {
+    "Body": "2005 UQ513202421",
+    "Radius (km)": "250±40",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2003 QX113",
+    "Radius (km)": "~250",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2014 FC69",
+    "Radius (km)": "~250",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "–",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2002 WC19119979",
+    "Radius (km)": 245,
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "twotino; binary",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Dziewanna471143",
+    "Radius (km)": "240±70",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "VanthOrcus I",
+    "Radius (km)": "237.5±37.5",
+    "Mass (10^20 kg)": "",
+    "Density (g/cm3)": "",
+    "Type": "satellite of Orcus",
+    "Remarks": "–"
+  },
+  {
+    "Body": "MirandaUranus V",
+    "Radius (km)": "235.8±0.7",
+    "Mass (10^20 kg)": 0.66,
+    "Density (g/cm3)": 1.2,
+    "Type": "moon of Uranus",
+    "Remarks": "round"
+  },
+  {
+    "Body": "2005 TB190145480",
+    "Radius (km)": "230±30",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "detached object",
+    "Remarks": "–"
+  },
+  {
+    "Body": "1999 DE9 26375",
+    "Radius (km)": "230±20",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "resonant KBO (2:5)",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2003 FY128120132",
+    "Radius (km)": "230±10",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Huya38628",
+    "Radius (km)": "229±5",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2002 VR12884719",
+    "Radius (km)": "220±20",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 TJ",
+    "Radius (km)": "~220",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 VZ98445473",
+    "Radius (km)": "~220",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2011 FW62",
+    "Radius (km)": "~220",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "other TNO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Hygiea10",
+    "Radius (km)": "215±4",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "belt asteroid",
+    "Remarks": "irregular"
+  },
+  {
+    "Body": "ProteusNeptune VIII",
+    "Radius (km)": "210±7",
+    "Mass (10^20 kg)": 0.44,
+    "Density (g/cm3)": "~1.3",
+    "Type": "moon of Neptune",
+    "Remarks": "irregular"
+  },
+  {
+    "Body": "2005 QU182303775",
+    "Radius (km)": "210±40",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2004 NT33444030",
+    "Radius (km)": "210±40",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "1999 CD158469306",
+    "Radius (km)": "~210",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "resonant KBO (4:7)",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2004 PF115175113",
+    "Radius (km)": "203±43",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2011 GM27471288",
+    "Radius (km)": "~201",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "1998 SN16535671",
+    "Radius (km)": "200±20",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2001 QF298469372",
+    "Radius (km)": "200±20",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2000 YW13482075",
+    "Radius (km)": "~200",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "1996 GQ2126181",
+    "Radius (km)": "~200",
+    "Mass (10^20 kg)": "–",
+    "Density (g/cm3)": "–",
+    "Type": "SDO",
+    "Remarks": "–"
+  }
+]

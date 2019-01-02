@@ -1,0 +1,1 @@
+All sample data in this folder is derived from public data available on Wikipedia: https://en.wikipedia.org/wiki/List_of_Solar_System_objects_by_size

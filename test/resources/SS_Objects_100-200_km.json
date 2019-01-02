@@ -1,0 +1,359 @@
+[
+  {
+    "Body": "MimasSaturn I",
+    "Radius (km)": "198.2±0.4",
+    "Mass (10^18 kg)": "37.49±0.03",
+    "Type": "satellite of Saturn",
+    "Remarks": "round (smallest known body currently known to have an ellipsoidalshape, but not in hydrostatic equilibrium)"
+  },
+  {
+    "Body": "2004 UX10144897",
+    "Radius (km)": "~190",
+    "Mass (10^18 kg)": "",
+    "Type": "plutino",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2010 TY53",
+    "Radius (km)": "~183",
+    "Mass (10^18 kg)": "",
+    "Type": "extended centaur",
+    "Remarks": "–"
+  },
+  {
+    "Body": "IlmarëVarda I",
+    "Radius (km)": "180±20",
+    "Mass (10^18 kg)": "",
+    "Type": "satellite of Varda",
+    "Remarks": "–"
+  },
+  {
+    "Body": "1996 TL6615874",
+    "Radius (km)": "170±10",
+    "Mass (10^18 kg)": "",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "NereidNeptune II",
+    "Radius (km)": "170±30",
+    "Mass (10^18 kg)": "",
+    "Type": "satellite of Neptune",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2004 XA192230965",
+    "Radius (km)": "170±60",
+    "Mass (10^18 kg)": "",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2001 FP18582158",
+    "Radius (km)": "166±28",
+    "Mass (10^18 kg)": "",
+    "Type": "SDO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Interamnia704",
+    "Radius (km)": "163±1",
+    "Mass (10^18 kg)": 37,
+    "Type": "belt asteroid (F)",
+    "Remarks": ""
+  },
+  {
+    "Body": "HiʻiakaHaumea I",
+    "Radius (km)": 160,
+    "Mass (10^18 kg)": 20,
+    "Type": "satellite of Haumea",
+    "Remarks": "–"
+  },
+  {
+    "Body": "S/(225088) 12007 OR10 I",
+    "Radius (km)": "~160",
+    "Mass (10^18 kg)": "",
+    "Type": "satellite of 2007 OR10",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2002 KX14119951",
+    "Radius (km)": 159,
+    "Mass (10^18 kg)": "",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Europa52",
+    "Radius (km)": "158±4",
+    "Mass (10^18 kg)": 16.5,
+    "Type": "belt asteroid (C)",
+    "Remarks": "irregular shape[38]"
+  },
+  {
+    "Body": "1995 SN55",
+    "Radius (km)": "~150",
+    "Mass (10^18 kg)": "",
+    "Type": "Lost—centaur or transient TNO",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Davida511",
+    "Radius (km)": "145±10",
+    "Mass (10^18 kg)": 43.8,
+    "Type": "belt asteroid (C)",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Sylvia87",
+    "Radius (km)": "143±5",
+    "Mass (10^18 kg)": 14.78,
+    "Type": "belt asteroid (outer) (X); trinary",
+    "Remarks": "irregular shape[38]"
+  },
+  {
+    "Body": "ActaeaSalacia I",
+    "Radius (km)": "140±10",
+    "Mass (10^18 kg)": "",
+    "Type": "satellite of 120347 Salacia",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Cybele65",
+    "Radius (km)": "136±6",
+    "Mass (10^18 kg)": 17.8,
+    "Type": "belt asteroid (outer) (C)",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Juno3",
+    "Radius (km)": "136±11",
+    "Mass (10^18 kg)": 26.7,
+    "Type": "belt asteroid (S)",
+    "Remarks": "irregular shape[38]"
+  },
+  {
+    "Body": "HyperionSaturn VII",
+    "Radius (km)": "135±4",
+    "Mass (10^18 kg)": 5.58,
+    "Type": "satellite of Saturn",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Eunomia15",
+    "Radius (km)": "134±7",
+    "Mass (10^18 kg)": 31.2,
+    "Type": "belt asteroid (S)",
+    "Remarks": "irregular shape[38]"
+  },
+  {
+    "Body": "Camilla107",
+    "Radius (km)": "129±7",
+    "Mass (10^18 kg)": 11.2,
+    "Type": "belt asteroid (outer) (C); binary",
+    "Remarks": "irregular shape[40]"
+  },
+  {
+    "Body": "Euphrosyne31",
+    "Radius (km)": "128±3",
+    "Mass (10^18 kg)": 6.23,
+    "Type": "belt asteroid (C)",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Psyche16",
+    "Radius (km)": "127±2",
+    "Mass (10^18 kg)": 21.9,
+    "Type": "belt asteroid (M)",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "2005 RR43145453",
+    "Radius (km)": 126,
+    "Mass (10^18 kg)": "",
+    "Type": "cubewano; Haumea family",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Sila79360",
+    "Radius (km)": "125+15−16",
+    "Mass (10^18 kg)": 11,
+    "Type": "cubewano; binary w/ Nunam",
+    "Remarks": "double classical Kuiper belt object 79360 Sila–Nunam"
+  },
+  {
+    "Body": "Chariklo10199",
+    "Radius (km)": "124±9",
+    "Mass (10^18 kg)": "",
+    "Type": "centaur",
+    "Remarks": "has rings"
+  },
+  {
+    "Body": "2007 RW10309239",
+    "Radius (km)": "124±15",
+    "Mass (10^18 kg)": "",
+    "Type": "TNO—quasi-satellite of Neptune",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Nunam79360",
+    "Radius (km)": "118+14−15",
+    "Mass (10^18 kg)": "",
+    "Type": "cubewano; binary w/ Sila",
+    "Remarks": "double classical Kuiper belt object 79360 Sila–Nunam"
+  },
+  {
+    "Body": "Bamberga324",
+    "Radius (km)": "117±4",
+    "Mass (10^18 kg)": 10,
+    "Type": "belt asteroid (C)",
+    "Remarks": ""
+  },
+  {
+    "Body": "Patientia451",
+    "Radius (km)": "117±5",
+    "Mass (10^18 kg)": "",
+    "Type": "belt asteroid",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "2001 QC298",
+    "Radius (km)": "117+11−12",
+    "Mass (10^18 kg)": "11.88±0.14",
+    "Type": "hot classical; binary",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Chiron2060 or 95P/Chiron",
+    "Radius (km)": "116±7",
+    "Mass (10^18 kg)": "",
+    "Type": "centaur",
+    "Remarks": "has rings"
+  },
+  {
+    "Body": "Thisbe88",
+    "Radius (km)": "113±6",
+    "Mass (10^18 kg)": 10.5,
+    "Type": "belt asteroid (B)",
+    "Remarks": "irregular shape[40]"
+  },
+  {
+    "Body": "Hektor624",
+    "Radius (km)": "113±8",
+    "Mass (10^18 kg)": 10,
+    "Type": "Jupiter trojan (L4); binary",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Ceto65489",
+    "Radius (km)": "112±10",
+    "Mass (10^18 kg)": 5.4,
+    "Type": "extended centaur; binary",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Herculina532",
+    "Radius (km)": "111±2",
+    "Mass (10^18 kg)": "",
+    "Type": "belt asteroid (S)",
+    "Remarks": "irregular shape[38]"
+  },
+  {
+    "Body": "Doris48",
+    "Radius (km)": "111±4",
+    "Mass (10^18 kg)": "",
+    "Type": "belt asteroid",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Eugenia45",
+    "Radius (km)": "107±2",
+    "Mass (10^18 kg)": 5.69,
+    "Type": "belt asteroid (F); trinary",
+    "Remarks": "irregular shape[38]"
+  },
+  {
+    "Body": "PhoebeSaturn IX",
+    "Radius (km)": "106.5±0.7",
+    "Mass (10^18 kg)": "8.29±0.01",
+    "Type": "satellite of Saturn",
+    "Remarks": "formerly round[43]"
+  },
+  {
+    "Body": "Amphitrite29",
+    "Radius (km)": "106±3",
+    "Mass (10^18 kg)": 11.8,
+    "Type": "belt asteroid (S)",
+    "Remarks": "irregular shape[38]"
+  },
+  {
+    "Body": "Bienor54598",
+    "Radius (km)": "105±15",
+    "Mass (10^18 kg)": "",
+    "Type": "centaur",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Deucalion53311",
+    "Radius (km)": "~105",
+    "Mass (10^18 kg)": "",
+    "Type": "cubewano",
+    "Remarks": "–"
+  },
+  {
+    "Body": "Diotima423",
+    "Radius (km)": "104±3",
+    "Mass (10^18 kg)": "",
+    "Type": "belt asteroid (C)",
+    "Remarks": "irregular shape[44]"
+  },
+  {
+    "Body": "Egeria13",
+    "Radius (km)": "104±4",
+    "Mass (10^18 kg)": 16.3,
+    "Type": "belt asteroid (G)",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Fortuna19",
+    "Radius (km)": "104±6",
+    "Mass (10^18 kg)": 12.7,
+    "Type": "belt asteroid (G)",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Aurora94",
+    "Radius (km)": "102±2",
+    "Mass (10^18 kg)": "",
+    "Type": "belt asteroid",
+    "Remarks": "irregular shape[45]"
+  },
+  {
+    "Body": "Iris7",
+    "Radius (km)": "100±5",
+    "Mass (10^18 kg)": 13.6,
+    "Type": "belt asteroid (S)",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Daphne41",
+    "Radius (km)": "100±5",
+    "Mass (10^18 kg)": "",
+    "Type": "belt asteroid",
+    "Remarks": "irregular shape"
+  },
+  {
+    "Body": "Themis24",
+    "Radius (km)": "100±10",
+    "Mass (10^18 kg)": 11.3,
+    "Type": "belt asteroid (C); Themis family",
+    "Remarks": "–"
+  },
+  {
+    "Body": "2015 TH367",
+    "Radius (km)": "100±60",
+    "Mass (10^18 kg)": "",
+    "Type": "centaur",
+    "Remarks": ""
+  }
+]

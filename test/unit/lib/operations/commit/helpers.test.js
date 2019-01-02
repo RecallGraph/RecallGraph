@@ -1,15 +1,15 @@
 'use strict';
 
 const { expect } = require("chai");
-const init = require('../../../helpers/init');
+const init = require('../../../../helpers/init');
 const {
   getLatestEvent, getTransientOrCreateLatestSnapshot, getTransientEventOriginFor,
   insertEventNode, insertCommandEdge, insertEvtSSLink, ensureOriginNode, prepInsert, prepRemove, prepReplace
-} = require('../../../../lib/operations/helpers');
-const { createSingle, createMultiple } = require('../../../../lib/handlers/createHandlers');
-const { replaceSingle } = require('../../../../lib/handlers/replaceHandlers');
-const { db, errors: ARANGO_ERRORS } = require('@arangodb');
-const { SERVICE_COLLECTIONS, snapshotInterval } = require('../../../../lib/helpers');
+} = require('../../../../../lib/operations/commit/helpers');
+const { createSingle, createMultiple } = require('../../../../../lib/handlers/createHandlers');
+const { replaceSingle } = require('../../../../../lib/handlers/replaceHandlers');
+const { db, errors: ARANGO_ERRORS, time: dbtime } = require('@arangodb');
+const { SERVICE_COLLECTIONS, snapshotInterval } = require('../../../../../lib/helpers');
 const omit = require('lodash/omit');
 const jiff = require('jiff');
 
@@ -126,7 +126,7 @@ describe('Commit Helpers - insertEventNode', () => {
   it('should return an event node for \'created\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({});
-    const time = new Date();
+    const time = dbtime();
     const latestEvent = getLatestEvent(node, coll);
     const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, time);
     const evtNode = insertEventNode(node, 'ctime', time, 'created', ssData, latestEvent);
@@ -138,7 +138,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode.meta).to.be.an.instanceOf(Object);
     Object.keys(node).forEach(key => expect(evtNode.meta[key]).to.deep.equal(node[key]));
     expect(evtNode.meta.event).to.equal('created');
-    expect(evtNode.meta.ctime).to.equal(time.toISOString());
+    expect(evtNode.meta.ctime).to.equal(time);
     expect(evtNode.meta['last-snapshot']).to.equal(ssData.ssNode._id);
     expect(evtNode.meta['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast);
     // noinspection BadExpressionStatementJS
@@ -148,14 +148,14 @@ describe('Commit Helpers - insertEventNode', () => {
   it('should return an event node for \'updated\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     let node = coll.insert({});
-    const ctime = new Date();
+    const ctime = dbtime();
     const latestEvent = getLatestEvent(node, coll);
     let ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, ctime);
     let evtNode = insertEventNode(node, 'ctime', ctime, 'created', ssData, latestEvent);
 
     node.k1 = 'v1';
     node = coll.replace(node._id, node);
-    const mtime = new Date();
+    const mtime = dbtime();
     ssData = getTransientOrCreateLatestSnapshot(coll.name(), evtNode, node, ctime, mtime);
     evtNode = insertEventNode(node, 'mtime', mtime, 'updated', ssData, evtNode);
 
@@ -166,8 +166,8 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode.meta).to.be.an.instanceOf(Object);
     Object.keys(node).forEach(key => expect(evtNode.meta[key]).to.deep.equal(node[key]));
     expect(evtNode.meta.event).to.equal('updated');
-    expect(evtNode.meta.ctime).to.equal(ctime.toISOString());
-    expect(evtNode.meta.mtime).to.equal(mtime.toISOString());
+    expect(evtNode.meta.ctime).to.equal(ctime);
+    expect(evtNode.meta.mtime).to.equal(mtime);
     expect(evtNode.meta['last-snapshot']).to.equal(ssData.ssNode._id);
     expect(evtNode.meta['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast);
   });
@@ -286,7 +286,7 @@ describe('Commit Helpers - prepInsert', () => {
 
     expect(event).to.equal('created');
     expect(timestampType).to.equal('ctime');
-    expect(time).to.be.an.instanceOf(Date);
+    expect(typeof time).to.equal('number');
 
     const coll = db._collection(collName);
     const eventOriginNode = getTransientEventOriginFor(coll);
@@ -347,7 +347,7 @@ describe('Commit Helpers - prepInsert', () => {
 
     expect(event).to.equal('created');
     expect(timestampType).to.equal('ctime');
-    expect(time).to.be.an.instanceOf(Date);
+    expect(typeof time).to.equal('number');
 
     const coll = db._collection(collName);
     const eventOriginNode = getTransientEventOriginFor(coll);
@@ -419,7 +419,7 @@ describe('Commit Helpers - prepReplace', () => {
 
     expect(event).to.equal('updated');
     expect(timestampType).to.equal('mtime');
-    expect(time).to.be.an.instanceOf(Date);
+    expect(typeof time).to.equal('number');
 
     const lastEvent = getLatestEvent(result, coll);
     expect(prevEvent).to.deep.equal(lastEvent);
@@ -431,7 +431,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode).to.have.property('_rev');
     expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
     expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.meta.ctime);
-    expect(ssData.ssNode.meta.mtime).to.equal(time.toISOString());
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
     expect(ssData.ssNode.data).to.deep.equal(result.new);
     expect(ssData.hopsFromLast).to.equal(1);
 
@@ -495,7 +495,7 @@ describe('Commit Helpers - prepReplace', () => {
 
     expect(event).to.equal('updated');
     expect(timestampType).to.equal('mtime');
-    expect(time).to.be.an.instanceOf(Date);
+    expect(typeof time).to.equal('number');
 
     const coll = db._collection(pathParams.collection);
     const lastEvent = getLatestEvent(result, coll);
@@ -508,7 +508,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode).to.have.property('_rev');
     expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
     expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.meta.ctime);
-    expect(ssData.ssNode.meta.mtime).to.equal(time.toISOString());
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
     expect(ssData.ssNode.data).to.deep.equal(result.new);
     expect(ssData.hopsFromLast).to.equal(1);
 
@@ -574,7 +574,7 @@ describe('Commit Helpers - prepRemove', () => {
 
     expect(event).to.equal('deleted');
     expect(timestampType).to.equal('dtime');
-    expect(time).to.be.an.instanceOf(Date);
+    expect(typeof time).to.equal('number');
 
     const lastEvent = getLatestEvent(result, coll);
     expect(prevEvent).to.deep.equal(lastEvent);
@@ -635,7 +635,7 @@ describe('Commit Helpers - prepRemove', () => {
 
     expect(event).to.equal('deleted');
     expect(timestampType).to.equal('dtime');
-    expect(time).to.be.an.instanceOf(Date);
+    expect(typeof time).to.equal('number');
 
     const coll = db._collection(pathParams.collection);
     const lastEvent = getLatestEvent(result, coll);
