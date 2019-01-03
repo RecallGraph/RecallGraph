@@ -320,7 +320,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
 
   //Populate moons
   docCount = insertCount = errorCount = 0;
-  let warningCount = 0;
+  let warningCount = 0, failedMoonKeys = [];
   cursor = query`
     for m in fulltext(${rawData}, 'Type', 'prefix:moon,|prefix:satellite')
       let parent = concat(regex_replace(m.Type, '^.*([Mm]oon|[Ss]atellite)s? of ([0-9A-Za-z\\\\s]+);?.*$', '$2'), '%')
@@ -364,6 +364,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       }
     } else {
       warningCount++;
+      failedMoonKeys.push(obj.moon._key);
       console.warn(`No suitable parent object found for moon ${obj.moon._id}. Skipped.`);
     }
   }
@@ -375,7 +376,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
   let removeCount = 0;
   const rids = query`
     for r in evstore_test_raw_data
-      filter has(r, '_ref')
+      filter has(r, '_ref') && r._key not in ${failedMoonKeys}
     return keep(r, '_key')
   `.toArray();
 
