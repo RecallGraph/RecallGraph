@@ -15,17 +15,17 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
   const sampleDataCollections = {
     rawData: {
       type: 'document',
-      name: module.context.collectionName('test_raw_data')
-    },
-    stars: {
-      type: 'document',
-      name: module.context.collectionName('test_stars'),
+      name: module.context.collectionName('test_raw_data'),
       indexes: [
         {
           type: 'fulltext',
           fields: ['Type']
         }
       ]
+    },
+    stars: {
+      type: 'document',
+      name: module.context.collectionName('test_stars')
     },
     planets: {
       type: 'document',
