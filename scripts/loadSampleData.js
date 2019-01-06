@@ -1,11 +1,11 @@
 'use strict';
 
-const { db, query } = require('@arangodb');
-const { forEach, get, mapValues, isEqual } = require('lodash');
+const {db, query} = require('@arangodb');
+const {forEach, get, mapValues, isEqual, omitBy, isEmpty, trim} = require('lodash');
 const fs = require('fs');
-const { createSingle } = require('../lib/handlers/createHandlers');
-const { replaceSingle } = require('../lib/handlers/replaceHandlers');
-const { removeMultiple } = require('../lib/handlers/removeHandlers');
+const {createSingle} = require('../lib/handlers/createHandlers');
+const {replaceSingle} = require('../lib/handlers/replaceHandlers');
+const {removeMultiple} = require('../lib/handlers/removeHandlers');
 
 const argv = module.context.argv;
 if (get(argv, [0, 'confirmTruncate']) !== true) {
@@ -75,7 +75,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
     get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index));
     colls[key] = coll;
   });
-  const { rawData, stars, planets, moons, asteroids, comets, dwarfPlanets, lineage } = colls;
+  const {rawData, stars, planets, moons, asteroids, comets, dwarfPlanets, lineage} = colls;
   require('./truncate');
 
   //Init script output
@@ -89,22 +89,22 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
     collection: rawData.name()
   };
   fs.list(module.context.fileName(resourcePath))
-    .filter(filename => dataPattern.test(filename))
-    .map(filename => `../${resourcePath}/${filename}`)
-    .forEach(fileName => {
-      try {
-        const jsonArr = require(fileName);
-        jsonArr.forEach(jsonObj => {
-          docCount++;
-          jsonObj._source = fileName;
-          createSingle({ pathParams, body: jsonObj });
-          insertCount++;
-        });
-      } catch (e) {
-        errorCount++;
-        console.error(e);
-      }
-    });
+  .filter(filename => dataPattern.test(filename))
+  .map(filename => `../${resourcePath}/${filename}`)
+  .forEach(fileName => {
+    try {
+      const jsonArr = require(fileName);
+      jsonArr.forEach(jsonObj => {
+        docCount++;
+        jsonObj._source = fileName;
+        createSingle({pathParams, body: jsonObj});
+        insertCount++;
+      });
+    } catch (e) {
+      errorCount++;
+      console.error(e);
+    }
+  });
   module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`);
 
   //Remove footnote references from raw data
@@ -125,7 +125,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
 
     if (!isEqual(object, newObj)) {
       try {
-        replaceSingle({ pathParams, body: newObj });
+        replaceSingle({pathParams, body: newObj});
         replaceCount++;
       } catch (e) {
         errorCount++;
@@ -135,8 +135,79 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
   }
   module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
 
+  //Remove empty/unspecified fields from raw data
+  cursor = rawData.all();
+  docCount = errorCount = replaceCount = 0;
+  const unspecifiedPattern = /^[\-–]+$/;
+  while (cursor.hasNext()) {
+    docCount++;
+    const object = cursor.next();
+    const newObj = omitBy(object, (value) => {
+      value = trim(value);
+
+      return isEmpty(value) || unspecifiedPattern.test(value);
+    });
+
+
+    if (!isEqual(object, newObj)) {
+      try {
+        replaceSingle({pathParams, body: newObj});
+        replaceCount++;
+      } catch (e) {
+        errorCount++;
+        console.error(e);
+      }
+    }
+  }
+  module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
+
+  //Insert spaces at title-case boundaries in Body field in raw data
+  docCount = errorCount = replaceCount = 0;
+  cursor = query`
+    for r in ${rawData}
+      let spBodyParts = regex_split(r.Body, "(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")
+      filter length(spBodyParts) > 1
+      let trBodyParts = spBodyParts[* filter not regex_test(CURRENT, '(^\\\\s*$)') return trim(CURRENT)]
+      let body = concat_separator(' ', trBodyParts)
+      filter r.Body != body
+    return merge(r, {Body: body})
+  `;
+  while (cursor.hasNext()) {
+    docCount++;
+    const object = cursor.next();
+    try {
+      replaceSingle({pathParams, body: object});
+      replaceCount++;
+    } catch (e) {
+      errorCount++;
+      console.error(e);
+    }
+  }
+  module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
+
+  //Insert spaces at alpha-numeric boundaries in Body field in raw data
+  docCount = errorCount = replaceCount = 0;
+  cursor = query`
+    for r in ${rawData}
+      let body = regex_replace(r.Body, '([a-z])([0-9])', '$1 $2')
+      filter r.Body != body
+    return merge(r, {Body: body})
+  `;
+  while (cursor.hasNext()) {
+    docCount++;
+    const object = cursor.next();
+    try {
+      replaceSingle({pathParams, body: object});
+      replaceCount++;
+    } catch (e) {
+      errorCount++;
+      console.error(e);
+    }
+  }
+  module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
+
   //Populate stars
-  cursor = rawData.byExample({ Type: 'star' });
+  cursor = rawData.byExample({Type: 'star'});
   docCount = insertCount = errorCount = 0;
   while (cursor.hasNext()) {
     docCount++;
@@ -145,13 +216,13 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: stars.name()
       };
-      const star = createSingle({ pathParams, body: obj });
+      const star = createSingle({pathParams, body: obj});
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = star._id;
-      replaceSingle({ pathParams, body: obj });
+      replaceSingle({pathParams, body: obj});
 
       insertCount++;
     } catch (e) {
@@ -163,7 +234,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
 
   //Populate planets
   docCount = insertCount = errorCount = 0;
-  const sun = stars.firstExample({ Body: 'Sun' });
+  const sun = stars.firstExample({Body: 'Sun'});
   cursor = query`
   for d in fulltext(${rawData}, 'Type', 'planet,-dwarf')
   return d
@@ -176,7 +247,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: planets.name()
       };
-      const planet = createSingle({ pathParams, body: obj });
+      const planet = createSingle({pathParams, body: obj});
 
       const linEdge = {
         _from: sun._id,
@@ -185,13 +256,13 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({ pathParams, body: linEdge });
+      createSingle({pathParams, body: linEdge});
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = planet._id;
-      replaceSingle({ pathParams, body: obj });
+      replaceSingle({pathParams, body: obj});
 
       insertCount++;
     } catch (e) {
@@ -215,7 +286,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: dwarfPlanets.name()
       };
-      const dwarfPlanet = createSingle({ pathParams, body: obj });
+      const dwarfPlanet = createSingle({pathParams, body: obj});
 
       const linEdge = {
         _from: sun._id,
@@ -224,13 +295,13 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({ pathParams, body: linEdge });
+      createSingle({pathParams, body: linEdge});
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = dwarfPlanet._id;
-      replaceSingle({ pathParams, body: obj });
+      replaceSingle({pathParams, body: obj});
 
       insertCount++;
     } catch (e) {
@@ -254,7 +325,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: asteroids.name()
       };
-      const asteroid = createSingle({ pathParams, body: obj });
+      const asteroid = createSingle({pathParams, body: obj});
 
       const linEdge = {
         _from: sun._id,
@@ -263,13 +334,13 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({ pathParams, body: linEdge });
+      createSingle({pathParams, body: linEdge});
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = asteroid._id;
-      replaceSingle({ pathParams, body: obj });
+      replaceSingle({pathParams, body: obj});
 
       insertCount++;
     } catch (e) {
@@ -293,7 +364,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: comets.name()
       };
-      const comet = createSingle({ pathParams, body: obj });
+      const comet = createSingle({pathParams, body: obj});
 
       const linEdge = {
         _from: sun._id,
@@ -302,13 +373,13 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({ pathParams, body: linEdge });
+      createSingle({pathParams, body: linEdge});
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = comet._id;
-      replaceSingle({ pathParams, body: obj });
+      replaceSingle({pathParams, body: obj});
 
       insertCount++;
     } catch (e) {
@@ -340,7 +411,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
         pathParams = {
           collection: moons.name()
         };
-        const moon = createSingle({ pathParams, body: obj.moon });
+        const moon = createSingle({pathParams, body: obj.moon});
 
         const linEdge = {
           _from: obj.rawObject._id,
@@ -349,13 +420,13 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
         pathParams = {
           collection: lineage.name()
         };
-        createSingle({ pathParams, body: linEdge });
+        createSingle({pathParams, body: linEdge});
 
         pathParams = {
           collection: rawData.name()
         };
         obj.moon._ref = obj.moon._ref ? [obj.moon._ref, moon._id] : moon._id;
-        replaceSingle({ pathParams, body: obj.moon });
+        replaceSingle({pathParams, body: obj.moon});
 
         insertCount++;
       } catch (e) {
@@ -383,7 +454,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
   pathParams = {
     collection: rawData.name()
   };
-  const rnodes = removeMultiple({ pathParams, body: rids });
+  const rnodes = removeMultiple({pathParams, body: rids});
   rnodes.forEach(rnode => {
     if (rnode.errorNum) {
       errorCount++;
