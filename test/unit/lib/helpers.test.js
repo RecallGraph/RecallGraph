@@ -1,6 +1,6 @@
 'use strict';
 
-const { expect } = require("chai");
+const { expect } = require('chai');
 const init = require('../../helpers/init');
 const { snapshotInterval } = require('../../../lib/helpers');
 

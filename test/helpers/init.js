@@ -29,7 +29,8 @@ exports.setup = function setup() {
     }
   });
 
-  forEach(TEST_DATA_COLLECTIONS, (collName) => module.context.service.configuration['snapshot-intervals'][collName] = COLLECTION_SNAPSHPOT_INTERVAL);
+  forEach(TEST_DATA_COLLECTIONS,
+    (collName) => module.context.service.configuration['snapshot-intervals'][collName] = COLLECTION_SNAPSHPOT_INTERVAL);
 };
 
 exports.teardown = function teardown() {

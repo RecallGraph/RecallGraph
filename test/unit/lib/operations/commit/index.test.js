@@ -45,6 +45,18 @@ describe('Commit', () => {
     expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
   });
 
+  it('should fail when creating a vertex with the same key as a deleted vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: 'v1'
+    };
+
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+    commit(collName, cnode, DB_OPS.REMOVE);
+
+    expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw(`Event log found for node with _id: ${cnode._id}`);
+  });
+
   it('should create an edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
@@ -108,6 +120,33 @@ describe('Commit', () => {
     const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true }).new;
 
     expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+  });
+
+  it('should fail when creating an edge with the same key as a deleted edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1'
+      },
+      {
+        k1: 'v1'
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const node = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1'
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+
+    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true }).new;
+    commit(collName, cnode, DB_OPS.REMOVE);
+
+    expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw(`Event log found for node with _id: ${cnode._id}`);
   });
 
   it('should replace a vertex', () => {
