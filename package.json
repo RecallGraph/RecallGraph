@@ -12,6 +12,7 @@
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
   "dependencies": {
+    "brace-expansion": "^1.1.11",
     "jiff": "^0.7.3"
   }
 }
