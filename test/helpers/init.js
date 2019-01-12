@@ -21,9 +21,8 @@ let sampleDataRefs = {};
 let testDataCollectionsInitialized = false;
 let testSampleCollectionsInitialized = false;
 
-exports.setup = function setup({ forceTruncateTestData = false, forceTruncateService = false, shouldLoadSampleData = false } = {}) {
-  let testDataCollectionsTruncated = false, serviceCollectionsTruncated = false, sampleDataLoaded = false,
-    sampleDataLoadMessages = null;
+exports.setup = function setup({ forceTruncateTestData = false, forceTruncateService = false, ensureSampleDataLoad = false } = {}) {
+  let testDataCollectionsTruncated = false, serviceCollectionsTruncated = false, sampleDataLoadMessages = null;
 
   if (!testDataCollectionsInitialized) {
     ensureTestDocumentCollections();
@@ -43,17 +42,21 @@ exports.setup = function setup({ forceTruncateTestData = false, forceTruncateSer
     serviceCollectionsTruncated = truncateServiceCollections();
   }
 
-  if (shouldLoadSampleData && !testSampleCollectionsInitialized) {
+  if (ensureSampleDataLoad && !testSampleCollectionsInitialized) {
     serviceCollectionsTruncated = serviceCollectionsTruncated || truncateServiceCollections();
 
     const results = loadSampleData();
     sampleDataRefs = omit(results, 'messages');
     sampleDataLoadMessages = results.messages;
-    sampleDataLoaded = true;
     testSampleCollectionsInitialized = true;
   }
 
-  return { serviceCollectionsTruncated, testDataCollectionsTruncated, sampleDataLoaded, sampleDataLoadMessages };
+  return {
+    serviceCollectionsTruncated,
+    testDataCollectionsTruncated,
+    sampleDataLoaded: testSampleCollectionsInitialized,
+    sampleDataLoadMessages
+  };
 };
 
 function ensureTestDocumentCollections() {

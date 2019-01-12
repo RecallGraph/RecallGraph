@@ -24,23 +24,24 @@ function getRandomKeyPattern(bracesOnly = false) {
 
 function getRandomSampleCollectionPatterns(bracesOnly = false) {
   const sampleDataRefsWrapper = chain(getSampleDataRefs());
-
-  return sampleDataRefsWrapper.pick('vertexCollections', 'edgeCollections')
+  const sampleSize = random(1, sampleDataRefsWrapper.size());
+  const collsWrapper = sampleDataRefsWrapper.pick('vertexCollections', 'edgeCollections')
     .values()
     .flatten()
-    .map(coll => {
-      const range = getRandomSubstringRange(coll);
-      const substr = coll.substring(range[0], range[1]);
+    .sampleSize(sampleSize);
 
-      if (bracesOnly) {
-        return substr;
-      }
-      else {
-        return `*${substr}*`;
-      }
-    })
-    .value()
-    .join(',');
+  if (bracesOnly) {
+    return collsWrapper.value();
+  }
+  else {
+    return collsWrapper.map(coll => {
+        const range = getRandomSubstringRange(coll);
+
+        return `*${coll.substring(range[0], range[1])}*`;
+      })
+      .value()
+      .join(',');
+  }
 }
 
 function getTestDataCollectionPatterns() {
