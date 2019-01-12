@@ -12,8 +12,7 @@
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
-    "truncate": "scripts/truncate.js",
-    "loadSampleData": "scripts/loadSampleData.js"
+    "truncate": "scripts/truncate.js"
   },
   "tests": [
     "test/unit/**/*.js",

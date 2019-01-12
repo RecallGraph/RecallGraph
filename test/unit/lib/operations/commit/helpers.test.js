@@ -265,7 +265,7 @@ describe('Commit Helpers - prepInsert', () => {
       k1: 'v1'
     };
 
-    const { result, event, timestampType, time, prevEvent, ssData } = prepInsert(collName, node);
+    const { result, event, time, prevEvent, ssData } = prepInsert(collName, node);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result).to.have.property('_id');
@@ -281,7 +281,6 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.old).to.be.empty;
 
     expect(event).to.equal('created');
-    expect(timestampType).to.equal('ctime');
     expect(typeof time).to.equal('number');
 
     const coll = db._collection(collName);
@@ -337,7 +336,7 @@ describe('Commit Helpers - prepInsert', () => {
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
-    const { result, event, timestampType, time, prevEvent, ssData } = prepInsert(collName, enode);
+    const { result, event, time, prevEvent, ssData } = prepInsert(collName, enode);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result).to.have.property('_id');
@@ -355,7 +354,6 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.old).to.be.empty;
 
     expect(event).to.equal('created');
-    expect(timestampType).to.equal('ctime');
     expect(typeof time).to.equal('number');
 
     const coll = db._collection(collName);
@@ -436,7 +434,7 @@ describe('Commit Helpers - prepReplace', () => {
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     node.k1 = 'v2';
 
-    const { result, event, timestampType, time, prevEvent, ssData } = prepReplace(collName, node);
+    const { result, event, time, prevEvent, ssData } = prepReplace(collName, node);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(node._id);
@@ -454,7 +452,6 @@ describe('Commit Helpers - prepReplace', () => {
     expect(result.old.k1).to.equal('v1');
 
     expect(event).to.equal('updated');
-    expect(timestampType).to.equal('mtime');
     expect(typeof time).to.equal('number');
 
     const lastEvent = getLatestEvent(result, coll);
@@ -509,7 +506,7 @@ describe('Commit Helpers - prepReplace', () => {
 
     ecnode.k1 = 'v2';
 
-    const { result, event, timestampType, time, prevEvent, ssData } = prepReplace(pathParams.collection, ecnode);
+    const { result, event, time, prevEvent, ssData } = prepReplace(pathParams.collection, ecnode);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(ecnode._id);
@@ -531,7 +528,6 @@ describe('Commit Helpers - prepReplace', () => {
     expect(result.old.k1).to.equal('v1');
 
     expect(event).to.equal('updated');
-    expect(timestampType).to.equal('mtime');
     expect(typeof time).to.equal('number');
 
     const coll = db._collection(pathParams.collection);
@@ -595,7 +591,7 @@ describe('Commit Helpers - prepRemove', () => {
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
-    const { result, event, timestampType, time, prevEvent, ssData } = prepRemove(collName, node);
+    const { result, event, time, prevEvent, ssData } = prepRemove(collName, node);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(node._id);
@@ -611,7 +607,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result.old.k1).to.equal('v1');
 
     expect(event).to.equal('deleted');
-    expect(timestampType).to.equal('dtime');
     expect(typeof time).to.equal('number');
 
     const lastEvent = getLatestEvent(result, coll);
@@ -655,7 +650,7 @@ describe('Commit Helpers - prepRemove', () => {
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
-    const { result, event, timestampType, time, prevEvent, ssData } = prepRemove(pathParams.collection, ecnode);
+    const { result, event, time, prevEvent, ssData } = prepRemove(pathParams.collection, ecnode);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(ecnode._id);
@@ -673,7 +668,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result.old.k1).to.equal('v1');
 
     expect(event).to.equal('deleted');
-    expect(timestampType).to.equal('dtime');
     expect(typeof time).to.equal('number');
 
     const coll = db._collection(pathParams.collection);

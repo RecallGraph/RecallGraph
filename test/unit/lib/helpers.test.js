@@ -13,7 +13,7 @@ describe('Helpers - snapshotInterval', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const ssInterval = snapshotInterval(collName);
 
-    expect(ssInterval).to.equal(init.COLLECTION_SNAPSHPOT_INTERVAL);
+    expect(ssInterval).to.equal(init.TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL);
   });
 
   it('should return the default snapshot interval', () => {

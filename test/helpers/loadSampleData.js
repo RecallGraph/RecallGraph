@@ -1,16 +1,14 @@
 'use strict';
 
-const {db, query} = require('@arangodb');
-const {forEach, get, mapValues, isEqual, omitBy, isEmpty, trim} = require('lodash');
+const { db, query, errors: ARANGO_ERRORS } = require('@arangodb');
+const gg = require('@arangodb/general-graph');
+const { forEach, get, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap } = require('lodash');
 const fs = require('fs');
-const {createSingle} = require('../lib/handlers/createHandlers');
-const {replaceSingle} = require('../lib/handlers/replaceHandlers');
-const {removeMultiple} = require('../lib/handlers/removeHandlers');
+const { createSingle } = require('../../lib/handlers/createHandlers');
+const { replaceSingle } = require('../../lib/handlers/replaceHandlers');
+const { removeMultiple } = require('../../lib/handlers/removeHandlers');
 
-const argv = module.context.argv;
-if (get(argv, [0, 'confirmTruncate']) !== true) {
-  module.exports = 'Please set arg { "confirmTruncate": true } when running this script.';
-} else {
+module.exports = function loadSampleData() {
   //Define collection metadata
   const sampleDataCollections = {
     rawData: {
@@ -75,11 +73,15 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
     get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index));
     colls[key] = coll;
   });
-  const {rawData, stars, planets, moons, asteroids, comets, dwarfPlanets, lineage} = colls;
-  require('./truncate');
+  const { rawData, stars, planets, moons, asteroids, comets, dwarfPlanets, lineage } = colls;
 
-  //Init script output
-  module.exports = [];
+  //Init results
+  const results = {
+    messages: [],
+    vertexCollections: undefined,
+    edgeCollections: undefined,
+    graphs: []
+  };
 
   //Load and insert raw data
   const resourcePath = 'test/resources';
@@ -89,23 +91,25 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
     collection: rawData.name()
   };
   fs.list(module.context.fileName(resourcePath))
-  .filter(filename => dataPattern.test(filename))
-  .map(filename => `../${resourcePath}/${filename}`)
-  .forEach(fileName => {
-    try {
-      const jsonArr = require(fileName);
-      jsonArr.forEach(jsonObj => {
-        docCount++;
-        jsonObj._source = fileName;
-        createSingle({pathParams, body: jsonObj});
-        insertCount++;
-      });
-    } catch (e) {
-      errorCount++;
-      console.error(e);
-    }
-  });
-  module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`);
+    .filter(filename => dataPattern.test(filename))
+    .map(filename => `../../${resourcePath}/${filename}`)
+    .forEach(fileName => {
+      try {
+        const jsonArr = require(fileName);
+        jsonArr.forEach(jsonObj => {
+          docCount++;
+          jsonObj._source = fileName;
+          createSingle({ pathParams, body: jsonObj });
+          insertCount++;
+        });
+      }
+      catch (e) {
+        errorCount++;
+        console.error(e);
+      }
+    });
+  results.messages.push(
+    `Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`);
 
   //Remove footnote references from raw data
   let cursor = rawData.all();
@@ -125,15 +129,17 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
 
     if (!isEqual(object, newObj)) {
       try {
-        replaceSingle({pathParams, body: newObj});
+        replaceSingle({ pathParams, body: newObj });
         replaceCount++;
-      } catch (e) {
+      }
+      catch (e) {
         errorCount++;
         console.error(e);
       }
     }
   }
-  module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
 
   //Remove empty/unspecified fields from raw data
   cursor = rawData.all();
@@ -148,18 +154,19 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       return isEmpty(value) || unspecifiedPattern.test(value);
     });
 
-
     if (!isEqual(object, newObj)) {
       try {
-        replaceSingle({pathParams, body: newObj});
+        replaceSingle({ pathParams, body: newObj });
         replaceCount++;
-      } catch (e) {
+      }
+      catch (e) {
         errorCount++;
         console.error(e);
       }
     }
   }
-  module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
 
   //Insert spaces at title-case boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0;
@@ -176,14 +183,16 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
     docCount++;
     const object = cursor.next();
     try {
-      replaceSingle({pathParams, body: object});
+      replaceSingle({ pathParams, body: object });
       replaceCount++;
-    } catch (e) {
+    }
+    catch (e) {
       errorCount++;
       console.error(e);
     }
   }
-  module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
 
   //Insert spaces at alpha-numeric boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0;
@@ -197,17 +206,19 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
     docCount++;
     const object = cursor.next();
     try {
-      replaceSingle({pathParams, body: object});
+      replaceSingle({ pathParams, body: object });
       replaceCount++;
-    } catch (e) {
+    }
+    catch (e) {
       errorCount++;
       console.error(e);
     }
   }
-  module.exports.push(`Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`);
 
   //Populate stars
-  cursor = rawData.byExample({Type: 'star'});
+  cursor = rawData.byExample({ Type: 'star' });
   docCount = insertCount = errorCount = 0;
   while (cursor.hasNext()) {
     docCount++;
@@ -216,25 +227,27 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: stars.name()
       };
-      const star = createSingle({pathParams, body: obj});
+      const star = createSingle({ pathParams, body: obj });
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = star._id;
-      replaceSingle({pathParams, body: obj});
+      replaceSingle({ pathParams, body: obj });
 
       insertCount++;
-    } catch (e) {
+    }
+    catch (e) {
       errorCount++;
       console.error(e);
     }
   }
-  module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${stars.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Inserted ${insertCount} out of ${docCount} documents into ${stars.name()} with ${errorCount} errors`);
 
   //Populate planets
   docCount = insertCount = errorCount = 0;
-  const sun = stars.firstExample({Body: 'Sun'});
+  const sun = stars.firstExample({ Body: 'Sun' });
   cursor = query`
   for d in fulltext(${rawData}, 'Type', 'planet,-dwarf')
   return d
@@ -247,7 +260,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: planets.name()
       };
-      const planet = createSingle({pathParams, body: obj});
+      const planet = createSingle({ pathParams, body: obj });
 
       const linEdge = {
         _from: sun._id,
@@ -256,21 +269,23 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({pathParams, body: linEdge});
+      createSingle({ pathParams, body: linEdge });
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = planet._id;
-      replaceSingle({pathParams, body: obj});
+      replaceSingle({ pathParams, body: obj });
 
       insertCount++;
-    } catch (e) {
+    }
+    catch (e) {
       errorCount++;
       console.error(e);
     }
   }
-  module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${planets.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Inserted ${insertCount} out of ${docCount} documents into ${planets.name()} with ${errorCount} errors`);
 
   //Populate dwarf planets
   docCount = insertCount = errorCount = 0;
@@ -286,7 +301,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: dwarfPlanets.name()
       };
-      const dwarfPlanet = createSingle({pathParams, body: obj});
+      const dwarfPlanet = createSingle({ pathParams, body: obj });
 
       const linEdge = {
         _from: sun._id,
@@ -295,21 +310,23 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({pathParams, body: linEdge});
+      createSingle({ pathParams, body: linEdge });
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = dwarfPlanet._id;
-      replaceSingle({pathParams, body: obj});
+      replaceSingle({ pathParams, body: obj });
 
       insertCount++;
-    } catch (e) {
+    }
+    catch (e) {
       errorCount++;
       console.error(e);
     }
   }
-  module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${dwarfPlanets.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Inserted ${insertCount} out of ${docCount} documents into ${dwarfPlanets.name()} with ${errorCount} errors`);
 
   //Populate asteroids
   docCount = insertCount = errorCount = 0;
@@ -325,7 +342,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: asteroids.name()
       };
-      const asteroid = createSingle({pathParams, body: obj});
+      const asteroid = createSingle({ pathParams, body: obj });
 
       const linEdge = {
         _from: sun._id,
@@ -334,21 +351,23 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({pathParams, body: linEdge});
+      createSingle({ pathParams, body: linEdge });
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = asteroid._id;
-      replaceSingle({pathParams, body: obj});
+      replaceSingle({ pathParams, body: obj });
 
       insertCount++;
-    } catch (e) {
+    }
+    catch (e) {
       errorCount++;
       console.error(e);
     }
   }
-  module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${asteroids.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Inserted ${insertCount} out of ${docCount} documents into ${asteroids.name()} with ${errorCount} errors`);
 
   //Populate comets
   docCount = insertCount = errorCount = 0;
@@ -364,7 +383,7 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: comets.name()
       };
-      const comet = createSingle({pathParams, body: obj});
+      const comet = createSingle({ pathParams, body: obj });
 
       const linEdge = {
         _from: sun._id,
@@ -373,21 +392,23 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       pathParams = {
         collection: lineage.name()
       };
-      createSingle({pathParams, body: linEdge});
+      createSingle({ pathParams, body: linEdge });
 
       pathParams = {
         collection: rawData.name()
       };
       obj._ref = comet._id;
-      replaceSingle({pathParams, body: obj});
+      replaceSingle({ pathParams, body: obj });
 
       insertCount++;
-    } catch (e) {
+    }
+    catch (e) {
       errorCount++;
       console.error(e);
     }
   }
-  module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${comets.name()} with ${errorCount} errors`);
+  results.messages.push(
+    `Inserted ${insertCount} out of ${docCount} documents into ${comets.name()} with ${errorCount} errors`);
 
   //Populate moons
   docCount = insertCount = errorCount = 0;
@@ -397,11 +418,11 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
       let parent = concat(regex_replace(m.Type, '^.*([Mm]oon|[Ss]atellite)s? of ([0-9A-Za-z\\\\s]+);?.*$', '$2'), '%')
       let o = (
           for b in ${rawData}
+          filter not regex_test(b.Type, '(moon|satellite)', true)
           filter like(b.Body, parent)
           return b
       )
-      collect moon = m into rawObjects = o[0]
-  return {"moon": moon, "rawObject": rawObjects[0]}
+    return {"moon": m, "rawObject": o[0]}
   `;
   while (cursor.hasNext()) {
     docCount++;
@@ -411,35 +432,38 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
         pathParams = {
           collection: moons.name()
         };
-        const moon = createSingle({pathParams, body: obj.moon});
+        const moon = createSingle({ pathParams, body: obj.moon });
 
         const linEdge = {
-          _from: obj.rawObject._id,
+          _from: obj.rawObject._ref,
           _to: moon._id
         };
         pathParams = {
           collection: lineage.name()
         };
-        createSingle({pathParams, body: linEdge});
+        createSingle({ pathParams, body: linEdge });
 
         pathParams = {
           collection: rawData.name()
         };
         obj.moon._ref = obj.moon._ref ? [obj.moon._ref, moon._id] : moon._id;
-        replaceSingle({pathParams, body: obj.moon});
+        replaceSingle({ pathParams, body: obj.moon });
 
         insertCount++;
-      } catch (e) {
-        errorCount++;
-        console.error(e);
       }
-    } else {
+      catch (e) {
+        errorCount++;
+        console.error(e, obj);
+      }
+    }
+    else {
       warningCount++;
       failedMoonKeys.push(obj.moon._key);
       console.warn(`No suitable parent object found for moon ${obj.moon._id}. Skipped.`);
     }
   }
-  module.exports.push(`Inserted ${insertCount} out of ${docCount} documents into ${moons.name()} with ${errorCount} errors and ${warningCount} warnings`);
+  results.messages.push(
+    `Inserted ${insertCount} out of ${docCount} documents into ${moons.name()} with ${errorCount} errors and ${warningCount} warnings`);
 
   //Cleanup raw data of entries copied to other collections
   errorCount = 0;
@@ -454,13 +478,42 @@ if (get(argv, [0, 'confirmTruncate']) !== true) {
   pathParams = {
     collection: rawData.name()
   };
-  const rnodes = removeMultiple({pathParams, body: rids});
+  const rnodes = removeMultiple({ pathParams, body: rids });
   rnodes.forEach(rnode => {
     if (rnode.errorNum) {
       errorCount++;
-    } else {
+    }
+    else {
       removeCount++;
     }
   });
-  module.exports.push(`Removed ${removeCount} out of ${docCount} documents from ${rawData.name()} with ${errorCount} errors`);
-}
+  results.messages.push(
+    `Removed ${removeCount} out of ${docCount} documents from ${rawData.name()} with ${errorCount} errors`);
+
+  //(Re-)Create Solar System Objects Graph
+  const ssGraph = `${module.context.collectionPrefix}test_ss_lineage`;
+  let edgeDefs;
+  try {
+    const lineageRel = gg._relation(lineage.name(), invokeMap([stars, planets, dwarfPlanets, asteroids], 'name'),
+      invokeMap([planets, moons, asteroids, comets, dwarfPlanets], 'name'));
+    edgeDefs = gg._edgeDefinitions(lineageRel);
+
+    gg._drop(ssGraph);
+  }
+  catch (e) {
+    if (e.errorNum !== ARANGO_ERRORS.ERROR_GRAPH_NOT_FOUND.code) {
+      console.error(e);
+    }
+  }
+  finally {
+    const g = gg._create(ssGraph, edgeDefs, [rawData.name()]);
+
+    results.messages.push(`Created graph ${ssGraph}`);
+    results.graphs.push(ssGraph);
+    results.vertexCollections = invokeMap(g._vertexCollections(), 'name');
+    results.edgeCollections = invokeMap(g._edgeCollections(), 'name');
+  }
+
+  return results;
+};
+
