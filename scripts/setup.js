@@ -43,11 +43,13 @@ commandColl.ensureIndex({
   fields: ['_from', 'meta._key']
 });
 
-const commandRel = gg._relation(commands, [events], [events]);
-const ssRel = gg._relation(evtSSLinks, [events], [snapshots]);
-const edgeDefs = gg._edgeDefinitions(commandRel, ssRel);
 const { eventLog } = SERVICE_GRAPHS;
+let edgeDefs;
 try {
+  const commandRel = gg._relation(commands, [events], [events]);
+  const ssRel = gg._relation(evtSSLinks, [events], [snapshots]);
+  edgeDefs = gg._edgeDefinitions(commandRel, ssRel);
+
   gg._drop(eventLog);
 }
 catch (e) {
