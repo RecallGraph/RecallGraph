@@ -1,8 +1,10 @@
 'use strict';
 
 const { expect } = require('chai');
-const { getScopeFor, getSearchPattern, getScopeFilters, getScopeInitializers, getLimitClause } = require(
-  '../../../../../lib/operations/log/helpers');
+const {
+  getScopeFor, getSearchPattern, getScopeFilters, getScopeInitializers, getLimitClause, getSortingClause,
+  getGroupingClause
+} = require('../../../../../lib/operations/log/helpers');
 const init = require('../../../../helpers/init');
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern,
@@ -245,20 +247,82 @@ describe('Log Helpers - getLimitClause', () => {
   it('should return a limit clause expression when only limit is specified', () => {
     const limit = 1;
     const limitClause = getLimitClause(limit);
-    console.dir(limitClause);
 
     expect(limitClause).to.be.an.instanceOf(Object);
     // noinspection BadExpressionStatementJS
-    expect(limitClause.query).to.include('limit');
+    expect(limitClause.query).to.match(/^limit +@\w+$/i);
   });
 
   it('should return a limit clause expression when both limit and skip are specified', () => {
     const limit = 1, skip = 2;
     const limitClause = getLimitClause(limit, skip);
-    console.dir(limitClause);
 
     expect(limitClause).to.be.an.instanceOf(Object);
     // noinspection BadExpressionStatementJS
-    expect(limitClause.query).to.match(/^limit @\w+, @\w+$/);
+    expect(limitClause.query).to.match(/^limit @\w+, @\w+$/i);
+  });
+});
+
+describe('Log Helpers - getSortingClause', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }));
+
+  after(init.teardown);
+
+  it('should return a blank clause when no sort type specified, irrespective of groupBy and countsOnly', () => {
+    const sortType = null, groupBy = [null, 'node', 'collection', 'event'], countsOnly = [false, true];
+    for (const gb of groupBy) {
+      for (const co of countsOnly) {
+        const sortingClause = getSortingClause(sortType, gb, co);
+
+        expect(sortingClause).to.be.an.instanceOf(Object);
+        // noinspection BadExpressionStatementJS
+        expect(sortingClause.query).to.be.empty;
+      }
+    }
+  });
+
+  it('should return a sort clause when sort type is specified, irrespective of groupBy and countsOnly', () => {
+    const sortType = ['asc', 'desc'], groupBy = [null, 'node', 'collection', 'event'], countsOnly = [false, true];
+    for (const st of sortType) {
+      for (const gb of groupBy) {
+        for (const co of countsOnly) {
+          const sortingClause = getSortingClause(st, gb, co);
+
+          expect(sortingClause).to.be.an.instanceOf(Object);
+          // noinspection BadExpressionStatementJS
+          expect(sortingClause.query).to.match(/^sort \S+ (asc|desc)$/i);
+        }
+      }
+    }
+  });
+});
+
+describe('Log Helpers - getGroupingClause', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }));
+
+  after(init.teardown);
+
+  it('should return a blank clause when no groupBy specified, irrespective of countsOnly', () => {
+    const groupBy = null, countsOnly = [false, true];
+    for (const co of countsOnly) {
+      const groupingClause = getGroupingClause(groupBy, co);
+
+      expect(groupingClause).to.be.an.instanceOf(Object);
+      // noinspection BadExpressionStatementJS
+      expect(groupingClause.query).to.be.empty;
+    }
+  });
+
+  it('should return a grouping clause when groupBy is specified, irrespective of countsOnly', () => {
+    const groupBy = ['node', 'collection', 'event'], countsOnly = [false, true];
+    for (const gb of groupBy) {
+      for (const co of countsOnly) {
+        const groupingClause = getGroupingClause(gb, co);
+
+        expect(groupingClause).to.be.an.instanceOf(Object);
+        // noinspection BadExpressionStatementJS
+        expect(groupingClause.query).to.match(/collect grp = .*$/i);
+      }
+    }
   });
 });
