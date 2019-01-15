@@ -3,12 +3,12 @@
 const { expect } = require('chai');
 const {
   getScopeFor, getSearchPattern, getScopeFilters, getScopeInitializers, getLimitClause, getSortingClause,
-  getGroupingClause
+  getGroupingClause, getReturnClause, getTimeBoundFilters
 } = require('../../../../../lib/operations/log/helpers');
 const init = require('../../../../helpers/init');
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern,
-  getRandomNodeBracePathPattern
+  getRandomNodeBracePathPattern, cartesian
 } = require('../../../../helpers/logTestHelper');
 
 describe('Log Helpers - getScopeFor', () => {
@@ -268,32 +268,86 @@ describe('Log Helpers - getSortingClause', () => {
 
   after(init.teardown);
 
-  it('should return a blank clause when no sort type specified, irrespective of groupBy and countsOnly', () => {
-    const sortType = null, groupBy = [null, 'node', 'collection', 'event'], countsOnly = [false, true];
-    for (const gb of groupBy) {
-      for (const co of countsOnly) {
-        const sortingClause = getSortingClause(sortType, gb, co);
+  it('should return a primary+secondary sort clause when groupBy is null, irrespective of sortType and countsOnly',
+    () => {
+      const sortType = [null, 'asc', 'desc'], groupBy = null, countsOnly = [false, true];
+      const combos = cartesian({ countsOnly, sortType });
+      combos.forEach(combo => {
+        const sortingClause = getSortingClause(combo.sortType, groupBy, combo.countsOnly);
 
         expect(sortingClause).to.be.an.instanceOf(Object);
-        // noinspection BadExpressionStatementJS
-        expect(sortingClause.query).to.be.empty;
-      }
-    }
+        expect(sortingClause).to.respondTo('toAQL');
+        expect(sortingClause.toAQL()).to.match(/^sort \S+ (asc|desc), \S+ asc$/i);
+      });
+    });
+
+  it('should return a primary+secondary sort clause when groupBy is specified and countsOnly is true, irrespective of' +
+    ' sortType', () => {
+    const sortType = [null, 'asc', 'desc'], groupBy = ['node', 'collection', 'event'], countsOnly = true;
+    const combos = cartesian({ groupBy, sortType });
+    combos.forEach(combo => {
+      const sortingClause = getSortingClause(combo.sortType, combo.groupBy, countsOnly);
+
+      expect(sortingClause).to.be.an.instanceOf(Object);
+      expect(sortingClause).to.respondTo('toAQL');
+      expect(sortingClause.toAQL()).to.match(/^sort \S+ (asc|desc), \S+ asc$/i);
+    });
   });
 
-  it('should return a sort clause when sort type is specified, irrespective of groupBy and countsOnly', () => {
-    const sortType = ['asc', 'desc'], groupBy = [null, 'node', 'collection', 'event'], countsOnly = [false, true];
-    for (const st of sortType) {
-      for (const gb of groupBy) {
-        for (const co of countsOnly) {
-          const sortingClause = getSortingClause(st, gb, co);
+  it('should return a secondary sort clause when groupBy is specified and countsOnly is false, irrespective of' +
+    ' sortType', () => {
+    const sortType = [null, 'asc', 'desc'], groupBy = ['node', 'collection', 'event'], countsOnly = false;
+    const combos = cartesian({ groupBy, sortType });
+    combos.forEach(combo => {
+      const sortingClause = getSortingClause(combo.sortType, combo.groupBy, countsOnly);
 
-          expect(sortingClause).to.be.an.instanceOf(Object);
-          // noinspection BadExpressionStatementJS
-          expect(sortingClause.query).to.match(/^sort \S+ (asc|desc)$/i);
-        }
-      }
-    }
+      expect(sortingClause).to.be.an.instanceOf(Object);
+      expect(sortingClause).to.respondTo('toAQL');
+      expect(sortingClause.toAQL()).to.match(/^sort \S+ asc$/i);
+    });
+  });
+});
+
+describe('Log Helpers - getTimeBoundFilters', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }));
+
+  after(init.teardown);
+
+  it('should return no filters when neither since nor until are specified', () => {
+    const since = null, until = null;
+
+    const timeBoundFilters = getTimeBoundFilters(since, until);
+
+    expect(timeBoundFilters).to.be.an.instanceOf(Array);
+    // noinspection BadExpressionStatementJS
+    expect(timeBoundFilters).to.be.empty;
+  });
+
+  it('should return a single filter when just one of since or until are specified', () => {
+    const combos = [{ since: 1 }, { until: 1 }];
+    combos.forEach(combo => {
+      const timeBoundFilters = getTimeBoundFilters(combo.since, combo.until);
+
+      expect(timeBoundFilters).to.be.an.instanceOf(Array);
+      // noinspection BadExpressionStatementJS
+      expect(timeBoundFilters).to.have.lengthOf(1);
+      expect(timeBoundFilters[0]).to.be.an.instanceOf(Object);
+      expect(timeBoundFilters[0].query).to.match(/filter v\.ctime [<>]= @\w+/);
+    });
+  });
+
+  it('should return two filters when both since and until are specified', () => {
+    const since = 1, until = 1;
+
+    const timeBoundFilters = getTimeBoundFilters(since, until);
+
+    expect(timeBoundFilters).to.be.an.instanceOf(Array);
+    // noinspection BadExpressionStatementJS
+    expect(timeBoundFilters).to.have.lengthOf(2);
+    timeBoundFilters.forEach(tbf => {
+      expect(tbf).to.be.an.instanceOf(Object);
+      expect(tbf.query).to.match(/filter v\.ctime [<>]= @\w+/);
+    });
   });
 });
 
@@ -304,25 +358,72 @@ describe('Log Helpers - getGroupingClause', () => {
 
   it('should return a blank clause when no groupBy specified, irrespective of countsOnly', () => {
     const groupBy = null, countsOnly = [false, true];
-    for (const co of countsOnly) {
+    countsOnly.forEach(co => {
       const groupingClause = getGroupingClause(groupBy, co);
 
       expect(groupingClause).to.be.an.instanceOf(Object);
+      expect(groupingClause).to.respondTo('toAQL');
       // noinspection BadExpressionStatementJS
-      expect(groupingClause.query).to.be.empty;
-    }
+      expect(groupingClause.toAQL()).to.be.empty;
+    });
   });
 
   it('should return a grouping clause when groupBy is specified, irrespective of countsOnly', () => {
     const groupBy = ['node', 'collection', 'event'], countsOnly = [false, true];
-    for (const gb of groupBy) {
-      for (const co of countsOnly) {
-        const groupingClause = getGroupingClause(gb, co);
+    const combos = cartesian({ groupBy, countsOnly });
+    combos.forEach(combo => {
+      const groupingClause = getGroupingClause(combo.groupBy, combo.countsOnly);
 
-        expect(groupingClause).to.be.an.instanceOf(Object);
-        // noinspection BadExpressionStatementJS
-        expect(groupingClause.query).to.match(/collect grp = .*$/i);
-      }
-    }
+      expect(groupingClause).to.be.an.instanceOf(Object);
+      expect(groupingClause).to.respondTo('toAQL');
+      expect(groupingClause.toAQL()).to.match(new RegExp(`collect ${combo.groupBy} = .*$`, 'i'));
+    });
   });
+});
+
+describe('Log Helpers - getReturnClause', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }));
+
+  after(init.teardown);
+
+  it('should return a default return clause when groupBy is null, irrespective of countsOnly and sortType', () => {
+    const groupBy = null, countsOnly = [false, true], sortType = [null, 'asc', 'desc'];
+    const combos = cartesian({ countsOnly, sortType });
+    combos.forEach(combo => {
+      const returnClause = getReturnClause(combo.sortType, groupBy, combo.countsOnly);
+
+      expect(returnClause).to.be.an.instanceOf(Object);
+      expect(returnClause).to.respondTo('toAQL');
+      expect(returnClause.toAQL()).include('return');
+    });
+  });
+
+  it('should return a default return clause when groupBy is specified and countsOnly is true, irrespective of sortType',
+    () => {
+      const groupBy = ['node', 'collection', 'event'], countsOnly = true, sortType = [null, 'asc', 'desc'];
+      const combos = cartesian({ groupBy, sortType });
+      combos.forEach(combo => {
+        const returnClause = getReturnClause(combo.sortType, combo.groupBy, countsOnly);
+
+        expect(returnClause).to.be.an.instanceOf(Object);
+        expect(returnClause).to.respondTo('toAQL');
+        expect(returnClause.toAQL()).include('return');
+      });
+    });
+
+  it('should return a sorted-group return clause when groupBy is specified and countsOnly is false, irrespective of' +
+    ' sortType',
+    () => {
+      const groupBy = ['node', 'collection', 'event'], countsOnly = false, sortType = [null, 'asc', 'desc'];
+      const combos = cartesian({ groupBy, sortType });
+      combos.forEach(combo => {
+        const returnClause = getReturnClause(combo.sortType, combo.groupBy, countsOnly);
+
+        expect(returnClause).to.be.an.instanceOf(Object);
+        expect(returnClause).to.respondTo('toAQL');
+
+        const aqlFragment = returnClause.toAQL();
+        expect(aqlFragment).match(/events.*sort.*(asc|desc) return/);
+      });
+    });
 });

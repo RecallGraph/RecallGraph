@@ -33,6 +33,13 @@ eventColl.ensureIndex({
   deduplicate: false,
   fields: ['meta._id', 'event', 'ctime']
 });
+eventColl.ensureIndex({
+  type: 'skiplist',
+  sparse: true,
+  unique: false,
+  deduplicate: false,
+  fields: ['ctime']
+});
 
 const commandColl = db._collection(commands);
 commandColl.ensureIndex({

@@ -1,11 +1,14 @@
 'use strict';
 
-const { random, chain } = require('lodash');
+const { random, chain, pick, flatMap } = require('lodash');
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init');
 
-function getRandomSubstringRange(str) {
-  return [random(0, Math.floor(str.length / 2) - 1), random(Math.ceil(str.length / 2) + 1, str.length)];
+function getRandomSubRange(objWithLength) {
+  return [random(0, Math.floor(objWithLength.length / 2) - 1),
+          random(Math.ceil(objWithLength.length / 2) + 1, objWithLength.length)];
 }
+
+exports.getRandomSubRange = getRandomSubRange;
 
 function getRandomKeyPattern(bracesOnly = false) {
   const patterns = [
@@ -35,7 +38,7 @@ function getRandomSampleCollectionPatterns(bracesOnly = false) {
   }
   else {
     return collsWrapper.map(coll => {
-        const range = getRandomSubstringRange(coll);
+        const range = getRandomSubRange(coll);
 
         return `*${coll.substring(range[0], range[1])}*`;
       })
@@ -54,7 +57,7 @@ function getTestDataCollectionPatterns() {
 exports.getRandomGraphPathPattern = function getRandomGraphPathPattern() {
   const sampleDataRefs = getSampleDataRefs();
   const graphPatterns = sampleDataRefs.graphs.map(graph => {
-    const range = getRandomSubstringRange(graph);
+    const range = getRandomSubRange(graph);
 
     return `*${graph.substring(range[0], range[1])}*`;
   }).join(',');
@@ -83,4 +86,23 @@ exports.getRandomNodeBracePathPattern = function getRandomNodeBracePathPattern()
 
   return `/n/{{${sampleCollectionPatterns}}/{${getRandomKeyPattern(true)}},`
     + `${testDataCollectionPatterns}/{${getRandomKeyPattern(true)}}}`;
+};
+
+exports.cartesian = function cartesian(keyedArrays = {}) {
+  const keys = Object.keys(keyedArrays);
+  if (!keys.length) {
+    return [];
+  }
+
+  const headKey = keys[0];
+  if (keys.length === 1) {
+    return keyedArrays[headKey].map(val => ({ [headKey]: val }));
+  }
+  else {
+    const head = keyedArrays[headKey];
+    const tail = pick(keyedArrays, keys.slice(1));
+    const tailCombos = cartesian(tail);
+
+    return flatMap(tailCombos, (tailItem) => head.map(headItem => Object.assign({ [headKey]: headItem }, tailItem)));
+  }
 };

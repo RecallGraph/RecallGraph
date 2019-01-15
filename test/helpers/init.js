@@ -17,6 +17,35 @@ const TEST_DATA_COLLECTIONS = Object.freeze(merge({}, TEST_DOCUMENT_COLLECTIONS,
 
 const TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = 2;
 
+function ensureTestEdgeCollections() {
+  forEach(TEST_EDGE_COLLECTIONS, (collName) => {
+    if (!db._collection(collName)) {
+      db._createEdgeCollection(collName);
+    }
+  });
+}
+
+function setSnapshotIntervals() {
+  forEach(TEST_DATA_COLLECTIONS,
+    (collName) => module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL);
+}
+
+function truncateDataCollections() {
+  forEach(TEST_DATA_COLLECTIONS, (collName) => {
+    db._truncate(collName);
+  });
+
+  return true;
+}
+
+function truncateServiceCollections() {
+  forEach(SERVICE_COLLECTIONS, (collName) => {
+    db._truncate(collName);
+  });
+
+  return true;
+}
+
 let sampleDataRefs = {};
 let testDataCollectionsInitialized = false;
 let testSampleCollectionsInitialized = false;
@@ -65,35 +94,6 @@ function ensureTestDocumentCollections() {
       db._createDocumentCollection(collName);
     }
   });
-}
-
-function ensureTestEdgeCollections() {
-  forEach(TEST_EDGE_COLLECTIONS, (collName) => {
-    if (!db._collection(collName)) {
-      db._createEdgeCollection(collName);
-    }
-  });
-}
-
-function setSnapshotIntervals() {
-  forEach(TEST_DATA_COLLECTIONS,
-    (collName) => module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL);
-}
-
-function truncateDataCollections() {
-  forEach(TEST_DATA_COLLECTIONS, (collName) => {
-    db._truncate(collName);
-  });
-
-  return true;
-}
-
-function truncateServiceCollections() {
-  forEach(SERVICE_COLLECTIONS, (collName) => {
-    db._truncate(collName);
-  });
-
-  return true;
 }
 
 exports.teardown = noop;
