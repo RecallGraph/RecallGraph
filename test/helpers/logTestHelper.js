@@ -1,11 +1,15 @@
 'use strict';
 
-const { random, chain, pick, flatMap } = require('lodash');
+const { random, chain, pick, flatMap, findIndex, findLastIndex, range } = require('lodash');
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init');
+const { expect } = require('chai');
+const log = require('../../lib/operations/log');
+const { getGroupingClause } = require('../../lib/operations/log/helpers');
+const { aql } = require('@arangodb');
 
 function getRandomSubRange(objWithLength) {
   return [random(0, Math.floor(objWithLength.length / 2) - 1),
-          random(Math.ceil(objWithLength.length / 2) + 1, objWithLength.length)];
+          random(Math.ceil(objWithLength.length / 2) + 1, objWithLength.length - 1)];
 }
 
 exports.getRandomSubRange = getRandomSubRange;
@@ -88,7 +92,7 @@ exports.getRandomNodeBracePathPattern = function getRandomNodeBracePathPattern()
     + `${testDataCollectionPatterns}/{${getRandomKeyPattern(true)}}}`;
 };
 
-exports.cartesian = function cartesian(keyedArrays = {}) {
+function cartesian(keyedArrays = {}) {
   const keys = Object.keys(keyedArrays);
   if (!keys.length) {
     return [];
@@ -104,5 +108,64 @@ exports.cartesian = function cartesian(keyedArrays = {}) {
     const tailCombos = cartesian(tail);
 
     return flatMap(tailCombos, (tailItem) => head.map(headItem => Object.assign({ [headKey]: headItem }, tailItem)));
+  }
+}
+
+exports.cartesian = cartesian;
+
+exports.testUngroupedEvents = function testUngroupedEvents(path, allEvents, expectedEvents) {
+  expect(allEvents).to.deep.equal(expectedEvents);
+
+  const timeRange = getRandomSubRange(allEvents),
+    sliceRange = getRandomSubRange(range(1, timeRange[1] - timeRange[0]));
+  const since = [0, allEvents[timeRange[1]].ctime], until = [0, allEvents[timeRange[0]].ctime];
+  const skip = [0, sliceRange[0]], limit = [0, sliceRange[1]];
+  const sortType = [null, 'asc', 'desc'], groupBy = [null], countsOnly = [false, true];
+  const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
+
+  combos.forEach(combo => {
+    const events = log(path, combo);
+
+    expect(events).to.be.an.instanceOf(Array);
+
+    const earliestTimeBoundIndex = combo.since ? findLastIndex(allEvents,
+      { ctime: combo.since }) : allEvents.length - 1;
+    const latestTimeBoundIndex = combo.until && findIndex(allEvents, { ctime: combo.until });
+
+    const timeSlicedEvents = allEvents.slice(latestTimeBoundIndex, earliestTimeBoundIndex + 1);
+    const sortedTimeSlicedEvents = (combo.sortType === 'asc') ? timeSlicedEvents.reverse() : timeSlicedEvents;
+
+    //https://wiki.teamfortress.com/wiki/Horseless_Headless_Horsemann
+    let slicedSortedTimeSlicedEvents, start = 0, end = 0;
+    if (combo.limit) {
+      start = combo.skip;
+      end = start + combo.limit;
+      slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents.slice(start, end);
+    }
+    else {
+      slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents;
+    }
+
+    expect(events).to.deep.equal(slicedSortedTimeSlicedEvents);
+  });
+};
+
+exports.getGroupingClauseForExpectedResultsQuery = function getGroupingClauseForExpectedResultsQuery(groupBy,
+  countsOnly) {
+  if (groupBy !== 'collection') {
+    return getGroupingClause(groupBy, countsOnly);
+  }
+  else {
+    const groupingPrefix = 'collect collection = regex_split(v.meta._id, "/")[0]';
+
+    let groupingSuffix;
+    if (countsOnly) {
+      groupingSuffix = 'with count into total';
+    }
+    else {
+      groupingSuffix = 'into events = keep(v, \'_id\', \'ctime\', \'event\', \'meta\')';
+    }
+
+    return aql.literal(`${groupingPrefix} ${groupingSuffix}`);
   }
 };
