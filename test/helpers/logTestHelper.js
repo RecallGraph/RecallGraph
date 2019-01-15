@@ -169,3 +169,39 @@ exports.getGroupingClauseForExpectedResultsQuery = function getGroupingClauseFor
     return aql.literal(`${groupingPrefix} ${groupingSuffix}`);
   }
 };
+
+exports.getNodeBraceSampleIds = function getNodeBraceSampleIds() {
+  const rootPathEvents = log('/');
+  const size = random(1, rootPathEvents.length);
+  const sampleIds = [];
+  const pathSuffixes = chain(rootPathEvents)
+    .shuffle()
+    .sampleSize(size)
+    .map('meta._id')
+    .uniq()
+    .map(id => {
+      sampleIds.push(id);
+
+      return id.split('/');
+    })
+    .transform((groups, matchPair) => {
+      const group = matchPair[0];
+      groups[group] = groups[group] || [];
+      groups[group].push(matchPair[1]);
+    }, {})
+    .map((keys, collName) => {
+      let suffix;
+      if (keys.length === 1) {
+        suffix = keys[0];
+      }
+      else {
+        suffix = `{${keys.join(',')}}`;
+      }
+      return `${collName}/${suffix}`;
+    })
+    .value();
+
+  const path = (pathSuffixes.length > 1) ? `/n/{${pathSuffixes.join(',')}}` : `/n/${pathSuffixes[0]}`;
+
+  return { path, sampleIds };
+};

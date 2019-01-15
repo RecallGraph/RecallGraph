@@ -47,7 +47,7 @@ commandColl.ensureIndex({
   sparse: true,
   unique: true,
   deduplicate: false,
-  fields: ['_from', 'meta._key']
+  fields: ['_from', 'meta._id']
 });
 
 const { eventLog } = SERVICE_GRAPHS;
