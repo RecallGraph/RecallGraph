@@ -14,7 +14,7 @@ _evstore_ is an event-based datastore with version-control - like features.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-tracking system.
  
- The event tracker's design is based on the [eventsourcing](https://martinfowler.com/eaaDev/EventSourcing.html) principles described in [Martin Fowler's Bliki](https://martinfowler.com/bliki/).
+ The event tracker's design is based on the [eventsourcing](https://martinfowler.com/eaaDev/EventSourcing.html) principles described in [Martin Fowler's Bliki](https://martinfowler.com/bliki/), with the addition of having ACID guarantees for single-instance deployments.
  
 ### Quick Technical Overview ###
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
@@ -30,9 +30,9 @@ Node read methods would be no different from what the core REST API already prov
 When a write method is invoked on a node, the following things happen behind the scenes:
 1. A transaction is opened with read and write (non-exclusive) locks on appropriate collections.
 2. The provided node is written.
-3. An event object corresponding to the write is created, that records the current time, event type (create, update, delete) and some meta information about the node. This event is written to a service-managed **document** collection.
-4. A command object is created using [JSON Patch RFC6902](https://tools.ietf.org/html/rfc6902) to compute a reversible diff from the last known state (`{}` by default) to the current state of the node. This command is written to a service-managed **edge** collection, linking the current event to the last one (an `origin` event by default).
-5. Optionally, if a specified number of events have been recorded for the node, a snapshot object is created which records the entire current state of the node. This snapshot object is linked to the current event and persisted to a service-managed collection. The number of events that must occur between two consecutive snapshots is configurable at a default and a per-collection level in the service configuration.
+3. An event object corresponding to the write is created, that records the current time, event type (create/update/delete) and some meta information about the node. This event is appended to a service-managed **document** collection.
+4. A command object is created using [JSON Patch RFC6902](https://tools.ietf.org/html/rfc6902) to compute a reversible diff from the last known state (`{}` by default) to the current state of the node. This command is appended to a service-managed **edge** collection, linking the current event to the last one (an `origin` event by default).
+5. Optionally, if a specified number of events have been recorded for the node, a snapshot object is created which records the entire current state of the node. This snapshot object is linked to the current event and persisted to a service-managed collection. The number of events that must occur between two consecutive snapshots is configurable at a default level as well as a collection-specific level in the service configuration.
 6. The transaction is committed.
 
 If something goes wrong at any step in the above process, the transaction is rolled back.
@@ -48,44 +48,44 @@ Snapshots, when available, are used on a best-effort basis to minimize the numbe
 
 Well, all is not lost in this case, since _evstore_, like Git, supports a **commit** operation that lets you explicitly add an event record post hoc. Obviously, this would create only a single diff from the last known state to the current state, and any intermediate mutations would collapse into that diff. Unfortunately, there is no way around this.
 
-_evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata. They can query (read-only) this data as though the service is not even there!
+_evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
 
 ### Salient API Features ###
-Detailed API docs are being written, and will be published soon.
+Detailed API docs are being written, and will be published soon. In the meantime, you can play around with the API in the built-in Swagger console. Some lightweight documentation is embedded there. 
 
 #### Document ####
 * Create - Create single/multiple nodes (documents/edges)
-* Replace - Replace single/multiple nodes with entirely new contents
+* Replace - Replace entire single/multiple nodes with new content
 * Delete - Delete single/multiple nodes
 * **(Planned)** Update - Add/Update specific fields in single/multiple nodes
 
 #### Operations ####
 * **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
 * Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
-* **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commits of specified nodes (will use `log` behind the scenes)
+* **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commit endpoints for specified nodes (might use `log` behind the scenes)
 * **(Planned)** Patch - Apply a set of diffs to specified nodes to rewind/fast-forward them in time (will use `diff` behind the scenes)
 
 ### Setting Up ###
 1. Clone this repository.
-2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx cli` is more suitable for power users.
-3. Try out the API endpoints through the super-cool Swagger-generated interface.
+2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
+3. Try out the API endpoints through the Swagger console.
 
 ### Testing ###
 **IMPORTANT:** Running tests will create some test collections apart from the usual service collections. This has a few caveats. **Carefully read the following points before running this service's test suites:**
-1. Although test collections are namespaced using a prefix (the service mount point) in order to minimize chances of user-defined collections being inadvertently picked up, there is a small chance that it could still happen, especially when the same prefix is also used for user-defined collections.
+1. Although test collections are namespaced using a prefix (the service mount point) in order to minimize chances of collision with user-defined collections, there is a small chance that it could still happen, especially when the same prefix is also used for user-defined collections.
 2. Both service and test collections are populated with test data.
-3. **Both service and test collections are truncated at the start of the test run!**
+3. **Both service and test collections are truncated at the start of every test run!**
 
-To avoid getting into trouble while testing, it is best to deploy this service to a blank database that isn't used for anything else.
+To avoid getting into trouble while testing, it is best to deploy this service to a blank database that isn't used for anything else, and then run the test suites there.
 
-Run tests via the web interface or `foxx cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end. It may look like your database has gone out for lunch, but it is actually busy crunching numbers. Use `top` or equivalent to monitor the process if you're unsure.
+Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end. It may look like your database has gone out for lunch, but it is actually busy crunching numbers. Use `top` or equivalent to monitor the process if you're unsure.
 
 ### Documentation ###
-Some documentation is already available through the Swagger interface. More detailed documentation is actively being worked on, and will available in-service as well as on the project wiki soon.
+Some documentation is already available through the Swagger interface. More detailed documentation is actively being worked on, and will be available through the web interface as well as on the project wiki very soon.
 
 ### Limitations ###
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
-2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed in such deployments.
+2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed for such deployments.
 
 ### Contribution Guidelines ###
 A formal contribution guideline document will be prepared eventually. In the meantime,
@@ -96,5 +96,5 @@ A formal contribution guideline document will be prepared eventually. In the mea
 
 ### Get in Touch ###
 * Raise an issue or PR on this repo, or
-* Mail me (email link in github profile), or
+* Mail me (email link in Github profile), or
 * DM me on Slack - `adityamukho@arangodb-community.slack.com`.
