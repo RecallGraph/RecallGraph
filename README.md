@@ -1,8 +1,6 @@
 # EVSTORE (Foxx Microservice) #
 A git-inspired event store for ArangoDB.
 
-Track the project's progess on this [Trello Board](https://trello.com/b/AGrGVmb8/evstore).
-
 ### DISCLAIMER ###
 * This project is under active development.
 * Expect heavy feature churn and unstable builds in the initial days.
@@ -80,7 +78,7 @@ To avoid getting into trouble while testing, it is best to deploy this service t
 
 Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end. It may look like your database has gone out for lunch, but it is actually busy crunching numbers. Use `top` or equivalent to monitor the process if you're unsure.
 
-### Documentation ###
+### Docs ###
 Some documentation is already available through the Swagger interface. More detailed documentation is actively being worked on, and will be available through the web interface as well as on the project wiki very soon.
 
 ### Limitations ###
