@@ -11,8 +11,7 @@
   "main": "main.js",
   "scripts": {
     "setup": "scripts/setup.js",
-    "teardown": "scripts/teardown.js",
-    "truncate": "scripts/truncate.js"
+    "teardown": "scripts/teardown.js"
   },
   "tests": [
     "test/unit/**/*.js",
