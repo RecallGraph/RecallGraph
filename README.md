@@ -1,18 +1,15 @@
 # EVSTORE (Foxx Microservice) #
-
 A git-inspired event store for ArangoDB.
 
 Track the project's progess on this [Trello Board](https://trello.com/b/AGrGVmb8/evstore).
 
 ### DISCLAIMER ###
-
 * This project is under active development.
 * Expect heavy feature churn and unstable builds in the initial days.
 * **DO NOT** use in production systems until a stable build is announced!
 
 
 ### Introduction ###
-
 _evstore_ is an event-based datastore with version-control - like features.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-tracking system.
@@ -20,7 +17,6 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
  The event tracker's design is based on the [eventsourcing](https://martinfowler.com/eaaDev/EventSourcing.html) principles described in [Martin Fowler's Bliki](https://martinfowler.com/bliki/).
  
 ### Quick Technical Overview ###
-
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
 
 _evstore_ exposes multiple write methods for individual/multiple nodes (documents/edges). Supported write method contracts (current and planned) are intended to closely follow the core REST API that ArangoDB already exports. These include:
@@ -54,27 +50,44 @@ Well, all is not lost in this case, since _evstore_, like Git, supports a **comm
 
 _evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata. They can query (read-only) this data as though the service is not even there!
 
-### Setting Up ###
+### Salient API Features ###
+Detailed API docs are being written, and will be published soon.
 
+#### Document ####
+* Create - Create single/multiple nodes (documents/edges)
+* Replace - Replace single/multiple nodes with entirely new contents
+* Delete - Delete single/multiple nodes
+* **(Planned)** Update - Add/Update specific fields in single/multiple nodes
+
+#### Operations ####
+* **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
+* Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
+* **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commits of specified nodes (will use `log` behind the scenes)
+* **(Planned)** Patch - Apply a set of diffs to specified nodes to rewind/fast-forward them in time (will use `diff` behind the scenes)
+
+### Setting Up ###
 1. Clone this repository.
 2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx cli` is more suitable for power users.
 3. Try out the API endpoints through the super-cool Swagger-generated interface.
 
 ### Testing ###
+**IMPORTANT:** Running tests will create some test collections apart from the usual service collections. This has a few caveats. **Carefully read the following points before running this service's test suites:**
+1. Although test collections are namespaced using a prefix (the service mount point) in order to minimize chances of user-defined collections being inadvertently picked up, there is a small chance that it could still happen, especially when the same prefix is also used for user-defined collections.
+2. Both service and test collections are populated with test data.
+3. **Both service and test collections are truncated at the start of the test run!**
+
+To avoid getting into trouble while testing, it is best to deploy this service to a blank database that isn't used for anything else.
 
 Run tests via the web interface or `foxx cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end. It may look like your database has gone out for lunch, but it is actually busy crunching numbers. Use `top` or equivalent to monitor the process if you're unsure.
 
 ### Documentation ###
-
 Some documentation is already available through the Swagger interface. More detailed documentation is actively being worked on, and will available in-service as well as on the project wiki soon.
 
 ### Limitations ###
-
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
 2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed in such deployments.
 
 ### Contribution Guidelines ###
-
 A formal contribution guideline document will be prepared eventually. In the meantime,
 
 * stick to the exisiting coding and formatting styles,
@@ -82,7 +95,6 @@ A formal contribution guideline document will be prepared eventually. In the mea
 * write test cases for every new piece of functionality and ensure good  code coverage. Automated builds and coverage reports will be set up soon.
 
 ### Get in Touch ###
-
 * Raise an issue or PR on this repo, or
 * Mail me (email link in github profile), or
 * DM me on Slack - `adityamukho@arangodb-community.slack.com`.
