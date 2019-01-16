@@ -3,7 +3,8 @@
 const { expect } = require('chai');
 const {
   getScopeFor, getSearchPattern, getScopeFilters, getScopeInitializers, getLimitClause, getSortingClause,
-  getGroupingClause, getReturnClause, getTimeBoundFilters
+  getGroupingClause, getReturnClause, getTimeBoundFilters, getDBScope, getGraphScope, getCollectionScope,
+  getNodeGlobScope, getNodeBraceScope
 } = require('../../../../../lib/operations/log/helpers');
 const init = require('../../../../helpers/init');
 const {
@@ -426,4 +427,57 @@ describe('Log Helpers - getReturnClause', () => {
         expect(aqlFragment).match(/events.*sort.*(asc|desc) return/);
       });
     });
+});
+
+describe('Log Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }));
+
+  after(init.teardown);
+
+  it('should return the DB scope', () => {
+    const path = '/';
+
+    const scope = getDBScope();
+
+    expect(scope).to.be.an.instanceOf(Object);
+    expect(scope.pathPattern).to.equal(path);
+    expect(scope).to.not.respondTo('filters');
+    expect(scope).to.not.respondTo('initializers');
+  });
+
+  it('should return the Graph scope', () => {
+    const scope = getGraphScope();
+
+    expect(scope).to.be.an.instanceOf(Object);
+    expect(scope.pathPattern).to.include('/g/');
+    expect(scope).to.respondTo('filters');
+    expect(scope).to.not.respondTo('initializers');
+  });
+
+  it('should return the Collection scope', () => {
+    const scope = getCollectionScope();
+
+    expect(scope).to.be.an.instanceOf(Object);
+    expect(scope.pathPattern).to.include('/c/');
+    expect(scope).to.respondTo('filters');
+    expect(scope).to.not.respondTo('initializers');
+  });
+
+  it('should return the Node Glob scope', () => {
+    const scope = getNodeGlobScope();
+
+    expect(scope).to.be.an.instanceOf(Object);
+    expect(scope.pathPattern).to.include('/ng/');
+    expect(scope).to.respondTo('filters');
+    expect(scope).to.not.respondTo('initializers');
+  });
+
+  it('should return the Node Brace scope', () => {
+    const scope = getNodeBraceScope();
+
+    expect(scope).to.be.an.instanceOf(Object);
+    expect(scope.pathPattern).to.include('/n/');
+    expect(scope).to.respondTo('filters');
+    expect(scope).to.respondTo('initializers');
+  });
 });

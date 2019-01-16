@@ -1,13 +1,13 @@
 {
   "name": "evstore",
   "version": "0.0.1",
-  "description": "Relational Event Store",
+  "description": "A git-inspired event store for ArangoDB (Foxx microservice)",
   "main": "main.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Use foxx-cli to run tests. See README.md.\" && exit 0"
   },
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json.schemastore.org/foxx-manifest",
-  "name": "eventstore",
+  "name": "evstore",
   "version": "0.0.1",
-  "description": "Relational Event Store.",
+  "description": "A git-inspired event store for ArangoDB (Foxx microservice)",
   "engines": {
     "arangodb": "^3.4.0"
   },

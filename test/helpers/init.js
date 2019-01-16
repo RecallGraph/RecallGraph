@@ -17,6 +17,14 @@ const TEST_DATA_COLLECTIONS = Object.freeze(merge({}, TEST_DOCUMENT_COLLECTIONS,
 
 const TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = 2;
 
+function ensureTestDocumentCollections() {
+  forEach(TEST_DOCUMENT_COLLECTIONS, (collName) => {
+    if (!db._collection(collName)) {
+      db._createDocumentCollection(collName);
+    }
+  });
+}
+
 function ensureTestEdgeCollections() {
   forEach(TEST_EDGE_COLLECTIONS, (collName) => {
     if (!db._collection(collName)) {
@@ -87,14 +95,6 @@ exports.setup = function setup({ forceTruncateTestData = false, forceTruncateSer
     sampleDataLoadMessages
   };
 };
-
-function ensureTestDocumentCollections() {
-  forEach(TEST_DOCUMENT_COLLECTIONS, (collName) => {
-    if (!db._collection(collName)) {
-      db._createDocumentCollection(collName);
-    }
-  });
-}
 
 exports.teardown = noop;
 
