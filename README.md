@@ -17,7 +17,7 @@ _evstore_ is an event-based datastore with version-control - like features.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-tracking system.
  
- The event tracker's design is based on the [Eventsourcing](https://martinfowler.com/eaaDev/EventSourcing.html) principles described in [Martin Fowler's Bliki](https://martinfowler.com/bliki/).
+ The event tracker's design is based on the [eventsourcing](https://martinfowler.com/eaaDev/EventSourcing.html) principles described in [Martin Fowler's Bliki](https://martinfowler.com/bliki/).
  
 ### Quick Technical Overview ###
 
@@ -73,7 +73,7 @@ Some documentation is already available through the Swagger interface. More deta
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
 2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed in such deployments.
 
-### Contribution guidelines ###
+### Contribution Guidelines ###
 
 A formal contribution guideline document will be prepared eventually. In the meantime,
 
@@ -81,8 +81,8 @@ A formal contribution guideline document will be prepared eventually. In the mea
 * maintain the current file and folder structure (it is quite simple and self-explanatory right now. Drop me a line if something isn't clear),
 * write test cases for every new piece of functionality and ensure good  code coverage. Automated builds and coverage reports will be set up soon.
 
-### Get in touch ###
+### Get in Touch ###
 
 * Raise an issue or PR on this repo, or
 * Mail me (email link in github profile), or
-* DM me on the Slack channel - `adityamukho@arangodb-community.slack.com`.
+* DM me on Slack - `adityamukho@arangodb-community.slack.com`.
