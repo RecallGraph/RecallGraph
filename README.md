@@ -10,9 +10,7 @@ A git-inspired event store for ArangoDB.
 ### Introduction ###
 _evstore_ is an event-based datastore with version-control - like features.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-tracking system.
- 
- The event tracker's design is based on the [eventsourcing](https://martinfowler.com/eaaDev/EventSourcing.html) principles described in [Martin Fowler's Bliki](https://martinfowler.com/bliki/), with the addition of having ACID guarantees for single-instance deployments.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourcing tracker.
  
 ### Quick Technical Overview ###
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
