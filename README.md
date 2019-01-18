@@ -49,7 +49,7 @@ Well, all is not lost in this case, since _evstore_, like Git, supports a **comm
 _evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
 
 ### Salient API Features ###
-Detailed API docs are being written, and will be published soon. In the meantime, you can play around with the API in the built-in Swagger console. Some lightweight documentation is embedded there. 
+Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). A lightweight documentation is also embedded in the built-in Swagger console. 
 
 #### Document ####
 * Create - Create single/multiple nodes (documents/edges)
@@ -79,7 +79,9 @@ To avoid getting into trouble while testing, it is best to deploy this service t
 Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end. It may look like your database has gone out for lunch, but it is actually busy crunching numbers. Use `top` or equivalent to monitor the process if you're unsure.
 
 ### Docs ###
-Some documentation is already available through the Swagger interface. More detailed documentation is actively being worked on, and will be available through the web interface as well as on the project wiki very soon.
+* Some documentation is already available through the Swagger interface.
+* Detailed API docs are available [here](https://github.com/adityamukho/evstore/wiki/API).
+* Detailed technical documentation is actively being worked on, and will be available in the project wiki very soon.
 
 ### Limitations ###
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
