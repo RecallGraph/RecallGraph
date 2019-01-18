@@ -3,6 +3,10 @@
   "name": "evstore",
   "version": "0.0.1",
   "description": "A git-inspired event store for ArangoDB (Foxx microservice)",
+  "keywords": [
+    "event-store",
+    "version-control"
+  ],
   "engines": {
     "arangodb": "^3.4.0"
   },
