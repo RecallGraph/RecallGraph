@@ -10,7 +10,7 @@ A git-inspired event store for ArangoDB.
 ### Introduction ###
 _evstore_ is an event-based datastore with version-control - like features.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourcing tracker.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourced tracker.
  
 ### Quick Technical Overview ###
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
@@ -47,10 +47,10 @@ Well, all is not lost in this case, since _evstore_, like Git, supports a **comm
 _evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
 
 ### Salient API Features ###
-Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). A lightweight documentation is also embedded in the built-in Swagger console. 
+Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console. 
 
 #### Document ####
-* Create - Create single/multiple nodes (documents/edges)
+* Create - Create single/multiple nodes (vertexes/edges)
 * Replace - Replace entire single/multiple nodes with new content
 * Delete - Delete single/multiple nodes
 * **(Planned)** Update - Add/Update specific fields in single/multiple nodes
@@ -74,7 +74,7 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 
 To avoid getting into trouble while testing, it is best to deploy this service to a blank database that isn't used for anything else, and then run the test suites there.
 
-Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end. It may look like your database has gone out for lunch, but it is actually busy crunching numbers. Use `top` or equivalent to monitor the process if you're unsure.
+Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end.
 
 ### Docs ###
 * Some documentation is already available through the Swagger interface.
