@@ -10,7 +10,7 @@ const init = require('../../../../helpers/init');
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern,
   getRandomNodeBracePathPattern, cartesian
-} = require('../../../../helpers/logTestHelper');
+} = require('../../../../helpers/logTestHelpers');
 
 describe('Log Helpers - getScopeFor', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }));

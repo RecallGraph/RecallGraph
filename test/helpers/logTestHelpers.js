@@ -1,11 +1,19 @@
 'use strict';
 
-const { random, chain, pick, flatMap, findIndex, findLastIndex, range } = require('lodash');
+const {
+  random, chain, pick, flatMap, findIndex, findLastIndex, range, differenceWith, values, memoize, cloneDeep, shuffle,
+  concat
+} = require('lodash');
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init');
 const { expect } = require('chai');
 const log = require('../../lib/operations/log');
 const { getGroupingClause } = require('../../lib/operations/log/helpers');
-const { aql } = require('@arangodb');
+const { aql, db } = require('@arangodb');
+const { SERVICE_COLLECTIONS } = require('../../lib/helpers');
+const {
+  getSortingClause, getLimitClause, getReturnClause,
+  getTimeBoundFilters
+} = require('../../lib/operations/log/helpers');
 
 function getRandomSubRange(objWithLength) {
   return [random(0, Math.floor(objWithLength.length / 2) - 1),
@@ -113,7 +121,7 @@ function cartesian(keyedArrays = {}) {
 
 exports.cartesian = cartesian;
 
-exports.testUngroupedEvents = function testUngroupedEvents(path, allEvents, expectedEvents) {
+exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents, expectedEvents, logFn) {
   expect(allEvents).to.deep.equal(expectedEvents);
 
   const timeRange = getRandomSubRange(allEvents),
@@ -124,7 +132,7 @@ exports.testUngroupedEvents = function testUngroupedEvents(path, allEvents, expe
   const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
 
   combos.forEach(combo => {
-    const events = log(path, combo);
+    const events = logFn(pathParam, combo);
 
     expect(events).to.be.an.instanceOf(Array);
 
@@ -135,7 +143,6 @@ exports.testUngroupedEvents = function testUngroupedEvents(path, allEvents, expe
     const timeSlicedEvents = allEvents.slice(latestTimeBoundIndex, earliestTimeBoundIndex + 1);
     const sortedTimeSlicedEvents = (combo.sortType === 'asc') ? timeSlicedEvents.reverse() : timeSlicedEvents;
 
-    //https://wiki.teamfortress.com/wiki/Horseless_Headless_Horsemann
     let slicedSortedTimeSlicedEvents, start = 0, end = 0;
     if (combo.limit) {
       start = combo.skip;
@@ -150,8 +157,71 @@ exports.testUngroupedEvents = function testUngroupedEvents(path, allEvents, expe
   });
 };
 
-exports.getGroupingClauseForExpectedResultsQuery = function getGroupingClauseForExpectedResultsQuery(groupBy,
-  countsOnly) {
+const eventColl = db._collection(SERVICE_COLLECTIONS.events);
+
+const ORIGIN_KEYS = differenceWith(db._collections(), values(SERVICE_COLLECTIONS),
+  (coll, svcCollName) => coll.name() === svcCollName).map(coll => `origin-${coll._id}`);
+ORIGIN_KEYS.push('origin');
+Object.freeze(ORIGIN_KEYS);
+
+exports.ORIGIN_KEYS = ORIGIN_KEYS;
+
+const queryPartsInializers = {
+  database: () => [
+    aql`
+      for v in ${eventColl}
+      filter v._key not in ${ORIGIN_KEYS}
+    `
+  ],
+  graph: () => {
+    const sampleDataRefs = getSampleDataRefs();
+    const sampleGraphCollNames = concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections);
+
+    return [
+      aql`
+        for v in ${eventColl}
+        filter v._key not in ${ORIGIN_KEYS}
+        filter regex_split(v.meta._id, '/')[0] in ${sampleGraphCollNames}
+      `
+    ];
+  }
+};
+
+const initQueryParts = memoize((scope) => queryPartsInializers[scope]());
+
+exports.testGroupedEvents = function testGroupedEvents(scope, pathParam, logFn, qp = null) {
+  const allEvents = logFn(pathParam); //Ungrouped events in desc order by ctime.
+  const timeRange = getRandomSubRange(allEvents);
+  const since = [0, allEvents[timeRange[1]].ctime], until = [0, allEvents[timeRange[0]].ctime];
+  const skip = [0, 1], limit = [0, 2];
+  const sortType = [null, 'asc', 'desc'];
+  const groupBy = ['node', 'collection', 'event'], countsOnly = [false, true];
+
+  const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
+  combos.forEach(combo => {
+    const eventGroups = logFn(pathParam, combo);
+
+    expect(eventGroups).to.be.an.instanceOf(Array);
+
+    const { since: snc, until: utl, skip: skp, limit: lmt, sortType: st, groupBy: gb, countsOnly: co } = combo;
+    const queryParts = cloneDeep(qp || initQueryParts(scope));
+
+    const timeBoundFilters = getTimeBoundFilters(snc, utl);
+    timeBoundFilters.forEach(filter => queryParts.push(filter));
+
+    queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co));
+    queryParts.push(getSortingClause(st, gb, co));
+    queryParts.push(getLimitClause(lmt, skp));
+    queryParts.push(getReturnClause(st, gb, co));
+
+    const query = aql.join(queryParts, '\n');
+    const expectedEventGroups = db._query(query).toArray();
+
+    expect(eventGroups, JSON.stringify(combo)).to.deep.equal(expectedEventGroups);
+  });
+};
+
+function getGroupingClauseForExpectedResultsQuery(groupBy, countsOnly) {
   if (groupBy !== 'collection') {
     return getGroupingClause(groupBy, countsOnly);
   }
@@ -168,7 +238,7 @@ exports.getGroupingClauseForExpectedResultsQuery = function getGroupingClauseFor
 
     return aql.literal(`${groupingPrefix} ${groupingSuffix}`);
   }
-};
+}
 
 exports.getNodeBraceSampleIds = function getNodeBraceSampleIds() {
   const rootPathEvents = log('/');
@@ -204,4 +274,13 @@ exports.getNodeBraceSampleIds = function getNodeBraceSampleIds() {
   const path = (pathSuffixes.length > 1) ? `/n/{${pathSuffixes.join(',')}}` : `/n/${pathSuffixes[0]}`;
 
   return { path, sampleIds };
+};
+
+exports.getSampleTestCollNames = function getSampleTestCollNames() {
+  const sampleDataRefs = getSampleDataRefs();
+  const testDataCollections = values(TEST_DATA_COLLECTIONS);
+  const testCollNames = shuffle(concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections,
+    testDataCollections));
+
+  return testCollNames.slice(...getRandomSubRange(testCollNames));
 };
