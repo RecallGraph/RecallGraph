@@ -14,7 +14,8 @@ describe('Routes - replace', () => {
   it('should remove a single vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     let response = request.post(`${baseUrl}/document/${collName}`, {
@@ -49,10 +50,12 @@ describe('Routes - replace', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let nodes = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -89,7 +92,11 @@ describe('Routes - replace', () => {
 
   it('should remove a single edge', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{}, {}];
+    let vnodes = [{
+      src: `${__filename}:${__line}`
+    }, {
+      src: `${__filename}:${__line}`
+    }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -100,7 +107,8 @@ describe('Routes - replace', () => {
     let enode = {
       k1: 'v1',
       _from: vnodes[0]._id,
-      _to: vnodes[1]._id
+      _to: vnodes[1]._id,
+      src: `${__filename}:${__line}`
     };
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
@@ -135,7 +143,11 @@ describe('Routes - replace', () => {
 
   it('should remove two edges', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{}, {}];
+    let vnodes = [{
+      src: `${__filename}:${__line}`
+    }, {
+      src: `${__filename}:${__line}`
+    }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -147,12 +159,14 @@ describe('Routes - replace', () => {
       {
         k1: 'v1',
         _from: vnodes[0]._id,
-        _to: vnodes[1]._id
+        _to: vnodes[1]._id,
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
-        _to: vnodes[1]._id
+        _to: vnodes[1]._id,
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -193,7 +207,8 @@ describe('Routes - replace', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
       k1: 'v1',
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
 
     const response = request.delete(`${baseUrl}/document/${collName}`, {
@@ -210,11 +225,13 @@ describe('Routes - replace', () => {
     let nodes = [
       {
         k1: 'v1',
-        _key: 'does-not-exist'
+        _key: 'does-not-exist',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
-        _key: 'does-not-exist'
+        _key: 'does-not-exist',
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -238,7 +255,11 @@ describe('Routes - replace', () => {
 
   it('should fail to remove a single edge with a non-existent key', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{}, {}];
+    let vnodes = [{
+      src: `${__filename}:${__line}`
+    }, {
+      src: `${__filename}:${__line}`
+    }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -250,7 +271,8 @@ describe('Routes - replace', () => {
       k1: 'v1',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
 
     const response = request.delete(`${baseUrl}/document/${eCollName}`, {
@@ -264,7 +286,11 @@ describe('Routes - replace', () => {
 
   it('should fail to remove two edges with non-existent keys', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{}, {}];
+    let vnodes = [{
+      src: `${__filename}:${__line}`
+    }, {
+      src: `${__filename}:${__line}`
+    }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -277,13 +303,15 @@ describe('Routes - replace', () => {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        _key: 'does-not-exist'
+        _key: 'does-not-exist',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        _key: 'does-not-exist'
+        _key: 'does-not-exist',
+        src: `${__filename}:${__line}`
       }
     ];
 

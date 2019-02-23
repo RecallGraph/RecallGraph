@@ -15,7 +15,8 @@ describe('Commit', () => {
   it('should create a vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true, returnOld: true });
@@ -37,7 +38,8 @@ describe('Commit', () => {
   it('should fail when creating a vertex with an existing key', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -48,7 +50,8 @@ describe('Commit', () => {
   it('should fail when creating a vertex with the same key as a deleted vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -64,9 +67,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -74,7 +79,8 @@ describe('Commit', () => {
     const node = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -103,9 +109,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -113,7 +121,8 @@ describe('Commit', () => {
     const node = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -128,10 +137,12 @@ describe('Commit', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -139,7 +150,8 @@ describe('Commit', () => {
     const node = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -152,7 +164,8 @@ describe('Commit', () => {
   it('should replace a vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -180,7 +193,8 @@ describe('Commit', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
 
     expect(() => commit(collName, node, DB_OPS.REPLACE)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
@@ -193,9 +207,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -203,7 +219,8 @@ describe('Commit', () => {
     const node = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -239,9 +256,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -250,7 +269,8 @@ describe('Commit', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -260,7 +280,8 @@ describe('Commit', () => {
   it('should delete a vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true }).new;
 
@@ -280,7 +301,8 @@ describe('Commit', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
 
     expect(() => commit(collName, node, DB_OPS.REMOVE)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
@@ -293,9 +315,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -303,7 +327,8 @@ describe('Commit', () => {
     const node = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -328,9 +353,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -339,7 +366,8 @@ describe('Commit', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 

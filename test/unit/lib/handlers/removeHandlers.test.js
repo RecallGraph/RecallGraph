@@ -16,7 +16,8 @@ describe('Remove Handlers', () => {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const body = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const cnode = createSingle({ pathParams, body }, { returnNew: true }).new;
@@ -39,10 +40,12 @@ describe('Remove Handlers', () => {
     };
     const body = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -72,10 +75,12 @@ describe('Remove Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -83,7 +88,8 @@ describe('Remove Handlers', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -106,10 +112,12 @@ describe('Remove Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -118,12 +126,14 @@ describe('Remove Handlers', () => {
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -153,7 +163,8 @@ describe('Remove Handlers', () => {
     };
     const body = {
       _key: 'does-not-exist',
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     expect(() => removeSingle({
@@ -169,11 +180,13 @@ describe('Remove Handlers', () => {
     const body = [
       {
         _key: 'does-not-exist',
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         _key: 'does-not-exist',
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -195,9 +208,11 @@ describe('Remove Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -206,7 +221,8 @@ describe('Remove Handlers', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -223,9 +239,11 @@ describe('Remove Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -235,13 +253,15 @@ describe('Remove Handlers', () => {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        _key: 'does-not-exist'
+        _key: 'does-not-exist',
+        src: `${__filename}:${__line}`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        _key: 'does-not-exist'
+        _key: 'does-not-exist',
+        src: `${__filename}:${__line}`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;

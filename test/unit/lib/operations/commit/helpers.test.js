@@ -14,6 +14,8 @@ const { SERVICE_COLLECTIONS, snapshotInterval } = require('../../../../../lib/he
 const omit = require('lodash/omit');
 const jiff = require('jiff');
 
+const eventColl = db._collection(SERVICE_COLLECTIONS.events);
+
 describe('Commit Helpers - getLatestEvent', () => {
   before(init.setup);
 
@@ -22,7 +24,8 @@ describe('Commit Helpers - getLatestEvent', () => {
   it('should return the origin event for a non-existent node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = {
-      _id: 'does-not-exist'
+      _id: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
     const origin = getTransientEventOriginFor(coll);
     const latestEvent = getLatestEvent(node, coll);
@@ -33,7 +36,9 @@ describe('Commit Helpers - getLatestEvent', () => {
 
   it('should return the origin event for a non-committed but persisted node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
-    const node = coll.insert({});
+    const node = coll.insert({
+      src: `${__filename}:${__line}`
+    });
     const origin = getTransientEventOriginFor(coll);
     const latestEvent = getLatestEvent(node, coll);
 
@@ -47,7 +52,9 @@ describe('Commit Helpers - getLatestEvent', () => {
     const pathParams = {
       collection: collName
     };
-    const body = {};
+    const body = {
+      src: `${__filename}:${__line}`
+    };
     const node = createSingle({ pathParams, body });
     const latestEvent = getLatestEvent(node, coll);
 
@@ -64,8 +71,10 @@ describe('Commit Helpers - getLatestEvent', () => {
     const pathParams = {
       collection: collName
     };
-    const body = {};
-    let node = createSingle({ pathParams, body });
+    const body = {
+      src: `${__filename}:${__line}`
+    };
+    let node = createSingle({ pathParams, body }, { returnNew: true }).new;
     node.k1 = 'v1';
     node = replaceSingle({ pathParams, body: node });
 
@@ -84,7 +93,9 @@ describe('Commit Helpers - getLatestEvent', () => {
     const pathParams = {
       collection: collName
     };
-    let node = coll.insert({});
+    let node = coll.insert({
+      src: `${__filename}:${__line}`
+    }, { returnNew: true }).new;
     node.k1 = 'v1';
     node = replaceSingle({ pathParams, body: node });
 
@@ -105,7 +116,9 @@ describe('Commit Helpers - getTransientOrCreateLatestSnapshot', () => {
 
   it('should return a new snapshot node for a non-committed but persisted node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
-    const node = coll.insert({});
+    const node = coll.insert({
+      src: `${__filename}:${__line}`
+    });
     const latestEvent = getLatestEvent(node, coll);
     const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node);
     const ssNode = ssData.ssNode;
@@ -124,11 +137,16 @@ describe('Commit Helpers - insertEventNode', () => {
 
   it('should return an event node for \'created\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
-    const node = coll.insert({});
+    const node = coll.insert({
+      src: `${__filename}:${__line}`
+    });
     const time = dbtime();
     const latestEvent = getLatestEvent(node, coll);
     const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, time);
     const evtNode = insertEventNode(node, time, 'created', ssData);
+
+    //Cleanup: Orphaned event nodes should not exist
+    eventColl.remove(evtNode);
 
     expect(evtNode).to.be.an.instanceOf(Object);
     expect(evtNode).to.have.property('_id');
@@ -144,28 +162,33 @@ describe('Commit Helpers - insertEventNode', () => {
 
   it('should return an event node for \'updated\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
-    let node = coll.insert({});
+    let node = coll.insert({
+      src: `${__filename}:${__line}`
+    }, { returnNew: true }).new;
     const ctime = dbtime();
     const latestEvent = getLatestEvent(node, coll);
     let ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node, ctime);
-    let evtNode = insertEventNode(node, ctime, 'created', ssData);
+    const cEvtNode = insertEventNode(node, ctime, 'created', ssData);
 
     node.k1 = 'v1';
     node = coll.replace(node._id, node);
     const mtime = dbtime();
-    ssData = getTransientOrCreateLatestSnapshot(coll.name(), evtNode, node, ctime, mtime);
-    evtNode = insertEventNode(node, mtime, 'updated', ssData);
+    ssData = getTransientOrCreateLatestSnapshot(coll.name(), cEvtNode, node, ctime, mtime);
+    const rEvtNode = insertEventNode(node, mtime, 'updated', ssData);
 
-    expect(evtNode).to.be.an.instanceOf(Object);
-    expect(evtNode).to.have.property('_id');
-    expect(evtNode).to.have.property('_key');
-    expect(evtNode).to.have.property('_rev');
-    expect(evtNode.meta).to.be.an.instanceOf(Object);
-    Object.keys(node).forEach(key => expect(evtNode.meta[key]).to.deep.equal(node[key]));
-    expect(evtNode.event).to.equal('updated');
-    expect(evtNode.ctime).to.equal(mtime);
-    expect(evtNode['last-snapshot']).to.equal(ssData.ssNode._id);
-    expect(evtNode['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast);
+    //Cleanup: Orphaned event nodes should not exist
+    eventColl.remove([cEvtNode, rEvtNode]);
+
+    expect(rEvtNode).to.be.an.instanceOf(Object);
+    expect(rEvtNode).to.have.property('_id');
+    expect(rEvtNode).to.have.property('_key');
+    expect(rEvtNode).to.have.property('_rev');
+    expect(rEvtNode.meta).to.be.an.instanceOf(Object);
+    Object.keys(node).forEach(key => expect(rEvtNode.meta[key]).to.deep.equal(node[key]));
+    expect(rEvtNode.event).to.equal('updated');
+    expect(rEvtNode.ctime).to.equal(mtime);
+    expect(rEvtNode['last-snapshot']).to.equal(ssData.ssNode._id);
+    expect(rEvtNode['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast);
   });
 });
 
@@ -176,7 +199,10 @@ describe('Commit Helpers - insertCommandEdge', () => {
 
   it('should return a new command edge', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
-    const node = coll.insert({ k1: 'v1' }, { returnNew: true });
+    const node = coll.insert({
+      k1: 'v1',
+      src: `${__filename}:${__line}`
+    }, { returnNew: true });
     node.old = {};
     const ctime = new Date();
     const latestEvent = getLatestEvent(node, coll);
@@ -262,7 +288,8 @@ describe('Commit Helpers - prepInsert', () => {
   it('should return a meta node after inserting a vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const { result, event, time, prevEvent, ssData } = prepInsert(collName, node);
@@ -296,7 +323,9 @@ describe('Commit Helpers - prepInsert', () => {
     const pathParams = {
       collection: collName
     };
-    const body = {};
+    const body = {
+      src: `${__filename}:${__line}`
+    };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
     expect(() => prepInsert(collName, node)).to.throw().with.property('errorNum',
@@ -308,7 +337,9 @@ describe('Commit Helpers - prepInsert', () => {
     const pathParams = {
       collection: collName
     };
-    const body = {};
+    const body = {
+      src: `${__filename}:${__line}`
+    };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     removeSingle({ pathParams, body: node });
 
@@ -321,10 +352,12 @@ describe('Commit Helpers - prepInsert', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -332,7 +365,8 @@ describe('Commit Helpers - prepInsert', () => {
     const enode = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -370,10 +404,12 @@ describe('Commit Helpers - prepInsert', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -381,7 +417,8 @@ describe('Commit Helpers - prepInsert', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -396,10 +433,12 @@ describe('Commit Helpers - prepInsert', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -407,7 +446,8 @@ describe('Commit Helpers - prepInsert', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -429,7 +469,8 @@ describe('Commit Helpers - prepReplace', () => {
       collection: collName
     };
     const body = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     node.k1 = 'v2';
@@ -475,7 +516,8 @@ describe('Commit Helpers - prepReplace', () => {
   it('should throw when trying to replace a non-existent vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
 
     expect(() => prepReplace(collName, node)).to.throw().with.property('errorNum',
@@ -488,10 +530,12 @@ describe('Commit Helpers - prepReplace', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -499,7 +543,8 @@ describe('Commit Helpers - prepReplace', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -555,10 +600,12 @@ describe('Commit Helpers - prepReplace', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -567,7 +614,8 @@ describe('Commit Helpers - prepReplace', () => {
       _key: 'does-not-exist',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     expect(() => prepReplace(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',
@@ -587,7 +635,8 @@ describe('Commit Helpers - prepRemove', () => {
       collection: collName
     };
     const body = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
@@ -621,7 +670,8 @@ describe('Commit Helpers - prepRemove', () => {
   it('should throw when trying to remove a non-existent vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      _key: 'does-not-exist'
+      _key: 'does-not-exist',
+      src: `${__filename}:${__line}`
     };
 
     expect(() => prepRemove(collName, node)).to.throw().with.property('errorNum',
@@ -634,10 +684,12 @@ describe('Commit Helpers - prepRemove', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -645,7 +697,8 @@ describe('Commit Helpers - prepRemove', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -686,10 +739,12 @@ describe('Commit Helpers - prepRemove', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -698,7 +753,8 @@ describe('Commit Helpers - prepRemove', () => {
       _key: 'does-not-exist',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     expect(() => prepRemove(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',

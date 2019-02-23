@@ -2,7 +2,7 @@
 
 const {
   random, chain, pick, flatMap, findIndex, findLastIndex, range, differenceWith, values, memoize, cloneDeep, shuffle,
-  concat
+  concat, differenceBy
 } = require('lodash');
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init');
 const { expect } = require('chai');
@@ -122,11 +122,14 @@ function cartesian(keyedArrays = {}) {
 exports.cartesian = cartesian;
 
 exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents, expectedEvents, logFn) {
-  expect(allEvents).to.deep.equal(expectedEvents);
+  expect(allEvents, JSON.stringify({
+    all: differenceBy(allEvents, expectedEvents, '_id'),
+    expected: differenceBy(expectedEvents, allEvents, '_id')
+  })).to.deep.equal(expectedEvents);
 
-  const timeRange = getRandomSubRange(allEvents),
+  const timeRange = getRandomSubRange(expectedEvents),
     sliceRange = getRandomSubRange(range(1, timeRange[1] - timeRange[0]));
-  const since = [0, allEvents[timeRange[1]].ctime], until = [0, allEvents[timeRange[0]].ctime];
+  const since = [0, expectedEvents[timeRange[1]].ctime], until = [0, expectedEvents[timeRange[0]].ctime];
   const skip = [0, sliceRange[0]], limit = [0, sliceRange[1]];
   const sortType = [null, 'asc', 'desc'], groupBy = [null], countsOnly = [false, true];
   const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
@@ -136,11 +139,11 @@ exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents,
 
     expect(events).to.be.an.instanceOf(Array);
 
-    const earliestTimeBoundIndex = combo.since ? findLastIndex(allEvents,
-      { ctime: combo.since }) : allEvents.length - 1;
-    const latestTimeBoundIndex = combo.until && findIndex(allEvents, { ctime: combo.until });
+    const earliestTimeBoundIndex = combo.since ? findLastIndex(expectedEvents,
+      { ctime: combo.since }) : expectedEvents.length - 1;
+    const latestTimeBoundIndex = combo.until && findIndex(expectedEvents, { ctime: combo.until });
 
-    const timeSlicedEvents = allEvents.slice(latestTimeBoundIndex, earliestTimeBoundIndex + 1);
+    const timeSlicedEvents = expectedEvents.slice(latestTimeBoundIndex, earliestTimeBoundIndex + 1);
     const sortedTimeSlicedEvents = (combo.sortType === 'asc') ? timeSlicedEvents.reverse() : timeSlicedEvents;
 
     let slicedSortedTimeSlicedEvents, start = 0, end = 0;
@@ -153,7 +156,12 @@ exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents,
       slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents;
     }
 
-    expect(events).to.deep.equal(slicedSortedTimeSlicedEvents);
+    expect(events, JSON.stringify({
+      pathParam,
+      combo,
+      events: differenceBy(events, slicedSortedTimeSlicedEvents, '_id'),
+      expected: differenceBy(slicedSortedTimeSlicedEvents, events, '_id')
+    })).to.deep.equal(slicedSortedTimeSlicedEvents);
   });
 };
 
@@ -217,7 +225,11 @@ exports.testGroupedEvents = function testGroupedEvents(scope, pathParam, logFn, 
     const query = aql.join(queryParts, '\n');
     const expectedEventGroups = db._query(query).toArray();
 
-    expect(eventGroups, JSON.stringify(combo)).to.deep.equal(expectedEventGroups);
+    expect(eventGroups, JSON.stringify({
+      combo,
+      eventGrps: differenceBy(eventGroups, expectedEventGroups, '_id'),
+      expectedGrps: differenceBy(expectedEventGroups, eventGroups, '_id')
+    })).to.deep.equal(expectedEventGroups);
   });
 };
 

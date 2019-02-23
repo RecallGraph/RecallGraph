@@ -1,5 +1,6 @@
 'use strict';
 
+require('./globals');
 const { db } = require('@arangodb');
 const { merge, forEach, noop, omit } = require('lodash');
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers');
@@ -38,7 +39,7 @@ function setSnapshotIntervals() {
     (collName) => module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL);
 }
 
-function truncateDataCollections() {
+function truncateTestDataCollections() {
   forEach(TEST_DATA_COLLECTIONS, (collName) => {
     db._truncate(collName);
   });
@@ -67,12 +68,12 @@ exports.setup = function setup({ forceTruncateTestData = false, forceTruncateSer
     setSnapshotIntervals();
     testDataCollectionsInitialized = true;
 
-    testDataCollectionsTruncated = truncateDataCollections();
+    testDataCollectionsTruncated = truncateTestDataCollections();
     serviceCollectionsTruncated = truncateServiceCollections();
   }
 
   if (forceTruncateTestData && !testDataCollectionsTruncated) {
-    testDataCollectionsTruncated = truncateDataCollections();
+    testDataCollectionsTruncated = truncateTestDataCollections();
   }
 
   if (forceTruncateService && !serviceCollectionsTruncated) {

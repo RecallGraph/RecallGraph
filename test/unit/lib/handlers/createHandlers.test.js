@@ -16,7 +16,8 @@ describe('Create Handlers', () => {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const body = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const node = createSingle({ pathParams, body }, { returnNew: true, returnOld: true });
@@ -41,10 +42,12 @@ describe('Create Handlers', () => {
     };
     const body = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -74,10 +77,12 @@ describe('Create Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -85,7 +90,8 @@ describe('Create Handlers', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true, returnOld: true });
@@ -112,10 +118,12 @@ describe('Create Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -124,12 +132,14 @@ describe('Create Handlers', () => {
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -160,7 +170,8 @@ describe('Create Handlers', () => {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const body = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const node = createSingle({ pathParams, body });
@@ -176,7 +187,8 @@ describe('Create Handlers', () => {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const body = {
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
 
     const node = createSingle({ pathParams, body });
@@ -194,10 +206,12 @@ describe('Create Handlers', () => {
     };
     const body = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -219,10 +233,12 @@ describe('Create Handlers', () => {
     };
     const body = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
 
@@ -243,10 +259,12 @@ describe('Create Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -254,7 +272,8 @@ describe('Create Handlers', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -271,10 +290,12 @@ describe('Create Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -282,7 +303,8 @@ describe('Create Handlers', () => {
     const ebody = {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      k1: 'v1'
+      k1: 'v1',
+      src: `${__filename}:${__line}`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -300,10 +322,12 @@ describe('Create Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -312,12 +336,14 @@ describe('Create Handlers', () => {
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -339,10 +365,12 @@ describe('Create Handlers', () => {
     };
     const vbody = [
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -351,12 +379,14 @@ describe('Create Handlers', () => {
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        k1: 'v1'
+        k1: 'v1',
+        src: `${__filename}:${__line}`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
