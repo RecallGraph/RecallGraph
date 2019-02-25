@@ -6,7 +6,7 @@ const request = require("@arangodb/request");
 const { baseUrl } = module.context;
 const { errors: ARANGO_ERRORS } = require('@arangodb');
 
-describe('Routes - replace', () => {
+describe('Routes - remove', () => {
   before(init.setup);
 
   after(init.teardown);

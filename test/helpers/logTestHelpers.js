@@ -129,7 +129,8 @@ exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents,
 
   const timeRange = getRandomSubRange(expectedEvents),
     sliceRange = getRandomSubRange(range(1, timeRange[1] - timeRange[0]));
-  const since = [0, expectedEvents[timeRange[1]].ctime], until = [0, expectedEvents[timeRange[0]].ctime];
+  const since = [0, Math.floor(expectedEvents[timeRange[1]].ctime)],
+    until = [0, Math.ceil(expectedEvents[timeRange[0]].ctime)];
   const skip = [0, sliceRange[0]], limit = [0, sliceRange[1]];
   const sortType = [null, 'asc', 'desc'], groupBy = [null], countsOnly = [false, true];
   const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
@@ -140,8 +141,8 @@ exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents,
     expect(events).to.be.an.instanceOf(Array);
 
     const earliestTimeBoundIndex = combo.since ? findLastIndex(expectedEvents,
-      { ctime: combo.since }) : expectedEvents.length - 1;
-    const latestTimeBoundIndex = combo.until && findIndex(expectedEvents, { ctime: combo.until });
+      (e) => e.ctime >= combo.since) : expectedEvents.length - 1;
+    const latestTimeBoundIndex = combo.until && findIndex(expectedEvents, (e) => e.ctime <= combo.until);
 
     const timeSlicedEvents = expectedEvents.slice(latestTimeBoundIndex, earliestTimeBoundIndex + 1);
     const sortedTimeSlicedEvents = (combo.sortType === 'asc') ? timeSlicedEvents.reverse() : timeSlicedEvents;
@@ -200,7 +201,7 @@ const initQueryParts = memoize((scope) => queryPartsInializers[scope]());
 exports.testGroupedEvents = function testGroupedEvents(scope, pathParam, logFn, qp = null) {
   const allEvents = logFn(pathParam); //Ungrouped events in desc order by ctime.
   const timeRange = getRandomSubRange(allEvents);
-  const since = [0, allEvents[timeRange[1]].ctime], until = [0, allEvents[timeRange[0]].ctime];
+  const since = [0, Math.floor(allEvents[timeRange[1]].ctime)], until = [0, Math.ceil(allEvents[timeRange[0]].ctime)];
   const skip = [0, 1], limit = [0, 2];
   const sortType = [null, 'asc', 'desc'];
   const groupBy = ['node', 'collection', 'event'], countsOnly = [false, true];
