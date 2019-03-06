@@ -1,8 +1,8 @@
 'use strict';
 
 const {
-  random, chain, pick, flatMap, findIndex, findLastIndex, range, differenceWith, values, memoize, cloneDeep, shuffle,
-  concat, differenceBy
+  random, chain, pick, flatMap, findIndex, findLastIndex, range, differenceWith, values, memoize, cloneDeep, concat,
+  differenceBy, sampleSize
 } = require('lodash');
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init');
 const { expect } = require('chai');
@@ -15,9 +15,17 @@ const {
   getTimeBoundFilters
 } = require('../../lib/operations/log/helpers');
 
-function getRandomSubRange(objWithLength) {
-  return [random(0, Math.floor(objWithLength.length / 2) - 1),
-          random(Math.ceil(objWithLength.length / 2) + 1, objWithLength.length - 1)];
+function getRandomSubRange(objWithLength, maxLength = Number.POSITIVE_INFINITY) {
+  if (objWithLength.length > 0) {
+    const lower = random(0, objWithLength.length - 1);
+    const upperIndexBound = (Number.isFinite(maxLength) ? Math.min(objWithLength.length,
+      lower + maxLength) : objWithLength.length) - 1;
+    const upper = random(lower, upperIndexBound);
+
+    return [lower, upper];
+  }
+
+  return [];
 }
 
 exports.getRandomSubRange = getRandomSubRange;
@@ -253,9 +261,10 @@ function getGroupingClauseForExpectedResultsQuery(groupBy, countsOnly) {
   }
 }
 
-exports.getNodeBraceSampleIds = function getNodeBraceSampleIds() {
+exports.getNodeBraceSampleIds = function getNodeBraceSampleIds(maxLength = Number.POSITIVE_INFINITY) {
   const rootPathEvents = log('/');
-  const size = random(1, rootPathEvents.length);
+  const length = Number.isFinite(maxLength) ? Math.min(rootPathEvents.length, maxLength) : rootPathEvents.length;
+  const size = random(1, length);
   const sampleIds = [];
   const pathSuffixes = chain(rootPathEvents)
     .shuffle()
@@ -292,8 +301,7 @@ exports.getNodeBraceSampleIds = function getNodeBraceSampleIds() {
 exports.getSampleTestCollNames = function getSampleTestCollNames() {
   const sampleDataRefs = getSampleDataRefs();
   const testDataCollections = values(TEST_DATA_COLLECTIONS);
-  const testCollNames = shuffle(concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections,
-    testDataCollections));
+  const testCollNames = concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections, testDataCollections);
 
-  return testCollNames.slice(...getRandomSubRange(testCollNames));
+  return sampleSize(testCollNames, testCollNames.length);
 };
