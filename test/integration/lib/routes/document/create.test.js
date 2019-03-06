@@ -15,7 +15,7 @@ describe('Routes - create', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create a single vertex`
     };
 
     const response = request.post(`${baseUrl}/document/${collName}`, {
@@ -42,11 +42,11 @@ describe('Routes - create', () => {
     const nodes = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two vertices`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two vertices`
       }
     ];
 
@@ -75,9 +75,9 @@ describe('Routes - create', () => {
   it('should create a single edge', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create a single edge`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create a single edge`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -90,7 +90,7 @@ describe('Routes - create', () => {
       k1: 'v1',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create a single edge`
     };
 
     const response = request.post(`${baseUrl}/document/${eCollName}`, {
@@ -117,9 +117,9 @@ describe('Routes - create', () => {
   it('should create two edges', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create two edges`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create two edges`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -133,13 +133,13 @@ describe('Routes - create', () => {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two edges`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two edges`
       }
     ];
 
@@ -171,7 +171,7 @@ describe('Routes - create', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single vertex with duplicate key`
     };
 
     let response = request.post(`${baseUrl}/document/${collName}`, {
@@ -193,7 +193,7 @@ describe('Routes - create', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single vertex with the same key as a deleted vertex`
     };
 
     let response = request.post(`${baseUrl}/document/${collName}`, {
@@ -220,11 +220,11 @@ describe('Routes - create', () => {
     let nodes = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two vertices with duplicate keys`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two vertices with duplicate keys`
       }
     ];
 
@@ -257,11 +257,11 @@ describe('Routes - create', () => {
     let nodes = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two vertices with the same keys as deleted vertices`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two vertices with the same keys as deleted vertices`
       }
     ];
 
@@ -295,9 +295,9 @@ describe('Routes - create', () => {
   it('should fail to create a single edge with duplicate key', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single edge with duplicate key`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single edge with duplicate key`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -310,7 +310,7 @@ describe('Routes - create', () => {
       k1: 'v1',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single vertex with duplicate key`
     };
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
@@ -334,9 +334,9 @@ describe('Routes - create', () => {
   it('should fail to create a single edge with the same key as a deleted edge', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single edge with the same key as a deleted edge`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single edge with the same key as a deleted edge`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -349,7 +349,7 @@ describe('Routes - create', () => {
       k1: 'v1',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create a single vertex with duplicate key`
     };
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
@@ -377,9 +377,9 @@ describe('Routes - create', () => {
   it('should fail to create two edges with duplicate keys', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create two edges with duplicate keys`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create two edges with duplicate keys`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -393,13 +393,13 @@ describe('Routes - create', () => {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two edges with duplicate keys`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two edges with duplicate keys`
       }
     ];
 
@@ -433,9 +433,9 @@ describe('Routes - create', () => {
   it('should fail to create two edges with the same keys as deleted edges', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -449,13 +449,13 @@ describe('Routes - create', () => {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
       }
     ];
 

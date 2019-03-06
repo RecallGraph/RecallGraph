@@ -17,7 +17,7 @@ describe('Create Handlers', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create a single vertex`
     };
 
     const node = createSingle({ pathParams, body }, { returnNew: true, returnOld: true });
@@ -43,11 +43,11 @@ describe('Create Handlers', () => {
     const body = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two vertices`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two vertices`
       }
     ];
 
@@ -78,11 +78,11 @@ describe('Create Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create a single edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create a single edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -91,7 +91,7 @@ describe('Create Handlers', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create a single edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true, returnOld: true });
@@ -119,11 +119,11 @@ describe('Create Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two edges`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two edges`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -133,13 +133,13 @@ describe('Create Handlers', () => {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two edges`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create two edges`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -171,7 +171,7 @@ describe('Create Handlers', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating a vertex with existing key`
     };
 
     const node = createSingle({ pathParams, body });
@@ -188,7 +188,7 @@ describe('Create Handlers', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating a vertex with the same key as a deleted vertex`
     };
 
     const node = createSingle({ pathParams, body });
@@ -207,11 +207,11 @@ describe('Create Handlers', () => {
     const body = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two vertices with existing key`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two vertices with existing key`
       }
     ];
 
@@ -234,11 +234,11 @@ describe('Create Handlers', () => {
     const body = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two vertices with the same keys as deleted vertices`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two vertices with the same keys as deleted vertices`
       }
     ];
 
@@ -260,11 +260,11 @@ describe('Create Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with existing key`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with existing key`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -273,7 +273,7 @@ describe('Create Handlers', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating an edge with existing key`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -291,11 +291,11 @@ describe('Create Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with the same key as a deleted edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with the same key as a deleted edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -304,7 +304,7 @@ describe('Create Handlers', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating an edge with the same key as a deleted edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -323,11 +323,11 @@ describe('Create Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with existing key`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with existing key`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -337,13 +337,13 @@ describe('Create Handlers', () => {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with existing key`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with existing key`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -366,11 +366,11 @@ describe('Create Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with the same keys as deleted vertices`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with the same keys as deleted vertices`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -380,13 +380,13 @@ describe('Create Handlers', () => {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with the same keys as deleted vertices`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating two edges with the same keys as deleted vertices`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;

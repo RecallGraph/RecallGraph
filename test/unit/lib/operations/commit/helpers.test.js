@@ -25,7 +25,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = {
       _id: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return the origin event for a non-existent node`
     };
     const origin = getTransientEventOriginFor(coll);
     const latestEvent = getLatestEvent(node, coll);
@@ -37,7 +37,7 @@ describe('Commit Helpers - getLatestEvent', () => {
   it('should return the origin event for a non-committed but persisted node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return the origin event for a non-committed but persisted node`
     });
     const origin = getTransientEventOriginFor(coll);
     const latestEvent = getLatestEvent(node, coll);
@@ -53,7 +53,7 @@ describe('Commit Helpers - getLatestEvent', () => {
       collection: collName
     };
     const body = {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a 'create' event node for a node created through service`
     };
     const node = createSingle({ pathParams, body });
     const latestEvent = getLatestEvent(node, coll);
@@ -72,7 +72,7 @@ describe('Commit Helpers - getLatestEvent', () => {
       collection: collName
     };
     const body = {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return an 'update' event node for a committed node replaced through service`
     };
     let node = createSingle({ pathParams, body }, { returnNew: true }).new;
     node.k1 = 'v1';
@@ -94,7 +94,7 @@ describe('Commit Helpers - getLatestEvent', () => {
       collection: collName
     };
     let node = coll.insert({
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return an 'update' event node for a non-committed node replaced through service`
     }, { returnNew: true }).new;
     node.k1 = 'v1';
     node = replaceSingle({ pathParams, body: node });
@@ -117,7 +117,7 @@ describe('Commit Helpers - getTransientOrCreateLatestSnapshot', () => {
   it('should return a new snapshot node for a non-committed but persisted node', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a new snapshot node for a non-committed but persisted node`
     });
     const latestEvent = getLatestEvent(node, coll);
     const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node);
@@ -138,7 +138,7 @@ describe('Commit Helpers - insertEventNode', () => {
   it('should return an event node for \'created\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return an event node for 'created' event`
     });
     const time = dbtime();
     const latestEvent = getLatestEvent(node, coll);
@@ -163,7 +163,7 @@ describe('Commit Helpers - insertEventNode', () => {
   it('should return an event node for \'updated\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     let node = coll.insert({
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return an event node for 'updated' event`
     }, { returnNew: true }).new;
     const ctime = dbtime();
     const latestEvent = getLatestEvent(node, coll);
@@ -201,7 +201,7 @@ describe('Commit Helpers - insertCommandEdge', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex);
     const node = coll.insert({
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a new command edge`
     }, { returnNew: true });
     node.old = {};
     const ctime = new Date();
@@ -289,7 +289,7 @@ describe('Commit Helpers - prepInsert', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a meta node after inserting a vertex`
     };
 
     const { result, event, time, prevEvent, ssData } = prepInsert(collName, node);
@@ -324,7 +324,7 @@ describe('Commit Helpers - prepInsert', () => {
       collection: collName
     };
     const body = {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to insert a duplicate vertex`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
@@ -338,7 +338,7 @@ describe('Commit Helpers - prepInsert', () => {
       collection: collName
     };
     const body = {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to insert a vertex with the same id as a deleted vertex`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     removeSingle({ pathParams, body: node });
@@ -353,11 +353,11 @@ describe('Commit Helpers - prepInsert', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should return a meta node after inserting an edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should return a meta node after inserting an edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -366,7 +366,7 @@ describe('Commit Helpers - prepInsert', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a meta node after inserting an edge`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -405,11 +405,11 @@ describe('Commit Helpers - prepInsert', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to insert a duplicate edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to insert a duplicate edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -418,7 +418,7 @@ describe('Commit Helpers - prepInsert', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to insert a duplicate edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -434,11 +434,11 @@ describe('Commit Helpers - prepInsert', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to insert an edge with same id as a deleted edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to insert an edge with same id as a deleted edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -447,7 +447,7 @@ describe('Commit Helpers - prepInsert', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to insert an edge with same id as a deleted edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -470,7 +470,7 @@ describe('Commit Helpers - prepReplace', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a meta node after replacing a vertex`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     node.k1 = 'v2';
@@ -517,7 +517,7 @@ describe('Commit Helpers - prepReplace', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to replace a non-existent vertex`
     };
 
     expect(() => prepReplace(collName, node)).to.throw().with.property('errorNum',
@@ -531,11 +531,11 @@ describe('Commit Helpers - prepReplace', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should return a meta node after replacing an edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should return a meta node after replacing an edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -544,7 +544,7 @@ describe('Commit Helpers - prepReplace', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a meta node after replacing an edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -601,11 +601,11 @@ describe('Commit Helpers - prepReplace', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to replace a non-existent edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to replace a non-existent edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -615,7 +615,7 @@ describe('Commit Helpers - prepReplace', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to replace a non-existent edge`
     };
 
     expect(() => prepReplace(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',
@@ -636,7 +636,7 @@ describe('Commit Helpers - prepRemove', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a meta node after removing a vertex`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
@@ -671,7 +671,7 @@ describe('Commit Helpers - prepRemove', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to remove a non-existent vertex`
     };
 
     expect(() => prepRemove(collName, node)).to.throw().with.property('errorNum',
@@ -685,11 +685,11 @@ describe('Commit Helpers - prepRemove', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should return a meta node after removing an edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should return a meta node after removing an edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -698,7 +698,7 @@ describe('Commit Helpers - prepRemove', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should return a meta node after removing an edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -740,11 +740,11 @@ describe('Commit Helpers - prepRemove', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to remove a non-existent edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should throw when trying to remove a non-existent edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -754,7 +754,7 @@ describe('Commit Helpers - prepRemove', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should throw when trying to remove a non-existent edge`
     };
 
     expect(() => prepRemove(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',

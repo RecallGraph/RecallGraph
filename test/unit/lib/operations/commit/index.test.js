@@ -16,7 +16,7 @@ describe('Commit', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create a vertex`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true, returnOld: true });
@@ -39,7 +39,7 @@ describe('Commit', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating a vertex with an existing key`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -51,7 +51,7 @@ describe('Commit', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating a vertex with the same key as a deleted vertex`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -67,11 +67,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create an edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should create an edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -80,7 +80,7 @@ describe('Commit', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should create an edge`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -109,11 +109,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with an existing key`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with an existing key`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -122,7 +122,7 @@ describe('Commit', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating an edge with an existing key`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -138,11 +138,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with the same key as a deleted edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when creating an edge with the same key as a deleted edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -151,7 +151,7 @@ describe('Commit', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when creating an edge with the same key as a deleted edge`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -165,7 +165,7 @@ describe('Commit', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace a vertex`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -194,7 +194,7 @@ describe('Commit', () => {
     const node = {
       k1: 'v1',
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when replacing a vertex with a non-existent key`
     };
 
     expect(() => commit(collName, node, DB_OPS.REPLACE)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
@@ -207,11 +207,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace an edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace an edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -220,7 +220,7 @@ describe('Commit', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace an edge`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -256,11 +256,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when replacing an edge with a non-existent key`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when replacing an edge with a non-existent key`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -270,7 +270,7 @@ describe('Commit', () => {
       _to: vnodes[1]._id,
       k1: 'v1',
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when replacing an edge with a non-existent key`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -281,7 +281,7 @@ describe('Commit', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should delete a vertex`
     };
     const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true }).new;
 
@@ -302,7 +302,7 @@ describe('Commit', () => {
     const node = {
       k1: 'v1',
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when deleting a vertex with a non-existent key`
     };
 
     expect(() => commit(collName, node, DB_OPS.REMOVE)).to.throw().with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
@@ -315,11 +315,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should delete an edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should delete an edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -328,7 +328,7 @@ describe('Commit', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should delete an edge`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -353,11 +353,11 @@ describe('Commit', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when deleting an edge with a non-existent key`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when deleting an edge with a non-existent key`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -367,7 +367,7 @@ describe('Commit', () => {
       _to: vnodes[1]._id,
       k1: 'v1',
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail when deleting an edge with a non-existent key`
     };
     const collName = init.TEST_DATA_COLLECTIONS.edge;
 

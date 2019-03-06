@@ -1,6 +1,5 @@
 'use strict';
 
-require('./globals');
 const { db } = require('@arangodb');
 const { merge, forEach, noop, omit } = require('lodash');
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers');

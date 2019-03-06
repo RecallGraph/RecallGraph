@@ -17,7 +17,7 @@ describe('Replace Handlers', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace a single vertex.`
     };
 
     const cnode = createSingle({ pathParams, body }, { returnNew: true }).new;
@@ -39,11 +39,11 @@ describe('Replace Handlers', () => {
     const body = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two vertices.`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two vertices.`
       }
     ];
 
@@ -75,11 +75,11 @@ describe('Replace Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace a single edge.`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace a single edge.`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -88,7 +88,7 @@ describe('Replace Handlers', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace a single edge.`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -112,11 +112,11 @@ describe('Replace Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two edges.`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two edges.`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -126,13 +126,13 @@ describe('Replace Handlers', () => {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two edges.`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two edges.`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -166,7 +166,7 @@ describe('Replace Handlers', () => {
     const body = {
       _key: 'does-not-exist',
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace a non-existent vertex`
     };
 
     expect(() => replaceSingle({
@@ -183,12 +183,12 @@ describe('Replace Handlers', () => {
       {
         _key: 'does-not-exist',
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace two non-existent vertices.`
       },
       {
         _key: 'does-not-exist',
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace two non-existent vertices.`
       }
     ];
 
@@ -210,11 +210,11 @@ describe('Replace Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace a non-existent edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace a non-existent edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -224,7 +224,7 @@ describe('Replace Handlers', () => {
       _to: vnodes[1]._id,
       k1: 'v1',
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace a non-existent edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -241,11 +241,11 @@ describe('Replace Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when replacing two edges with non-existing keys`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when replacing two edges with non-existing keys`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -256,14 +256,14 @@ describe('Replace Handlers', () => {
         _to: vnodes[1]._id,
         k1: 'v1',
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when replacing two edges with non-existing keys`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when replacing two edges with non-existing keys`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;

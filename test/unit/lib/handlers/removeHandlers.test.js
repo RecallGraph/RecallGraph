@@ -17,7 +17,7 @@ describe('Remove Handlers', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should remove a single vertex.`
     };
 
     const cnode = createSingle({ pathParams, body }, { returnNew: true }).new;
@@ -41,11 +41,11 @@ describe('Remove Handlers', () => {
     const body = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove two vertices.`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove two vertices.`
       }
     ];
 
@@ -76,11 +76,11 @@ describe('Remove Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove a single edge.`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove a single edge.`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -89,7 +89,7 @@ describe('Remove Handlers', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should remove a single edge.`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -113,11 +113,11 @@ describe('Remove Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove two edges.`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove two edges.`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -127,13 +127,13 @@ describe('Remove Handlers', () => {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove two edges.`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should remove two edges.`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
@@ -164,7 +164,7 @@ describe('Remove Handlers', () => {
     const body = {
       _key: 'does-not-exist',
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to remove a non-existent vertex`
     };
 
     expect(() => removeSingle({
@@ -181,12 +181,12 @@ describe('Remove Handlers', () => {
       {
         _key: 'does-not-exist',
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to remove two non-existent vertices.`
       },
       {
         _key: 'does-not-exist',
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to remove two non-existent vertices.`
       }
     ];
 
@@ -208,11 +208,11 @@ describe('Remove Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to remove a non-existent edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to remove a non-existent edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -222,7 +222,7 @@ describe('Remove Handlers', () => {
       _to: vnodes[1]._id,
       k1: 'v1',
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to remove a non-existent edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -239,11 +239,11 @@ describe('Remove Handlers', () => {
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when removing two edges with non-existing keys`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when removing two edges with non-existing keys`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -254,14 +254,14 @@ describe('Remove Handlers', () => {
         _to: vnodes[1]._id,
         k1: 'v1',
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when removing two edges with non-existing keys`
       },
       {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         k1: 'v1',
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail when removing two edges with non-existing keys`
       }
     ];
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;

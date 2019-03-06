@@ -15,7 +15,7 @@ describe('Routes - replace', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
       k1: 'v1',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace a single vertex`
     };
 
     let response = request.post(`${baseUrl}/document/${collName}`, {
@@ -52,11 +52,11 @@ describe('Routes - replace', () => {
     let nodes = [
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two vertices`
       },
       {
         k1: 'v1',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two vertices`
       }
     ];
 
@@ -98,9 +98,9 @@ describe('Routes - replace', () => {
   it('should replace a single edge', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace a single edge`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace a single edge`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -113,7 +113,7 @@ describe('Routes - replace', () => {
       k1: 'v1',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace a single edge`
     };
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
@@ -150,9 +150,9 @@ describe('Routes - replace', () => {
   it('should replace two edges', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace two edges`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should replace two edges`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -166,13 +166,13 @@ describe('Routes - replace', () => {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two edges`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should replace two edges`
       }
     ];
 
@@ -218,7 +218,7 @@ describe('Routes - replace', () => {
     let node = {
       k1: 'v1',
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace a single vertex with a non-existent key`
     };
 
     const response = request.put(`${baseUrl}/document/${collName}`, {
@@ -236,12 +236,12 @@ describe('Routes - replace', () => {
       {
         k1: 'v1',
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace two vertices with non-existent keys`
       },
       {
         k1: 'v1',
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace two vertices with non-existent keys`
       }
     ];
 
@@ -266,9 +266,9 @@ describe('Routes - replace', () => {
   it('should fail to replace a single edge with a non-existent key', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace a single edge with a non-existent key`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace a single edge with a non-existent key`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -282,7 +282,7 @@ describe('Routes - replace', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       _key: 'does-not-exist',
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace a single edge with a non-existent key`
     };
 
     const response = request.put(`${baseUrl}/document/${eCollName}`, {
@@ -297,9 +297,9 @@ describe('Routes - replace', () => {
   it('should fail to replace two edges with non-existent keys', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace two edges with non-existent keys`
     }, {
-      src: `${__filename}:${__line}`
+      src: `${__filename}:should fail to replace two edges with non-existent keys`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -314,14 +314,14 @@ describe('Routes - replace', () => {
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace two edges with non-existent keys`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         _key: 'does-not-exist',
-        src: `${__filename}:${__line}`
+        src: `${__filename}:should fail to replace two edges with non-existent keys`
       }
     ];
 
