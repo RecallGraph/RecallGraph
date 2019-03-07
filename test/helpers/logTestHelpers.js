@@ -135,43 +135,45 @@ exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents,
     expected: differenceBy(expectedEvents, allEvents, '_id')
   })).to.deep.equal(expectedEvents);
 
-  const timeRange = getRandomSubRange(expectedEvents),
-    sliceRange = getRandomSubRange(range(1, timeRange[1] - timeRange[0]));
-  const since = [0, Math.floor(expectedEvents[timeRange[1]].ctime)],
-    until = [0, Math.ceil(expectedEvents[timeRange[0]].ctime)];
-  const skip = [0, sliceRange[0]], limit = [0, sliceRange[1]];
-  const sortType = [null, 'asc', 'desc'], groupBy = [null], countsOnly = [false, true];
-  const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
+  if (expectedEvents.length > 0) {
+    const timeRange = getRandomSubRange(expectedEvents),
+      sliceRange = getRandomSubRange(range(1, timeRange[1] - timeRange[0]));
+    const since = [0, Math.floor(expectedEvents[timeRange[1]].ctime)],
+      until = [0, Math.ceil(expectedEvents[timeRange[0]].ctime)];
+    const skip = [0, sliceRange[0]], limit = [0, sliceRange[1]];
+    const sortType = [null, 'asc', 'desc'], groupBy = [null], countsOnly = [false, true];
+    const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
 
-  combos.forEach(combo => {
-    const events = logFn(pathParam, combo);
+    combos.forEach(combo => {
+      const events = logFn(pathParam, combo);
 
-    expect(events).to.be.an.instanceOf(Array);
+      expect(events).to.be.an.instanceOf(Array);
 
-    const earliestTimeBoundIndex = combo.since ? findLastIndex(expectedEvents,
-      (e) => e.ctime >= combo.since) : expectedEvents.length - 1;
-    const latestTimeBoundIndex = combo.until && findIndex(expectedEvents, (e) => e.ctime <= combo.until);
+      const earliestTimeBoundIndex = combo.since ? findLastIndex(expectedEvents,
+        (e) => e.ctime >= combo.since) : expectedEvents.length - 1;
+      const latestTimeBoundIndex = combo.until && findIndex(expectedEvents, (e) => e.ctime <= combo.until);
 
-    const timeSlicedEvents = expectedEvents.slice(latestTimeBoundIndex, earliestTimeBoundIndex + 1);
-    const sortedTimeSlicedEvents = (combo.sortType === 'asc') ? timeSlicedEvents.reverse() : timeSlicedEvents;
+      const timeSlicedEvents = expectedEvents.slice(latestTimeBoundIndex, earliestTimeBoundIndex + 1);
+      const sortedTimeSlicedEvents = (combo.sortType === 'asc') ? timeSlicedEvents.reverse() : timeSlicedEvents;
 
-    let slicedSortedTimeSlicedEvents, start = 0, end = 0;
-    if (combo.limit) {
-      start = combo.skip;
-      end = start + combo.limit;
-      slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents.slice(start, end);
-    }
-    else {
-      slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents;
-    }
+      let slicedSortedTimeSlicedEvents, start = 0, end = 0;
+      if (combo.limit) {
+        start = combo.skip;
+        end = start + combo.limit;
+        slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents.slice(start, end);
+      }
+      else {
+        slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents;
+      }
 
-    expect(events, JSON.stringify({
-      pathParam,
-      combo,
-      events: differenceBy(events, slicedSortedTimeSlicedEvents, '_id'),
-      expected: differenceBy(slicedSortedTimeSlicedEvents, events, '_id')
-    })).to.deep.equal(slicedSortedTimeSlicedEvents);
-  });
+      expect(events, JSON.stringify({
+        pathParam,
+        combo,
+        events: differenceBy(events, slicedSortedTimeSlicedEvents, '_id'),
+        expected: differenceBy(slicedSortedTimeSlicedEvents, events, '_id')
+      })).to.deep.equal(slicedSortedTimeSlicedEvents);
+    });
+  }
 };
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events);
