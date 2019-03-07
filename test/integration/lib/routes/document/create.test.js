@@ -212,7 +212,7 @@ describe('Routes - create', () => {
     });
 
     expect(response).to.be.an.instanceOf(Object);
-    expect(response.statusCode).to.equal(500);
+    expect(response.statusCode).to.equal(409);
   });
 
   it('should fail to create two vertices with duplicate keys', () => {
@@ -287,7 +287,7 @@ describe('Routes - create', () => {
     expect(resBody).to.be.an.instanceOf(Array);
     resBody.forEach((resNode, idx) => {
       expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_TRANSACTION_INTERNAL.code);
+      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       expect(resNode.errorMessage).to.include(`Event log found for node with _id: ${nodes[idx]._id}`);
     });
   });
@@ -371,7 +371,7 @@ describe('Routes - create', () => {
     });
 
     expect(response).to.be.an.instanceOf(Object);
-    expect(response.statusCode).to.equal(500);
+    expect(response.statusCode).to.equal(409);
   });
 
   it('should fail to create two edges with duplicate keys', () => {
@@ -484,7 +484,7 @@ describe('Routes - create', () => {
     expect(resBody).to.be.an.instanceOf(Array);
     resBody.forEach((resNode, idx) => {
       expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_TRANSACTION_INTERNAL.code);
+      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
       expect(resNode.errorMessage).to.include(`Event log found for node with _id: ${enodes[idx]._id}`);
     });
   });
