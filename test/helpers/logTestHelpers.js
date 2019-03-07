@@ -302,6 +302,7 @@ exports.getSampleTestCollNames = function getSampleTestCollNames() {
   const sampleDataRefs = getSampleDataRefs();
   const testDataCollections = values(TEST_DATA_COLLECTIONS);
   const testCollNames = concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections, testDataCollections);
+  const size = random(1, testCollNames.length);
 
-  return sampleSize(testCollNames, testCollNames.length);
+  return sampleSize(testCollNames, size);
 };
