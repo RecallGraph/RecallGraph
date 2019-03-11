@@ -688,6 +688,139 @@ describe('Commit', () => {
     expect(uunode.old.k2).to.equal('v1');
   });
 
+  it('should remove null values when keepNull is false', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should remove null values when keepNull is false`
+    };
+
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key');
+    unode.k1 = null;
+    unode._rev = 'mismatched_rev';
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true }, { keepNull: false });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    expect(uunode.new).to.not.have.property('k1');
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old.k1).to.equal('v1');
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
+  it('should preserve null values when keepNull is true', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should preserve null values when keepNull is true`
+    };
+
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key');
+    unode.k1 = null;
+    unode._rev = 'mismatched_rev';
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true }, { keepNull: true });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    // noinspection BadExpressionStatementJS
+    expect(uunode.new.k1).to.be.null;
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old.k1).to.equal('v1');
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
+  it('should replace objects when mergeObjects is false', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should replace objects when mergeObjects is false`
+    };
+
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key');
+    unode.k1 = { b: 1 };
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true },
+      { mergeObjects: false });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    expect(uunode.new.k1).to.deep.equal({ b: 1 });
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old.k1).to.deep.equal({ a: 1 });
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
+  it('should merge objects when mergeObjects is true', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should merge objects when mergeObjects is true`
+    };
+
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key');
+    unode.k1 = { b: 1 };
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true },
+      { mergeObjects: true });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    expect(uunode.new.k1).to.deep.equal({ b: 1, a: 1 });
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old.k1).to.deep.equal({ a: 1 });
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
   it('should fail when updating a vertex with a non-existent key', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {

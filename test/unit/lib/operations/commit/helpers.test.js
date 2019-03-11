@@ -1171,9 +1171,9 @@ describe('Commit Helpers - prepUpdate', () => {
       k2: 'v1',
       src: `${__filename}:should return a meta node after updating a vertex, when ignoreRevs is true, irrespective of _rev match`
     };
-    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+    const node = createSingle({ pathParams, body });
 
-    const unode = pick(node, '_key', 'k1');
+    const unode = pick(node, '_key');
     unode.k1 = 'v2';
     unode._rev = 'mismatched_rev';
 
@@ -1193,6 +1193,227 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old._id).to.equal(result._id);
     expect(result.old._key).to.equal(result._key);
     expect(result.old.k1).to.equal('v1');
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should remove null values when keepNull is false', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should remove null values when keepNull is false`
+    };
+    const node = createSingle({ pathParams, body });
+
+    const unode = pick(node, '_key');
+    unode.k1 = null;
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(collName, unode, { keepNull: false });
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(unode._key);
+    expect(result._rev).to.not.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new).to.not.have.property('k1');
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old.k1).to.equal('v1');
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should preserve null values when keepNull is true', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should preserve null values when keepNull is true`
+    };
+    const node = createSingle({ pathParams, body });
+
+    const unode = pick(node, '_key');
+    unode.k1 = null;
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(collName, unode);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(unode._key);
+    expect(result._rev).to.not.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    // noinspection BadExpressionStatementJS
+    expect(result.new.k1).to.be.null;
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old.k1).to.equal('v1');
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should replace objects when mergeObjects is false', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should replace objects when mergeObjects is false`
+    };
+    const node = createSingle({ pathParams, body });
+
+    const unode = pick(node, '_key');
+    unode.k1 = { b: 1 };
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(collName, unode, { mergeObjects: false });
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(unode._key);
+    expect(result._rev).to.not.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new.k1).to.deep.equal({ b: 1 });
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old.k1).to.deep.equal({ a: 1 });
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should merge objects when mergeObjects is true', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should merge objects when mergeObjects is true`
+    };
+    const node = createSingle({ pathParams, body });
+
+    const unode = pick(node, '_key');
+    unode.k1 = { b: 1 };
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(collName, unode);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(unode._key);
+    expect(result._rev).to.not.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new.k1).to.deep.equal({ b: 1, a: 1 });
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old.k1).to.deep.equal({ a: 1 });
     expect(result.old.k2).to.equal('v1');
 
     expect(event).to.equal('updated');
