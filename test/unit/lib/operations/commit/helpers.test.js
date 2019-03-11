@@ -318,13 +318,13 @@ describe('Commit Helpers - prepInsert', () => {
     expect(ssData).to.deep.equal(snapshotOriginData);
   });
 
-  it('should throw when trying to insert a duplicate vertex', () => {
+  it('should fail when trying to insert a duplicate vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const pathParams = {
       collection: collName
     };
     const body = {
-      src: `${__filename}:should throw when trying to insert a duplicate vertex`
+      src: `${__filename}:should fail when trying to insert a duplicate vertex`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
@@ -332,13 +332,13 @@ describe('Commit Helpers - prepInsert', () => {
       ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
   });
 
-  it('should throw when trying to insert a vertex with the same id as a deleted vertex', () => {
+  it('should fail when trying to insert a vertex with the same id as a deleted vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const pathParams = {
       collection: collName
     };
     const body = {
-      src: `${__filename}:should throw when trying to insert a vertex with the same id as a deleted vertex`
+      src: `${__filename}:should fail when trying to insert a vertex with the same id as a deleted vertex`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     removeSingle({ pathParams, body: node });
@@ -398,18 +398,18 @@ describe('Commit Helpers - prepInsert', () => {
     expect(ssData).to.deep.equal(snapshotOriginData);
   });
 
-  it('should throw when trying to insert a duplicate edge', () => {
+  it('should fail when trying to insert a duplicate edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to insert a duplicate edge`
+        src: `${__filename}:should fail when trying to insert a duplicate edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to insert a duplicate edge`
+        src: `${__filename}:should fail when trying to insert a duplicate edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -418,7 +418,7 @@ describe('Commit Helpers - prepInsert', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should throw when trying to insert a duplicate edge`
+      src: `${__filename}:should fail when trying to insert a duplicate edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -427,18 +427,18 @@ describe('Commit Helpers - prepInsert', () => {
       ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
   });
 
-  it('should throw when trying to insert an edge with same id as a deleted edge', () => {
+  it('should fail when trying to insert an edge with same id as a deleted edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to insert an edge with same id as a deleted edge`
+        src: `${__filename}:should fail when trying to insert an edge with same id as a deleted edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to insert an edge with same id as a deleted edge`
+        src: `${__filename}:should fail when trying to insert an edge with same id as a deleted edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -447,7 +447,7 @@ describe('Commit Helpers - prepInsert', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should throw when trying to insert an edge with same id as a deleted edge`
+      src: `${__filename}:should fail when trying to insert an edge with same id as a deleted edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
     const enode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
@@ -462,32 +462,14 @@ describe('Commit Helpers - prepReplace', () => {
 
   after(init.teardown);
 
-  it('should throw when neither _key nor _id are present in vertex node', () => {
+  it('should fail when ignoreRevs is false and _rev match fails in vertex node', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const pathParams = {
       collection: collName
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:should throw when neither _key nor _id are present in vertex node`
-    };
-
-    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
-    delete node._key;
-    delete node._id;
-    node.k1 = 'v2';
-
-    expect(() => prepReplace(collName, node)).to.throw();
-  });
-
-  it('should throw when ignoreRevs is false and _rev match fails in vertex node', () => {
-    const collName = init.TEST_DATA_COLLECTIONS.vertex;
-    const pathParams = {
-      collection: collName
-    };
-    const body = {
-      k1: 'v1',
-      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in vertex node`
+      src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in vertex node`
     };
 
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
@@ -600,29 +582,29 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
   });
 
-  it('should throw when trying to replace a non-existent vertex', () => {
+  it('should fail when trying to replace a non-existent vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       _key: 'does-not-exist',
-      src: `${__filename}:should throw when trying to replace a non-existent vertex`
+      src: `${__filename}:should fail when trying to replace a non-existent vertex`
     };
 
     expect(() => prepReplace(collName, node)).to.throw().with.property('errorNum',
       ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
-  it('should throw when neither _key nor _id are present in edge node', () => {
+  it('should fail when ignoreRevs is false and _rev match fails in edge node', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+        src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+        src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -631,39 +613,7 @@ describe('Commit Helpers - prepReplace', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should throw when neither _key nor _id are present in edge node`
-    };
-    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-
-    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
-    delete ecnode._id;
-    delete ecnode._key;
-    ecnode.k1 = 'v2';
-
-    expect(() => prepReplace(pathParams.collection, ecnode)).to.throw();
-  });
-
-  it('should throw when ignoreRevs is false and _rev match fails in edge node', () => {
-    const pathParams = {
-      collection: init.TEST_DATA_COLLECTIONS.vertex
-    };
-    const vbody = [
-      {
-        k1: 'v1',
-        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
-      },
-      {
-        k1: 'v1',
-        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
-      }
-    ];
-    const vnodes = createMultiple({ pathParams, body: vbody });
-
-    const ebody = {
-      _from: vnodes[0]._id,
-      _to: vnodes[1]._id,
-      k1: 'v1',
-      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -816,18 +766,18 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
   });
 
-  it('should throw when trying to replace a non-existent edge', () => {
+  it('should fail when trying to replace a non-existent edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to replace a non-existent edge`
+        src: `${__filename}:should fail when trying to replace a non-existent edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to replace a non-existent edge`
+        src: `${__filename}:should fail when trying to replace a non-existent edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -837,7 +787,7 @@ describe('Commit Helpers - prepReplace', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should throw when trying to replace a non-existent edge`
+      src: `${__filename}:should fail when trying to replace a non-existent edge`
     };
 
     expect(() => prepReplace(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',
@@ -850,31 +800,14 @@ describe('Commit Helpers - prepRemove', () => {
 
   after(init.teardown);
 
-  it('should throw when neither _key nor _id are present in vertex node', () => {
+  it('should fail when ignoreRevs is false and _rev match fails in vertex node', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const pathParams = {
       collection: collName
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:should throw when neither _key nor _id are present in vertex node`
-    };
-
-    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
-    delete node._key;
-    delete node._id;
-
-    expect(() => prepRemove(collName, node)).to.throw();
-  });
-
-  it('should throw when ignoreRevs is false and _rev match fails in vertex node', () => {
-    const collName = init.TEST_DATA_COLLECTIONS.vertex;
-    const pathParams = {
-      collection: collName
-    };
-    const body = {
-      k1: 'v1',
-      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in vertex node`
+      src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in vertex node`
     };
 
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
@@ -963,29 +896,29 @@ describe('Commit Helpers - prepRemove', () => {
     expect(ssData.hopsFromLast).to.equal(prevEvent['hops-from-last-snapshot'] + 1);
   });
 
-  it('should throw when trying to remove a non-existent vertex', () => {
+  it('should fail when trying to remove a non-existent vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       _key: 'does-not-exist',
-      src: `${__filename}:should throw when trying to remove a non-existent vertex`
+      src: `${__filename}:should fail when trying to remove a non-existent vertex`
     };
 
     expect(() => prepRemove(collName, node)).to.throw().with.property('errorNum',
       ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
-  it('should throw when neither _key nor _id are present in edge node', () => {
+  it('should fail when ignoreRevs is false and _rev match fails in edge node', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+        src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+        src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -994,38 +927,7 @@ describe('Commit Helpers - prepRemove', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should throw when neither _key nor _id are present in edge node`
-    };
-    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-
-    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
-    delete ecnode._id;
-    delete ecnode._key;
-
-    expect(() => prepRemove(pathParams.collection, ecnode)).to.throw();
-  });
-
-  it('should throw when ignoreRevs is false and _rev match fails in edge node', () => {
-    const pathParams = {
-      collection: init.TEST_DATA_COLLECTIONS.vertex
-    };
-    const vbody = [
-      {
-        k1: 'v1',
-        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
-      },
-      {
-        k1: 'v1',
-        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
-      }
-    ];
-    const vnodes = createMultiple({ pathParams, body: vbody });
-
-    const ebody = {
-      _from: vnodes[0]._id,
-      _to: vnodes[1]._id,
-      k1: 'v1',
-      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -1148,18 +1050,18 @@ describe('Commit Helpers - prepRemove', () => {
     expect(ssData.hopsFromLast).to.equal(prevEvent['hops-from-last-snapshot'] + 1);
   });
 
-  it('should throw when trying to remove a non-existent edge', () => {
+  it('should fail when trying to remove a non-existent edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to remove a non-existent edge`
+        src: `${__filename}:should fail when trying to remove a non-existent edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to remove a non-existent edge`
+        src: `${__filename}:should fail when trying to remove a non-existent edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -1169,7 +1071,7 @@ describe('Commit Helpers - prepRemove', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should throw when trying to remove a non-existent edge`
+      src: `${__filename}:should fail when trying to remove a non-existent edge`
     };
 
     expect(() => prepRemove(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',
@@ -1182,7 +1084,7 @@ describe('Commit Helpers - prepUpdate', () => {
 
   after(init.teardown);
 
-  it('should throw when neither _key nor _id are present in vertex node', () => {
+  it('should fail when ignoreRevs is false and _rev match fails in vertex node', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const pathParams = {
       collection: collName
@@ -1190,25 +1092,7 @@ describe('Commit Helpers - prepUpdate', () => {
     const body = {
       k1: 'v1',
       k2: 'v1',
-      src: `${__filename}:should throw when neither _key nor _id are present in vertex node`
-    };
-    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
-
-    const unode = pick(node, 'k1');
-    unode.k1 = 'v2';
-
-    expect(() => prepUpdate(collName, unode)).to.throw();
-  });
-
-  it('should throw when ignoreRevs is false and _rev match fails in vertex node', () => {
-    const collName = init.TEST_DATA_COLLECTIONS.vertex;
-    const pathParams = {
-      collection: collName
-    };
-    const body = {
-      k1: 'v1',
-      k2: 'v1',
-      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in vertex node`
+      src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in vertex node`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
 
@@ -1332,29 +1216,29 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
   });
 
-  it('should throw when trying to update a non-existent vertex', () => {
+  it('should fail when trying to update a non-existent vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       _key: 'does-not-exist',
-      src: `${__filename}:should throw when trying to replace a non-existent vertex`
+      src: `${__filename}:should fail when trying to replace a non-existent vertex`
     };
 
     expect(() => prepUpdate(collName, node)).to.throw().with.property('errorNum',
       ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
-  it('should throw when neither _key nor _id are present in edge node', () => {
+  it('should fail when ignoreRevs is false and _rev match fails in edge node', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+        src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+        src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -1364,39 +1248,7 @@ describe('Commit Helpers - prepUpdate', () => {
       _to: vnodes[1]._id,
       k1: 'v1',
       k2: 'v1',
-      src: `${__filename}:should throw when neither _key nor _id are present in edge node`
-    };
-    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
-
-    const eunode = pick(ecnode, 'k1');
-    eunode.k1 = 'v2';
-
-    expect(() => prepUpdate(pathParams.collection, eunode)).to.throw();
-  });
-
-  it('should throw when ignoreRevs is false and _rev match fails in edge node', () => {
-    const pathParams = {
-      collection: init.TEST_DATA_COLLECTIONS.vertex
-    };
-    const vbody = [
-      {
-        k1: 'v1',
-        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
-      },
-      {
-        k1: 'v1',
-        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
-      }
-    ];
-    const vnodes = createMultiple({ pathParams, body: vbody });
-
-    const ebody = {
-      _from: vnodes[0]._id,
-      _to: vnodes[1]._id,
-      k1: 'v1',
-      k2: 'v1',
-      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      src: `${__filename}:should fail when ignoreRevs is false and _rev match fails in edge node`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
 
@@ -1560,18 +1412,18 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
   });
 
-  it('should throw when trying to update a non-existent edge', () => {
+  it('should fail when trying to update a non-existent edge', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to update a non-existent edge`
+        src: `${__filename}:should fail when trying to update a non-existent edge`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should throw when trying to update a non-existent edge`
+        src: `${__filename}:should fail when trying to update a non-existent edge`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -1581,7 +1433,7 @@ describe('Commit Helpers - prepUpdate', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should throw when trying to update a non-existent edge`
+      src: `${__filename}:should fail when trying to update a non-existent edge`
     };
 
     expect(() => prepUpdate(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',
