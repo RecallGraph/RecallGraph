@@ -3,15 +3,15 @@
 const { expect } = require('chai');
 const init = require('../../../../helpers/init');
 const {
-  getLatestEvent, getTransientOrCreateLatestSnapshot, getTransientEventOriginFor,
-  insertEventNode, insertCommandEdge, insertEvtSSLink, ensureEventOriginNode, prepInsert, prepRemove, prepReplace
+  getLatestEvent, getTransientOrCreateLatestSnapshot, getTransientEventOriginFor, insertEventNode, insertCommandEdge,
+  insertEvtSSLink, ensureEventOriginNode, prepInsert, prepRemove, prepReplace, prepUpdate
 } = require('../../../../../lib/operations/commit/helpers');
 const { createSingle, createMultiple } = require('../../../../../lib/handlers/createHandlers');
 const { replaceSingle } = require('../../../../../lib/handlers/replaceHandlers');
 const { removeSingle } = require('../../../../../lib/handlers/removeHandlers');
 const { db, errors: ARANGO_ERRORS, time: dbtime } = require('@arangodb');
 const { SERVICE_COLLECTIONS, snapshotInterval } = require('../../../../../lib/helpers');
-const omit = require('lodash/omit');
+const { omit, pick } = require('lodash');
 const jiff = require('jiff');
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events);
@@ -462,7 +462,43 @@ describe('Commit Helpers - prepReplace', () => {
 
   after(init.teardown);
 
-  it('should return a meta node after replacing a vertex', () => {
+  it('should throw when neither _key nor _id are present in vertex node', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      src: `${__filename}:should throw when neither _key nor _id are present in vertex node`
+    };
+
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+    delete node._key;
+    delete node._id;
+    node.k1 = 'v2';
+
+    expect(() => prepReplace(collName, node)).to.throw();
+  });
+
+  it('should throw when ignoreRevs is false and _rev match fails in vertex node', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in vertex node`
+    };
+
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+    node.k1 = 'v2';
+    node._rev = 'mismatched_rev';
+
+    expect(() => prepReplace(collName, node, { ignoreRevs: false })).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code);
+  });
+
+  it('should return a meta node after replacing a vertex, when ignoreRevs is false, and _rev matches', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const coll = db._collection(collName);
     const pathParams = {
@@ -470,12 +506,12 @@ describe('Commit Helpers - prepReplace', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:should return a meta node after replacing a vertex`
+      src: `${__filename}:should return a meta node after replacing a vertex, when ignoreRevs is false, and _rev matches`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
     node.k1 = 'v2';
 
-    const { result, event, time, prevEvent, ssData } = prepReplace(collName, node);
+    const { result, event, time, prevEvent, ssData } = prepReplace(collName, node, { ignoreRevs: false });
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(node._id);
@@ -513,6 +549,57 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
   });
 
+  it('should return a meta node after replacing a vertex, when ignoreRevs is true, irrespective of _rev match', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      src: `${__filename}:should return a meta node after replacing a vertex, when ignoreRevs is true, irrespective of _rev match`
+    };
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+    node.k1 = 'v2';
+    node._rev = 'mismatched_rev';
+
+    const { result, event, time, prevEvent, ssData } = prepReplace(collName, node);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(node._key);
+    expect(result._rev).to.not.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
   it('should throw when trying to replace a non-existent vertex', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
@@ -524,18 +611,18 @@ describe('Commit Helpers - prepReplace', () => {
       ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
-  it('should return a meta node after replacing an edge', () => {
+  it('should throw when neither _key nor _id are present in edge node', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should return a meta node after replacing an edge`
+        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should return a meta node after replacing an edge`
+        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -544,12 +631,148 @@ describe('Commit Helpers - prepReplace', () => {
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       k1: 'v1',
-      src: `${__filename}:should return a meta node after replacing an edge`
+      src: `${__filename}:should throw when neither _key nor _id are present in edge node`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
-    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
 
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    delete ecnode._id;
+    delete ecnode._key;
     ecnode.k1 = 'v2';
+
+    expect(() => prepReplace(pathParams.collection, ecnode)).to.throw();
+  });
+
+  it('should throw when ignoreRevs is false and _rev match fails in edge node', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    ecnode.k1 = 'v2';
+    ecnode._rev = 'mismatched_rev';
+
+    expect(() => prepReplace(pathParams.collection, ecnode, { ignoreRevs: false })).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code);
+  });
+
+  it('should return a meta node after replacing a edge, when ignoreRevs is false, and _rev matches', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after replacing an edge, when ignoreRevs is false, and _rev matches`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after replacing an edge, when ignoreRevs is false, and _rev matches`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should return a meta node after replacing an edge, when ignoreRevs is false, and _rev matches`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    ecnode.k1 = 'v2';
+
+    const { result, event, time, prevEvent, ssData } = prepReplace(pathParams.collection, ecnode,
+      { ignoreRevs: false });
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(ecnode._id);
+    expect(result._key).to.equal(ecnode._key);
+    expect(result._rev).to.not.equal(ecnode._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new._from).to.equal(ecnode._from);
+    expect(result.new._to).to.equal(ecnode._to);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(ecnode._rev);
+    expect(result.old._from).to.equal(ecnode._from);
+    expect(result.old._to).to.equal(ecnode._to);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const coll = db._collection(pathParams.collection);
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(pathParams.collection);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should return a meta node after replacing an edge, when ignoreRevs is true, irrespective of _rev match', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after replacing an edge, when ignoreRevs is true, irrespective of _rev match`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after replacing an edge, when ignoreRevs is true, irrespective of _rev match`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should return a meta node after replacing an edge, when ignoreRevs is true, irrespective of _rev match`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    ecnode.k1 = 'v2';
+    ecnode._rev = 'mismatched_rev';
 
     const { result, event, time, prevEvent, ssData } = prepReplace(pathParams.collection, ecnode);
 
@@ -567,7 +790,6 @@ describe('Commit Helpers - prepReplace', () => {
     expect(result.old).to.be.an.instanceOf(Object);
     expect(result.old._id).to.equal(result._id);
     expect(result.old._key).to.equal(result._key);
-    expect(result.old._rev).to.equal(ecnode._rev);
     expect(result.old._from).to.equal(ecnode._from);
     expect(result.old._to).to.equal(ecnode._to);
     expect(result.old.k1).to.equal('v1');
@@ -628,7 +850,41 @@ describe('Commit Helpers - prepRemove', () => {
 
   after(init.teardown);
 
-  it('should return a meta node after removing a vertex', () => {
+  it('should throw when neither _key nor _id are present in vertex node', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      src: `${__filename}:should throw when neither _key nor _id are present in vertex node`
+    };
+
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+    delete node._key;
+    delete node._id;
+
+    expect(() => prepRemove(collName, node)).to.throw();
+  });
+
+  it('should throw when ignoreRevs is false and _rev match fails in vertex node', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in vertex node`
+    };
+
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+    node._rev = 'mismatched_rev';
+
+    expect(() => prepRemove(collName, node, { ignoreRevs: false })).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code);
+  });
+
+  it('should return a meta node after removing a vertex, when ignoreRevs is false, and _rev matches', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const coll = db._collection(collName);
     const pathParams = {
@@ -636,16 +892,56 @@ describe('Commit Helpers - prepRemove', () => {
     };
     const body = {
       k1: 'v1',
-      src: `${__filename}:should return a meta node after removing a vertex`
+      src: `${__filename}:should return a meta node after removing a vertex, when ignoreRevs is false, and _rev matches`
     };
     const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+
+    const { result, event, time, prevEvent, ssData } = prepRemove(collName, node, { ignoreRevs: false });
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(node._key);
+    expect(result._rev).to.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(result.new).to.be.empty;
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(result._rev);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('deleted');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode._id).to.equal(prevEvent['last-snapshot']);
+    expect(ssData.hopsFromLast).to.equal(prevEvent['hops-from-last-snapshot'] + 1);
+  });
+
+  it('should return a meta node after removing a vertex, when ignoreRevs is true, irrespective of _rev match', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      src: `${__filename}:should return a meta node after removing a vertex, when ignoreRevs is true, irrespective of _rev match`
+    };
+
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+    node._rev = 'mismatched_rev';
 
     const { result, event, time, prevEvent, ssData } = prepRemove(collName, node);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(node._id);
     expect(result._key).to.equal(node._key);
-    expect(result._rev).to.equal(node._rev);
     expect(result.new).to.be.an.instanceOf(Object);
     // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty;
@@ -678,18 +974,136 @@ describe('Commit Helpers - prepRemove', () => {
       ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 
-  it('should return a meta node after removing an edge', () => {
+  it('should throw when neither _key nor _id are present in edge node', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
     };
     const vbody = [
       {
         k1: 'v1',
-        src: `${__filename}:should return a meta node after removing an edge`
+        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should return a meta node after removing an edge`
+        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    delete ecnode._id;
+    delete ecnode._key;
+
+    expect(() => prepRemove(pathParams.collection, ecnode)).to.throw();
+  });
+
+  it('should throw when ignoreRevs is false and _rev match fails in edge node', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    ecnode._rev = 'mismatched_rev';
+
+    expect(() => prepRemove(pathParams.collection, ecnode, { ignoreRevs: false })).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code);
+  });
+
+  it('should return a meta node after removing a edge, when ignoreRevs is false, and _rev matches', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after removing an edge, when ignoreRevs is false, and _rev matches`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after removing an edge, when ignoreRevs is false, and _rev matches`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should return a meta node after removing an edge, when ignoreRevs is false, and _rev matches`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    const { result, event, time, prevEvent, ssData } = prepRemove(pathParams.collection, ecnode, { ignoreRevs: false });
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(ecnode._id);
+    expect(result._key).to.equal(ecnode._key);
+    expect(result._rev).to.equal(ecnode._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    // noinspection BadExpressionStatementJS
+    expect(result.new).to.be.empty;
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(result._rev);
+    expect(result.old._from).to.equal(ecnode._from);
+    expect(result.old._to).to.equal(ecnode._to);
+    expect(result.old.k1).to.equal('v1');
+
+    expect(event).to.equal('deleted');
+    expect(typeof time).to.equal('number');
+
+    const coll = db._collection(pathParams.collection);
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode._id).to.equal(prevEvent['last-snapshot']);
+    expect(ssData.hopsFromLast).to.equal(prevEvent['hops-from-last-snapshot'] + 1);
+  });
+
+  it('should return a meta node after removing an edge, when ignoreRevs is true, irrespective of _rev match', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after removing an edge, when ignoreRevs is true, irrespective of _rev match`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after removing an edge, when ignoreRevs is true, irrespective of _rev match`
       }
     ];
     const vnodes = createMultiple({ pathParams, body: vbody });
@@ -701,14 +1115,15 @@ describe('Commit Helpers - prepRemove', () => {
       src: `${__filename}:should return a meta node after removing an edge`
     };
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
     const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+    ecnode._rev = 'mismatched_rev';
 
     const { result, event, time, prevEvent, ssData } = prepRemove(pathParams.collection, ecnode);
 
     expect(result).to.be.an.instanceOf(Object);
     expect(result._id).to.equal(ecnode._id);
     expect(result._key).to.equal(ecnode._key);
-    expect(result._rev).to.equal(ecnode._rev);
     expect(result.new).to.be.an.instanceOf(Object);
     // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty;
@@ -758,6 +1173,418 @@ describe('Commit Helpers - prepRemove', () => {
     };
 
     expect(() => prepRemove(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+  });
+});
+
+describe('Commit Helpers - prepUpdate', () => {
+  before(init.setup);
+
+  after(init.teardown);
+
+  it('should throw when neither _key nor _id are present in vertex node', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should throw when neither _key nor _id are present in vertex node`
+    };
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+
+    const unode = pick(node, 'k1');
+    unode.k1 = 'v2';
+
+    expect(() => prepUpdate(collName, unode)).to.throw();
+  });
+
+  it('should throw when ignoreRevs is false and _rev match fails in vertex node', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in vertex node`
+    };
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+
+    const unode = pick(node, '_key', 'k1', '_rev');
+    unode.k1 = 'v2';
+    unode._rev = 'mismatched_rev';
+
+    expect(() => prepUpdate(collName, unode, { ignoreRevs: false })).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code);
+  });
+
+  it('should return a meta node after updating a vertex, when ignoreRevs is false, and _rev matches', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should return a meta node after updating a vertex, when ignoreRevs is false, and _rev matches`
+    };
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+
+    const unode = pick(node, '_key', 'k1', '_rev');
+    unode.k1 = 'v2';
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(collName, unode, { ignoreRevs: false });
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(unode._key);
+    expect(result._rev).to.not.equal(unode._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(node._rev);
+    expect(result.old.k1).to.equal('v1');
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should return a meta node after updating a vertex, when ignoreRevs is true, irrespective of _rev match', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const coll = db._collection(collName);
+    const pathParams = {
+      collection: collName
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should return a meta node after updating a vertex, when ignoreRevs is true, irrespective of _rev match`
+    };
+    const node = createSingle({ pathParams, body }, { returnNew: true }).new;
+
+    const unode = pick(node, '_key', 'k1');
+    unode.k1 = 'v2';
+    unode._rev = 'mismatched_rev';
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(collName, unode);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(node._id);
+    expect(result._key).to.equal(unode._key);
+    expect(result._rev).to.not.equal(node._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old.k1).to.equal('v1');
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(collName);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should throw when trying to update a non-existent vertex', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    const node = {
+      _key: 'does-not-exist',
+      src: `${__filename}:should throw when trying to replace a non-existent vertex`
+    };
+
+    expect(() => prepUpdate(collName, node)).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
+  });
+
+  it('should throw when neither _key nor _id are present in edge node', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should throw when neither _key nor _id are present in edge node`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    const eunode = pick(ecnode, 'k1');
+    eunode.k1 = 'v2';
+
+    expect(() => prepUpdate(pathParams.collection, eunode)).to.throw();
+  });
+
+  it('should throw when ignoreRevs is false and _rev match fails in edge node', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should throw when ignoreRevs is false and _rev match fails in edge node`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    const eunode = pick(ecnode, '_key', 'k1');
+    eunode.k1 = 'v2';
+    eunode._rev = 'mismatched_rev';
+
+    expect(() => prepUpdate(pathParams.collection, eunode, { ignoreRevs: false })).to.throw().with.property('errorNum',
+      ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code);
+  });
+
+  it('should return a meta node after updating a edge, when ignoreRevs is false, and _rev matches', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after updating an edge, when ignoreRevs is false, and _rev matches`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after updating an edge, when ignoreRevs is false, and _rev matches`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should return a meta node after updating an edge, when ignoreRevs is false, and _rev matches`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    const eunode = pick(ecnode, '_key', 'k1', '_rev');
+    eunode.k1 = 'v2';
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(pathParams.collection, eunode,
+      { ignoreRevs: false });
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(ecnode._id);
+    expect(result._key).to.equal(eunode._key);
+    expect(result._rev).to.not.equal(eunode._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new._from).to.equal(ecnode._from);
+    expect(result.new._to).to.equal(ecnode._to);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._rev).to.equal(eunode._rev);
+    expect(result.old._from).to.equal(ecnode._from);
+    expect(result.old._to).to.equal(ecnode._to);
+    expect(result.old.k1).to.equal('v1');
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const coll = db._collection(pathParams.collection);
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(pathParams.collection);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should return a meta node after updating an edge, when ignoreRevs is true, irrespective of _rev match', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after updating an edge, when ignoreRevs is true, irrespective of _rev match`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should return a meta node after updating an edge, when ignoreRevs is true, irrespective of _rev match`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should return a meta node after updating an edge, when ignoreRevs is true, irrespective of _rev match`
+    };
+
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnode = createSingle({ pathParams, body: ebody }, { returnNew: true }).new;
+
+    const eunode = pick(ecnode, '_key', 'k1');
+    eunode.k1 = 'v2';
+    eunode._rev = 'mismatched_rev';
+
+    const { result, event, time, prevEvent, ssData } = prepUpdate(pathParams.collection, eunode);
+
+    expect(result).to.be.an.instanceOf(Object);
+    expect(result._id).to.equal(ecnode._id);
+    expect(result._key).to.equal(eunode._key);
+    expect(result._rev).to.not.equal(ecnode._rev);
+    expect(result.new).to.be.an.instanceOf(Object);
+    expect(result.new._id).to.equal(result._id);
+    expect(result.new._key).to.equal(result._key);
+    expect(result.new._rev).to.equal(result._rev);
+    expect(result.new._from).to.equal(ecnode._from);
+    expect(result.new._to).to.equal(ecnode._to);
+    expect(result.new.k1).to.equal('v2');
+    expect(result.new.k2).to.equal('v1');
+    expect(result.old).to.be.an.instanceOf(Object);
+    expect(result.old._id).to.equal(result._id);
+    expect(result.old._key).to.equal(result._key);
+    expect(result.old._from).to.equal(ecnode._from);
+    expect(result.old._to).to.equal(ecnode._to);
+    expect(result.old.k1).to.equal('v1');
+    expect(result.old.k2).to.equal('v1');
+
+    expect(event).to.equal('updated');
+    expect(typeof time).to.equal('number');
+
+    const coll = db._collection(pathParams.collection);
+    const lastEvent = getLatestEvent(result, coll);
+    expect(prevEvent).to.deep.equal(lastEvent);
+
+    expect(ssData).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode).to.have.property('_id');
+    expect(ssData.ssNode).to.have.property('_key');
+    expect(ssData.ssNode).to.have.property('_rev');
+    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object);
+    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime);
+    expect(ssData.ssNode.meta.mtime).to.equal(time);
+    expect(ssData.ssNode.data).to.deep.equal(result.new);
+    expect(ssData.hopsFromLast).to.equal(1);
+
+    const ssInterval = snapshotInterval(pathParams.collection);
+    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast);
+  });
+
+  it('should throw when trying to update a non-existent edge', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when trying to update a non-existent edge`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should throw when trying to update a non-existent edge`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const enode = {
+      _key: 'does-not-exist',
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should throw when trying to update a non-existent edge`
+    };
+
+    expect(() => prepUpdate(init.TEST_DATA_COLLECTIONS.edge, enode)).to.throw().with.property('errorNum',
       ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code);
   });
 });
