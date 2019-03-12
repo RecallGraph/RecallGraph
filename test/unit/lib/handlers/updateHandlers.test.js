@@ -76,6 +76,101 @@ describe('Update Handlers', () => {
     expect(rnode._rev).to.not.equal(cnode._rev);
   });
 
+  it('should remove null values in a single vertex when keepNull is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should remove null values in a single vertex when keepNull is false`
+    };
+
+    const cnode = createSingle({ pathParams, body });
+    cnode.k1 = null;
+
+    const rnode = updateSingle({ pathParams, body: cnode }, { returnNew: true, keepNull: false }).new;
+
+    expect(rnode).to.be.an.instanceOf(Object);
+    expect(rnode._id).to.equal(cnode._id);
+    expect(rnode._key).to.equal(cnode._key);
+    expect(rnode).to.not.have.property('k1');
+    expect(rnode.k2).to.equal('v1');
+    expect(rnode._rev).to.not.equal(cnode._rev);
+  });
+
+  it('should preserve null values in a vertex when keepNull is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should preserve null values in a vertex when keepNull is true`
+    };
+
+    const cnode = createSingle({ pathParams, body });
+    cnode.k1 = null;
+
+    const rnode = updateSingle({ pathParams, body: cnode }, { returnNew: true, keepNull: true }).new;
+
+    expect(rnode).to.be.an.instanceOf(Object);
+    expect(rnode._id).to.equal(cnode._id);
+    expect(rnode._key).to.equal(cnode._key);
+    // noinspection BadExpressionStatementJS
+    expect(rnode.k1).to.be.null;
+    expect(rnode.k2).to.equal('v1');
+    expect(rnode._rev).to.not.equal(cnode._rev);
+  });
+
+  it('should replace objects in a vertex when mergeObjects is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = {
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should replace objects in a vertex when mergeObjects is false`
+    };
+
+    const cnode = createSingle({ pathParams, body });
+    cnode.k1 = { b: 1 };
+
+    const rnode = updateSingle({ pathParams, body: cnode }, { returnNew: true, mergeObjects: false }).new;
+
+    expect(rnode).to.be.an.instanceOf(Object);
+    expect(rnode._id).to.equal(cnode._id);
+    expect(rnode._key).to.equal(cnode._key);
+    // noinspection BadExpressionStatementJS
+    expect(rnode.k1).to.deep.equal({ b: 1 });
+    expect(rnode.k2).to.equal('v1');
+    expect(rnode._rev).to.not.equal(cnode._rev);
+  });
+
+  it('should merge objects in a vertex when mergeObjects is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = {
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should merge objects in a vertex when mergeObjects is true`
+    };
+
+    const cnode = createSingle({ pathParams, body });
+    cnode.k1 = { b: 1 };
+
+    const rnode = updateSingle({ pathParams, body: cnode }, { returnNew: true, mergeObjects: true }).new;
+
+    expect(rnode).to.be.an.instanceOf(Object);
+    expect(rnode._id).to.equal(cnode._id);
+    expect(rnode._key).to.equal(cnode._key);
+    // noinspection BadExpressionStatementJS
+    expect(rnode.k1).to.deep.equal({ b: 1, a: 1 });
+    expect(rnode.k2).to.equal('v1');
+    expect(rnode._rev).to.not.equal(cnode._rev);
+  });
+
   it('should fail when updating two vertices where ignoreRevs is false and _rev match fails', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
@@ -192,6 +287,165 @@ describe('Update Handlers', () => {
     });
   });
 
+  it('should remove null values from two vertices when keepNull is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = [
+      {
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should remove null values from two vertices when keepNull is false`
+      },
+      {
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should remove null values from two vertices when keepNull is false`
+      }
+    ];
+
+    const cnodes = createMultiple({ pathParams, body });
+
+    const rnodes = updateMultiple({
+      pathParams, body: cnodes.map(node => {
+        node.k1 = null;
+
+        return node;
+      })
+    }, { returnNew: true, keepNull: false });
+
+    expect(rnodes).to.be.an.instanceOf(Array);
+    expect(rnodes).to.have.lengthOf(2);
+    rnodes.map(node => node.new).forEach((node, idx) => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node._id).to.equal(cnodes[idx]._id);
+      expect(node._key).to.equal(cnodes[idx]._key);
+      expect(node).to.not.have.property('k1');
+      expect(node.k2).to.equal('v1');
+      expect(node._rev).to.not.equal(cnodes[idx]._rev);
+    });
+  });
+
+  it('should preserve null values in two vertices when keepNull is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = [
+      {
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should preserve null values in two vertices when keepNull is true`
+      },
+      {
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should preserve null values in two vertices when keepNull is true`
+      }
+    ];
+
+    const cnodes = createMultiple({ pathParams, body });
+
+    const rnodes = updateMultiple({
+      pathParams, body: cnodes.map(node => {
+        node.k1 = null;
+
+        return node;
+      })
+    }, { returnNew: true, keepNull: true });
+
+    expect(rnodes).to.be.an.instanceOf(Array);
+    expect(rnodes).to.have.lengthOf(2);
+    rnodes.map(node => node.new).forEach((node, idx) => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node._id).to.equal(cnodes[idx]._id);
+      expect(node._key).to.equal(cnodes[idx]._key);
+      // noinspection BadExpressionStatementJS
+      expect(node.k1).to.be.null;
+      expect(node.k2).to.equal('v1');
+      expect(node._rev).to.not.equal(cnodes[idx]._rev);
+    });
+  });
+
+  it('should replace objects in two vertices when mergeObjects is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = [
+      {
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should replace objects in two vertices when mergeObjects is false`
+      },
+      {
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should replace objects in two vertices when mergeObjects is false`
+      }
+    ];
+
+    const cnodes = createMultiple({ pathParams, body });
+
+    const rnodes = updateMultiple({
+      pathParams, body: cnodes.map(node => {
+        node.k1 = { b: 1 };
+
+        return node;
+      })
+    }, { returnNew: true, mergeObjects: false });
+
+    expect(rnodes).to.be.an.instanceOf(Array);
+    expect(rnodes).to.have.lengthOf(2);
+    rnodes.map(node => node.new).forEach((node, idx) => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node._id).to.equal(cnodes[idx]._id);
+      expect(node._key).to.equal(cnodes[idx]._key);
+      // noinspection BadExpressionStatementJS
+      expect(node.k1).to.deep.equal({ b: 1 });
+      expect(node.k2).to.equal('v1');
+      expect(node._rev).to.not.equal(cnodes[idx]._rev);
+    });
+  });
+
+  it('should merge objects in two vertices when mergeObjects is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const body = [
+      {
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should merge objects in two vertices when mergeObjects is true`
+      },
+      {
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should merge objects in two vertices when mergeObjects is true`
+      }
+    ];
+
+    const cnodes = createMultiple({ pathParams, body });
+
+    const rnodes = updateMultiple({
+      pathParams, body: cnodes.map(node => {
+        node.k1 = { b: 1 };
+
+        return node;
+      })
+    }, { returnNew: true, mergeObjects: true });
+
+    expect(rnodes).to.be.an.instanceOf(Array);
+    expect(rnodes).to.have.lengthOf(2);
+    rnodes.map(node => node.new).forEach((node, idx) => {
+      expect(node).to.be.an.instanceOf(Object);
+      expect(node._id).to.equal(cnodes[idx]._id);
+      expect(node._key).to.equal(cnodes[idx]._key);
+      // noinspection BadExpressionStatementJS
+      expect(node.k1).to.deep.equal({ b: 1, a: 1 });
+      expect(node.k2).to.equal('v1');
+      expect(node._rev).to.not.equal(cnodes[idx]._rev);
+    });
+  });
+
   it('should fail when updating an edge where ignoreRevs is false and _rev match fails', () => {
     const pathParams = {
       collection: init.TEST_DATA_COLLECTIONS.vertex
@@ -302,6 +556,169 @@ describe('Update Handlers', () => {
     expect(ernode._from).to.equal(vnodes[0]._id);
     expect(ernode._to).to.equal(vnodes[1]._id);
     expect(ernode.k1).to.equal('v2');
+    expect(ernode.k2).to.equal('v1');
+    expect(ernode._rev).to.not.equal(ecnode._rev);
+  });
+
+  it('should remove null values from an edge when keepNull is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove null values from an edge when keepNull is false`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove null values from an edge when keepNull is false`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should remove null values from an edge when keepNull is false`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody });
+    ecnode.k1 = null;
+
+    const ernode = updateSingle({ pathParams, body: ecnode }, { returnNew: true, keepNull: false }).new;
+
+    expect(ernode).to.be.an.instanceOf(Object);
+    expect(ernode._id).to.equal(ecnode._id);
+    expect(ernode._key).to.equal(ecnode._key);
+    expect(ernode._from).to.equal(vnodes[0]._id);
+    expect(ernode._to).to.equal(vnodes[1]._id);
+    expect(ernode).to.not.have.property('k1');
+    expect(ernode.k2).to.equal('v1');
+    expect(ernode._rev).to.not.equal(ecnode._rev);
+  });
+
+  it('should preserve null values in an edge when keepNull is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should preserve null values in an edge when keepNull is true`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should preserve null values in an edge when keepNull is true`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should preserve null values in an edge when keepNull is true`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody });
+    ecnode.k1 = null;
+
+    const ernode = updateSingle({ pathParams, body: ecnode }, { returnNew: true, keepNull: true }).new;
+
+    expect(ernode).to.be.an.instanceOf(Object);
+    expect(ernode._id).to.equal(ecnode._id);
+    expect(ernode._key).to.equal(ecnode._key);
+    expect(ernode._from).to.equal(vnodes[0]._id);
+    expect(ernode._to).to.equal(vnodes[1]._id);
+    // noinspection BadExpressionStatementJS
+    expect(ernode.k1).to.be.null;
+    expect(ernode.k2).to.equal('v1');
+    expect(ernode._rev).to.not.equal(ecnode._rev);
+  });
+
+  it('should replace objects in an edge when mergeObjects is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should replace objects in an edge when mergeObjects is false`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should replace objects in an edge when mergeObjects is false`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should replace objects in an edge when mergeObjects is false`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody });
+    ecnode.k1 = { b: 1 };
+
+    const ernode = updateSingle({ pathParams, body: ecnode }, { returnNew: true, mergeObjects: false }).new;
+
+    expect(ernode).to.be.an.instanceOf(Object);
+    expect(ernode._id).to.equal(ecnode._id);
+    expect(ernode._key).to.equal(ecnode._key);
+    expect(ernode._from).to.equal(vnodes[0]._id);
+    expect(ernode._to).to.equal(vnodes[1]._id);
+    // noinspection BadExpressionStatementJS
+    expect(ernode.k1).to.deep.equal({ b: 1 });
+    expect(ernode.k2).to.equal('v1');
+    expect(ernode._rev).to.not.equal(ecnode._rev);
+  });
+
+  it('should merge objects in a vertex when mergeObjects is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should merge objects in a vertex when mergeObjects is true`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should merge objects in a vertex when mergeObjects is true`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should merge objects in a vertex when mergeObjects is true`
+    };
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+
+    const ecnode = createSingle({ pathParams, body: ebody });
+    ecnode.k1 = { b: 1 };
+
+    const ernode = updateSingle({ pathParams, body: ecnode }, { returnNew: true, mergeObjects: true }).new;
+
+    expect(ernode).to.be.an.instanceOf(Object);
+    expect(ernode._id).to.equal(ecnode._id);
+    expect(ernode._key).to.equal(ecnode._key);
+    expect(ernode._from).to.equal(vnodes[0]._id);
+    expect(ernode._to).to.equal(vnodes[1]._id);
+    // noinspection BadExpressionStatementJS
+    expect(ernode.k1).to.deep.equal({ b: 1, a: 1 });
     expect(ernode.k2).to.equal('v1');
     expect(ernode._rev).to.not.equal(ecnode._rev);
   });
@@ -469,6 +886,237 @@ describe('Update Handlers', () => {
       expect(ernode._from).to.equal(vnodes[0]._id);
       expect(ernode._to).to.equal(vnodes[1]._id);
       expect(ernode.k1).to.equal('v2');
+      expect(ernode.k2).to.equal('v1');
+      expect(ernode._rev).to.not.equal(ecnodes[idx]._rev);
+    });
+  });
+
+  it('should remove null values from two edges when keepNull is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove null values from two edges when keepNull is false`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove null values from two edges when keepNull is false`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = [
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should remove null values from two edges when keepNull is false`
+      },
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should remove null values from two edges when keepNull is false`
+      }
+    ];
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnodes = createMultiple({ pathParams, body: ebody });
+
+    const ernodes = updateMultiple({
+      pathParams, body: ecnodes.map(node => {
+        node.k1 = null;
+
+        return node;
+      })
+    }, { returnNew: true, keepNull: false });
+
+    expect(ernodes).to.be.an.instanceOf(Array);
+    expect(ernodes).to.have.lengthOf(2);
+    ernodes.map(node => node.new).forEach((ernode, idx) => {
+      expect(ernode).to.be.an.instanceOf(Object);
+      expect(ernode._id).to.equal(ecnodes[idx]._id);
+      expect(ernode._key).to.equal(ecnodes[idx]._key);
+      expect(ernode._from).to.equal(vnodes[0]._id);
+      expect(ernode._to).to.equal(vnodes[1]._id);
+      expect(ernode).to.not.have.property('k1');
+      expect(ernode.k2).to.equal('v1');
+      expect(ernode._rev).to.not.equal(ecnodes[idx]._rev);
+    });
+  });
+
+  it('should preserve null values in two edges when keepNull is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should preserve null values in two edges when keepNull is true`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should preserve null values in two edges when keepNull is true`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = [
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should preserve null values in two edges when keepNull is true`
+      },
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: 'v1',
+        k2: 'v1',
+        src: `${__filename}:should preserve null values in two edges when keepNull is true`
+      }
+    ];
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnodes = createMultiple({ pathParams, body: ebody });
+
+    const ernodes = updateMultiple({
+      pathParams, body: ecnodes.map(node => {
+        node.k1 = null;
+
+        return node;
+      })
+    }, { returnNew: true, keepNull: true });
+
+    expect(ernodes).to.be.an.instanceOf(Array);
+    expect(ernodes).to.have.lengthOf(2);
+    ernodes.map(node => node.new).forEach((ernode, idx) => {
+      expect(ernode).to.be.an.instanceOf(Object);
+      expect(ernode._id).to.equal(ecnodes[idx]._id);
+      expect(ernode._key).to.equal(ecnodes[idx]._key);
+      expect(ernode._from).to.equal(vnodes[0]._id);
+      expect(ernode._to).to.equal(vnodes[1]._id);
+      // noinspection BadExpressionStatementJS
+      expect(ernode.k1).to.be.null;
+      expect(ernode.k2).to.equal('v1');
+      expect(ernode._rev).to.not.equal(ecnodes[idx]._rev);
+    });
+  });
+
+  it('should replace objects in two edges when mergeObjects is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should replace objects in two edges when mergeObjects is false`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should replace objects in two edges when mergeObjects is false`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = [
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should replace objects in two edges when mergeObjects is false`
+      },
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should replace objects in two edges when mergeObjects is false`
+      }
+    ];
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnodes = createMultiple({ pathParams, body: ebody });
+
+    const ernodes = updateMultiple({
+      pathParams, body: ecnodes.map(node => {
+        node.k1 = { b: 1 };
+
+        return node;
+      })
+    }, { returnNew: true, mergeObjects: false });
+
+    expect(ernodes).to.be.an.instanceOf(Array);
+    expect(ernodes).to.have.lengthOf(2);
+    ernodes.map(node => node.new).forEach((ernode, idx) => {
+      expect(ernode).to.be.an.instanceOf(Object);
+      expect(ernode._id).to.equal(ecnodes[idx]._id);
+      expect(ernode._key).to.equal(ecnodes[idx]._key);
+      expect(ernode._from).to.equal(vnodes[0]._id);
+      expect(ernode._to).to.equal(vnodes[1]._id);
+      // noinspection BadExpressionStatementJS
+      expect(ernode.k1).to.deep.equal({ b: 1 });
+      expect(ernode.k2).to.equal('v1');
+      expect(ernode._rev).to.not.equal(ecnodes[idx]._rev);
+    });
+  });
+
+  it('should merge objects in two edges when mergeObjects is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should merge objects in two edges when mergeObjects is true`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should merge objects in two edges when mergeObjects is true`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const ebody = [
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should merge objects in two edges when mergeObjects is true`
+      },
+      {
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        k1: { a: 1 },
+        k2: 'v1',
+        src: `${__filename}:should merge objects in two edges when mergeObjects is true`
+      }
+    ];
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge;
+    const ecnodes = createMultiple({ pathParams, body: ebody });
+
+    const ernodes = updateMultiple({
+      pathParams, body: ecnodes.map(node => {
+        node.k1 = { b: 1 };
+
+        return node;
+      })
+    }, { returnNew: true, mergeObjects: true });
+
+    expect(ernodes).to.be.an.instanceOf(Array);
+    expect(ernodes).to.have.lengthOf(2);
+    ernodes.map(node => node.new).forEach((ernode, idx) => {
+      expect(ernode).to.be.an.instanceOf(Object);
+      expect(ernode._id).to.equal(ecnodes[idx]._id);
+      expect(ernode._key).to.equal(ecnodes[idx]._key);
+      expect(ernode._from).to.equal(vnodes[0]._id);
+      expect(ernode._to).to.equal(vnodes[1]._id);
+      // noinspection BadExpressionStatementJS
+      expect(ernode.k1).to.deep.equal({ b: 1, a: 1 });
       expect(ernode.k2).to.equal('v1');
       expect(ernode._rev).to.not.equal(ecnodes[idx]._rev);
     });

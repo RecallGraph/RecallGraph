@@ -688,12 +688,12 @@ describe('Commit', () => {
     expect(uunode.old.k2).to.equal('v1');
   });
 
-  it('should remove null values when keepNull is false', () => {
+  it('should remove null values from a vertex when keepNull is false', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
       k2: 'v1',
-      src: `${__filename}:should remove null values when keepNull is false`
+      src: `${__filename}:should remove null values from a vertex when keepNull is false`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -721,12 +721,12 @@ describe('Commit', () => {
     expect(uunode.old.k2).to.equal('v1');
   });
 
-  it('should preserve null values when keepNull is true', () => {
+  it('should preserve null values in a vertex when keepNull is true', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: 'v1',
       k2: 'v1',
-      src: `${__filename}:should preserve null values when keepNull is true`
+      src: `${__filename}:should preserve null values in a vertex when keepNull is true`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -755,12 +755,12 @@ describe('Commit', () => {
     expect(uunode.old.k2).to.equal('v1');
   });
 
-  it('should replace objects when mergeObjects is false', () => {
+  it('should replace objects in a vertex when mergeObjects is false', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: { a: 1 },
       k2: 'v1',
-      src: `${__filename}:should replace objects when mergeObjects is false`
+      src: `${__filename}:should replace objects in a vertex when mergeObjects is false`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -788,12 +788,12 @@ describe('Commit', () => {
     expect(uunode.old.k2).to.equal('v1');
   });
 
-  it('should merge objects when mergeObjects is true', () => {
+  it('should merge objects in a vertex when mergeObjects is true', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
       k1: { a: 1 },
       k2: 'v1',
-      src: `${__filename}:should merge objects when mergeObjects is true`
+      src: `${__filename}:should merge objects in a vertex when mergeObjects is true`
     };
 
     const cnode = commit(collName, node, DB_OPS.INSERT);
@@ -970,6 +970,223 @@ describe('Commit', () => {
     expect(uunode.old._from).to.equal(uunode.new._from);
     expect(uunode.old._to).to.equal(uunode.new._to);
     expect(uunode.old.k1).to.equal('v1');
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
+  it('should remove null values from an edge when keepNull is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove null values from an edge when keepNull is false`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove null values from an edge when keepNull is false`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const node = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should remove null values from an edge when keepNull is false`
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key', '_rev');
+    unode.k1 = null;
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true }, { keepNull: false });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    expect(uunode.new._from).to.equal(vnodes[0]._id);
+    expect(uunode.new._to).to.equal(vnodes[1]._id);
+    expect(uunode.new).to.not.have.property('k1');
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old._rev).to.equal(cnode._rev);
+    expect(uunode.old._from).to.equal(uunode.new._from);
+    expect(uunode.old._to).to.equal(uunode.new._to);
+    expect(uunode.old.k1).to.equal('v1');
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
+  it('should preserve null values in an edge when keepNull is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should preserve null values in an edge when keepNull is true`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should preserve null values in an edge when keepNull is true`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const node = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should preserve null values in an edge when keepNull is true`
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key', '_rev');
+    unode.k1 = null;
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true }, { keepNull: true });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    expect(uunode.new._from).to.equal(vnodes[0]._id);
+    expect(uunode.new._to).to.equal(vnodes[1]._id);
+    // noinspection BadExpressionStatementJS
+    expect(uunode.new.k1).to.be.null;
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old._rev).to.equal(cnode._rev);
+    expect(uunode.old._from).to.equal(uunode.new._from);
+    expect(uunode.old._to).to.equal(uunode.new._to);
+    expect(uunode.old.k1).to.equal('v1');
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
+  it('should replace objects in an edge when mergeObjects is false', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should replace objects in an edge when mergeObjects is false`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should replace objects in an edge when mergeObjects is false`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const node = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should replace objects in an edge when mergeObjects is false`
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key', '_rev');
+    unode.k1 = { b: 1 };
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true },
+      { mergeObjects: false });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    expect(uunode.new._from).to.equal(vnodes[0]._id);
+    expect(uunode.new._to).to.equal(vnodes[1]._id);
+    // noinspection BadExpressionStatementJS
+    expect(uunode.new.k1).to.deep.equal({ b: 1 });
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old._rev).to.equal(cnode._rev);
+    expect(uunode.old._from).to.equal(uunode.new._from);
+    expect(uunode.old._to).to.equal(uunode.new._to);
+    expect(uunode.old.k1).to.deep.equal({ a: 1 });
+    expect(uunode.old.k2).to.equal('v1');
+  });
+
+  it('should merge objects in an edge when mergeObjects is true', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    };
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should merge objects in an edge when mergeObjects is true`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should merge objects in an edge when mergeObjects is true`
+      }
+    ];
+    const vnodes = createMultiple({ pathParams, body: vbody });
+
+    const node = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: { a: 1 },
+      k2: 'v1',
+      src: `${__filename}:should merge objects in an edge when mergeObjects is true`
+    };
+    const collName = init.TEST_DATA_COLLECTIONS.edge;
+    const cnode = commit(collName, node, DB_OPS.INSERT);
+
+    const unode = pick(cnode, '_key', '_rev');
+    unode.k1 = { b: 1 };
+
+    const uunode = commit(collName, unode, DB_OPS.UPDATE, { returnNew: true, returnOld: true },
+      { mergeObjects: true });
+
+    expect(uunode).to.be.an.instanceOf(Object);
+    expect(uunode._id).to.equal(cnode._id);
+    expect(uunode._key).to.equal(cnode._key);
+    expect(uunode._rev).to.not.equal(cnode._rev);
+    expect(uunode.new).to.be.an.instanceOf(Object);
+    expect(uunode.new._id).to.equal(uunode._id);
+    expect(uunode.new._key).to.equal(uunode._key);
+    expect(uunode.new._rev).to.equal(uunode._rev);
+    expect(uunode.new._from).to.equal(vnodes[0]._id);
+    expect(uunode.new._to).to.equal(vnodes[1]._id);
+    // noinspection BadExpressionStatementJS
+    expect(uunode.new.k1).to.deep.equal({ b: 1, a: 1 });
+    expect(uunode.new.k2).to.equal('v1');
+    expect(uunode.old).to.be.an.instanceOf(Object);
+    expect(uunode.old._id).to.equal(uunode._id);
+    expect(uunode.old._key).to.equal(uunode._key);
+    expect(uunode.old._rev).to.equal(cnode._rev);
+    expect(uunode.old._from).to.equal(uunode.new._from);
+    expect(uunode.old._to).to.equal(uunode.new._to);
+    expect(uunode.old.k1).to.deep.equal({ a: 1 });
     expect(uunode.old.k2).to.equal('v1');
   });
 
