@@ -1,8 +1,8 @@
 'use strict';
 
-const { expect } = require("chai");
+const { expect } = require('chai');
 const init = require('../../../../helpers/init');
-const request = require("@arangodb/request");
+const request = require('@arangodb/request');
 const { baseUrl } = module.context;
 const { errors: ARANGO_ERRORS } = require('@arangodb');
 
@@ -217,7 +217,9 @@ describe('Routes - remove', () => {
     });
 
     expect(response).to.be.an.instanceOf(Object);
-    expect(response.statusCode).to.equal(404);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code}:1`);
   });
 
   it('should fail to remove two vertices with non-existent keys', () => {
@@ -241,7 +243,9 @@ describe('Routes - remove', () => {
     });
 
     expect(response).to.be.an.instanceOf(Object);
-    expect(response.statusCode).to.equal(200);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code}:2`);
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
@@ -281,7 +285,9 @@ describe('Routes - remove', () => {
     });
 
     expect(response).to.be.an.instanceOf(Object);
-    expect(response.statusCode).to.equal(404);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code}:1`);
   });
 
   it('should fail to remove two edges with non-existent keys', () => {
@@ -321,7 +327,9 @@ describe('Routes - remove', () => {
     });
 
     expect(response).to.be.an.instanceOf(Object);
-    expect(response.statusCode).to.equal(200);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code}:2`);
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
