@@ -11,11 +11,43 @@ describe('Routes - remove', () => {
 
   after(init.teardown);
 
-  it('should remove a single vertex', () => {
+  it('should fail when removing a vertex where ignoreRevs is false and _rev match fails', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
       k1: 'v1',
-      src: `${__filename}:should remove a single vertex`
+      src: `${__filename}:should fail when removing a vertex where ignoreRevs is false and _rev match fails`
+    };
+
+    let response = request.post(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: node,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    node = JSON.parse(response.body).new;
+    node._rev = 'mismatched_rev';
+
+    response = request.delete(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: node,
+      qs: {
+        returnOld: true,
+        ignoreRevs: false
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(`${ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code}:1`);
+  });
+
+  it('should remove a single vertex where ignoreRevs is false and _rev matches', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    let node = {
+      k1: 'v1',
+      src: `${__filename}:should remove a single vertex where ignoreRevs is false and _rev matches`
     };
 
     let response = request.post(`${baseUrl}/document/${collName}`, {
@@ -31,7 +63,8 @@ describe('Routes - remove', () => {
       json: true,
       body: node,
       qs: {
-        returnOld: true
+        returnOld: true,
+        ignoreRevs: false
       }
     });
 
@@ -46,16 +79,93 @@ describe('Routes - remove', () => {
     expect(resBody.k1).to.equal('v1');
   });
 
-  it('should remove two vertices', () => {
+  it('should remove a single vertex where ignoreRevs is true, irrespective of _rev', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    let node = {
+      k1: 'v1',
+      src: `${__filename}:should remove a single vertex where ignoreRevs is true, irrespective of _rev`
+    };
+
+    let response = request.post(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: node,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    node = JSON.parse(response.body).new;
+    node._rev = 'mismatched_rev';
+
+    response = request.delete(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: node,
+      qs: {
+        returnOld: true,
+        ignoreRevs: true
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(200);
+
+    const resBody = JSON.parse(response.body).old;
+    expect(resBody).to.be.an.instanceOf(Object);
+    expect(resBody._id).to.equal(node._id);
+    expect(resBody._key).to.equal(node._key);
+    expect(resBody.k1).to.equal('v1');
+  });
+
+  it('should fail when removing two vertices where ignoreRevs is false and _rev match fails', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let nodes = [
       {
         k1: 'v1',
-        src: `${__filename}:should remove two vertices`
+        src: `${__filename}:should fail when removing two vertices where ignoreRevs is false and _rev match fails`
       },
       {
         k1: 'v1',
-        src: `${__filename}:should remove two vertices`
+        src: `${__filename}:should fail when removing two vertices where ignoreRevs is false and _rev match fails`
+      }
+    ];
+
+    let response = request.post(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: nodes,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    nodes = JSON.parse(response.body);
+    response = request.delete(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: nodes.map(node => {
+        node.new._rev = 'mismatched_rev';
+
+        return node.new;
+      }),
+      qs: {
+        returnOld: true,
+        ignoreRevs: false
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(`${ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code}:2`);
+  });
+
+  it('should remove two vertices where ignoreRevs is false and _rev matches', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    let nodes = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove two vertices where ignoreRevs is false and _rev matches`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove two vertices where ignoreRevs is false and _rev matches`
       }
     ];
 
@@ -72,7 +182,8 @@ describe('Routes - remove', () => {
       json: true,
       body: nodes.map(node => node.new),
       qs: {
-        returnOld: true
+        returnOld: true,
+        ignoreRevs: false
       }
     });
 
@@ -90,12 +201,61 @@ describe('Routes - remove', () => {
     });
   });
 
-  it('should remove a single edge', () => {
+  it('should remove two vertices where ignoreRevs is true, irrespective of _rev', () => {
+    const collName = init.TEST_DATA_COLLECTIONS.vertex;
+    let nodes = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove two vertices where ignoreRevs is true, irrespective of _rev`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should remove two vertices where ignoreRevs is true, irrespective of _rev`
+      }
+    ];
+
+    let response = request.post(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: nodes,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    nodes = JSON.parse(response.body);
+    response = request.delete(`${baseUrl}/document/${collName}`, {
+      json: true,
+      body: nodes.map(node => {
+        node.new._rev = 'mismatched_rev';
+
+        return node.new;
+      }),
+      qs: {
+        returnOld: true,
+        ignoreRevs: true
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(200);
+
+    const resBody = JSON.parse(response.body);
+    expect(resBody).to.be.an.instanceOf(Array);
+    resBody.map(node => node.old).forEach((resNode, idx) => {
+      expect(resNode).to.be.an.instanceOf(Object);
+      expect(resNode._id).to.equal(nodes[idx]._id);
+      expect(resNode._key).to.equal(nodes[idx]._key);
+      expect(resNode._rev).to.equal(nodes[idx]._rev);
+      expect(resNode.k1).to.equal('v1');
+    });
+  });
+
+  it('should fail when removing an edge where ignoreRevs is false and _rev match fails', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:should remove a single edge`
+      src: `${__filename}:should fail when removing an edge where ignoreRevs is false and _rev match fails`
     }, {
-      src: `${__filename}:should remove a single edge`
+      src: `${__filename}:should fail when removing an edge where ignoreRevs is false and _rev match fails`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -108,7 +268,53 @@ describe('Routes - remove', () => {
       k1: 'v1',
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
-      src: `${__filename}:should remove a single edge`
+      src: `${__filename}:should fail when removing an edge where ignoreRevs is false and _rev match fails`
+    };
+
+    let response = request.post(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enode,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    enode = JSON.parse(response.body).new;
+    enode._rev = 'mismatched_rev';
+
+    response = request.delete(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enode,
+      qs: {
+        returnOld: true,
+        ignoreRevs: false
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(`${ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code}:1`);
+  });
+
+  it('should remove a single edge where ignoreRevs is false and _rev matches', () => {
+    const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
+    let vnodes = [{
+      src: `${__filename}:should remove a single edge where ignoreRevs is false and _rev matches`
+    }, {
+      src: `${__filename}:should remove a single edge where ignoreRevs is false and _rev matches`
+    }];
+    const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
+      json: true,
+      body: vnodes
+    });
+    vnodes = JSON.parse(vResponse.body);
+
+    const eCollName = init.TEST_DATA_COLLECTIONS.edge;
+    let enode = {
+      k1: 'v1',
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      src: `${__filename}:should remove a single edge where ignoreRevs is false and _rev matches`
     };
 
     let response = request.post(`${baseUrl}/document/${eCollName}`, {
@@ -124,7 +330,8 @@ describe('Routes - remove', () => {
       json: true,
       body: enode,
       qs: {
-        returnOld: true
+        returnOld: true,
+        ignoreRevs: false
       }
     });
 
@@ -141,12 +348,65 @@ describe('Routes - remove', () => {
     expect(resBody._to).to.equal(vnodes[1]._id);
   });
 
-  it('should remove two edges', () => {
+  it('should remove a single edge where ignoreRevs is true, irrespective of _rev', () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
     let vnodes = [{
-      src: `${__filename}:should remove two edges`
+      src: `${__filename}:should remove a single edge where ignoreRevs is true, irrespective of _rev`
     }, {
-      src: `${__filename}:should remove two edges`
+      src: `${__filename}:should remove a single edge where ignoreRevs is true, irrespective of _rev`
+    }];
+    const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
+      json: true,
+      body: vnodes
+    });
+    vnodes = JSON.parse(vResponse.body);
+
+    const eCollName = init.TEST_DATA_COLLECTIONS.edge;
+    let enode = {
+      k1: 'v1',
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      src: `${__filename}:should remove a single edge where ignoreRevs is true, irrespective of _rev`
+    };
+
+    let response = request.post(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enode,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    enode = JSON.parse(response.body).new;
+    enode._rev = 'mismatched_rev';
+
+    response = request.delete(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enode,
+      qs: {
+        returnOld: true,
+        ignoreRevs: true
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(200);
+
+    const resBody = JSON.parse(response.body).old;
+    expect(resBody).to.be.an.instanceOf(Object);
+    expect(resBody._id).to.equal(enode._id);
+    expect(resBody._key).to.equal(enode._key);
+    expect(resBody.k1).to.equal('v1');
+    expect(resBody._from).to.equal(vnodes[0]._id);
+    expect(resBody._to).to.equal(vnodes[1]._id);
+  });
+
+  it('should fail when removing two edges where ignoreRevs is false and _rev match fails', () => {
+    const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
+    let vnodes = [{
+      src: `${__filename}:should fail when removing two edges where ignoreRevs is false and _rev match fails`
+    }, {
+      src: `${__filename}:should fail when removing two edges where ignoreRevs is false and _rev match fails`
     }];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
@@ -160,13 +420,69 @@ describe('Routes - remove', () => {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:should remove two edges`
+        src: `${__filename}:should fail when removing two edges where ignoreRevs is false and _rev match fails`
       },
       {
         k1: 'v1',
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
-        src: `${__filename}:should remove two edges`
+        src: `${__filename}:should fail when removing two edges where ignoreRevs is false and _rev match fails`
+      }
+    ];
+
+    let response = request.post(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enodes,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    enodes = JSON.parse(response.body);
+    response = request.delete(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enodes.map(node => {
+        node.new._rev = 'mismatched_rev';
+
+        return node.new;
+      }),
+      qs: {
+        returnOld: true,
+        ignoreRevs: false
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(412);
+    expect(response.headers['x-arango-error-codes']).to.equal(`${ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code}:2`);
+  });
+
+  it('should remove two edges where ignoreRevs is false and _rev matches', () => {
+    const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
+    let vnodes = [{
+      src: `${__filename}:should remove two edges where ignoreRevs is false and _rev matches`
+    }, {
+      src: `${__filename}:should remove two edges where ignoreRevs is false and _rev matches`
+    }];
+    const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
+      json: true,
+      body: vnodes
+    });
+    vnodes = JSON.parse(vResponse.body);
+
+    const eCollName = init.TEST_DATA_COLLECTIONS.edge;
+    let enodes = [
+      {
+        k1: 'v1',
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        src: `${__filename}:should remove two edges where ignoreRevs is false and _rev matches`
+      },
+      {
+        k1: 'v1',
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        src: `${__filename}:should remove two edges where ignoreRevs is false and _rev matches`
       }
     ];
 
@@ -183,7 +499,8 @@ describe('Routes - remove', () => {
       json: true,
       body: enodes.map(node => node.new),
       qs: {
-        returnOld: true
+        returnOld: true,
+        ignoreRevs: false
       }
     });
 
@@ -197,6 +514,72 @@ describe('Routes - remove', () => {
       expect(resNode._id).to.equal(enodes[idx]._id);
       expect(resNode._key).to.equal(enodes[idx]._key);
       expect(resNode._rev).to.equal(enodes[idx]._rev);
+      expect(resNode.k1).to.equal('v1');
+      expect(resNode._from).to.equal(vnodes[0]._id);
+      expect(resNode._to).to.equal(vnodes[1]._id);
+    });
+  });
+
+  it('should remove two edges where ignoreRevs is true, irrespective of _rev', () => {
+    const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
+    let vnodes = [{
+      src: `${__filename}:should remove two edges where ignoreRevs is true, irrespective of _rev`
+    }, {
+      src: `${__filename}:should remove two edges where ignoreRevs is true, irrespective of _rev`
+    }];
+    const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
+      json: true,
+      body: vnodes
+    });
+    vnodes = JSON.parse(vResponse.body);
+
+    const eCollName = init.TEST_DATA_COLLECTIONS.edge;
+    let enodes = [
+      {
+        k1: 'v1',
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        src: `${__filename}:should remove two edges where ignoreRevs is true, irrespective of _rev`
+      },
+      {
+        k1: 'v1',
+        _from: vnodes[0]._id,
+        _to: vnodes[1]._id,
+        src: `${__filename}:should remove two edges where ignoreRevs is true, irrespective of _rev`
+      }
+    ];
+
+    let response = request.post(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enodes,
+      qs: {
+        returnNew: true
+      }
+    });
+
+    enodes = JSON.parse(response.body);
+    response = request.delete(`${baseUrl}/document/${eCollName}`, {
+      json: true,
+      body: enodes.map(node => {
+        node.new._rev = 'mismatched_rev';
+
+        return node.new;
+      }),
+      qs: {
+        returnOld: true,
+        ignoreRevs: true
+      }
+    });
+
+    expect(response).to.be.an.instanceOf(Object);
+    expect(response.statusCode).to.equal(200);
+
+    const resBody = JSON.parse(response.body);
+    expect(resBody).to.be.an.instanceOf(Array);
+    resBody.map(node => node.old).forEach((resNode, idx) => {
+      expect(resNode).to.be.an.instanceOf(Object);
+      expect(resNode._id).to.equal(enodes[idx]._id);
+      expect(resNode._key).to.equal(enodes[idx]._key);
       expect(resNode.k1).to.equal('v1');
       expect(resNode._from).to.equal(vnodes[0]._id);
       expect(resNode._to).to.equal(vnodes[1]._id);

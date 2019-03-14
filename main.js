@@ -7,7 +7,8 @@ const fs = require('fs');
 const router = createRouter();
 module.context.use(router);
 
-const routes = fs.list(`${__dirname}/lib/routes`);
+const routeBase = `${__dirname}/lib/routes`;
+const routes = fs.list(routeBase).filter(route => fs.isDirectory(`${routeBase}/${route}`));
 routes.forEach(route => {
   const mountPath = path.basename(route, '.js');
   const childRouter = require(`./lib/routes/${route}`);
