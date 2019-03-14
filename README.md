@@ -16,10 +16,10 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
 
 _evstore_ exposes multiple write methods for individual/multiple nodes (documents/edges). Supported write method contracts (current and planned) are intended to closely follow the core REST API that ArangoDB already exports. These include:
-1. Create (POST) (Implemented)
-2. Replace (PUT) (Implemented)
-3. Update (PATCH) (Planned)
-4. Delete (DELETE) (Implemented)
+1. Create (POST)
+2. Replace (PUT)
+3. Update (PATCH)
+4. Delete (DELETE)
 
 Node read methods would be no different from what the core REST API already provides, and so they are left out the microservice.
 
@@ -53,7 +53,7 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 * Create - Create single/multiple nodes (vertexes/edges)
 * Replace - Replace entire single/multiple nodes with new content
 * Delete - Delete single/multiple nodes
-* **(Planned)** Update - Add/Update specific fields in single/multiple nodes
+* Update - Add/Update specific fields in single/multiple nodes
 
 #### Operations ####
 * **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
