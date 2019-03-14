@@ -94,9 +94,9 @@ describe('Update Handlers', () => {
     expect(rnode).to.be.an.instanceOf(Object);
     expect(rnode._id).to.equal(cnode._id);
     expect(rnode._key).to.equal(cnode._key);
+    expect(rnode._rev).to.not.equal(cnode._rev);
     expect(rnode).to.not.have.property('k1');
     expect(rnode.k2).to.equal('v1');
-    expect(rnode._rev).to.not.equal(cnode._rev);
   });
 
   it('should preserve null values in a vertex when keepNull is true', () => {
