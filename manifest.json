@@ -15,7 +15,8 @@
   "main": "main.js",
   "scripts": {
     "setup": "scripts/setup.js",
-    "teardown": "scripts/teardown.js"
+    "teardown": "scripts/teardown.js",
+    "runTests": "scripts/run-tests.js"
   },
   "tests": [
     "test/unit/**/*.js",
