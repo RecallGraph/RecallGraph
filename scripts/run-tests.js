@@ -8,12 +8,12 @@ const isWindows = require('internal').platform.substr(0, 3) === 'win';
 const mocha = require('@arangodb/mocha');
 
 const argv = module.context.argv;
-const tests = get(argv, [0, 'tests']);
+const files = get(argv, [0, 'files']);
 const reporter = get(argv, [0, 'reporter'], 'default');
 const grep = get(argv, [0, 'grep']);
 
 const service = manager.lookupService(module.context.mount);
-const testFiles = findTestFiles(service, tests);
+const testFiles = findTestFiles(service, files);
 
 const result = mocha.run((file, context) => service.run(file, { context: context }), testFiles, reporter, grep);
 if (reporter === 'xunit' && Array.isArray(result) && result[1]) {
