@@ -7,14 +7,12 @@ const Minimatch = require('minimatch').Minimatch;
 const isWindows = require('internal').platform.substr(0, 3) === 'win';
 const mocha = require('@arangodb/mocha');
 
-const argv = module.context.argv;
-const files = get(argv, [0, 'files']);
-const reporter = get(argv, [0, 'reporter'], 'default');
-const grep = get(argv, [0, 'grep']);
+const { files, reporter = 'default', grep } = get(module.context.argv, [0], {});
 
 const service = manager.lookupService(module.context.mount);
 const testFiles = findTestFiles(service, files);
 
+//Adapted from @arangodb/foxx/mocha.js
 const result = mocha.run((file, context) => service.run(file, { context: context }), testFiles, reporter, grep);
 if (reporter === 'xunit' && Array.isArray(result) && result[1]) {
   result[1].name = service.mount;
@@ -22,12 +20,14 @@ if (reporter === 'xunit' && Array.isArray(result) && result[1]) {
 
 module.exports = result;
 
+//Adapted from @arangodb/foxx/mocha.js
 function isNotPattern(pattern) {
   return pattern.indexOf('*') === -1;
 }
 
-function findTestFiles(service, tests) {
-  const patterns = tests || service.manifest.tests || [];
+//Adapted from @arangodb/foxx/mocha.js
+function findTestFiles(service, files) {
+  const patterns = files || service.manifest.tests || [];
   if (patterns.every(isNotPattern)) {
     return patterns.slice();
   }
