@@ -2,6 +2,10 @@
 A git-inspired event store for ArangoDB.
 
 [![Dependencies](https://img.shields.io/david/adityamukho/evstore.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
+[![Build Status](https://travis-ci.org/adityamukho/evstore.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
+[![Maintainability](https://api.codeclimate.com/v1/badges/fcc8aff34ff19c9d129b/maintainability)](https://codeclimate.com/github/adityamukho/evstore/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/fcc8aff34ff19c9d129b/test_coverage)](https://codeclimate.com/github/adityamukho/evstore/test_coverage)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 
 ### DISCLAIMER ###
 * This project is under active development.
@@ -83,7 +87,7 @@ To run tests selectively on specific files or test suites, run
 ```
 $ foxx run [options] <mount> runTests [args]
 ```
-For a description on what `args` are available for the above command, see [here](https://gist.github.com/adityamukho/d1a042bb808d871d7d4ef0f266191867#file-usage-md)
+For a description on what `args` are available for the above command, see [here](https://gist.github.com/adityamukho/d1a042bb808d871d7d4ef0f266191867#file-usage-md).
 
 ### Docs ###
 * Some documentation is already available through the Swagger interface.
