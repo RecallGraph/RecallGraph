@@ -1,6 +1,8 @@
 # EVSTORE (Foxx Microservice) #
 A git-inspired event store for ArangoDB.
 
+[![Dependencies](https://img.shields.io/david/adityamukho/evstore.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
+
 ### DISCLAIMER ###
 * This project is under active development.
 * Expect heavy feature churn and unstable builds in the initial days.
