@@ -83,7 +83,7 @@ To run tests selectively on specific files or test suites, run
 ```
 $ foxx run [options] <mount> runTests [args]
 ```
-For a description on what `args` are available for the above command, see [here](https://gist.githubusercontent.com/adityamukho/d1a042bb808d871d7d4ef0f266191867/raw/605ed69145abeec97f111a5e8d2e7d2efa04e907/usage.txt)
+For a description on what `args` are available for the above command, see [here](https://gist.github.com/adityamukho/d1a042bb808d871d7d4ef0f266191867#file-usage-md)
 
 ### Docs ###
 * Some documentation is already available through the Swagger interface.
