@@ -1,27 +1,14 @@
 language: node_js
 node_js: node
 services: docker
-matrix:
-  include:
-    - env:
-        - ARANGODB_VERSION=3.4
-        - ARANGO_STORAGE_ENGINE=rocksdb
-        - EVTEST_FILES='["test/unit/**/*.js"]'
-    - env:
-        - ARANGODB_VERSION=3.4
-        - ARANGO_STORAGE_ENGINE=rocksdb
-        - EVTEST_FILES='["test/integration/**/*.js"]'
-    - env:
-        - ARANGODB_VERSION=3.4
-        - ARANGO_STORAGE_ENGINE=mmfiles
-        - EVTEST_FILES='["test/unit/**/*.js"]'
-    - env:
-        - ARANGODB_VERSION=3.4
-        - ARANGO_STORAGE_ENGINE=mmfiles
-        - EVTEST_FILES='["test/integration/**/*.js"]'
 addons:
   sonarcloud:
     organization: "adityamukho-github"
+env:
+  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]'
+  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]'
+  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]'
+  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]'
 before_install:
   - docker pull arangodb:$ARANGODB_VERSION
   - docker run
@@ -42,7 +29,4 @@ jobs:
   include:
     - stage: analysis
       script: sonar-scanner
-      env:
-        - ARANGODB_VERSION=3.4
-        - ARANGO_STORAGE_ENGINE=rocksdb
-        - EVTEST_FILES='["test/unit/**/*.js"]'
+#      env: ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]'
