@@ -13,8 +13,8 @@ rl.on('line', function (line) {
 
 rl.on('close', function () {
   const result = input.slice(1).join('\n');
-  console.log(result);
+  const json = JSON.parse(result).filter(item => ['fail', 'end'].includes(item[0]));
 
-  const json = JSON.parse(result);
+  console.log(JSON.stringify(json, null, 2));
   process.exit(Math.sign(json.pop()[1].failures));
 });
