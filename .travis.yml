@@ -19,23 +19,9 @@ matrix:
         - ARANGODB_VERSION=3.4
         - ARANGO_STORAGE_ENGINE=mmfiles
         - EVTEST_FILES='["test/integration/**/*.js"]'
-    - env:
-        - ARANGODB_VERSION=3.3
-        - ARANGO_STORAGE_ENGINE=rocksdb
-        - EVTEST_FILES='["test/unit/**/*.js"]'
-    - env:
-        - ARANGODB_VERSION=3.3
-        - ARANGO_STORAGE_ENGINE=rocksdb
-        - EVTEST_FILES='["test/integration/**/*.js"]'
-    - env:
-        - ARANGODB_VERSION=3.3
-        - ARANGO_STORAGE_ENGINE=mmfiles
-        - EVTEST_FILES='["test/unit/**/*.js"]'
-    - env:
-        - ARANGODB_VERSION=3.3
-        - ARANGO_STORAGE_ENGINE=mmfiles
-        - EVTEST_FILES='["test/integration/**/*.js"]'
-
+addons:
+  sonarcloud:
+    organization: "adityamukho-github"
 before_install:
   - docker pull arangodb:$ARANGODB_VERSION
   - docker run
@@ -52,3 +38,11 @@ install:
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
 script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+jobs:
+  include:
+    - stage: analysis
+      script: sonar-scanner
+      env:
+        - ARANGODB_VERSION=3.4
+        - ARANGO_STORAGE_ENGINE=rocksdb
+        - EVTEST_FILES='["test/unit/**/*.js"]'
