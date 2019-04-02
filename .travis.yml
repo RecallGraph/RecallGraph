@@ -1,5 +1,26 @@
 language: node_js
-node_js:
-  - "node"
-services:
-  - docker
+node_js: node
+services: docker
+env:
+  matrix:
+    - ARANGODB_VERSION=3.4
+    - ARANGODB_VERSION=3.3
+    - ARANGO_STORAGE_ENGINE=rocksdb
+    - ARANGO_STORAGE_ENGINE=mmfiles
+    - EVTEST_FILES='["test/unit/**/*.js"]'
+    - EVTEST_FILES='["test/integration/**/*.js"]'
+before_install:
+  - docker pull arangodb:$ARANGODB_VERSION
+  - docker run
+    -e ARANGO_RANDOM_ROOT_PASSWORD=1
+    -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
+    -e EVPASSWD=$EVPASSWD
+    -e EVTEST_FILES=$EVTEST_FILES
+    -v "$PWD":/mnt/evstore
+    -d --name arangodb arangodb:$ARANGODB_VERSION
+  - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
+install:
+  - npm install
+  - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
+  - docker exec arangodb /mnt/evstore/test/travis/install.sh
+script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
