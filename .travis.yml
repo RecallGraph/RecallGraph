@@ -29,4 +29,3 @@ jobs:
   include:
     - stage: analysis
       script: sonar-scanner
-#      env: ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]'
