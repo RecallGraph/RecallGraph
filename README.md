@@ -56,14 +56,14 @@ _evstore_ manages all its bookkeeping in a set of service-managed collections, a
 Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console. 
 
 #### Document ####
-* Create - Create single/multiple nodes (vertexes/edges)
-* Replace - Replace entire single/multiple nodes with new content
-* Delete - Delete single/multiple nodes
-* Update - Add/Update specific fields in single/multiple nodes
+* **(Implemented)** Create - Create single/multiple nodes (vertexes/edges)
+* **(Implemented)** Replace - Replace entire single/multiple nodes with new content
+* **(Implemented)** Delete - Delete single/multiple nodes
+* **(Implemented)** Update - Add/Update specific fields in single/multiple nodes
 
 #### Operations ####
 * **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
-* Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
+* **(Implemented)** Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
 * **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commit endpoints for specified nodes (might use `log` behind the scenes)
 * **(Planned)** Patch - Apply a set of diffs to specified nodes to rewind/fast-forward them in time (will use `diff` behind the scenes)
 
