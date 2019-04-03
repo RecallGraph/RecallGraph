@@ -13,6 +13,8 @@ A git-inspired event store for ArangoDB.
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 
+---
+
 ### DISCLAIMER ###
 * This project is under active development.
 * Expect heavy feature churn and unstable builds in the initial days.
