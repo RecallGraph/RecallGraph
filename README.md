@@ -3,8 +3,6 @@ A git-inspired event store for ArangoDB.
 
 [![Dependencies](https://img.shields.io/david/adityamukho/evstore.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
 [![Build Status](https://travis-ci.org/adityamukho/evstore.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
-[![Maintainability](https://api.codeclimate.com/v1/badges/fcc8aff34ff19c9d129b/maintainability)](https://codeclimate.com/github/adityamukho/evstore/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/fcc8aff34ff19c9d129b/test_coverage)](https://codeclimate.com/github/adityamukho/evstore/test_coverage)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 
 ### DISCLAIMER ###
