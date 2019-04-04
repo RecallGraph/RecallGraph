@@ -1,3 +1,4 @@
+dist: xenial
 language: node_js
 node_js: node
 services: docker
@@ -6,7 +7,6 @@ env:
   global:
     - ARANGODB_VERSION=3.4
     - PATH=$HOME/.local/bin:$PATH
-    - TRAVIS_S3_BUCKET=evstore-travis-data
   matrix:
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
@@ -23,10 +23,10 @@ before_install:
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
-  - npm install -g nyc
-  - nyc instrument ./lib ./lib
 
 install:
+  - npm install -g nyc
+  - nyc instrument ./lib ./lib
   - npm install
   - sleep 30
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
@@ -47,7 +47,6 @@ jobs:
       #      env:
       #        global:
       #          - PATH=$HOME/.local/bin:$PATH
-      #          - TRAVIS_S3_BUCKET=evstore-travis-data
       addons:
         sonarcloud:
           organization: "adityamukho-github"
