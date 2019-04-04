@@ -2,6 +2,10 @@ stages:
   - test
   - analysis
 
+language: node_js
+
+node_js: node
+
 env:
   global:
     - ARANGODB_VERSION=3.4
@@ -16,8 +20,6 @@ env:
 jobs:
   include:
     - stage: test
-      language: node_js
-      node_js: node
       services: docker
       before_install:
         - docker pull arangodb:$ARANGODB_VERSION
