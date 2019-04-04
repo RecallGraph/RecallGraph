@@ -23,7 +23,7 @@ before_install:
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
-  - sudo npm install -g nyc
+  - npm install -g nyc
   - nyc instrument ./lib ./lib
 
 install:
