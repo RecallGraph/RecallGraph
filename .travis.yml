@@ -1,10 +1,6 @@
-stages:
-  - test
-  - analysis
-
 language: node_js
-
 node_js: node
+services: docker
 
 env:
   global:
@@ -17,35 +13,36 @@ env:
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=mmfiles-unit
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
 
+before_install:
+  - docker pull arangodb:$ARANGODB_VERSION
+  - docker run
+    -e ARANGO_RANDOM_ROOT_PASSWORD=1
+    -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
+    -e EVPASSWD=$EVPASSWD
+    -e EVTEST_FILES=$EVTEST_FILES
+    -v "$PWD":/mnt/evstore
+    -d --name arangodb arangodb:$ARANGODB_VERSION
+  - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
+  - sudo npm install -g nyc
+  - nyc instrument ./lib ./lib
+
+install:
+  - npm install
+  - sleep 30
+  - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
+  - docker exec arangodb /mnt/evstore/test/travis/install.sh
+
+script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+
+after_success:
+  - pip install --user awscli
+  - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+  - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+  - aws configure set region us-east-1
+  - aws s3 cp ./.nyc_output/out.json s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/$NYC_OUT.json
+
 jobs:
   include:
-    - stage: test
-      services: docker
-      before_install:
-        - docker pull arangodb:$ARANGODB_VERSION
-        - docker run
-          -e ARANGO_RANDOM_ROOT_PASSWORD=1
-          -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
-          -e EVPASSWD=$EVPASSWD
-          -e EVTEST_FILES=$EVTEST_FILES
-          -v "$PWD":/mnt/evstore
-          -d --name arangodb arangodb:$ARANGODB_VERSION
-        - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
-        - sudo npm install -g nyc
-        - nyc instrument ./lib ./lib
-      install:
-        - npm install
-        - sleep 30
-        - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
-        - docker exec arangodb /mnt/evstore/test/travis/install.sh
-      script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
-      after_success:
-        - pip install --user awscli
-        - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
-        - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
-        - aws configure set region us-east-1
-        - aws s3 cp ./.nyc_output/out.json s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/$NYC_OUT.json
-
     - stage: analysis
       #      env:
       #        global:
