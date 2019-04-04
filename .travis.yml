@@ -2,22 +2,23 @@ stages:
   - test
   - analysis
 
+env:
+  global:
+    - ARANGODB_VERSION=3.4
+    - PATH=$HOME/.local/bin:$PATH
+    - TRAVIS_S3_BUCKET=evstore-travis-data
+  matrix:
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=mmfiles-unit
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
+
 jobs:
   include:
     - stage: test
       language: node_js
       node_js: node
       services: docker
-      env:
-        global:
-          - ARANGODB_VERSION=3.4
-          - PATH=$HOME/.local/bin:$PATH
-          - TRAVIS_S3_BUCKET=evstore-travis-data
-        matrix:
-          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
-          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
-          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=mmfiles-unit
-          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
       before_install:
         - docker pull arangodb:$ARANGODB_VERSION
         - docker run
@@ -44,10 +45,10 @@ jobs:
         - aws s3 cp ./.nyc_output/out.json s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/$NYC_OUT.json
 
     - stage: analysis
-      env:
-        global:
-          - PATH=$HOME/.local/bin:$PATH
-          - TRAVIS_S3_BUCKET=evstore-travis-data
+      #      env:
+      #        global:
+      #          - PATH=$HOME/.local/bin:$PATH
+      #          - TRAVIS_S3_BUCKET=evstore-travis-data
       addons:
         sonarcloud:
           organization: "adityamukho-github"
