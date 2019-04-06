@@ -470,7 +470,7 @@ module.exports = function loadSampleData() {
   docCount = rawData.count();
   let removeCount = 0;
   const rids = query`
-    for r in evstore_test_raw_data
+    for r in ${rawData}
       filter has(r, '_ref') && r._key not in ${failedMoonKeys}
     return keep(r, '_key')
   `.toArray();
