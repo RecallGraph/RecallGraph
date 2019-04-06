@@ -7,7 +7,7 @@ const { baseUrl } = module.context;
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers');
 const { isObject, concat, defaults, omitBy, isNil } = require('lodash');
 const {
-  ORIGIN_KEYS, testUngroupedEvents, testGroupedEvents, getRandomGraphPathPattern, getSampleTestCollNames,
+  getOriginKeys, testUngroupedEvents, testGroupedEvents, getRandomGraphPathPattern, getSampleTestCollNames,
   getNodeBraceSampleIds
 } = require('../../../../helpers/logTestHelpers');
 const { db, query, aql } = require('@arangodb');
@@ -33,7 +33,7 @@ describe('Routes - log (Path as query param)', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
       `.toArray();
@@ -70,7 +70,7 @@ describe('Routes - log (Path as query param)', () => {
       const sampleGraphCollNames = concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections);
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -105,7 +105,7 @@ describe('Routes - log (Path as query param)', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -125,7 +125,7 @@ describe('Routes - log (Path as query param)', () => {
       const queryParts = [
         aql`
           for v in ${eventColl}
-          filter v._key not in ${ORIGIN_KEYS}
+          filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
         `
       ];
@@ -147,7 +147,7 @@ describe('Routes - log (Path as query param)', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
           sort e.ctime desc
         return keep(e,'_id', 'ctime', 'event', 'meta')
@@ -166,7 +166,7 @@ describe('Routes - log (Path as query param)', () => {
     const queryParts = [
       aql`
         for v in ${eventColl}
-        filter v._key not in ${ORIGIN_KEYS}
+        filter v._key not in ${getOriginKeys()}
         filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
       `
     ];
@@ -187,7 +187,7 @@ describe('Routes - log (Path as query param)', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -206,7 +206,7 @@ describe('Routes - log (Path as query param)', () => {
       const queryParts = [
         aql`
           for v in ${eventColl}
-          filter v._key not in ${ORIGIN_KEYS}
+          filter v._key not in ${getOriginKeys()}
           filter v.meta._id in ${sampleIds}
         `
       ];
@@ -234,7 +234,7 @@ describe('Routes - log (Path as body param)', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
       `.toArray();
@@ -271,7 +271,7 @@ describe('Routes - log (Path as body param)', () => {
       const sampleGraphCollNames = concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections);
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -306,7 +306,7 @@ describe('Routes - log (Path as body param)', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -326,7 +326,7 @@ describe('Routes - log (Path as body param)', () => {
       const queryParts = [
         aql`
           for v in ${eventColl}
-          filter v._key not in ${ORIGIN_KEYS}
+          filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
         `
       ];
@@ -347,7 +347,7 @@ describe('Routes - log (Path as body param)', () => {
       expect(allEvents).to.be.an.instanceOf(Array);
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
           sort e.ctime desc
         return keep(e,'_id', 'ctime', 'event', 'meta')
@@ -366,7 +366,7 @@ describe('Routes - log (Path as body param)', () => {
     const queryParts = [
       aql`
         for v in ${eventColl}
-        filter v._key not in ${ORIGIN_KEYS}
+        filter v._key not in ${getOriginKeys()}
         filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
       `
     ];
@@ -387,7 +387,7 @@ describe('Routes - log (Path as body param)', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -406,7 +406,7 @@ describe('Routes - log (Path as body param)', () => {
       const queryParts = [
         aql`
           for v in ${eventColl}
-          filter v._key not in ${ORIGIN_KEYS}
+          filter v._key not in ${getOriginKeys()}
           filter v.meta._id in ${sampleIds}
         `
       ];

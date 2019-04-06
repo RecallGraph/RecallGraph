@@ -8,7 +8,7 @@ const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers');
 const { concat } = require('lodash');
 const {
   testUngroupedEvents, getRandomGraphPathPattern, getNodeBraceSampleIds, testGroupedEvents, getSampleTestCollNames,
-  ORIGIN_KEYS
+  getOriginKeys
 } = require('../../../../helpers/logTestHelpers');
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events);
@@ -27,7 +27,7 @@ describe('Log - DB Scope', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
       `.toArray();
@@ -60,7 +60,7 @@ describe('Log - Graph Scope', () => {
       const sampleGraphCollNames = concat(sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections);
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -88,7 +88,7 @@ describe('Log - Collection Scope', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -104,7 +104,7 @@ describe('Log - Collection Scope', () => {
       const queryParts = [
         aql`
           for v in ${eventColl}
-          filter v._key not in ${ORIGIN_KEYS}
+          filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
         `
       ];
@@ -128,7 +128,7 @@ describe('Log - Node Glob Scope', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
           sort e.ctime desc
         return keep(e,'_id', 'ctime', 'event', 'meta')
@@ -144,7 +144,7 @@ describe('Log - Node Glob Scope', () => {
       const queryParts = [
         aql`
           for v in ${eventColl}
-          filter v._key not in ${ORIGIN_KEYS}
+          filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
         `
       ];
@@ -167,7 +167,7 @@ describe('Log - Node Brace Scope', () => {
 
       const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${ORIGIN_KEYS}
+          filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
           sort e.ctime desc
         return keep(e, '_id', 'ctime', 'event', 'meta')
@@ -182,7 +182,7 @@ describe('Log - Node Brace Scope', () => {
       const queryParts = [
         aql`
           for v in ${eventColl}
-          filter v._key not in ${ORIGIN_KEYS}
+          filter v._key not in ${getOriginKeys()}
           filter v.meta._id in ${sampleIds}
         `
       ];

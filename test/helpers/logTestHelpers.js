@@ -178,18 +178,21 @@ exports.testUngroupedEvents = function testUngroupedEvents(pathParam, allEvents,
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events);
 
-const ORIGIN_KEYS = differenceWith(db._collections(), values(SERVICE_COLLECTIONS),
-  (coll, svcCollName) => coll.name() === svcCollName).map(coll => `origin-${coll._id}`);
-ORIGIN_KEYS.push('origin');
-Object.freeze(ORIGIN_KEYS);
+function getOriginKeys() {
+  const originKeys = differenceWith(db._collections(), values(SERVICE_COLLECTIONS),
+    (coll, svcCollName) => coll.name() === svcCollName).map(coll => `origin-${coll._id}`);
+  originKeys.push('origin');
 
-exports.ORIGIN_KEYS = ORIGIN_KEYS;
+  return originKeys;
+}
+
+exports.getOriginKeys = getOriginKeys;
 
 const queryPartsInializers = {
   database: () => [
     aql`
       for v in ${eventColl}
-      filter v._key not in ${ORIGIN_KEYS}
+      filter v._key not in ${getOriginKeys()}
     `
   ],
   graph: () => {
@@ -199,7 +202,7 @@ const queryPartsInializers = {
     return [
       aql`
         for v in ${eventColl}
-        filter v._key not in ${ORIGIN_KEYS}
+        filter v._key not in ${getOriginKeys()}
         filter regex_split(v.meta._id, '/')[0] in ${sampleGraphCollNames}
       `
     ];
