@@ -2,5 +2,6 @@
 node_modules
 /.idea
 /.scannerwork
-/.nyc_output
+/.nyc_output/*
+!/.nyc_output/.gitkeep
 /test/coverage
