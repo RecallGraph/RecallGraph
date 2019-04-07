@@ -28,7 +28,7 @@ install:
   - npm install -g nyc
   - nyc instrument . ./.nyc_output/instrumented
   - cp -r ./.nyc_output/instrumented/lib . && rm -rf ./.nyc_output/instrumented
-  - npm install --only=prod
+  - npm install
   - sleep 30
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
