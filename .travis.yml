@@ -25,8 +25,9 @@ before_install:
 
 install:
   - npm install -g nyc
-  - nyc instrument ./lib ./lib
-  - npm install
+  - nyc instrument . ./.nyc_output/instrumented
+  - cp -r ./.nyc_output/instrumented/lib . && rm -rf ./.nyc_output/instrumented
+  - npm install --only=prod
   - sleep 30
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
@@ -43,9 +44,6 @@ after_success:
 jobs:
   include:
     - stage: analysis
-      #      env:
-      #        global:
-      #          - PATH=$HOME/.local/bin:$PATH
       addons:
         sonarcloud:
           organization: "adityamukho-github"
@@ -54,8 +52,9 @@ jobs:
         - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
         - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
         - aws configure set region us-east-1
+        - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
+        - npm install -g nyc
       script:
-        - aws s3 cp s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/* ./.nyc_output/
         - nyc merge ./.nyc_output ./.nyc_output/out.json
         - nyc report --report-dir=./test/coverage -r lcovonly
         - sonar-scanner
