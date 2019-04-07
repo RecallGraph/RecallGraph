@@ -1,3 +1,4 @@
+dist: xenial
 language: node_js
 node_js: node
 services: docker
@@ -47,6 +48,7 @@ jobs:
       addons:
         sonarcloud:
           organization: "adityamukho-github"
+      before_install:
       install: pip install --user awscli
       before_script:
         - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
@@ -58,4 +60,4 @@ jobs:
         - nyc merge ./.nyc_output ./.nyc_output/out.json
         - nyc report --report-dir=./test/coverage -r lcovonly
         - sonar-scanner
-      after_script: aws s3 rm --recursive s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+      after_success: aws s3 rm --recursive s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
