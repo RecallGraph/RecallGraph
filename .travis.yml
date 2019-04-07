@@ -1,14 +1,18 @@
+dist: xenial
 language: node_js
 node_js: node
 services: docker
-addons:
-  sonarcloud:
-    organization: "adityamukho-github"
+
 env:
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]'
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]'
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]'
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]'
+  global:
+    - ARANGODB_VERSION=3.4
+    - PATH=$HOME/.local/bin:$PATH
+  matrix:
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=mmfiles-unit
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
+
 before_install:
   - docker pull arangodb:$ARANGODB_VERSION
   - docker run
@@ -19,13 +23,41 @@ before_install:
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
+
 install:
+  - npm install -g nyc
+  - nyc instrument . ./.nyc_output/instrumented
+  - cp -r ./.nyc_output/instrumented/lib . && rm -rf ./.nyc_output/instrumented
   - npm install
   - sleep 30
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
+
 script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+
+after_success:
+  - pip install --user awscli
+  - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+  - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+  - aws configure set region us-east-1
+  - aws s3 cp ./.nyc_output/out.json s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/$NYC_OUT.json
+
 jobs:
   include:
     - stage: analysis
-      script: sonar-scanner
+      addons:
+        sonarcloud:
+          organization: "adityamukho-github"
+      before_install:
+      install: pip install --user awscli
+      before_script:
+        - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+        - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+        - aws configure set region us-east-1
+        - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
+        - npm install -g nyc
+      script:
+        - nyc merge ./.nyc_output ./.nyc_output/out.json
+        - nyc report --report-dir=./test/coverage -r lcovonly
+        - sonar-scanner
+      after_success: aws s3 rm --recursive s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
