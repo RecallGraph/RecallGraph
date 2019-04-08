@@ -213,38 +213,42 @@ const initQueryParts = memoize((scope) => queryPartsInializers[scope]());
 
 exports.testGroupedEvents = function testGroupedEvents(scope, pathParam, logFn, qp = null) {
   const allEvents = logFn(pathParam); //Ungrouped events in desc order by ctime.
-  const timeRange = getRandomSubRange(allEvents);
-  const since = [0, Math.floor(allEvents[timeRange[1]].ctime)], until = [0, Math.ceil(allEvents[timeRange[0]].ctime)];
-  const skip = [0, 1], limit = [0, 2];
-  const sortType = [null, 'asc', 'desc'];
-  const groupBy = ['node', 'collection', 'event'], countsOnly = [false, true];
+  expect.fail();
 
-  const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
-  combos.forEach(combo => {
-    const eventGroups = logFn(pathParam, combo);
+  if (allEvents.length) {
+    const timeRange = getRandomSubRange(allEvents);
+    const since = [0, Math.floor(allEvents[timeRange[1]].ctime)], until = [0, Math.ceil(allEvents[timeRange[0]].ctime)];
+    const skip = [0, 1], limit = [0, 2];
+    const sortType = [null, 'asc', 'desc'];
+    const groupBy = ['node', 'collection', 'event'], countsOnly = [false, true];
 
-    expect(eventGroups).to.be.an.instanceOf(Array);
+    const combos = cartesian({ since, until, skip, limit, sortType, groupBy, countsOnly });
+    combos.forEach(combo => {
+      const eventGroups = logFn(pathParam, combo);
 
-    const { since: snc, until: utl, skip: skp, limit: lmt, sortType: st, groupBy: gb, countsOnly: co } = combo;
-    const queryParts = cloneDeep(qp || initQueryParts(scope));
+      expect(eventGroups).to.be.an.instanceOf(Array);
 
-    const timeBoundFilters = getTimeBoundFilters(snc, utl);
-    timeBoundFilters.forEach(filter => queryParts.push(filter));
+      const { since: snc, until: utl, skip: skp, limit: lmt, sortType: st, groupBy: gb, countsOnly: co } = combo;
+      const queryParts = cloneDeep(qp || initQueryParts(scope));
 
-    queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co));
-    queryParts.push(getSortingClause(st, gb, co));
-    queryParts.push(getLimitClause(lmt, skp));
-    queryParts.push(getReturnClause(st, gb, co));
+      const timeBoundFilters = getTimeBoundFilters(snc, utl);
+      timeBoundFilters.forEach(filter => queryParts.push(filter));
 
-    const query = aql.join(queryParts, '\n');
-    const expectedEventGroups = db._query(query).toArray();
+      queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co));
+      queryParts.push(getSortingClause(st, gb, co));
+      queryParts.push(getLimitClause(lmt, skp));
+      queryParts.push(getReturnClause(st, gb, co));
 
-    expect(eventGroups, JSON.stringify({
-      combo,
-      eventGrps: differenceBy(eventGroups, expectedEventGroups, '_id'),
-      expectedGrps: differenceBy(expectedEventGroups, eventGroups, '_id')
-    })).to.deep.equal(expectedEventGroups);
-  });
+      const query = aql.join(queryParts, '\n');
+      const expectedEventGroups = db._query(query).toArray();
+
+      expect(eventGroups, JSON.stringify({
+        combo,
+        eventGrps: differenceBy(eventGroups, expectedEventGroups, '_id'),
+        expectedGrps: differenceBy(expectedEventGroups, eventGroups, '_id')
+      })).to.deep.equal(expectedEventGroups);
+    });
+  }
 };
 
 function getGroupingClauseForExpectedResultsQuery(groupBy, countsOnly) {

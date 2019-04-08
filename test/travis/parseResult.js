@@ -16,10 +16,10 @@ rl.on('close', function () {
   const jsonStr = input.slice(1).join('\n');
   const json = JSON.parse(jsonStr);
 
-  const result = json.result.filter(item => ['fail', 'end'].includes(item[0]));
+  const result = json.result;
   console.log(JSON.stringify(result, null, 2));
 
-  const exitCode = Math.sign(result.pop()[1].failures);
+  const exitCode = Math.sign(result.stats.failures);
   if (exitCode === 0) {
     const outfile = `./.nyc_output/out.json`;
     fs.writeFileSync(outfile, JSON.stringify(json.coverage, null, 2));

@@ -18,7 +18,7 @@ if (reporter === 'xunit' && Array.isArray(result) && result[1]) {
   result[1].name = service.mount;
 }
 
-module.exports = { result, coverage: __coverage__ };
+module.exports = { result, coverage: global.__coverage__ };
 
 //Adapted from @arangodb/foxx/mocha.js
 function isNotPattern(pattern) {
