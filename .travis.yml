@@ -45,6 +45,8 @@ after_success:
 jobs:
   include:
     - stage: analysis
+      git:
+        depth: false
       addons:
         sonarcloud:
           organization: "adityamukho-github"
