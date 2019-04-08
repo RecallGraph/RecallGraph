@@ -213,7 +213,6 @@ const initQueryParts = memoize((scope) => queryPartsInializers[scope]());
 
 exports.testGroupedEvents = function testGroupedEvents(scope, pathParam, logFn, qp = null) {
   const allEvents = logFn(pathParam); //Ungrouped events in desc order by ctime.
-  expect.fail();
 
   if (allEvents.length) {
     const timeRange = getRandomSubRange(allEvents);
