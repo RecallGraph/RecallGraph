@@ -62,4 +62,3 @@ jobs:
         - nyc merge ./.nyc_output ./.nyc_output/out.json
         - nyc report --report-dir=./test/coverage -r lcovonly
       script: sonar-scanner
-      after_success: aws s3 rm --recursive s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
