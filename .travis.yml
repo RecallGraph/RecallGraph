@@ -66,5 +66,10 @@ jobs:
         - npx eslint ./main.js ./lib/ ./test/{unit,helpers,integration,travis} ./scripts
           -f json
           -o ./test/reports/eslint-report.json
-
-      script: sonar-scanner
+        - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
+      script:
+        - sonar-scanner
+        - fossa init
+        - fossa analyze
+      after_success:
+        - cd "$TRAVIS_BUILD_DIR" && fossa test
