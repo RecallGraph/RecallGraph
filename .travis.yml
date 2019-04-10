@@ -64,7 +64,7 @@ jobs:
         - npx nyc merge ./.nyc_output ./.nyc_output/out.json
         - npx nyc report --report-dir=./test/reports -r lcovonly
         - npx eslint ./main.js ./lib/ ./test/{unit,helpers,integration,travis} ./scripts
-          -f json-with-metadata
+          -f json
           -o ./test/reports/eslint-report.json
 
       script: sonar-scanner
