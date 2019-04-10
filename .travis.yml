@@ -1,6 +1,7 @@
 dist: xenial
 language: node_js
 node_js: node
+services: docker
 
 env:
   global:
@@ -42,9 +43,6 @@ after_success:
 
 jobs:
   include:
-    - stage: test
-      services: docker
-
     - stage: analysis
 
       git:
