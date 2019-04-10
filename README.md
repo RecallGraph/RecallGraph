@@ -1,35 +1,42 @@
-# EVSTORE (Foxx Microservice) #
+# EVSTORE (Foxx Microservice)
+
 A git-inspired event store for ArangoDB.
 
-#### Core Metrics ####
+#### Core Metrics
+
 [![Dependencies](https://img.shields.io/david/adityamukho/evstore.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
 [![Build Status](https://travis-ci.org/adityamukho/evstore.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=Coverage)
 
-#### Additional Metrics ####
+#### Additional Metrics
+
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=ncloc)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/adityamukho/evstore)
 
 ---
 
-### DISCLAIMER ###
-* This project is under active development.
-* Expect heavy feature churn and unstable builds in the initial days.
-* **DO NOT** use in production systems until a stable build is announced!
+### DISCLAIMER
 
+- This project is under active development.
+- Expect heavy feature churn and unstable builds in the initial days.
+- **DO NOT** use in production systems until a stable build is announced!
 
-### Introduction ###
+### Introduction
+
 _evstore_ is an event-based datastore with version-control - like features.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourced tracker.
- 
-### Quick Technical Overview ###
+
+### Quick Technical Overview
+
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
 
 _evstore_ exposes multiple write methods for individual/multiple nodes (documents/edges). Supported write method contracts (current and planned) are intended to closely follow the core REST API that ArangoDB already exports. These include:
+
 1. Create (POST)
 2. Replace (PUT)
 3. Update (PATCH)
@@ -38,6 +45,7 @@ _evstore_ exposes multiple write methods for individual/multiple nodes (document
 Node read methods would be no different from what the core REST API already provides, and so they are left out the microservice.
 
 When a write method is invoked on a node, the following things happen behind the scenes:
+
 1. A transaction is opened with read and write (non-exclusive) locks on appropriate collections.
 2. The provided node is written.
 3. An event object corresponding to the write is created, that records the current time, event type (create/update/delete) and some meta information about the node. This event is appended to a service-managed **document** collection.
@@ -48,9 +56,10 @@ When a write method is invoked on a node, the following things happen behind the
 If something goes wrong at any step in the above process, the transaction is rolled back.
 
 This way, every time something happens to a node (a create/update/delete event), a permanent, immutable record of that event is stored forever in the database. These records can be queried in different ways to either:
-* view a node's mutation history, or
-* rewind a node to any point in time in its mutation history, or
-* even bring a deleted node back to life!
+
+- view a node's mutation history, or
+- rewind a node to any point in time in its mutation history, or
+- even bring a deleted node back to life!
 
 Snapshots, when available, are used on a best-effort basis to minimize the number of diff calculations required to perform a rewind/fast-forward.
 
@@ -60,28 +69,34 @@ Well, all is not lost in this case, since _evstore_, like Git, supports a **comm
 
 _evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
 
-### Salient API Features ###
-Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console. 
+### Salient API Features
 
-#### Document ####
-* **(Implemented)** Create - Create single/multiple nodes (vertexes/edges)
-* **(Implemented)** Replace - Replace entire single/multiple nodes with new content
-* **(Implemented)** Delete - Delete single/multiple nodes
-* **(Implemented)** Update - Add/Update specific fields in single/multiple nodes
+Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
 
-#### Operations ####
-* **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
-* **(Implemented)** Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
-* **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commit endpoints for specified nodes (might use `log` behind the scenes)
-* **(Planned)** Patch - Apply a set of diffs to specified nodes to rewind/fast-forward them in time (will use `diff` behind the scenes)
+#### Document
 
-### Setting Up ###
+- **(Implemented)** Create - Create single/multiple nodes (vertexes/edges)
+- **(Implemented)** Replace - Replace entire single/multiple nodes with new content
+- **(Implemented)** Delete - Delete single/multiple nodes
+- **(Implemented)** Update - Add/Update specific fields in single/multiple nodes
+
+#### Operations
+
+- **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
+- **(Implemented)** Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
+- **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commit endpoints for specified nodes (might use `log` behind the scenes)
+- **(Planned)** Patch - Apply a set of diffs to specified nodes to rewind/fast-forward them in time (will use `diff` behind the scenes)
+
+### Setting Up
+
 1. Clone this repository.
 2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 3. Try out the API endpoints through the Swagger console.
 
-### Testing ###
+### Testing
+
 **IMPORTANT:** Running tests will create some test collections apart from the usual service collections. This has a few caveats. **Carefully read the following points before running this service's test suites:**
+
 1. Although test collections are namespaced using a prefix (the service mount point) in order to minimize chances of collision with user-defined collections, there is a small chance that it could still happen, especially when the same prefix is also used for user-defined collections.
 2. Both service and test collections are populated with test data.
 3. **Both service and test collections are truncated at the start of every test run!**
@@ -90,30 +105,37 @@ To avoid getting into trouble while testing, it is best to deploy this service t
 
 Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end.
 
-#### Running Selective Tests ####
+#### Running Selective Tests
+
 To run tests selectively on specific files or test suites, run
+
 ```
 $ foxx run [options] <mount> runTests [args]
 ```
+
 For a description on what `args` are available for the above command, see [here](https://gist.github.com/adityamukho/d1a042bb808d871d7d4ef0f266191867#file-usage-md).
 
-### Docs ###
-* Some documentation is already available through the Swagger interface.
-* Detailed API docs are available [here](https://github.com/adityamukho/evstore/wiki/API).
-* Detailed technical documentation is actively being worked on, and will be available in the project wiki very soon.
+### Docs
 
-### Limitations ###
+- Some documentation is already available through the Swagger interface.
+- Detailed API docs are available [here](https://github.com/adityamukho/evstore/wiki/API).
+- Detailed technical documentation is actively being worked on, and will be available in the project wiki very soon.
+
+### Limitations
+
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
 2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed for such deployments.
 
-### Contribution Guidelines ###
+### Contribution Guidelines
+
 A formal contribution guideline document will be prepared eventually. In the meantime,
 
-* stick to the exisiting coding and formatting styles,
-* maintain the current file and folder structure (it is quite simple and self-explanatory right now. Drop me a line if something isn't clear),
-* write test cases for every new piece of functionality and ensure good  code coverage. Automated builds and coverage reports will be set up soon.
+- stick to the exisiting coding and formatting styles,
+- maintain the current file and folder structure (it is quite simple and self-explanatory right now. Drop me a line if something isn't clear),
+- write test cases for every new piece of functionality and ensure good code coverage. Automated builds and coverage reports will be set up soon.
 
-### Get in Touch ###
-* Raise an issue or PR on this repo, or
-* Mail me (email link in Github profile), or
-* DM me on Slack - `adityamukho@arangodb-community.slack.com`.
+### Get in Touch
+
+- Raise an issue or PR on this repo, or
+- Mail me (email link in Github profile), or
+- DM me on Slack - `adityamukho@arangodb-community.slack.com`.

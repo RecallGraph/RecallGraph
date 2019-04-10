@@ -14,11 +14,10 @@ env:
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
 
 install:
-  - npm install -g nyc
   - npm install
 
 before_script:
-  - nyc instrument . ./.nyc_output/instrumented
+  - npx nyc instrument . ./.nyc_output/instrumented
   - cp -r ./.nyc_output/instrumented/lib . && rm -rf ./.nyc_output/instrumented
   - docker pull arangodb:$ARANGODB_VERSION
   - docker run
@@ -45,7 +44,6 @@ after_success:
 jobs:
   include:
     - stage: analysis
-      services:
       git:
         depth: false
       addons:
@@ -53,12 +51,14 @@ jobs:
           organization: "adityamukho-github"
       install:
         - pip install --user awscli
-        - npm install -g nyc
       before_script:
         - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
         - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
         - aws configure set region us-east-1
         - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
-        - nyc merge ./.nyc_output ./.nyc_output/out.json
-        - nyc report --report-dir=./test/coverage -r lcovonly
+        - npx nyc merge ./.nyc_output ./.nyc_output/out.json
+        - npx nyc report --report-dir=./test/reports -r lcovonly
+        - npx eslint ./main.js ./lib/ ./test/{unit,helpers,integration,travis} ./scripts
+          -f json-with-metadata
+          -o ./test/reports/eslint-report.json
       script: sonar-scanner

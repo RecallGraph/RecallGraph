@@ -4,4 +4,4 @@ node_modules
 /.scannerwork
 /.nyc_output/*
 !/.nyc_output/.gitkeep
-/test/coverage
+/test/reports
