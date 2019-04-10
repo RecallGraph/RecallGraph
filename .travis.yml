@@ -66,4 +66,4 @@ jobs:
         - fossa init
         - fossa analyze
       after_success:
-        - fossa test
+        - cd "$TRAVIS_BUILD_DIR" && fossa test
