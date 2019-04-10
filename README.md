@@ -16,7 +16,7 @@ A git-inspired event store for ArangoDB.
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B9851%2Fgit%40github.com%3Aadityamukho%2Fevstore.git.svg?type=shield)](https://app.fossa.com/projects/custom%2B9851%2Fgit%40github.com%3Aadityamukho%2Fevstore.git?ref=badge_shield)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/adityamukho/evstore)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 ---
 
