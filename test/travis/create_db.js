@@ -1,5 +1,5 @@
-db._createDatabase('evdb');
+db._createDatabase("evdb");
 
-const users = require('@arangodb/users');
-users.save('evuser', process.env.EVPASSWD, true);
-users.grantDatabase('evuser', 'evdb');
+const users = require("@arangodb/users");
+users.save("evuser", process.env.EVPASSWD, true);
+users.grantDatabase("evuser", "evdb");

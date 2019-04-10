@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 
-const readline = require('readline');
-const fs = require('fs');
+const readline = require("readline");
+const fs = require("fs");
 
 const input = [];
 const rl = readline.createInterface({
   input: process.stdin
 });
 
-rl.on('line', function (line) {
+rl.on("line", function(line) {
   input.push(line);
 });
 
-rl.on('close', function () {
-  const jsonStr = input.slice(1).join('\n');
+rl.on("close", function() {
+  const jsonStr = input.slice(1).join("\n");
   const json = JSON.parse(jsonStr);
 
   const result = json.result;

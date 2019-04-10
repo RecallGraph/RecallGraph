@@ -1,24 +1,26 @@
-'use strict';
+"use strict";
 
-const { db } = require('@arangodb');
-const { merge, forEach, noop, omit } = require('lodash');
-const { SERVICE_COLLECTIONS } = require('../../lib/helpers');
-const loadSampleData = require('./loadSampleData');
+const { db } = require("@arangodb");
+const { merge, forEach, noop, omit } = require("lodash");
+const { SERVICE_COLLECTIONS } = require("../../lib/helpers");
+const loadSampleData = require("./loadSampleData");
 
 const TEST_DOCUMENT_COLLECTIONS = {
-  vertex: module.context.collectionName('test_vertex')
+  vertex: module.context.collectionName("test_vertex")
 };
 
 const TEST_EDGE_COLLECTIONS = {
-  edge: module.context.collectionName('test_edge')
+  edge: module.context.collectionName("test_edge")
 };
 
-const TEST_DATA_COLLECTIONS = Object.freeze(merge({}, TEST_DOCUMENT_COLLECTIONS, TEST_EDGE_COLLECTIONS));
+const TEST_DATA_COLLECTIONS = Object.freeze(
+  merge({}, TEST_DOCUMENT_COLLECTIONS, TEST_EDGE_COLLECTIONS)
+);
 
 const TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = 2;
 
 function ensureTestDocumentCollections() {
-  forEach(TEST_DOCUMENT_COLLECTIONS, (collName) => {
+  forEach(TEST_DOCUMENT_COLLECTIONS, collName => {
     if (!db._collection(collName)) {
       db._createDocumentCollection(collName);
     }
@@ -26,7 +28,7 @@ function ensureTestDocumentCollections() {
 }
 
 function ensureTestEdgeCollections() {
-  forEach(TEST_EDGE_COLLECTIONS, (collName) => {
+  forEach(TEST_EDGE_COLLECTIONS, collName => {
     if (!db._collection(collName)) {
       db._createEdgeCollection(collName);
     }
@@ -34,12 +36,17 @@ function ensureTestEdgeCollections() {
 }
 
 function setSnapshotIntervals() {
-  forEach(TEST_DATA_COLLECTIONS,
-    (collName) => module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL);
+  forEach(
+    TEST_DATA_COLLECTIONS,
+    collName =>
+      (module.context.service.configuration["snapshot-intervals"][
+        collName
+      ] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL)
+  );
 }
 
 function truncateTestDataCollections() {
-  forEach(TEST_DATA_COLLECTIONS, (collName) => {
+  forEach(TEST_DATA_COLLECTIONS, collName => {
     db._truncate(collName);
   });
 
@@ -47,7 +54,7 @@ function truncateTestDataCollections() {
 }
 
 function truncateServiceCollections() {
-  forEach(SERVICE_COLLECTIONS, (collName) => {
+  forEach(SERVICE_COLLECTIONS, collName => {
     db._truncate(collName);
   });
 
@@ -58,8 +65,14 @@ let sampleDataRefs = {};
 let testDataCollectionsInitialized = false;
 let testSampleCollectionsInitialized = false;
 
-exports.setup = function setup({ forceTruncateTestData = false, forceTruncateService = false, ensureSampleDataLoad = false } = {}) {
-  let testDataCollectionsTruncated = false, serviceCollectionsTruncated = false, sampleDataLoadMessages = null;
+exports.setup = function setup({
+  forceTruncateTestData = false,
+  forceTruncateService = false,
+  ensureSampleDataLoad = false
+} = {}) {
+  let testDataCollectionsTruncated = false,
+    serviceCollectionsTruncated = false,
+    sampleDataLoadMessages = null;
 
   if (!testDataCollectionsInitialized) {
     ensureTestDocumentCollections();
@@ -80,10 +93,11 @@ exports.setup = function setup({ forceTruncateTestData = false, forceTruncateSer
   }
 
   if (ensureSampleDataLoad && !testSampleCollectionsInitialized) {
-    serviceCollectionsTruncated = serviceCollectionsTruncated || truncateServiceCollections();
+    serviceCollectionsTruncated =
+      serviceCollectionsTruncated || truncateServiceCollections();
 
     const results = loadSampleData();
-    sampleDataRefs = omit(results, 'messages');
+    sampleDataRefs = omit(results, "messages");
     sampleDataLoadMessages = results.messages;
     testSampleCollectionsInitialized = true;
   }

@@ -1,20 +1,20 @@
-'use strict';
+"use strict";
 
-const { expect } = require('chai');
-const init = require('../../../../helpers/init');
-const request = require('@arangodb/request');
+const { expect } = require("chai");
+const init = require("../../../../helpers/init");
+const request = require("@arangodb/request");
 const { baseUrl } = module.context;
-const { errors: ARANGO_ERRORS } = require('@arangodb');
+const { errors: ARANGO_ERRORS } = require("@arangodb");
 
-describe('Routes - create', () => {
+describe("Routes - create", () => {
   before(init.setup);
 
   after(init.teardown);
 
-  it('should create a single vertex', () => {
+  it("should create a single vertex", () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const node = {
-      k1: 'v1',
+      k1: "v1",
       src: `${__filename}:should create a single vertex`
     };
 
@@ -31,21 +31,21 @@ describe('Routes - create', () => {
 
     const resBody = JSON.parse(response.body).new;
     expect(resBody).to.be.an.instanceOf(Object);
-    expect(resBody).to.have.property('_id');
-    expect(resBody).to.have.property('_key');
-    expect(resBody).to.have.property('_rev');
-    expect(resBody.k1).to.equal('v1');
+    expect(resBody).to.have.property("_id");
+    expect(resBody).to.have.property("_key");
+    expect(resBody).to.have.property("_rev");
+    expect(resBody.k1).to.equal("v1");
   });
 
-  it('should create two vertices', () => {
+  it("should create two vertices", () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     const nodes = [
       {
-        k1: 'v1',
+        k1: "v1",
         src: `${__filename}:should create two vertices`
       },
       {
-        k1: 'v1',
+        k1: "v1",
         src: `${__filename}:should create two vertices`
       }
     ];
@@ -63,22 +63,27 @@ describe('Routes - create', () => {
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
-    resBody.map(node => node.new).forEach(resNode => {
-      expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode).to.have.property('_id');
-      expect(resNode).to.have.property('_key');
-      expect(resNode).to.have.property('_rev');
-      expect(resNode.k1).to.equal('v1');
-    });
+    resBody
+      .map(node => node.new)
+      .forEach(resNode => {
+        expect(resNode).to.be.an.instanceOf(Object);
+        expect(resNode).to.have.property("_id");
+        expect(resNode).to.have.property("_key");
+        expect(resNode).to.have.property("_rev");
+        expect(resNode.k1).to.equal("v1");
+      });
   });
 
-  it('should create a single edge', () => {
+  it("should create a single edge", () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{
-      src: `${__filename}:should create a single edge`
-    }, {
-      src: `${__filename}:should create a single edge`
-    }];
+    let vnodes = [
+      {
+        src: `${__filename}:should create a single edge`
+      },
+      {
+        src: `${__filename}:should create a single edge`
+      }
+    ];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -87,7 +92,7 @@ describe('Routes - create', () => {
 
     const eCollName = init.TEST_DATA_COLLECTIONS.edge;
     const enode = {
-      k1: 'v1',
+      k1: "v1",
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       src: `${__filename}:should create a single edge`
@@ -106,21 +111,24 @@ describe('Routes - create', () => {
 
     const resBody = JSON.parse(response.body).new;
     expect(resBody).to.be.an.instanceOf(Object);
-    expect(resBody).to.have.property('_id');
-    expect(resBody).to.have.property('_key');
-    expect(resBody).to.have.property('_rev');
-    expect(resBody.k1).to.equal('v1');
+    expect(resBody).to.have.property("_id");
+    expect(resBody).to.have.property("_key");
+    expect(resBody).to.have.property("_rev");
+    expect(resBody.k1).to.equal("v1");
     expect(resBody._from).to.equal(vnodes[0]._id);
     expect(resBody._to).to.equal(vnodes[1]._id);
   });
 
-  it('should create two edges', () => {
+  it("should create two edges", () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{
-      src: `${__filename}:should create two edges`
-    }, {
-      src: `${__filename}:should create two edges`
-    }];
+    let vnodes = [
+      {
+        src: `${__filename}:should create two edges`
+      },
+      {
+        src: `${__filename}:should create two edges`
+      }
+    ];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -130,13 +138,13 @@ describe('Routes - create', () => {
     const eCollName = init.TEST_DATA_COLLECTIONS.edge;
     const enodes = [
       {
-        k1: 'v1',
+        k1: "v1",
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         src: `${__filename}:should create two edges`
       },
       {
-        k1: 'v1',
+        k1: "v1",
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         src: `${__filename}:should create two edges`
@@ -156,21 +164,23 @@ describe('Routes - create', () => {
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
-    resBody.map(node => node.new).forEach(resNode => {
-      expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode).to.have.property('_id');
-      expect(resNode).to.have.property('_key');
-      expect(resNode).to.have.property('_rev');
-      expect(resNode.k1).to.equal('v1');
-      expect(resNode._from).to.equal(vnodes[0]._id);
-      expect(resNode._to).to.equal(vnodes[1]._id);
-    });
+    resBody
+      .map(node => node.new)
+      .forEach(resNode => {
+        expect(resNode).to.be.an.instanceOf(Object);
+        expect(resNode).to.have.property("_id");
+        expect(resNode).to.have.property("_key");
+        expect(resNode).to.have.property("_rev");
+        expect(resNode.k1).to.equal("v1");
+        expect(resNode._from).to.equal(vnodes[0]._id);
+        expect(resNode._to).to.equal(vnodes[1]._id);
+      });
   });
 
-  it('should fail to create a single vertex with duplicate key', () => {
+  it("should fail to create a single vertex with duplicate key", () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
-      k1: 'v1',
+      k1: "v1",
       src: `${__filename}:should fail to create a single vertex with duplicate key`
     };
 
@@ -187,14 +197,15 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`
+    );
   });
 
-  it('should fail to create a single vertex with the same key as a deleted vertex', () => {
+  it("should fail to create a single vertex with the same key as a deleted vertex", () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let node = {
-      k1: 'v1',
+      k1: "v1",
       src: `${__filename}:should fail to create a single vertex with the same key as a deleted vertex`
     };
 
@@ -215,19 +226,20 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`
+    );
   });
 
-  it('should fail to create two vertices with duplicate keys', () => {
+  it("should fail to create two vertices with duplicate keys", () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let nodes = [
       {
-        k1: 'v1',
+        k1: "v1",
         src: `${__filename}:should fail to create two vertices with duplicate keys`
       },
       {
-        k1: 'v1',
+        k1: "v1",
         src: `${__filename}:should fail to create two vertices with duplicate keys`
       }
     ];
@@ -245,28 +257,33 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`
+    );
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
     resBody.forEach(resNode => {
       expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+      expect(resNode.errorNum).to.equal(
+        ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
+      );
       // noinspection BadExpressionStatementJS
-      expect(resNode.errorMessage).to.include(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message);
+      expect(resNode.errorMessage).to.include(
+        ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message
+      );
     });
   });
 
-  it('should fail to create two vertices with the same keys as deleted vertices', () => {
+  it("should fail to create two vertices with the same keys as deleted vertices", () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex;
     let nodes = [
       {
-        k1: 'v1',
+        k1: "v1",
         src: `${__filename}:should fail to create two vertices with the same keys as deleted vertices`
       },
       {
-        k1: 'v1',
+        k1: "v1",
         src: `${__filename}:should fail to create two vertices with the same keys as deleted vertices`
       }
     ];
@@ -288,25 +305,33 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`
+    );
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
     resBody.forEach((resNode, idx) => {
       expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
-      expect(resNode.errorMessage).to.include(`Event log found for node with _id: ${nodes[idx]._id}`);
+      expect(resNode.errorNum).to.equal(
+        ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
+      );
+      expect(resNode.errorMessage).to.include(
+        `Event log found for node with _id: ${nodes[idx]._id}`
+      );
     });
   });
 
-  it('should fail to create a single edge with duplicate key', () => {
+  it("should fail to create a single edge with duplicate key", () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{
-      src: `${__filename}:should fail to create a single edge with duplicate key`
-    }, {
-      src: `${__filename}:should fail to create a single edge with duplicate key`
-    }];
+    let vnodes = [
+      {
+        src: `${__filename}:should fail to create a single edge with duplicate key`
+      },
+      {
+        src: `${__filename}:should fail to create a single edge with duplicate key`
+      }
+    ];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -315,7 +340,7 @@ describe('Routes - create', () => {
 
     const eCollName = init.TEST_DATA_COLLECTIONS.edge;
     let enode = {
-      k1: 'v1',
+      k1: "v1",
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       src: `${__filename}:should fail to create a single edge with duplicate key`
@@ -337,17 +362,21 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`
+    );
   });
 
-  it('should fail to create a single edge with the same key as a deleted edge', () => {
+  it("should fail to create a single edge with the same key as a deleted edge", () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{
-      src: `${__filename}:should fail to create a single edge with the same key as a deleted edge`
-    }, {
-      src: `${__filename}:should fail to create a single edge with the same key as a deleted edge`
-    }];
+    let vnodes = [
+      {
+        src: `${__filename}:should fail to create a single edge with the same key as a deleted edge`
+      },
+      {
+        src: `${__filename}:should fail to create a single edge with the same key as a deleted edge`
+      }
+    ];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -356,7 +385,7 @@ describe('Routes - create', () => {
 
     const eCollName = init.TEST_DATA_COLLECTIONS.edge;
     let enode = {
-      k1: 'v1',
+      k1: "v1",
       _from: vnodes[0]._id,
       _to: vnodes[1]._id,
       src: `${__filename}:should fail to create a single edge with the same key as a deleted edge`
@@ -382,17 +411,21 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:1`
+    );
   });
 
-  it('should fail to create two edges with duplicate keys', () => {
+  it("should fail to create two edges with duplicate keys", () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{
-      src: `${__filename}:should fail to create two edges with duplicate keys`
-    }, {
-      src: `${__filename}:should fail to create two edges with duplicate keys`
-    }];
+    let vnodes = [
+      {
+        src: `${__filename}:should fail to create two edges with duplicate keys`
+      },
+      {
+        src: `${__filename}:should fail to create two edges with duplicate keys`
+      }
+    ];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -402,13 +435,13 @@ describe('Routes - create', () => {
     const eCollName = init.TEST_DATA_COLLECTIONS.edge;
     let enodes = [
       {
-        k1: 'v1',
+        k1: "v1",
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         src: `${__filename}:should fail to create two edges with duplicate keys`
       },
       {
-        k1: 'v1',
+        k1: "v1",
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         src: `${__filename}:should fail to create two edges with duplicate keys`
@@ -431,26 +464,34 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`
+    );
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
     resBody.forEach(resNode => {
       expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
+      expect(resNode.errorNum).to.equal(
+        ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
+      );
       // noinspection BadExpressionStatementJS
-      expect(resNode.errorMessage).to.include(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message);
+      expect(resNode.errorMessage).to.include(
+        ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message
+      );
     });
   });
 
-  it('should fail to create two edges with the same keys as deleted edges', () => {
+  it("should fail to create two edges with the same keys as deleted edges", () => {
     const vCollName = init.TEST_DATA_COLLECTIONS.vertex;
-    let vnodes = [{
-      src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
-    }, {
-      src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
-    }];
+    let vnodes = [
+      {
+        src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
+      },
+      {
+        src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
+      }
+    ];
     const vResponse = request.post(`${baseUrl}/document/${vCollName}`, {
       json: true,
       body: vnodes
@@ -460,13 +501,13 @@ describe('Routes - create', () => {
     const eCollName = init.TEST_DATA_COLLECTIONS.edge;
     let enodes = [
       {
-        k1: 'v1',
+        k1: "v1",
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
       },
       {
-        k1: 'v1',
+        k1: "v1",
         _from: vnodes[0]._id,
         _to: vnodes[1]._id,
         src: `${__filename}:should fail to create two edges with the same keys as deleted edges`
@@ -493,15 +534,20 @@ describe('Routes - create', () => {
 
     expect(response).to.be.an.instanceOf(Object);
     expect(response.statusCode).to.equal(412);
-    expect(response.headers['x-arango-error-codes']).to.equal(
-      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`);
+    expect(response.headers["x-arango-error-codes"]).to.equal(
+      `${ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code}:2`
+    );
 
     const resBody = JSON.parse(response.body);
     expect(resBody).to.be.an.instanceOf(Array);
     resBody.forEach((resNode, idx) => {
       expect(resNode).to.be.an.instanceOf(Object);
-      expect(resNode.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code);
-      expect(resNode.errorMessage).to.include(`Event log found for node with _id: ${enodes[idx]._id}`);
+      expect(resNode.errorNum).to.equal(
+        ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
+      );
+      expect(resNode.errorMessage).to.include(
+        `Event log found for node with _id: ${enodes[idx]._id}`
+      );
     });
   });
 });

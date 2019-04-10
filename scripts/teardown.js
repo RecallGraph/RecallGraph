@@ -1,5 +1,5 @@
-'use strict';
-const db = require('@arangodb').db;
+"use strict";
+const db = require("@arangodb").db;
 const collections = [];
 
 for (const localName of collections) {
