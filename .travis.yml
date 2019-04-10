@@ -44,13 +44,18 @@ after_success:
 jobs:
   include:
     - stage: analysis
+
       git:
         depth: false
+
       addons:
         sonarcloud:
           organization: "adityamukho-github"
+
       install:
+        - npm install
         - pip install --user awscli
+
       before_script:
         - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
         - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
@@ -61,4 +66,5 @@ jobs:
         - npx eslint ./main.js ./lib/ ./test/{unit,helpers,integration,travis} ./scripts
           -f json-with-metadata
           -o ./test/reports/eslint-report.json
+
       script: sonar-scanner
