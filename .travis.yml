@@ -1,7 +1,6 @@
 dist: xenial
 language: node_js
 node_js: node
-services: docker
 
 env:
   global:
@@ -43,6 +42,9 @@ after_success:
 
 jobs:
   include:
+    - stage: test
+      services: docker
+
     - stage: analysis
 
       git:
@@ -63,7 +65,7 @@ jobs:
         - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
         - npx nyc merge ./.nyc_output ./.nyc_output/out.json
         - npx nyc report --report-dir=./test/reports -r lcovonly
-        - npx eslint ./main.js ./lib/ ./test/{unit,helpers,integration,travis} ./scripts
+        - npx eslint ./main.js ./lib/ ./scripts
           -f json
           -o ./test/reports/eslint-report.json
         - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
