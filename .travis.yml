@@ -45,7 +45,6 @@ after_success:
 jobs:
   include:
     - stage: analysis
-      services:
       git:
         depth: false
       addons:
@@ -61,4 +60,10 @@ jobs:
         - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
         - nyc merge ./.nyc_output ./.nyc_output/out.json
         - nyc report --report-dir=./test/coverage -r lcovonly
-      script: sonar-scanner
+        - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
+      script:
+        - sonar-scanner
+        - fossa init
+        - fossa analyze
+      after_success:
+        - fossa test
