@@ -2,11 +2,16 @@ dist: xenial
 language: node_js
 node_js: node
 services: docker
+cache:
+  npm: true
+  directories:
+    - .nyc_output
 
 env:
   global:
     - ARANGODB_VERSION=3.4
     - PATH=$HOME/.local/bin:$PATH
+    - CACHE_NAME=GLOBAL
   matrix:
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
@@ -18,12 +23,11 @@ install:
 
 before_script:
   - npx nyc instrument . ./.nyc_output/instrumented
-  - cp -r ./.nyc_output/instrumented/lib . && rm -rf ./.nyc_output/instrumented
+  - cp -r ./.nyc_output/instrumented/lib .
   - docker pull arangodb:$ARANGODB_VERSION
   - docker run
     -e ARANGO_RANDOM_ROOT_PASSWORD=1
     -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
-    -e EVPASSWD=$EVPASSWD
     -e EVTEST_FILES=$EVTEST_FILES
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
@@ -34,12 +38,15 @@ before_script:
 
 script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
 
-after_success:
-  - pip install --user awscli
-  - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
-  - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
-  - aws configure set region us-east-1
-  - aws s3 cp ./.nyc_output/out.json s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/$NYC_OUT.json
+before_cache: rm -rf ./.nyc_output/instrumented
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/56cdc63259d08d2f5687
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: never     # options: [always|never|change] default: always
 
 jobs:
   include:
@@ -54,22 +61,19 @@ jobs:
 
       install:
         - npm install
-        - pip install --user awscli
 
       before_script:
-        - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
-        - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
-        - aws configure set region us-east-1
-        - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
         - npx nyc merge ./.nyc_output ./.nyc_output/out.json
         - npx nyc report --report-dir=./test/reports -r lcovonly
         - npx eslint ./main.js ./lib/ ./scripts
           -f json
           -o ./test/reports/eslint-report.json
-        - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | sudo bash"
+        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+            curl -H "Cache-Control: no-cache" https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh
+            |sudo bash;
+          fi'
       script:
         - sonar-scanner
-        - fossa init
-        - fossa analyze
+        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then fossa init && fossa analyze; fi'
       after_success:
-        - cd "$TRAVIS_BUILD_DIR" && fossa test
+        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then cd "$TRAVIS_BUILD_DIR" && fossa test; fi'

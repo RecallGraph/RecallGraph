@@ -21,7 +21,7 @@ rl.on('close', function () {
 
   const exitCode = Math.sign(result.stats.failures)
   if (exitCode === 0) {
-    const outfile = `./.nyc_output/out.json`
+    const outfile = `./.nyc_output/${process.env.NYC_OUT}.json`
     fs.writeFileSync(outfile, JSON.stringify(json.coverage, null, 2))
 
     console.log(`Piped coverage output to ${outfile}`)
