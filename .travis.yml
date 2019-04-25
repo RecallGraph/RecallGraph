@@ -68,12 +68,15 @@ jobs:
         - npx eslint ./main.js ./lib/ ./scripts
           -f json
           -o ./test/reports/eslint-report.json
-        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
             curl -H "Cache-Control: no-cache" https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh
             |sudo bash;
           fi'
       script:
-        - sonar-scanner
-        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then fossa init && fossa analyze; fi'
-      after_success:
-        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then cd "$TRAVIS_BUILD_DIR" && fossa test; fi'
+        - npx nyc check-coverage --lines 80 --functions 80 --branches 80
+        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
+            sonar-scanner;
+          fi'
+        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
+            fossa init && fossa analyze && fossa test;
+          fi'
