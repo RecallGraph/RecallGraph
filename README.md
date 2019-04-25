@@ -11,7 +11,7 @@ A git-inspired event store for ArangoDB.
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=ncloc)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore) [![Join the chat at https://gitter.im/evstore/community](https://badges.gitter.im/evstore/community.svg)](https://gitter.im/evstore/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ---
 
