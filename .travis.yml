@@ -22,6 +22,7 @@ install:
   - npm install
 
 before_script:
+  - rm -rf ./.nyc_output/*
   - npx nyc instrument . ./.nyc_output/instrumented
   - cp -r ./.nyc_output/instrumented/lib .
   - docker pull arangodb:$ARANGODB_VERSION
@@ -74,7 +75,7 @@ jobs:
             |sudo bash;
           fi'
       script:
-        - npx nyc check-coverage --lines 80 --functions 80 --branches 80
+        - npx nyc check-coverage --lines 80 --functions 80 --branches 70
         - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
             sonar-scanner;
           fi'
