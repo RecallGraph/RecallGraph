@@ -29,6 +29,7 @@ before_script:
     -e ARANGO_RANDOM_ROOT_PASSWORD=1
     -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
     -e EVTEST_FILES=$EVTEST_FILES
+    -e NYC_OUT=$NYC_OUT
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
