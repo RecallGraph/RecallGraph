@@ -5,18 +5,9 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 module.exports = function (grunt) {
-  const buildId = grunt.option('buildId') || Date.now()
-
-  grunt.log.subhead(`
-    =========================
-     Build ID: ${buildId}
-    =========================
-  `)
-
   grunt.initConfig({
-    buildId,
     manifest: grunt.file.readJSON('manifest.json'),
-    buildDir: `./build/${buildId}`,
+    buildDir: './build',
     eslint: {
       src: ['main.js', 'lib', 'scripts', 'test/{unit,helpers,integration,travis}', 'Gruntfile.js', 'tasks'],
       options: {
@@ -36,7 +27,7 @@ module.exports = function (grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['scripts/**', 'test/{unit,helpers,integration,resources}', 'LICENSE', 'main.js', 'manifest.json',
+          src: ['scripts/**', 'test/{unit,helpers,integration,resources}/**', 'LICENSE', 'main.js', 'manifest.json',
             'package.json', 'README.md'],
           dest: '<%= buildDir %>'
         }]
@@ -46,16 +37,44 @@ module.exports = function (grunt) {
       build: ['build'],
       dist: ['dist']
     },
+    uninstall: {
+      command: ['build', 'foxx', 'uninstall'],
+      options: {
+        '--server': process.env.ARANGO_SERVER
+      },
+      args: [process.env.EVSTORE_MOUNT_POINT]
+    },
+    install: {
+      command: ['build', 'foxx', 'install'],
+      options: {
+        '--server': process.env.ARANGO_SERVER
+      },
+      args: [process.env.EVSTORE_MOUNT_POINT]
+    },
+    upgrade: {
+      command: ['build', 'foxx', 'upgrade'],
+      options: {
+        '--server': process.env.ARANGO_SERVER
+      },
+      args: [process.env.EVSTORE_MOUNT_POINT]
+    },
+    runTests: {
+      command: ['root', 'foxx', 'run'],
+      options: {
+        '--server': process.env.ARANGO_SERVER
+      },
+      args: [process.env.EVSTORE_MOUNT_POINT, 'runTests']
+    },
     bundle: {
       command: ['build', 'foxx', 'bundle'],
       options: {
-        '--outfile': '../../dist/evstore-<%= manifest.version %>.zip'
+        '--outfile': '../dist/evstore-<%= manifest.version %>.zip'
       },
       flags: ['-f']
     },
     instrument: {
       command: ['root', 'npx', 'nyc', 'instrument'],
-      flags: ['--produce-source-map', '--delete'],
+      flags: ['--delete'],
       src: 'lib',
       dest: '<%= buildDir %>/<%= instrument.src %>'
     },
@@ -94,6 +113,8 @@ module.exports = function (grunt) {
   grunt.loadTasks('tasks')
 
   grunt.registerTask('analyze', ['eslint', 'exec:root:fossa:analyze', 'sonar'])
-  grunt.registerTask('dist', ['copy:lib', 'copy:main', 'installSvcDeps', 'mkdir:dist', 'bundle'])
-  // grunt.registerTask('test', ['instrument', 'copy:main', 'installSvcDeps'])
+  grunt.registerTask('build', ['copy:lib', 'copy:main', 'installSvcDeps'])
+  grunt.registerTask('initialize', ['build', 'uninstall', 'install'])
+  grunt.registerTask('dist', ['build', 'mkdir:dist', 'bundle'])
+  grunt.registerTask('test', ['instrument', 'copy:main', 'installSvcDeps', 'upgrade', 'runTests'])
 }
