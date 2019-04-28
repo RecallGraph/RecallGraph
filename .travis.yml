@@ -80,5 +80,5 @@ jobs:
             sonar-scanner;
           fi'
         - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
-            fossa init && fossa analyze && fossa test;
+            fossa analyze && fossa test;
           fi'
