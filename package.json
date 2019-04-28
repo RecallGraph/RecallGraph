@@ -11,7 +11,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Use foxx-cli to run tests. See README.md.\" && exit 0"
+    "setup": "grunt initialize",
+    "clean": "grunt clean",
+    "lint": "grunt eslint",
+    "test": "grunt test",
+    "analyze": "grunt analyze",
+    "bundle": "grunt dist"
   },
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
