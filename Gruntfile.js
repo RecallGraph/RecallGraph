@@ -112,7 +112,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean')
   grunt.loadTasks('tasks')
 
-  grunt.registerTask('analyze', ['eslint', 'exec:root:fossa:analyze', 'sonar'])
+  grunt.registerTask('analyze', ['eslint', 'sonar'])
   grunt.registerTask('build', ['copy:lib', 'copy:main', 'installSvcDeps'])
   grunt.registerTask('initialize', ['build', 'uninstall', 'install'])
   grunt.registerTask('dist', ['build', 'mkdir:dist', 'bundle'])
