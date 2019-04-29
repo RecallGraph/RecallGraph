@@ -71,6 +71,21 @@ module.exports = function (grunt) {
       src: 'lib',
       dest: '<%= buildDir %>/<%= instrument.src %>'
     },
+    checkCoverage: {
+      command: ['root', 'npx', 'nyc', 'check-coverage'],
+      options: {
+        '--lines': 80,
+        '--functions': 80,
+        '--branches': 70
+      }
+    },
+    lcovReport: {
+      command: ['root', 'npx', 'nyc', 'report'],
+      options: {
+        '--report-dir': './test/reports',
+        '--reporter': 'lcovonly'
+      }
+    },
     sonar: {
       command: ['root', 'sonar-scanner'],
       options: {
@@ -97,13 +112,17 @@ module.exports = function (grunt) {
         }
       },
       runTests: {
-        cmd: function () {
+        cmd: function (nofilters = false) {
           const reporter = 'suite'
-          let files = this.option('files')
-          if (files) {
-            files = JSON.parse(files)
+          let files, grep
+
+          if (!nofilters) {
+            files = this.option('files')
+            if (files) {
+              files = JSON.parse(files)
+            }
+            grep = this.option('grep')
           }
-          const grep = this.option('grep')
 
           const params = `'${JSON.stringify({ files, grep, reporter })}'`
 
@@ -150,5 +169,6 @@ module.exports = function (grunt) {
   grunt.registerTask('initialize', ['build', 'uninstall', 'install'])
   grunt.registerTask('dist', ['build', 'mkdir:dist', 'bundle'])
   grunt.registerTask('test', ['build', 'replace', 'exec:runTests'])
-  grunt.registerTask('testWithCoverage', ['instrument', 'copy:main', 'installSvcDeps', 'replace', 'exec:runTests'])
+  grunt.registerTask('testWithCoverage', ['instrument', 'copy:main', 'installSvcDeps', 'replace', 'exec:runTests:true',
+    'checkCoverage', 'lcovReport'])
 }
