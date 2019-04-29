@@ -51,19 +51,12 @@ module.exports = function (grunt) {
       },
       args: [process.env.EVSTORE_MOUNT_POINT]
     },
-    upgrade: {
-      command: ['build', 'foxx', 'upgrade'],
+    replace: {
+      command: ['build', 'foxx', 'replace'],
       options: {
         '--server': process.env.ARANGO_SERVER
       },
       args: [process.env.EVSTORE_MOUNT_POINT]
-    },
-    runTests: {
-      command: ['root', 'foxx', 'run'],
-      options: {
-        '--server': process.env.ARANGO_SERVER
-      },
-      args: [process.env.EVSTORE_MOUNT_POINT, 'runTests']
     },
     bundle: {
       command: ['build', 'foxx', 'bundle'],
@@ -102,6 +95,46 @@ module.exports = function (grunt) {
         cmd: function (command, ...params) {
           return `${command} ${params.join(' ')}`
         }
+      },
+      runTests: {
+        cmd: function () {
+          const reporter = 'suite'
+          let files = this.option('files')
+          if (files) {
+            files = JSON.parse(files)
+          }
+          const grep = this.option('grep')
+
+          const params = `'${JSON.stringify({ files, grep, reporter })}'`
+
+          return `foxx run --server ${process.env.ARANGO_SERVER} ${process.env.EVSTORE_MOUNT_POINT} runTests ${params}`
+        },
+        options: {
+          maxBuffer: 1073741824 // 1 MiB
+        },
+        stdout: false,
+        callback: function (error, stdout) {
+          if (error) {
+            grunt.fatal(error)
+          } else {
+            const json = JSON.parse(stdout)
+
+            const result = json.result
+            grunt.log.writeln(JSON.stringify(result, null, 2))
+
+            const exitCode = Math.sign(result.stats.failures)
+            if (exitCode === 0) {
+              if (json.coverage) {
+                const outfile = './.nyc_output/out.json'
+                grunt.file.write(outfile, JSON.stringify(json.coverage, null, 2))
+
+                grunt.log.ok(`Piped coverage output to ${outfile}`)
+              }
+            } else {
+              grunt.fatal('There were test failures', exitCode)
+            }
+          }
+        }
       }
     }
   })
@@ -116,5 +149,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build', ['copy:lib', 'copy:main', 'installSvcDeps'])
   grunt.registerTask('initialize', ['build', 'uninstall', 'install'])
   grunt.registerTask('dist', ['build', 'mkdir:dist', 'bundle'])
-  grunt.registerTask('test', ['instrument', 'copy:main', 'installSvcDeps', 'upgrade', 'runTests'])
+  grunt.registerTask('test', ['build', 'replace', 'exec:runTests'])
+  grunt.registerTask('testWithCoverage', ['instrument', 'copy:main', 'installSvcDeps', 'replace', 'exec:runTests'])
 }

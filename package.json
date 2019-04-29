@@ -15,6 +15,7 @@
     "clean": "grunt clean",
     "lint": "grunt eslint",
     "test": "grunt test",
+    "testWithCoverage": "grunt testWithCoverage",
     "analyze": "grunt analyze",
     "bundle": "grunt dist"
   },
