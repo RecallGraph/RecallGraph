@@ -5,3 +5,6 @@ node_modules
 /.nyc_output/*
 !/.nyc_output/.gitkeep
 /test/reports
+/.env
+/build
+/dist

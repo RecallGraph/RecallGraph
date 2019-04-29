@@ -46,7 +46,7 @@ notifications:
   webhooks:
     urls:
       - https://webhooks.gitter.im/e/56cdc63259d08d2f5687
-    on_success: change  # options: [always|never|change] default: always
+    on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
 
@@ -70,15 +70,8 @@ jobs:
         - npx eslint ./main.js ./lib/ ./scripts
           -f json
           -o ./test/reports/eslint-report.json
-        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
-            curl -H "Cache-Control: no-cache" https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh
-            |sudo bash;
-          fi'
       script:
         - npx nyc check-coverage --lines 80 --functions 80 --branches 70
         - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
             sonar-scanner;
-          fi'
-        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
-            fossa init && fossa analyze && fossa test;
           fi'
