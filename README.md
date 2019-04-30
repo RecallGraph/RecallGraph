@@ -90,9 +90,17 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 
 ### Setting Up
 
-1. Clone this repository.
+#### For Users
+
+1. Download the [latest release](https://github.com/adityamukho/evstore/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 3. Try out the API endpoints through the Swagger console.
+
+**Note:** A One-Click deployment option will be available soon for those who wish to give _evstore_ a spin without having to setup and deploy on their machines.
+
+#### For Contributors
+
+For developers who wish to contribute to this project, see the [contribution guidelines](/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
 
 ### Testing
 
@@ -127,16 +135,8 @@ For a description on what `args` are available for the above command, see [here]
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
 2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed for such deployments.
 
-### Contribution Guidelines
-
-A formal contribution guideline document will be prepared eventually. In the meantime,
-
-- stick to the exisiting coding and formatting styles,
-- maintain the current file and folder structure (it is quite simple and self-explanatory right now. Drop me a line if something isn't clear),
-- write test cases for every new piece of functionality and ensure good code coverage. Automated builds and coverage reports will be set up soon.
-
 ### Get in Touch
 
 - Raise an issue or PR on this repo, or
 - Mail me (email link in Github profile), or
-- DM me on Slack - `adityamukho@arangodb-community.slack.com`.
+- Join the Gitter channel - [https://gitter.im/evstore/community](https://gitter.im/evstore/community).
