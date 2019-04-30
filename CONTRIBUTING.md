@@ -1,6 +1,6 @@
 # Contributing to evstore
 
-A formal contribution guideline document is in the works. In the meantime,
+A formal contribution guideline document is [in the works](https://github.com/adityamukho/evstore/wiki/Contributing). In the meantime,
 
 - stick to the exisiting coding and formatting styles,
 - maintain the current file and folder structure (it is quite simple and self-explanatory right now. Drop me a line if something isn't clear),

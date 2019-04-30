@@ -100,7 +100,7 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 
 #### For Contributors
 
-For developers who wish to contribute to this project, see the [contribution guidelines](/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
+For developers who wish to contribute to this project, see the [contribution guidelines](https://github.com/adityamukho/evstore/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
 
 ### Testing
 
