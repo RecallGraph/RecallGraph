@@ -17,19 +17,19 @@ A git-inspired event store for ArangoDB.
 
 ---
 
-### DISCLAIMER
+## DISCLAIMER
 
 - This project is under active development.
 - Expect heavy feature churn and unstable builds in the initial days.
 - **DO NOT** use in production systems until a stable build is announced!
 
-### Introduction
+## Introduction
 
 _evstore_ is an event-based datastore with version-control - like features.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourced tracker.
 
-### Quick Technical Overview
+## Quick Technical Overview
 
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
 
@@ -67,27 +67,27 @@ Well, all is not lost in this case, since _evstore_, like Git, supports a **comm
 
 _evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
 
-### Salient API Features
+## Salient API Features
 
 Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
 
-#### Document
+### Document
 
 - **(Implemented)** Create - Create single/multiple nodes (vertexes/edges)
 - **(Implemented)** Replace - Replace entire single/multiple nodes with new content
 - **(Implemented)** Delete - Delete single/multiple nodes
 - **(Implemented)** Update - Add/Update specific fields in single/multiple nodes
 
-#### Operations
+### Operations
 
 - **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
 - **(Implemented)** Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
 - **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commit endpoints for specified nodes (might use `log` behind the scenes)
 - **(Planned)** Patch - Apply a set of diffs to specified nodes to rewind/fast-forward them in time (will use `diff` behind the scenes)
 
-### Setting Up
+## Setting Up
 
-#### For Users
+### For Users
 
 1. Download the [latest release](https://github.com/adityamukho/evstore/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
@@ -95,11 +95,11 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 
 **Note:** A One-Click deployment option will be available soon for those who wish to give _evstore_ a spin without having to setup and deploy on their machines.
 
-#### For Contributors
+### For Contributors
 
 For developers who wish to contribute to this project, see the [contribution guidelines](https://github.com/adityamukho/evstore/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
 
-### Testing
+## Testing
 
 **IMPORTANT:** Running tests will create some test collections apart from the usual service collections. This has a few caveats. **Carefully read the following points before running this service's test suites:**
 
@@ -111,7 +111,7 @@ To avoid getting into trouble while testing, it is best to deploy this service t
 
 Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end.
 
-#### Running Selective Tests
+### Running Selective Tests
 
 To run tests selectively on specific files or test suites, run
 
@@ -121,18 +121,18 @@ $ foxx run [options] <mount> runTests [args]
 
 For a description on what `args` are available for the above command, see [here](https://gist.github.com/adityamukho/d1a042bb808d871d7d4ef0f266191867#file-usage-md).
 
-### Docs
+## Docs
 
 - Some documentation is already available through the Swagger interface.
 - Detailed API docs are available [here](https://github.com/adityamukho/evstore/wiki/API).
 - Detailed technical documentation is actively being worked on, and will be available in the project wiki very soon.
 
-### Limitations
+## Limitations
 
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
 2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed for such deployments.
 
-### Get in Touch
+## Get in Touch
 
 - Raise an issue or PR on this repo, or
 - Mail me (email link in Github profile), or
