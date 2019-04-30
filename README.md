@@ -7,6 +7,7 @@ A git-inspired event store for ArangoDB.
 [![Dependencies](https://img.shields.io/david/adityamukho/evstore.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
 [![Build Status](https://travis-ci.org/adityamukho/evstore.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 
 #### Additional Metrics
 
