@@ -1,11 +1,11 @@
-# EVSTORE (Foxx Microservice)
+# CivicGraph (Previously called _evstore_)
 
-A git-inspired event store for ArangoDB.
+Git-inspired versioned storage for historical graph data.
 
 #### Core Metrics
 
-[![Dependencies](https://img.shields.io/david/adityamukho/evstore.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
-[![Build Status](https://travis-ci.org/adityamukho/evstore.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
+[![Dependencies](https://img.shields.io/david/adityamukho/civicgraph.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
+[![Build Status](https://travis-ci.org/adityamukho/civicgraph.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 
@@ -25,7 +25,7 @@ A git-inspired event store for ArangoDB.
 
 ## Introduction
 
-_evstore_ is an event-based datastore with version-control - like features.
+CivicGraph is an event-based datastore with version-control - like features.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourced tracker.
 
@@ -33,7 +33,7 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 
 This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
 
-_evstore_ exposes multiple write methods for individual/multiple nodes (documents/edges). Supported write method contracts (current and planned) are intended to closely follow the core REST API that ArangoDB already exports. These include:
+CivicGraph exposes multiple write methods for individual/multiple nodes (documents/edges). Supported write method contracts (current and planned) are intended to closely follow the core REST API that ArangoDB already exports. These include:
 
 1. Create (POST)
 2. Replace (PUT)
@@ -61,15 +61,15 @@ This way, every time something happens to a node (a create/update/delete event),
 
 Snapshots, when available, are used on a best-effort basis to minimize the number of diff calculations required to perform a rewind/fast-forward.
 
-**The process described above makes the implicit assumption that all mutation methods for a node were invoked through _evstore_'s API, allowing it to record all changes, and no direct manipulation happened**. But what if somehow, a node underwent a few direct mutations via other means (AQL/Core REST API/Client)?
+**The process described above makes the implicit assumption that all mutation methods for a node were invoked through CivicGraph's API, allowing it to record all changes, and no direct manipulation happened**. But what if somehow, a node underwent a few direct mutations via other means (AQL/Core REST API/Client)?
 
-Well, all is not lost in this case, since _evstore_, like Git, supports a **commit** operation that lets you explicitly add an event record post hoc. Obviously, this would create only a single diff from the last known state to the current state, and any intermediate mutations would collapse into that diff. Unfortunately, there is no way around this.
+Well, all is not lost in this case, since CivicGraph, like Git, supports a **commit** operation that lets you explicitly add an event record post hoc. Obviously, this would create only a single diff from the last known state to the current state, and any intermediate mutations would collapse into that diff. Unfortunately, there is no way around this.
 
-_evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
+CivicGraph manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
 
 ## Salient API Features
 
-Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
+Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/civicgraph/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
 
 ### Document
 
@@ -89,15 +89,15 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 
 ### For Users
 
-1. Download the [latest release](https://github.com/adityamukho/evstore/releases/).
+1. Download the [latest release](https://github.com/adityamukho/civicgraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 3. Try out the API endpoints through the Swagger console.
 
-**Note:** A One-Click deployment option will be available soon for those who wish to give _evstore_ a spin without having to setup and deploy on their machines.
+**Note:** A One-Click deployment option will be available soon for those who wish to give CivicGraph a spin without having to setup and deploy on their machines.
 
 ### For Contributors
 
-For developers who wish to contribute to this project, see the [contribution guidelines](https://github.com/adityamukho/evstore/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
+For developers who wish to contribute to this project, see the [contribution guidelines](https://github.com/adityamukho/civicgraph/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
 
 ## Testing
 
@@ -124,7 +124,7 @@ For a description on what `args` are available for the above command, see [here]
 ## Docs
 
 - Some documentation is already available through the Swagger interface.
-- Detailed API docs are available [here](https://github.com/adityamukho/evstore/wiki/API).
+- Detailed API docs are available [here](https://github.com/adityamukho/civicgraph/wiki/API).
 - Detailed technical documentation is actively being worked on, and will be available in the project wiki very soon.
 
 ## Limitations
@@ -136,4 +136,4 @@ For a description on what `args` are available for the above command, see [here]
 
 - Raise an issue or PR on this repo, or
 - Mail me (email link in Github profile), or
-- Join the Gitter channel - [https://gitter.im/evstore/community](https://gitter.im/evstore/community).
+- Join the Gitter channel - [https://gitter.im/civicgraph/community](https://gitter.im/civicgraph/community).

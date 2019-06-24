@@ -1,8 +1,8 @@
 {
   "$schema": "http://json.schemastore.org/foxx-manifest",
-  "name": "evstore",
+  "name": "CivicGraph",
   "version": "0.0.1",
-  "description": "A git-inspired event store for ArangoDB (Foxx microservice)",
+  "description": "Git-inspired versioned storage for historical graph data",
   "keywords": [
     "event-store",
     "version-control"

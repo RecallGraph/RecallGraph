@@ -45,7 +45,7 @@ before_cache: rm -rf ./.nyc_output/instrumented
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/56cdc63259d08d2f5687
+      - https://webhooks.gitter.im/e/2a140dc8d21490c900ab
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
