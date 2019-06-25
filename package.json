@@ -4,7 +4,7 @@
   "description": "Git-inspired versioned storage for time-variant graph data",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adityamukho/civicgraph"
+    "url": "https://github.com/adityamukho/CivicGraph"
   },
   "main": "main.js",
   "directories": {

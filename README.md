@@ -4,8 +4,8 @@ Git-inspired versioned storage for time-variant graph data.
 
 #### Core Metrics
 
-[![Dependencies](https://img.shields.io/david/adityamukho/civicgraph.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
-[![Build Status](https://travis-ci.org/adityamukho/civicgraph.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
+[![Dependencies](https://img.shields.io/david/adityamukho/CivicGraph.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
+[![Build Status](https://travis-ci.org/adityamukho/CivicGraph.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 
@@ -69,7 +69,7 @@ CivicGraph manages all its bookkeeping in a set of service-managed collections, 
 
 ## Salient API Features
 
-Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/civicgraph/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
+Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/CivicGraph/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
 
 ### Document
 
@@ -89,7 +89,7 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 
 ### For Users
 
-1. Download the [latest release](https://github.com/adityamukho/civicgraph/releases/).
+1. Download the [latest release](https://github.com/adityamukho/CivicGraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 3. Try out the API endpoints through the Swagger console.
 
@@ -97,7 +97,7 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 
 ### For Contributors
 
-For developers who wish to contribute to this project, see the [contribution guidelines](https://github.com/adityamukho/civicgraph/blob/development/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
+For developers who wish to contribute to this project, see the [contribution guidelines](https://github.com/adityamukho/CivicGraph/blob/development/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
 
 ## Testing
 
@@ -124,7 +124,7 @@ For a description on what `args` are available for the above command, see [here]
 ## Docs
 
 - Some documentation is already available through the Swagger interface.
-- Detailed API docs are available [here](https://github.com/adityamukho/civicgraph/wiki/API).
+- Detailed API docs are available [here](https://github.com/adityamukho/CivicGraph/wiki/API).
 - Detailed technical documentation is actively being worked on, and will be available in the project wiki very soon.
 
 ## Limitations
