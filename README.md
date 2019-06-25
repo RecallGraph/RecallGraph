@@ -1,6 +1,8 @@
-# CivicGraph (Previously, _evstore_)
+# CivicGraph
 
-Git-inspired versioned storage for time-variant graph data.
+Previously, _evstore_.
+
+A git-inspired versioned storage for time-variant graph data.
 
 #### Core Metrics
 
