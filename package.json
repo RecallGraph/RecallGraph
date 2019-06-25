@@ -1,7 +1,7 @@
 {
   "name": "CivicGraph",
   "version": "0.0.1",
-  "description": "Git-inspired versioned storage for historical graph data",
+  "description": "Git-inspired versioned storage for time-variant graph data",
   "repository": {
     "type": "git",
     "url": "https://github.com/adityamukho/civicgraph"

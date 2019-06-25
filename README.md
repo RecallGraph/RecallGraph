@@ -1,6 +1,6 @@
-# CivicGraph (Previously called _evstore_)
+# CivicGraph (Previously, _evstore_)
 
-Git-inspired versioned storage for historical graph data.
+Git-inspired versioned storage for time-variant graph data.
 
 #### Core Metrics
 
@@ -136,4 +136,4 @@ For a description on what `args` are available for the above command, see [here]
 
 - Raise an issue or PR on this repo, or
 - Mail me (email link in Github profile), or
-- Join the Gitter channel - [https://gitter.im/civicgraph/community](https://gitter.im/civicgraph/community).
+- Join the Gitter channel - [https://gitter.im/CivicGraph/community](https://gitter.im/CivicGraph/community).
