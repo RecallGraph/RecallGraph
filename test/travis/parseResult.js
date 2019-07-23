@@ -1,20 +1,31 @@
 #!/usr/bin/env node
 
-const readline = require('readline');
+const readline = require('readline')
+const fs = require('fs')
 
-const input = [];
+const input = []
 const rl = readline.createInterface({
   input: process.stdin
-});
+})
 
 rl.on('line', function (line) {
-  input.push(line);
-});
+  input.push(line)
+})
 
 rl.on('close', function () {
-  const result = input.slice(1).join('\n');
-  const json = JSON.parse(result).filter(item => ['fail', 'end'].includes(item[0]));
+  const jsonStr = input.slice(1).join('\n')
+  const json = JSON.parse(jsonStr)
 
-  console.log(JSON.stringify(json, null, 2));
-  process.exit(Math.sign(json.pop()[1].failures));
-});
+  const result = json.result
+  console.log(JSON.stringify(result, null, 2))
+
+  const exitCode = Math.sign(result.stats.failures)
+  if (exitCode === 0) {
+    const outfile = `./.nyc_output/${process.env.NYC_OUT}.json`
+    fs.writeFileSync(outfile, JSON.stringify(json.coverage, null, 2))
+
+    console.log(`Piped coverage output to ${outfile}`)
+  }
+
+  process.exit(exitCode)
+})

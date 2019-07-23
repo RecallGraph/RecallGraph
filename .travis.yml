@@ -1,31 +1,77 @@
+dist: xenial
 language: node_js
 node_js: node
 services: docker
-addons:
-  sonarcloud:
-    organization: "adityamukho-github"
+cache:
+  npm: true
+  directories:
+    - .nyc_output
+
 env:
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]'
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]'
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]'
-  - ARANGODB_VERSION=3.4 ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]'
-before_install:
+  global:
+    - ARANGODB_VERSION=3.4
+    - PATH=$HOME/.local/bin:$PATH
+    - CACHE_NAME=GLOBAL
+  matrix:
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=mmfiles-unit
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
+
+install:
+  - npm install
+
+before_script:
+  - rm -rf ./.nyc_output/*
+  - npx nyc instrument . ./.nyc_output/instrumented
+  - cp -r ./.nyc_output/instrumented/lib .
   - docker pull arangodb:$ARANGODB_VERSION
   - docker run
     -e ARANGO_RANDOM_ROOT_PASSWORD=1
     -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
-    -e EVPASSWD=$EVPASSWD
     -e EVTEST_FILES=$EVTEST_FILES
+    -e NYC_OUT=$NYC_OUT
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
-install:
-  - npm install
   - sleep 30
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
+
 script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+
+before_cache: rm -rf ./.nyc_output/instrumented
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/2a140dc8d21490c900ab
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: never     # options: [always|never|change] default: always
+
 jobs:
   include:
     - stage: analysis
-      script: sonar-scanner
+
+      git:
+        depth: false
+
+      addons:
+        sonarcloud:
+          organization: "adityamukho-github"
+
+      install:
+        - npm install
+
+      before_script:
+        - npx nyc merge ./.nyc_output ./.nyc_output/out.json
+        - npx nyc report --report-dir=./test/reports -r lcovonly
+        - npx eslint ./main.js ./lib/ ./scripts
+          -f json
+          -o ./test/reports/eslint-report.json
+      script:
+        - npx nyc check-coverage --lines 80 --functions 80 --branches 70
+        - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
+            sonar-scanner;
+          fi'
