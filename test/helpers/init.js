@@ -62,7 +62,7 @@ function truncateServiceCollections () {
 
 let sampleDataRefs = {}
 let testDataCollectionsInitialized = false
-let testSampleCollectionsInitialized = false
+let sampleDataLoaded = false
 
 exports.setup = function setup ({
   forceTruncateTestData = false,
@@ -91,20 +91,20 @@ exports.setup = function setup ({
     serviceCollectionsTruncated = truncateServiceCollections()
   }
 
-  if (ensureSampleDataLoad && !testSampleCollectionsInitialized) {
+  if (ensureSampleDataLoad && !sampleDataLoaded) {
     serviceCollectionsTruncated =
       serviceCollectionsTruncated || truncateServiceCollections()
 
     const results = loadSampleData()
     sampleDataRefs = omit(results, 'messages')
     sampleDataLoadMessages = results.messages
-    testSampleCollectionsInitialized = true
+    sampleDataLoaded = true
   }
 
   return {
     serviceCollectionsTruncated,
     testDataCollectionsTruncated,
-    sampleDataLoaded: testSampleCollectionsInitialized,
+    sampleDataLoaded,
     sampleDataLoadMessages
   }
 }
