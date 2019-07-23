@@ -1,5 +1,5 @@
 {
-  "name": "CivicGraph",
+  "name": "civicgraph",
   "version": "0.0.1",
   "description": "Git-inspired versioned storage for time-variant graph data",
   "repository": {
