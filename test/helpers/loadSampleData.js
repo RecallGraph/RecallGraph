@@ -76,9 +76,10 @@ module.exports = function loadSampleData () {
 
           break
       }
+    } else {
+      db._truncate(coll)
     }
 
-    db._truncate(coll)
     get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index))
     colls[key] = coll
   })

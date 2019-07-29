@@ -441,7 +441,7 @@ function logWrapper (reqParams, combo, method = 'get') {
   const response = request[method](`${baseUrl}/event/log`, reqParams)
 
   expect(response).to.be.an.instanceOf(Object)
-  expect(response.statusCode, JSON.stringify({ reqParams, response })).to.equal(
+  expect(response.statusCode).to.equal(
     200
   )
 
