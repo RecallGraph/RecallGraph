@@ -14,7 +14,9 @@ const {
   prepInsert,
   prepRemove,
   prepReplace,
-  prepUpdate
+  prepUpdate,
+  upsertSkeletonNode,
+  expireSkeletonNode
 } = require('../../../../../lib/operations/commit/helpers')
 const {
   createSingle,
@@ -64,7 +66,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.deep.equal(origin)
   })
 
-  it("should return a 'create' event node for a node created through service", () => {
+  it('should return a \'create\' event node for a node created through service', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex
     const coll = db._collection(collName)
     const pathParams = {
@@ -83,7 +85,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.have.property('ctime')
   })
 
-  it("should return an 'update' event node for a committed node replaced through service", () => {
+  it('should return an \'update\' event node for a committed node replaced through service', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex
     const coll = db._collection(collName)
     const pathParams = {
@@ -105,7 +107,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.have.property('ctime')
   })
 
-  it("should return an 'update' event node for a non-committed node replaced through service", () => {
+  it('should return an \'update\' event node for a non-committed node replaced through service', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex
     const coll = db._collection(collName)
     const pathParams = {
@@ -160,7 +162,7 @@ describe('Commit Helpers - insertEventNode', () => {
 
   after(init.teardown)
 
-  it("should return an event node for 'created' event", () => {
+  it('should return an event node for \'created\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
     const node = coll.insert({
       src: `${__filename}:should return an event node for 'created' event`
@@ -192,7 +194,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast)
   })
 
-  it("should return an event node for 'updated' event", () => {
+  it('should return an event node for \'updated\' event', () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
     let node = coll.insert(
       {
@@ -1879,5 +1881,154 @@ describe('Commit Helpers - prepUpdate', () => {
         'errorNum',
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
+  })
+})
+
+describe('Commit Helpers - upsertSkeletonNode', () => {
+  before(init.setup)
+
+  after(init.teardown)
+
+  it('should create a job with valid data when a vertex is provided', () => {
+    const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should create a job with valid data when a vertex is provided`
+    }
+    const time = dbtime()
+    const node = coll.insert(body)
+
+    const { jobId, queue } = upsertSkeletonNode(node, time)
+    // noinspection BadExpressionStatementJS
+    expect(jobId).to.be.not.empty
+    expect(queue).to.respondTo('get')
+
+    const job = queue.get(jobId)
+
+    const jobData = job.data
+    expect(jobData).to.be.an.instanceOf(Array)
+    expect(jobData).to.have.lengthOf(2)
+    expect(jobData[0]).to.deep.equal(node)
+    expect(jobData[1]).to.equal(time)
+  })
+
+  it('should create a job with valid data when an edge is provided', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    }
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should create a job with valid data when an edge is provided`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should create a job with valid data when an edge is provided`
+      }
+    ]
+    const vnodes = createMultiple({ pathParams, body: vbody })
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should create a job with valid data when an edge is provided`
+    }
+    const coll = db._collection(init.TEST_DATA_COLLECTIONS.edge)
+    const time = dbtime()
+    const enode = coll.insert(ebody, { returnNew: true }).new
+
+    const { jobId, queue } = upsertSkeletonNode(enode, time)
+    // noinspection BadExpressionStatementJS
+    expect(jobId).to.be.not.empty
+    expect(queue).to.respondTo('get')
+
+    const job = queue.get(jobId)
+
+    const jobData = job.data
+    expect(jobData).to.be.an.instanceOf(Array)
+    expect(jobData).to.have.lengthOf(2)
+    expect(jobData[0]).to.deep.equal(enode)
+    expect(jobData[1]).to.equal(time)
+  })
+})
+
+describe('Commit Helpers - expireSkeletonNode', () => {
+  before(init.setup)
+
+  after(init.teardown)
+
+  it('should create a job with valid data when a deleted vertex is provided', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    }
+    const body = {
+      k1: 'v1',
+      k2: 'v1',
+      src: `${__filename}:should create a job with valid data when a deleted vertex is provided`
+    }
+    const node = createSingle({ pathParams, body })
+
+    const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
+    const time = dbtime()
+    coll.remove(node)
+
+    const { jobId, queue } = expireSkeletonNode(node._id, time)
+    // noinspection BadExpressionStatementJS
+    expect(jobId).to.be.not.empty
+    expect(queue).to.respondTo('get')
+
+    const job = queue.get(jobId)
+
+    const jobData = job.data
+    expect(jobData).to.be.an.instanceOf(Array)
+    expect(jobData).to.have.lengthOf(2)
+    expect(jobData[0]).to.equal(node._id)
+    expect(jobData[1]).to.equal(time)
+  })
+
+  it('should create a job with valid data when a deleted edge is provided', () => {
+    const pathParams = {
+      collection: init.TEST_DATA_COLLECTIONS.vertex
+    }
+    const vbody = [
+      {
+        k1: 'v1',
+        src: `${__filename}:should create a job with valid data when a deleted edge is provided`
+      },
+      {
+        k1: 'v1',
+        src: `${__filename}:should create a job with valid data when a deleted edge is provided`
+      }
+    ]
+    const vnodes = createMultiple({ pathParams, body: vbody })
+
+    const ebody = {
+      _from: vnodes[0]._id,
+      _to: vnodes[1]._id,
+      k1: 'v1',
+      src: `${__filename}:should create a job with valid data when a deleted edge is provided`
+    }
+
+    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge
+    const enode = createSingle({ pathParams, body: ebody })
+
+    const coll = db._collection(init.TEST_DATA_COLLECTIONS.edge)
+    const time = dbtime()
+    coll.remove(enode)
+
+    const { jobId, queue } = expireSkeletonNode(enode._id, time)
+    // noinspection BadExpressionStatementJS
+    expect(jobId).to.be.not.empty
+    expect(queue).to.respondTo('get')
+
+    const job = queue.get(jobId)
+
+    const jobData = job.data
+    expect(jobData).to.be.an.instanceOf(Array)
+    expect(jobData).to.have.lengthOf(2)
+    expect(jobData[0]).to.equal(enode._id)
+    expect(jobData[1]).to.equal(time)
   })
 })

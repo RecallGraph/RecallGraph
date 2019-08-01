@@ -18,15 +18,10 @@ const {
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init')
 const { expect } = require('chai')
 const log = require('../../lib/operations/log')
-const { getGroupingClause } = require('../../lib/operations/log/helpers')
+const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/helpers')
 const { aql, db } = require('@arangodb')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
-const {
-  getSortingClause,
-  getLimitClause,
-  getReturnClause,
-  getTimeBoundFilters
-} = require('../../lib/operations/log/helpers')
+const { getSortingClause, getReturnClause, getGroupingClause } = require('../../lib/operations/log/helpers')
 
 function getRandomSubRange (
   objWithLength,
