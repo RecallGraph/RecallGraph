@@ -16,7 +16,9 @@
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
-    "runTests": "scripts/run-tests.js"
+    "runTests": "scripts/run-tests.js",
+    "upsertSkeletonNode": "scripts/upsertSkeletonNode.js",
+    "expireSkeletonNode": "scripts/expireSkeletonNode.js"
   },
   "tests": [
     "test/unit/**/*.js",
@@ -65,6 +67,12 @@
       "description": "The suffix of the (edge) collection where structural edges are stored.",
       "default": "_skeleton_edges",
       "type": "string",
+      "required": true
+    },
+    "skeleton-queue-shards": {
+      "description": "The number of shards per skeleton queue.",
+      "default": 5,
+      "type": "integer",
       "required": true
     }
   }
