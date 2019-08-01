@@ -13,7 +13,7 @@ const {
   testGroupedEvents,
   getSampleTestCollNames,
   getOriginKeys
-} = require('../../../../helpers/eventTestHelpers')
+} = require('../../../../helpers/logTestHelpers')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 

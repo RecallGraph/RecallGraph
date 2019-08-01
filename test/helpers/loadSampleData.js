@@ -18,6 +18,8 @@ const { replaceSingle } = require('../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../lib/handlers/removeHandlers')
 
 module.exports = function loadSampleData () {
+  console.log('Starting sample data load...')
+
   // Define collection metadata
   const sampleDataCollections = {
     rawData: {
@@ -68,16 +70,19 @@ module.exports = function loadSampleData () {
       switch (collInfo.type) {
         case 'document':
           coll = db._createDocumentCollection(collInfo.name)
+          console.log(`Created ${collInfo.name}`)
 
           break
 
         case 'edge':
           coll = db._createEdgeCollection(collInfo.name)
+          console.log(`Created ${collInfo.name}`)
 
           break
       }
     } else {
       db._truncate(coll)
+      console.log(`Truncated ${collInfo.name}`)
     }
 
     get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index))
@@ -128,9 +133,10 @@ module.exports = function loadSampleData () {
         console.error(e)
       }
     })
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`
-  )
+
+  let message = `Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Remove footnote references from raw data
   let cursor = rawData.all()
@@ -158,9 +164,10 @@ module.exports = function loadSampleData () {
       }
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Remove empty/unspecified fields from raw data
   cursor = rawData.all()
@@ -185,9 +192,10 @@ module.exports = function loadSampleData () {
       }
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Insert spaces at title-case boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -211,9 +219,10 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Insert spaces at alpha-numeric boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -234,9 +243,10 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Populate stars
   cursor = rawData.byExample({ Type: 'star' })
@@ -262,9 +272,10 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${stars.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${stars.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Populate planets
   docCount = insertCount = errorCount = 0
@@ -304,9 +315,10 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${planets.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${planets.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Populate dwarf planets
   docCount = insertCount = errorCount = 0
@@ -345,9 +357,10 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${dwarfPlanets.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${dwarfPlanets.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Populate asteroids
   docCount = insertCount = errorCount = 0
@@ -386,9 +399,10 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${asteroids.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${asteroids.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Populate comets
   docCount = insertCount = errorCount = 0
@@ -427,9 +441,10 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${comets.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${comets.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // Populate moons
   docCount = insertCount = errorCount = 0
@@ -485,9 +500,10 @@ module.exports = function loadSampleData () {
       )
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${moons.name()} with ${errorCount} errors and ${warningCount} warnings`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${moons.name()} with ${errorCount} errors and ${warningCount} warnings`
+  console.log(message)
+  results.messages.push(message)
 
   // Cleanup raw data of entries copied to other collections
   errorCount = 0
@@ -510,9 +526,10 @@ module.exports = function loadSampleData () {
       removeCount++
     }
   })
-  results.messages.push(
-    `Removed ${removeCount} out of ${docCount} documents from ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Removed ${removeCount} out of ${docCount} documents from ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
 
   // (Re-)Create Solar System Objects Graph
   const ssGraph = `${module.context.collectionPrefix}test_ss_lineage`
@@ -533,7 +550,10 @@ module.exports = function loadSampleData () {
   } finally {
     const g = gg._create(ssGraph, edgeDefs, [rawData.name()])
 
-    results.messages.push(`Created graph ${ssGraph}`)
+    message = `Created graph ${ssGraph}`
+    console.log(message)
+    results.messages.push(message)
+
     results.graphs.push(ssGraph)
     results.vertexCollections = invokeMap(g._vertexCollections(), 'name')
     results.edgeCollections = invokeMap(g._edgeCollections(), 'name')

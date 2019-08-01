@@ -11,7 +11,7 @@ const {
   getRandomGraphPathPattern,
   getSampleTestCollNames,
   getNodeBraceSampleIds
-} = require('../../../helpers/eventTestHelpers')
+} = require('../../../helpers/logTestHelpers')
 const { db, query, aql } = require('@arangodb')
 const { isObject, concat, defaults } = require('lodash')
 

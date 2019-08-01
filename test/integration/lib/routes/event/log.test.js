@@ -13,7 +13,7 @@ const {
   getRandomGraphPathPattern,
   getSampleTestCollNames,
   getNodeBraceSampleIds
-} = require('../../../../helpers/eventTestHelpers')
+} = require('../../../../helpers/logTestHelpers')
 const { db, query, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)

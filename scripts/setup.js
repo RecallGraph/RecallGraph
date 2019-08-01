@@ -91,3 +91,5 @@ try {
   gg._create(eventLog, evlEdgeDefs)
   gg._create(skeleton, skelEdgeDefs)
 }
+
+console.log('Finished setup.')
