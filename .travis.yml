@@ -13,15 +13,31 @@ env:
     - PATH=$HOME/.local/bin:$PATH
     - CACHE_NAME=GLOBAL
   matrix:
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/*.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=mmfiles-unit-lib-rest
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-rest
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-log
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/routes/document/*.js"]' NYC_OUT=mmfiles-integration-document
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body GREP='Path as body param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/routes/document/*.js"]' NYC_OUT=rocksdb-integration-document
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body GREP='Path as body param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.js", "test/unit/lib/handlers/removeHandlers.js", "test/unit/lib/handlers/replaceHandlers.js", "test/unit/lib/handlers/updateHandlers.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=mmfiles-unit-lib-rest
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body GREP='Path as body param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-rest
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-db GREP='Log - DB Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-graph GREP='Log - Graph Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-coll GREP='Log - Collection Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-ng GREP='Log - Node Glob Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-nb GREP='Log - Node Brace Scope'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/diff/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-diff
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/*.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=rocksdb-unit-lib-rest
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js"]' NYC_OUT=rocksdb-unit-lib-operations-rest
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/*.js"]' NYC_OUT=rocksdb-unit-lib-operations-log
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.js", "test/unit/lib/handlers/removeHandlers.js", "test/unit/lib/handlers/replaceHandlers.js", "test/unit/lib/handlers/updateHandlers.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=rocksdb-unit-lib-rest
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body GREP='Path as body param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-rest
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-db GREP='Log - DB Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-graph GREP='Log - Graph Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-coll GREP='Log - Collection Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-ng GREP='Log - Node Glob Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-nb GREP='Log - Node Brace Scope'
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/diff/*.js"]' NYC_OUT=rocksdb-unit-lib-operations-diff
 
 install:
@@ -35,8 +51,9 @@ before_script:
   - docker run
     -e ARANGO_RANDOM_ROOT_PASSWORD=1
     -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
-    -e EVTEST_FILES=$EVTEST_FILES
+    -e EVTEST_FILES="$EVTEST_FILES"
     -e NYC_OUT=$NYC_OUT
+    -e GREP="$GREP"
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
