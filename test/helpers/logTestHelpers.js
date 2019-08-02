@@ -13,7 +13,9 @@ const {
   memoize,
   cloneDeep,
   concat,
-  sampleSize
+  sampleSize,
+  omit,
+  partialRight
 } = require('lodash')
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init')
 const { expect } = require('chai')
@@ -159,7 +161,8 @@ exports.testUngroupedEvents = function testUngroupedEvents (
   expectedEvents,
   logFn
 ) {
-  expect(allEvents).to.deep.equal(expectedEvents)
+  const expectedEventsSansCommands = expectedEvents.map(partialRight(omit, 'command'))
+  expect(allEvents).to.deep.equal(expectedEventsSansCommands)
 
   if (expectedEvents.length > 0) {
     const timeRange = getRandomSubRange(expectedEvents)
@@ -171,6 +174,10 @@ exports.testUngroupedEvents = function testUngroupedEvents (
     const sort = [null, 'asc', 'desc']
     const groupBy = [null]
     const countsOnly = [false, true]
+    const groupSort = [null, 'asc', 'desc']
+    const groupSkip = [0, 1]
+    const groupLimit = [0, 2]
+    const returnCommands = [false, true]
     const combos = cartesian({
       since,
       until,
@@ -178,7 +185,11 @@ exports.testUngroupedEvents = function testUngroupedEvents (
       limit,
       sort,
       groupBy,
-      countsOnly
+      countsOnly,
+      groupSort,
+      groupSkip,
+      groupLimit,
+      returnCommands
     })
 
     combos.forEach(combo => {
@@ -186,13 +197,15 @@ exports.testUngroupedEvents = function testUngroupedEvents (
 
       expect(events).to.be.an.instanceOf(Array)
 
-      const earliestTimeBoundIndex = combo.since
-        ? findLastIndex(expectedEvents, e => e.ctime >= combo.since)
-        : expectedEvents.length - 1
-      const latestTimeBoundIndex =
-        combo.until && findIndex(expectedEvents, e => e.ctime <= combo.until)
+      const relevantExpectedEvents = combo.returnCommands ? expectedEvents : expectedEventsSansCommands
 
-      const timeSlicedEvents = expectedEvents.slice(
+      const earliestTimeBoundIndex = combo.since
+        ? findLastIndex(relevantExpectedEvents, e => e.ctime >= combo.since)
+        : relevantExpectedEvents.length - 1
+      const latestTimeBoundIndex =
+        combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
+
+      const timeSlicedEvents = relevantExpectedEvents.slice(
         latestTimeBoundIndex,
         earliestTimeBoundIndex + 1
       )

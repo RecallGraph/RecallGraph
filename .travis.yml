@@ -61,7 +61,9 @@ before_script:
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
 
-script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+script:
+  - travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+  - sleep 10 # Give the build worker enough time to completely flush the last command's output
 
 before_cache: rm -rf ./.nyc_output/instrumented
 

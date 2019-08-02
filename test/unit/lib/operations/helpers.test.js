@@ -23,7 +23,7 @@ const {
   cartesian
 } = require('../../../helpers/logTestHelpers')
 // noinspection NpmUsedModulesInstalled
-const { concat } = require('lodash')
+const { concat, values } = require('lodash')
 
 describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', () => {
   before(init.setup)
@@ -403,7 +403,7 @@ describe('Log Helpers - getEventLogQueryInitializer', () => {
 
       expect(queryParts).to.be.an.instanceOf(Array)
       // noinspection JSUnresolvedFunction
-      expect(queryParts).to.have.lengthOf.within(3, 5)
+      expect(queryParts.length).to.be.within(3, 5)
       queryParts.forEach(queryPart => {
         expect(queryPart).to.be.an.instanceOf(Object)
         if (queryPart.hasOwnProperty('toAQL')) {
@@ -424,7 +424,7 @@ describe('Log Helpers - getNonServiceCollections', () => {
 
   it('should return non-service collections', () => {
     const sampleDataRefs = init.getSampleDataRefs()
-    const testDataCollections = init.TEST_DATA_COLLECTIONS
+    const testDataCollections = values(init.TEST_DATA_COLLECTIONS)
     const sampleNonServiceCollections = concat(testDataCollections, sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections)
 
     const nonServiceCollections = getNonServiceCollections()

@@ -5,7 +5,8 @@ const { expect } = require('chai')
 const init = require('../../helpers/init')
 const { snapshotInterval, hash } = require('../../../lib/helpers')
 // noinspection NpmUsedModulesInstalled
-const { range, uniqueId } = require('lodash')
+const { range } = require('lodash')
+const crypto = require('@arangodb/crypto')
 
 describe('Helpers - snapshotInterval', () => {
   before(init.setup)
@@ -49,7 +50,7 @@ describe('Helpers - hash', () => {
     const radixRange = range(1, 10)
 
     radixRange.forEach(radix => {
-      const input = uniqueId()
+      const input = crypto.uuidv4()
 
       const h = hash(input, radix)
 

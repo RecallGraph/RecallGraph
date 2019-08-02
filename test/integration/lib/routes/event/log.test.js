@@ -17,6 +17,7 @@ const {
 const { db, query, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
+const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 describe('Routes - log (Path as query param)', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -37,8 +38,10 @@ describe('Routes - log (Path as query param)', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
@@ -76,8 +79,10 @@ describe('Routes - log (Path as query param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
@@ -112,8 +117,10 @@ describe('Routes - log (Path as query param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
@@ -158,8 +165,10 @@ describe('Routes - log (Path as query param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e,'_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
@@ -200,8 +209,10 @@ describe('Routes - log (Path as query param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
@@ -244,8 +255,10 @@ describe('Routes - log (Path as body param)', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapperPost)
@@ -283,8 +296,10 @@ describe('Routes - log (Path as body param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapperPost)
@@ -319,8 +334,10 @@ describe('Routes - log (Path as body param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(req, allEvents, expectedEvents, logWrapperPost)
@@ -364,8 +381,10 @@ describe('Routes - log (Path as body param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e,'_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(req, allEvents, expectedEvents, logWrapperPost)
@@ -406,8 +425,10 @@ describe('Routes - log (Path as body param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(keep(e, '_id', 'ctime', 'event', 'meta'), keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapperPost)
