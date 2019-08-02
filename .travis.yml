@@ -13,10 +13,16 @@ env:
     - PATH=$HOME/.local/bin:$PATH
     - CACHE_NAME=GLOBAL
   matrix:
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=mmfiles-unit
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/*.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=mmfiles-unit-lib-rest
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-rest
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-log
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/diff/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-diff
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/*.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=rocksdb-unit-lib-rest
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js"]' NYC_OUT=rocksdb-unit-lib-operations-rest
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/*.js"]' NYC_OUT=rocksdb-unit-lib-operations-log
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/diff/*.js"]' NYC_OUT=rocksdb-unit-lib-operations-diff
 
 install:
   - npm install

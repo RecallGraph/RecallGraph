@@ -7,7 +7,7 @@ A git-inspired versioned storage for time-variant graph data.
 #### Core Metrics
 
 [![Dependencies](https://img.shields.io/david/adityamukho/CivicGraph.svg?style=flat-square)](https://david-dm.org/adityamukho/CivicGraph)
-[![Build Status](https://travis-ci.org/adityamukho/CivicGraph.svg?branch=master)](https://travis-ci.org/adityamukho/CivicGraph)
+[![Build Status](https://travis-ci.org/adityamukho/CivicGraph.svg?branch=development)](https://travis-ci.org/adityamukho/CivicGraph)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 

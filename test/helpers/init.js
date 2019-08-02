@@ -1,9 +1,12 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { db } = require('@arangodb')
+// noinspection NpmUsedModulesInstalled
 const { merge, forEach, noop, omit } = require('lodash')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
 const loadSampleData = require('./loadSampleData')
+// noinspection NpmUsedModulesInstalled
 const cache = require('@arangodb/aql/cache')
 
 cache.properties({ mode: 'on' })
@@ -12,6 +15,7 @@ const TEST_DOCUMENT_COLLECTIONS = {
   vertex: module.context.collectionName('test_vertex')
 }
 
+// noinspection JSUnresolvedVariable
 const TEST_EDGE_COLLECTIONS = {
   edge: module.context.collectionName('test_edge')
 }
@@ -42,6 +46,7 @@ function setSnapshotIntervals () {
   forEach(
     TEST_DATA_COLLECTIONS,
     collName => {
+      // noinspection JSUnresolvedVariable
       module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
     }
   )

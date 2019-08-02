@@ -88,6 +88,7 @@ module.exports = function loadSampleData () {
     get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index))
     colls[key] = coll
   })
+
   const {
     rawData,
     stars,
