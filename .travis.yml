@@ -13,12 +13,9 @@ env:
     - PATH=$HOME/.local/bin:$PATH
     - CACHE_NAME=GLOBAL
   matrix:
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/routes/document/*.js"]' NYC_OUT=mmfiles-integration-document
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query GREP='Path as query param'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body GREP='Path as body param'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/routes/document/*.js"]' NYC_OUT=rocksdb-integration-document
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query GREP='Path as query param'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body GREP='Path as body param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/document/*.js"]' NYC_OUT=mmfiles-integration-document
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body GREP='Path as body param'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.js", "test/unit/lib/handlers/removeHandlers.js", "test/unit/lib/handlers/replaceHandlers.js", "test/unit/lib/handlers/updateHandlers.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=mmfiles-unit-lib-rest
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query GREP='Path as query param'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body GREP='Path as body param'
@@ -29,6 +26,9 @@ env:
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-ng GREP='Log - Node Glob Scope'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-nb GREP='Log - Node Brace Scope'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/diff/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-diff
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/document/*.js"]' NYC_OUT=rocksdb-integration-document
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body GREP='Path as body param'
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.js", "test/unit/lib/handlers/removeHandlers.js", "test/unit/lib/handlers/replaceHandlers.js", "test/unit/lib/handlers/updateHandlers.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=rocksdb-unit-lib-rest
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query GREP='Path as query param'
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body GREP='Path as body param'
