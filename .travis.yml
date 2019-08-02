@@ -42,6 +42,7 @@ env:
 
 install:
   - npm install
+  - pip install git+https://github.com/naftulikay/travis-pls
 
 before_script:
   - rm -rf ./.nyc_output/*
@@ -62,7 +63,7 @@ before_script:
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
 
 script:
-  - travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+  - travis-pls -m 7200 docker exec arangodb /mnt/evstore/test/travis/run.sh
   - sleep 10 # Give the build worker enough time to completely flush the last command's output
 
 before_cache: rm -rf ./.nyc_output/instrumented
