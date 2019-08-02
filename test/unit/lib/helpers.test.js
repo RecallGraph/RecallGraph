@@ -53,7 +53,7 @@ describe('Helpers - hash', () => {
 
       const h = hash(input, radix)
 
-      expect(h).to.be.within(0, hash - 1)
+      expect(h).to.be.within(0, radix - 1)
     })
   })
 })
