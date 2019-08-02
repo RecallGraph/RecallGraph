@@ -1,5 +1,6 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const {
   random,
   chain,
@@ -18,9 +19,11 @@ const {
   partialRight
 } = require('lodash')
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init')
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const log = require('../../lib/operations/log')
 const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/helpers')
+// noinspection NpmUsedModulesInstalled
 const { aql, db } = require('@arangodb')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../lib/operations/log/helpers')
@@ -70,6 +73,7 @@ function getRandomSampleCollectionPatterns (bracesOnly = false) {
     .sampleSize(sampleSize)
 
   if (bracesOnly) {
+    // noinspection JSUnresolvedFunction
     return collsWrapper.value()
   } else {
     return collsWrapper
@@ -84,12 +88,14 @@ function getRandomSampleCollectionPatterns (bracesOnly = false) {
 }
 
 function getTestDataCollectionPatterns () {
+  // noinspection JSUnresolvedVariable
   const testDataCollectionPatterns = chain(TEST_DATA_COLLECTIONS)
     .values()
     .map(coll => coll.substring(module.context.collectionPrefix.length))
     .value()
     .join(',')
 
+  // noinspection JSUnresolvedVariable
   return `${module.context.collectionPrefix}{test_does_not_exist,${testDataCollectionPatterns}}`
 }
 
@@ -103,6 +109,7 @@ exports.getRandomGraphPathPattern = function getRandomGraphPathPattern () {
     })
     .join(',')
 
+  // noinspection JSUnresolvedVariable
   return `/g/{${graphPatterns},${module.context.collectionPrefix}test_does_not_exist}`
 }
 
@@ -371,11 +378,13 @@ exports.getNodeBraceSampleIds = function getNodeBraceSampleIds (
   maxLength = Number.POSITIVE_INFINITY
 ) {
   const rootPathEvents = log('/')
+  // noinspection JSUnresolvedVariable
   const length = Number.isFinite(maxLength)
     ? Math.min(rootPathEvents.length, maxLength)
     : rootPathEvents.length
   const size = random(1, length)
   const sampleIds = []
+  // noinspection JSCheckFunctionSignatures
   const pathSuffixes = chain(rootPathEvents)
     .shuffle()
     .sampleSize(size)

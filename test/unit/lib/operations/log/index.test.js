@@ -1,10 +1,13 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
+// noinspection NpmUsedModulesInstalled
 const { db, query, aql } = require('@arangodb')
 const log = require('../../../../../lib/operations/log')
 const init = require('../../../../helpers/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
+// noinspection NpmUsedModulesInstalled
 const { concat } = require('lodash')
 const {
   testUngroupedEvents,

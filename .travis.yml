@@ -57,7 +57,7 @@ before_script:
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
-  - sleep 30
+  - sleep 60
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
 
