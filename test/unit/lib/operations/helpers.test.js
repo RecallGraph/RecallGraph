@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../helpers/init')
 const {
@@ -9,17 +10,23 @@ const {
   getCollectionScope,
   getNodeGlobScope,
   getNodeBraceScope,
-  getLimitClause
+  getLimitClause,
+  getTimeBoundFilters,
+  getEventLogQueryInitializer,
+  getNonServiceCollections
 } = require('../../../../lib/operations/helpers')
-// const {
-//   getRandomGraphPathPattern,
-//   getRandomCollectionPathPattern,
-//   getRandomNodeGlobPathPattern,
-//   getRandomNodeBracePathPattern
-// } = require('../../../helpers/eventTestHelpers')
+const {
+  getRandomGraphPathPattern,
+  getRandomCollectionPathPattern,
+  getRandomNodeGlobPathPattern,
+  getRandomNodeBracePathPattern,
+  cartesian
+} = require('../../../helpers/logTestHelpers')
+// noinspection NpmUsedModulesInstalled
+const { concat } = require('lodash')
 
 describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true }))
+  before(init.setup)
 
   after(init.teardown)
 
@@ -30,7 +37,9 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
 
     expect(scope).to.be.an.instanceOf(Object)
     expect(scope.pathPattern).to.equal(path)
+    // noinspection JSUnresolvedFunction
     expect(scope).to.not.respondTo('filters')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.not.respondTo('initializers')
   })
 
@@ -39,7 +48,9 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
 
     expect(scope).to.be.an.instanceOf(Object)
     expect(scope.pathPattern).to.include('/g/')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.not.respondTo('initializers')
   })
 
@@ -48,7 +59,9 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
 
     expect(scope).to.be.an.instanceOf(Object)
     expect(scope.pathPattern).to.include('/c/')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.not.respondTo('initializers')
   })
 
@@ -57,7 +70,9 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
 
     expect(scope).to.be.an.instanceOf(Object)
     expect(scope.pathPattern).to.include('/ng/')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.not.respondTo('initializers')
   })
 
@@ -66,7 +81,9 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
 
     expect(scope).to.be.an.instanceOf(Object)
     expect(scope.pathPattern).to.include('/n/')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
     expect(scope).to.respondTo('initializers')
   })
 })
@@ -126,7 +143,7 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
 //     expect(scope).to.respondTo('initializers')
 //   })
 // })
-//
+
 // describe('Log Helpers - getSearchPattern', () => {
 //   before(() => init.setup({ ensureSampleDataLoad: true }))
 //
@@ -292,7 +309,7 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
 // })
 
 describe('Log Helpers - getLimitClause', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true }))
+  before(init.setup)
 
   after(init.teardown)
 
@@ -324,47 +341,96 @@ describe('Log Helpers - getLimitClause', () => {
   })
 })
 
-// describe('Log Helpers - getTimeBoundFilters', () => {
-//   before(() => init.setup({ ensureSampleDataLoad: true }))
-//
-//   after(init.teardown)
-//
-//   it('should return no filters when neither since nor until are specified', () => {
-//     const since = null
-//     const until = null
-//
-//     const timeBoundFilters = getTimeBoundFilters(since, until)
-//
-//     expect(timeBoundFilters).to.be.an.instanceOf(Array)
-//     // noinspection BadExpressionStatementJS
-//     expect(timeBoundFilters).to.be.empty
-//   })
-//
-//   it('should return a single filter when just one of since or until are specified', () => {
-//     const combos = [{ since: 1 }, { until: 1 }]
-//     combos.forEach(combo => {
-//       const timeBoundFilters = getTimeBoundFilters(combo.since, combo.until)
-//
-//       expect(timeBoundFilters).to.be.an.instanceOf(Array)
-//       // noinspection BadExpressionStatementJS
-//       expect(timeBoundFilters).to.have.lengthOf(1)
-//       expect(timeBoundFilters[0]).to.be.an.instanceOf(Object)
-//       expect(timeBoundFilters[0].query).to.match(/filter v\.ctime [<>]= @\w+/)
-//     })
-//   })
-//
-//   it('should return two filters when both since and until are specified', () => {
-//     const since = 1
-//     const until = 1
-//
-//     const timeBoundFilters = getTimeBoundFilters(since, until)
-//
-//     expect(timeBoundFilters).to.be.an.instanceOf(Array)
-//     // noinspection BadExpressionStatementJS
-//     expect(timeBoundFilters).to.have.lengthOf(2)
-//     timeBoundFilters.forEach(tbf => {
-//       expect(tbf).to.be.an.instanceOf(Object)
-//       expect(tbf.query).to.match(/filter v\.ctime [<>]= @\w+/)
-//     })
-//   })
-// })
+describe('Log Helpers - getTimeBoundFilters', () => {
+  before(init.setup)
+
+  after(init.teardown)
+
+  it('should return no filters when neither since nor until are specified', () => {
+    const since = null
+    const until = null
+
+    const timeBoundFilters = getTimeBoundFilters(since, until)
+
+    expect(timeBoundFilters).to.be.an.instanceOf(Array)
+    // noinspection BadExpressionStatementJS
+    expect(timeBoundFilters).to.be.empty
+  })
+
+  it('should return a single filter when just one of since or until are specified', () => {
+    const combos = [{ since: 1 }, { until: 1 }]
+    combos.forEach(combo => {
+      const timeBoundFilters = getTimeBoundFilters(combo.since, combo.until)
+
+      expect(timeBoundFilters).to.be.an.instanceOf(Array)
+      // noinspection BadExpressionStatementJS
+      expect(timeBoundFilters).to.have.lengthOf(1)
+      expect(timeBoundFilters[0]).to.be.an.instanceOf(Object)
+      expect(timeBoundFilters[0].query).to.match(/filter v\.ctime [<>]= @\w+/)
+    })
+  })
+
+  it('should return two filters when both since and until are specified', () => {
+    const since = 1
+    const until = 1
+
+    const timeBoundFilters = getTimeBoundFilters(since, until)
+
+    expect(timeBoundFilters).to.be.an.instanceOf(Array)
+    // noinspection BadExpressionStatementJS
+    expect(timeBoundFilters).to.have.lengthOf(2)
+    timeBoundFilters.forEach(tbf => {
+      expect(tbf).to.be.an.instanceOf(Object)
+      expect(tbf.query).to.match(/filter v\.ctime [<>]= @\w+/)
+    })
+  })
+})
+
+describe('Log Helpers - getEventLogQueryInitializer', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }))
+
+  after(init.teardown)
+
+  it('should return queryParts', () => {
+    const path = ['/', getRandomGraphPathPattern(), getRandomCollectionPathPattern(), getRandomNodeGlobPathPattern(),
+      getRandomNodeBracePathPattern()]
+    const since = [0, 1]
+    const until = [0, 1]
+
+    const combos = cartesian({ path, since, until })
+    combos.forEach(combo => {
+      const queryParts = getEventLogQueryInitializer(combo.path, combo.since, combo.until)
+
+      expect(queryParts).to.be.an.instanceOf(Array)
+      // noinspection JSUnresolvedFunction
+      expect(queryParts).to.have.lengthOf.within(3, 5)
+      queryParts.forEach(queryPart => {
+        expect(queryPart).to.be.an.instanceOf(Object)
+        if (queryPart.hasOwnProperty('toAQL')) {
+          // noinspection JSUnresolvedFunction
+          expect(queryPart).to.respondTo('toAQL')
+        } else {
+          expect(queryPart).to.have.property('query')
+        }
+      })
+    })
+  })
+})
+
+describe('Log Helpers - getNonServiceCollections', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }))
+
+  after(init.teardown)
+
+  it('should return non-service collections', () => {
+    const sampleDataRefs = init.getSampleDataRefs()
+    const testDataCollections = init.TEST_DATA_COLLECTIONS
+    const sampleNonServiceCollections = concat(testDataCollections, sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections)
+
+    const nonServiceCollections = getNonServiceCollections()
+
+    expect(nonServiceCollections).to.be.an.instanceOf(Array)
+    // noinspection JSValidateTypes
+    expect(nonServiceCollections).to.include.members(sampleNonServiceCollections)
+  })
+})
