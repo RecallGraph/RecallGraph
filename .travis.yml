@@ -1,6 +1,7 @@
 dist: xenial
 language: node_js
 node_js: node
+python: "3.7"
 services: docker
 cache:
   npm: true
