@@ -1,7 +1,6 @@
 dist: xenial
 language: node_js
 node_js: node
-python: "3.7"
 services: docker
 cache:
   npm: true
@@ -43,7 +42,7 @@ env:
 
 install:
   - npm install
-  - pip install git+https://github.com/naftulikay/travis-pls
+  - sudo pip install git+https://github.com/naftulikay/travis-pls
 
 before_script:
   - rm -rf ./.nyc_output/*
