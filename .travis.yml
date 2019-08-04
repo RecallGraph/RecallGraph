@@ -1,7 +1,6 @@
 dist: xenial
 language: node_js
 node_js: node
-python: "3.7"
 services: docker
 cache:
   npm: true
@@ -63,7 +62,7 @@ before_script:
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
 
-script: travis-pls -m 7200 docker exec arangodb /mnt/evstore/test/travis/run.sh
+script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
 
 before_cache: rm -rf ./.nyc_output/instrumented
 
