@@ -365,9 +365,9 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
     if (countsOnly) {
       groupingSuffix = 'with count into total'
     } else if (returnCommands) {
-      groupingSuffix = 'into events = merge(v, {command: e.command})'
+      groupingSuffix = 'into events = merge(keep(v, "_id", "ctime", "event", "meta"), {command: e.command})'
     } else {
-      groupingSuffix = 'into events = v'
+      groupingSuffix = 'into events = keep(v, "_id", "ctime", "event", "meta")'
     }
 
     return aql.literal(`${groupingPrefix} ${groupingSuffix}`)
