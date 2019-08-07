@@ -4,7 +4,8 @@ node_modules
 /.scannerwork
 /.nyc_output/*
 !/.nyc_output/.gitkeep
-/test/reports
+/test/reports/*
+!/test/reports/.gitkeep
 /.env
 /build
 /dist
