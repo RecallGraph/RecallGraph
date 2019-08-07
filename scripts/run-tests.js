@@ -17,7 +17,7 @@ const result = mocha.run(
   (file, context) => service.run(file, { context: context }),
   testFiles,
   reporter,
-  grep ? new RegExp(grep) : ''
+  new RegExp(grep)
 )
 if (reporter === 'xunit' && Array.isArray(result) && result[1]) {
   result[1].name = service.mount

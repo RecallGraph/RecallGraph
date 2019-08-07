@@ -7,7 +7,7 @@ docker exec arangodb /mnt/evstore/test/travis/run.sh &
 pid=$!
 RED='\033[0;31m'
 minutes=0
-limit=120
+limit=240
 
 while kill -0 ${pid} >/dev/null 2>&1; do
   echo -n -e " \b" # never leave evidences!
