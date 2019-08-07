@@ -124,6 +124,8 @@ describe('Log - Collection Scope', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
@@ -170,6 +172,8 @@ describe('Log - Node Glob Scope', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
@@ -208,6 +212,8 @@ describe('Log - Node Brace Scope', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter v.meta._id in ${sampleIds}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
