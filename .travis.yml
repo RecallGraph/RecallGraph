@@ -42,8 +42,12 @@ env:
 
 install:
   - npm install
+  - pip install --user awscli
 
 before_script:
+  - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+  - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+  - aws configure set region us-east-1
   - rm -rf ./.nyc_output/*
   - npx nyc instrument . ./.nyc_output/instrumented
   - cp -r ./.nyc_output/instrumented/lib .
@@ -54,6 +58,7 @@ before_script:
     -e EVTEST_FILES="$EVTEST_FILES"
     -e NYC_OUT=$NYC_OUT
     -e GREP="$GREP"
+    -e TRAVIS_JOB_NUMBER="$TRAVIS_JOB_NUMBER"
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
@@ -62,6 +67,10 @@ before_script:
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
 
 script: ./test/travis/travis-runner.sh
+
+after_script:
+  - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+  - echo "Copied test reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
 
 before_cache: rm -rf ./.nyc_output/instrumented
 
@@ -86,8 +95,12 @@ jobs:
 
       install:
         - npm install
+        - pip install --user awscli
 
       before_script:
+        - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+        - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+        - aws configure set region us-east-1
         - npx nyc merge ./.nyc_output ./.nyc_output/out.json
         - npx nyc report --report-dir=./test/reports -r lcovonly
         - npx eslint ./main.js ./lib/ ./scripts
@@ -98,3 +111,6 @@ jobs:
         - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
             sonar-scanner;
           fi'
+      after_script:
+        - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+        - echo "Copied coverage and lint reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"

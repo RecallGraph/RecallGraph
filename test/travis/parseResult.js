@@ -17,11 +17,13 @@ rl.on('close', function () {
   const json = JSON.parse(jsonStr)
 
   const result = json.result
-  console.log(JSON.stringify(result, null, 2))
+  let outfile = `./test/reports/${process.env.NYC_OUT}-${process.env.TRAVIS_JOB_NUMBER}.json`
+  fs.writeFileSync(outfile, JSON.stringify(result, null, 2))
+  console.log(JSON.stringify(result.stats, null, 2))
 
   const exitCode = Math.sign(result.stats.failures)
   if (exitCode === 0) {
-    const outfile = `./.nyc_output/${process.env.NYC_OUT}.json`
+    outfile = `./.nyc_output/${process.env.NYC_OUT}-${process.env.TRAVIS_JOB_NUMBER}.json`
     fs.writeFileSync(outfile, JSON.stringify(json.coverage, null, 2))
 
     console.log(`Piped coverage output to ${outfile}`)

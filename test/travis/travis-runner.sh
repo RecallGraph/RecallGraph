@@ -4,14 +4,15 @@
 docker exec arangodb /mnt/evstore/test/travis/run.sh &
 
 # Constants
+pid=$!
 RED='\033[0;31m'
 minutes=0
 limit=120
 
-while kill -0 $! >/dev/null 2>&1; do
+while kill -0 ${pid} >/dev/null 2>&1; do
   echo -n -e " \b" # never leave evidences!
 
-  if [ $minutes == $limit ]; then
+  if [[ ${minutes} == ${limit} ]]; then
     echo -e "\n"
     echo -e "${RED}Test has reached a ${minutes} minutes timeout limit"
     exit 1
@@ -22,4 +23,4 @@ while kill -0 $! >/dev/null 2>&1; do
   sleep 60
 done
 
-exit 0
+exit $(wait ${pid})
