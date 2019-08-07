@@ -18,7 +18,7 @@ rl.on('close', function () {
 
   const result = json.result
   const exitCode = Math.sign(result.stats.failures)
-  const resultCode = (exitCode === 0) ? 'failed' : 'passed'
+  const resultCode = (exitCode === 0) ? 'passed' : 'failed'
 
   let outfile = `./test/reports/report-${process.env.NYC_OUT}-${process.env.TRAVIS_JOB_NUMBER}-${resultCode}.json`
   fs.writeFileSync(outfile, JSON.stringify(result, null, 2))
