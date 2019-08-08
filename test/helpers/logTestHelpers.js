@@ -355,9 +355,7 @@ exports.testGroupedEvents = function testGroupedEvents (
       const query = aql.join(queryParts, '\n')
       const expectedEventGroups = db._query(query).toArray()
 
-      expect(eventGroups).to.deep.equal(expectedEventGroups)
       expect(eventGroups.length).to.equal(expectedEventGroups.length)
-      expect(eventGroups[0]).to.deep.equal(expectedEventGroups[0])
 
       const aggrField = co ? 'total' : 'events'
       eventGroups.forEach((eventGroup, idx1) => {
@@ -370,11 +368,16 @@ exports.testGroupedEvents = function testGroupedEvents (
           expect(eventGroup[aggrField]).to.equal(expectedEventGroups[idx1][aggrField])
         } else {
           expect(eventGroup[aggrField]).to.be.an.instanceOf(Array)
-          eventGroup[aggrField].forEach((event, idx2) => {
-            expect(event).to.be.an.instanceOf(Object)
-            expect(event).to.have.property('_id')
-            expect(event._id).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
-          })
+          expect(eventGroup[aggrField].length).to.equal(expectedEventGroups[idx1][aggrField].length)
+
+          if (eventGroup[aggrField].length > 0) {
+            expect(eventGroup[aggrField][0]).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
+            eventGroup[aggrField].forEach((event, idx2) => {
+              expect(event).to.be.an.instanceOf(Object)
+              expect(event).to.have.property('_id')
+              expect(event._id).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
+            })
+          }
         }
       })
     })
