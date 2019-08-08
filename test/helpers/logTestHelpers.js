@@ -360,8 +360,8 @@ exports.testGroupedEvents = function testGroupedEvents (
       expect(eventGroups[0]).to.deep.equal(expectedEventGroups[0])
       eventGroups.forEach((eventGroup, idx1) => {
         expect(eventGroup).to.be.an.instanceOf(Object)
-        expect(eventGroup).to.have.property('node')
-        expect(eventGroup.node).to.equal(expectedEventGroups[idx1].node)
+        expect(eventGroup).to.have.property(gb)
+        expect(eventGroup[gb]).to.equal(expectedEventGroups[idx1][gb])
         expect(eventGroup).to.have.property('events')
         expect(eventGroup.events).to.be.an.instanceOf(Array)
         eventGroup.events.forEach((event, idx2) => {
