@@ -358,17 +358,24 @@ exports.testGroupedEvents = function testGroupedEvents (
       expect(eventGroups).to.deep.equal(expectedEventGroups)
       expect(eventGroups.length).to.equal(expectedEventGroups.length)
       expect(eventGroups[0]).to.deep.equal(expectedEventGroups[0])
+
+      const aggrField = co ? 'total' : 'events'
       eventGroups.forEach((eventGroup, idx1) => {
         expect(eventGroup).to.be.an.instanceOf(Object)
         expect(eventGroup).to.have.property(gb)
         expect(eventGroup[gb]).to.equal(expectedEventGroups[idx1][gb])
-        expect(eventGroup).to.have.property('events')
-        expect(eventGroup.events).to.be.an.instanceOf(Array)
-        eventGroup.events.forEach((event, idx2) => {
-          expect(event).to.be.an.instanceOf(Object)
-          expect(event).to.have.property('_id')
-          expect(event._id).to.equal(expectedEventGroups[idx1].events[idx2]._id)
-        })
+
+        expect(eventGroup).to.have.property(aggrField)
+        if (co) {
+          expect(eventGroup[aggrField]).to.equal(expectedEventGroups[idx1][aggrField])
+        } else {
+          expect(eventGroup[aggrField]).to.be.an.instanceOf(Array)
+          eventGroup[aggrField].forEach((event, idx2) => {
+            expect(event).to.be.an.instanceOf(Object)
+            expect(event).to.have.property('_id')
+            expect(event._id).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
+          })
+        }
       })
     })
   }
