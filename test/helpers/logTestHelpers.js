@@ -232,7 +232,13 @@ exports.testUngroupedEvents = function testUngroupedEvents (
         slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents
       }
 
-      expect(events).to.deep.equal(slicedSortedTimeSlicedEvents)
+      expect(events.length).to.equal(slicedSortedTimeSlicedEvents.length)
+      expect(events[0]).to.deep.equal(slicedSortedTimeSlicedEvents[0])
+      events.forEach((event, idx) => {
+        expect(event).to.be.an.instanceOf(Object)
+        expect(event).to.have.property('_id')
+        expect(event._id).to.equal(slicedSortedTimeSlicedEvents[idx]._id)
+      })
     })
   }
 }
@@ -350,6 +356,20 @@ exports.testGroupedEvents = function testGroupedEvents (
       const expectedEventGroups = db._query(query).toArray()
 
       expect(eventGroups).to.deep.equal(expectedEventGroups)
+      expect(eventGroups.length).to.equal(expectedEventGroups.length)
+      expect(eventGroups[0]).to.deep.equal(expectedEventGroups[0])
+      eventGroups.forEach((eventGroup, idx1) => {
+        expect(eventGroup).to.be.an.instanceOf(Object)
+        expect(eventGroup).to.have.property('node')
+        expect(eventGroup.node).to.equal(expectedEventGroups[idx1].node)
+        expect(eventGroup).to.have.property('events')
+        expect(eventGroup.events).to.be.an.instanceOf(Array)
+        eventGroup.events.forEach((event, idx2) => {
+          expect(event).to.be.an.instanceOf(Object)
+          expect(event).to.have.property('_id')
+          expect(event._id).to.equal(expectedEventGroups[idx1].events[idx2]._id)
+        })
+      })
     })
   }
 }
