@@ -106,6 +106,8 @@ script: ./test/travis/travis-runner.sh
 after_script:
   - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
   - echo "Copied test reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+
+after_success:
   - aws s3 sync ./.nyc_out/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
   - echo "Copied coverage reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
 
