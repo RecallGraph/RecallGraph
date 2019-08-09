@@ -4,14 +4,14 @@ node_js: node
 services: docker
 cache:
   npm: true
-  directories:
-    - .nyc_output
+#  directories:
+#    - .nyc_output
 
 env:
   global:
     - ARANGODB_VERSION=3.4
     - PATH=$HOME/.local/bin:$PATH
-    - CACHE_NAME=GLOBAL
+  #    - CACHE_NAME=GLOBAL
   matrix:
     #mmfiles
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/document/*.js"]' NYC_OUT=mmfiles-integration-document
@@ -107,7 +107,7 @@ after_script:
   - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
   - echo "Copied test reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
 
-before_cache: rm -rf ./.nyc_output/instrumented
+#before_cache: rm -rf ./.nyc_output/instrumented
 
 notifications:
   webhooks:
@@ -136,6 +136,9 @@ jobs:
         - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
         - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
         - aws configure set region us-east-1
+        - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
+        - echo 'Found following files in ./.nyc_output/:'
+        - ls -l ./.nyc_output
         - npx nyc merge ./.nyc_output ./.nyc_output/out.json
         - npx nyc report --report-dir=./test/reports -r lcovonly
         - npx eslint ./main.js ./lib/ ./scripts
