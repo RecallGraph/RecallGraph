@@ -106,6 +106,8 @@ script: ./test/travis/travis-runner.sh
 after_script:
   - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
   - echo "Copied test reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+  - aws s3 sync ./.nyc_out/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+  - echo "Copied coverage reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
 
 #before_cache: rm -rf ./.nyc_output/instrumented
 
@@ -136,7 +138,7 @@ jobs:
         - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
         - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
         - aws configure set region us-east-1
-        - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/
+        - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER ./.nyc_output/ --exclude '*' --include 'coverage*.json'
         - echo 'Found following files in ./.nyc_output/:'
         - ls -l ./.nyc_output
         - npx nyc merge ./.nyc_output ./.nyc_output/out.json
