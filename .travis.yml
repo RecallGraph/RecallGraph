@@ -108,8 +108,8 @@ after_script:
   - echo "Copied test reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
 
 after_success:
-  - aws s3 sync ./.nyc_out/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
-  - echo "Copied coverage reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+  - aws s3 sync ./.nyc_output/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+  - echo "Copied coverage data to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
 
 #before_cache: rm -rf ./.nyc_output/instrumented
 
@@ -156,3 +156,5 @@ jobs:
       after_script:
         - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
         - echo "Copied coverage and lint reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+        - aws s3 cp ./.nyc_output/out.json s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER
+        - echo "Copied merged coverage data to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
