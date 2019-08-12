@@ -21,7 +21,7 @@
     "expireSkeletonNode": "scripts/expireSkeletonNode.js"
   },
   "tests": [
-    "test/unit/**/*.js",
+    "test/unit/lib/**/*.js",
     "test/integration/**/*.js"
   ],
   "configuration": {
