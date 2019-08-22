@@ -29,7 +29,11 @@ Previously, _evstore_.
 
 CivicGraph is a temporal graph data store - it retains all changes that its data have gone through to reach their current state. It is designed to support graph traversals in time slices, letting the user query any past state of the graph just as easily as they can query the present state. The time slice could be a simple  _point in time_ or a _time range_, or a complex _inclusion/exclusion_ expression.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourced tracker.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker.
+
+To get an idea of where such a data store might be used, see [The Case for Versioned Graph Databases](https://adityamukho.com/the-case-for-versioned-graph-databases/).
+
+**TL;DR:** CivicGraph is a potential fit for situations where there are data with highly dynamic inter-connections whose past states are as important as their present, and hence must be retained and queryable.
 
 ## Quick Technical Overview
 
