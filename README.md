@@ -33,11 +33,11 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 
 To get an idea of where such a data store might be used, see [The Case for Versioned Graph Databases](https://adityamukho.com/the-case-for-versioned-graph-databases/).
 
-**TL;DR:** CivicGraph is a potential fit for situations where there are data with highly dynamic inter-connections whose past states are as important as their present, and hence must be retained and queryable.
+**TL;DR:** CivicGraph is a potential fit for situations where there are data with highly dynamic inter-connections whose past states are as important as their present, and hence necessitate retention and queryability.
 
 ## Quick Technical Overview
 
-This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
+This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document will soon be made available in the project's wiki.
 
 CivicGraph exposes multiple write methods for individual/multiple nodes (documents/edges). Supported write method contracts (current and planned) are intended to closely follow the core REST API that ArangoDB already exports. These include:
 
@@ -53,7 +53,7 @@ When a write method is invoked on a node, the following things happen behind the
 1. A transaction is opened with read and write (non-exclusive) locks on appropriate collections.
 2. The provided node is written.
 3. An event object corresponding to the write is created, that records the current time, event type (create/update/delete) and some meta information about the node. This event is appended to a service-managed **document** collection.
-4. A command object is created using [JSON Patch RFC6902](https://tools.ietf.org/html/rfc6902) to compute a reversible diff from the last known state (`{}` by default) to the current state of the node. This command is appended to a service-managed **edge** collection, linking the current event to the last one (an `origin` event by default).
+4. A command object is created using [JSON Patch (RFC6902)](https://tools.ietf.org/html/rfc6902) to compute a reversible diff from the last known state (`{}` by default) to the current state of the node. This command is appended to a service-managed **edge** collection, linking the current event to the last one (an `origin` event by default).
 5. The transaction is committed.
 
 If something goes wrong at any step in the above process, the transaction is rolled back.
@@ -66,9 +66,9 @@ This way, every time something happens to a node (a create/update/delete event),
 
 In the background, recurring cron jobs are executed to create periodic snapshots from event lists, and a skeleton graph that records a history of structural changes to the main data. Snapshots, when available, are used on a best-effort basis to reduce the number of diff calculations required to perform a rewind/fast-forward. The skeleton graph is used to run traversals on historical versions of the main data.
 
-**The process described above makes the implicit assumption that all mutation methods for a node were invoked through CivicGraph's API, allowing it to record all changes, and no direct manipulation happened**. But what if somehow, a node underwent a few direct mutations via other means (AQL/Core REST API/Client)?
+**The process described above makes the implicit assumption that all mutation methods for a node were invoked through CivicGraph's API, allowing it to record all changes, and no direct modifications happened.** But what if somehow, a node underwent a few direct mutations via other means (AQL/Core REST API/Client)?
 
-Well, all is not lost in this case, since CivicGraph, like Git, supports a **commit** operation that lets you explicitly add an event record post hoc. Obviously, this would create only a single diff from the last known state to the current state, and any intermediate mutations would collapse into that diff. Unfortunately, there is no way around this.
+Not all is lost in this case, since CivicGraph, like Git, supports a **commit** operation that lets you explicitly add an event record post hoc. Obviously, this would create only a single diff from the last known state to the current state, and any intermediate mutations would collapse into that diff. Unfortunately, there is no way around this.
 
 CivicGraph manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
 
