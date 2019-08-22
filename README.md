@@ -2,7 +2,7 @@
 
 Previously, _evstore_.
 
-A git-inspired versioned storage for time-variant graph data.
+**A versioning data store for time-variant graph data.**
 
 #### Core Metrics
 
@@ -27,7 +27,7 @@ A git-inspired versioned storage for time-variant graph data.
 
 ## Introduction
 
-CivicGraph is an event-based datastore with version-control - like features.
+CivicGraph is a temporal graph data store - it retains all changes that its data have gone through to reach their current state. It is designed to support graph traversals in time slices, letting the user query any past state of the graph just as easily as they can query the present state. The time slice could be a simple  _point in time_ or a _time range_, or a complex _inclusion/exclusion_ expression.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourced tracker.
 
@@ -50,8 +50,7 @@ When a write method is invoked on a node, the following things happen behind the
 2. The provided node is written.
 3. An event object corresponding to the write is created, that records the current time, event type (create/update/delete) and some meta information about the node. This event is appended to a service-managed **document** collection.
 4. A command object is created using [JSON Patch RFC6902](https://tools.ietf.org/html/rfc6902) to compute a reversible diff from the last known state (`{}` by default) to the current state of the node. This command is appended to a service-managed **edge** collection, linking the current event to the last one (an `origin` event by default).
-5. Optionally, if a specified number of events have been recorded for the node, a snapshot object is created which records the entire current state of the node. This snapshot object is linked to the current event and persisted to a service-managed collection. The number of events that must occur between two consecutive snapshots is configurable at a default level as well as a collection-specific level in the service configuration.
-6. The transaction is committed.
+5. The transaction is committed.
 
 If something goes wrong at any step in the above process, the transaction is rolled back.
 
@@ -61,7 +60,7 @@ This way, every time something happens to a node (a create/update/delete event),
 - rewind a node to any point in time in its mutation history, or
 - even bring a deleted node back to life!
 
-Snapshots, when available, are used on a best-effort basis to minimize the number of diff calculations required to perform a rewind/fast-forward.
+In the background, recurring cron jobs are executed to create periodic snapshots from event lists, and a skeleton graph that records a history of structural changes to the main data. Snapshots, when available, are used on a best-effort basis to reduce the number of diff calculations required to perform a rewind/fast-forward. The skeleton graph is used to run traversals on historical versions of the main data.
 
 **The process described above makes the implicit assumption that all mutation methods for a node were invoked through CivicGraph's API, allowing it to record all changes, and no direct manipulation happened**. But what if somehow, a node underwent a few direct mutations via other means (AQL/Core REST API/Client)?
 
