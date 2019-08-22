@@ -10,7 +10,7 @@ const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 const skeletonVerticesColl = db._collection(SERVICE_COLLECTIONS.skeletonVertices)
 const limit = 1000
 
-//Sync Vertex Create Events
+// Sync Vertex Create Events
 const unsyncedVertexCreates = query`
   for e in ${eventColl}
     filter e.event == 'created'
