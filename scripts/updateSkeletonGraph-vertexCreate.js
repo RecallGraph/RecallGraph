@@ -8,7 +8,8 @@ const { getNonServiceCollections } = require('../lib/operations/helpers')
 const nonServiceCollections = getNonServiceCollections()
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 const skeletonVerticesColl = db._collection(SERVICE_COLLECTIONS.skeletonVertices)
-const limit = 1000
+const configuration = module.context.service.configuration
+const limit = configuration['skeleton-graph-update-batch-size']
 
 // Sync Vertex Create Events
 const unsyncedVertexCreates = query`
