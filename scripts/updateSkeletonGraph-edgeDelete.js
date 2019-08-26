@@ -8,21 +8,19 @@ const { getNonServiceCollections } = require('../lib/operations/helpers')
 const edgeCollections = getNonServiceCollections().filter(coll => getCollectionType(coll) === COLLECTION_TYPES.EDGE)
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 const skeletonEdgeHubsColl = db._collection(SERVICE_COLLECTIONS.skeletonEdgeHubs)
-// noinspection JSUnresolvedVariable
-const limit = module.context.service.configuration['skeleton-graph-update-batch-size']
+const skeletonEdgeSpokesColl = db._collection(SERVICE_COLLECTIONS.skeletonEdgeSpokes)
 
 // Sync Edge Delete Events
 module.exports = query`
   for e in ${eventColl}
     filter e.event == 'deleted'
     filter parse_identifier(e.meta._id).collection in ${edgeCollections}
-    let sv = (
-      for s in ${skeletonEdgeHubsColl}
-        filter (s.meta._id == e.meta._id) && !s.valid_until
-      return s._key
-    )
-    filter length(sv) == 1
-    limit ${limit}
-  update sv[0] with { valid_until: e.ctime } into ${skeletonEdgeHubsColl}
-  return {skid: NEW._id, nid: NEW.meta._id}
+    for s in ${skeletonEdgeHubsColl}
+      filter (s.meta._id == e.meta._id) && !s.valid_until
+      update s with { valid_until: e.ctime } into ${skeletonEdgeHubsColl}
+      for ss in ${skeletonEdgeSpokesColl}
+        filter ss.hub == s._id and !ss.valid_until
+        update ss with { valid_until: e.ctime } into ${skeletonEdgeSpokesColl}
+        collect skhub = {hub: s._id, nid: s.meta._id} into skspokes = ss._id
+  return {skhub, skspokes}
 `.toArray()
