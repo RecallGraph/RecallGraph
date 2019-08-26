@@ -1,29 +1,35 @@
 'use strict'
+// noinspection NpmUsedModulesInstalled
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
+// noinspection NpmUsedModulesInstalled
 const gg = require('@arangodb/general-graph')
 const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
 
-const { events, commands, snapshots, evtSSLinks, skeletonVertices, skeletonEdges } = SERVICE_COLLECTIONS
-const documentCollections = [events, snapshots, skeletonVertices]
-const edgeCollections = [commands, evtSSLinks, skeletonEdges]
+const { events, commands, snapshots, evtSSLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
+const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
+const edgeCollections = [commands, evtSSLinks, skeletonEdgeSpokes]
 
 for (const localName of documentCollections) {
   if (!db._collection(localName)) {
     db._createDocumentCollection(localName)
-  } else if (module.context.isProduction) {
-    console.debug(
-      `collection ${localName} already exists. Leaving it untouched.`
-    )
+  } else { // noinspection JSUnresolvedVariable
+    if (module.context.isProduction) {
+      console.debug(
+        `collection ${localName} already exists. Leaving it untouched.`
+      )
+    }
   }
 }
 
 for (const localName of edgeCollections) {
   if (!db._collection(localName)) {
     db._createEdgeCollection(localName)
-  } else if (module.context.isProduction) {
-    console.debug(
-      `collection ${localName} already exists. Leaving it untouched.`
-    )
+  } else { // noinspection JSUnresolvedVariable
+    if (module.context.isProduction) {
+      console.debug(
+        `collection ${localName} already exists. Leaving it untouched.`
+      )
+    }
   }
 }
 
@@ -61,8 +67,8 @@ skeletonVerticesColl.ensureIndex({
   fields: ['meta._id']
 })
 
-const skeletonEdgesColl = db._collection(skeletonEdges)
-skeletonEdgesColl.ensureIndex({
+const skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
+skeletonEdgeHubsColl.ensureIndex({
   type: 'hash',
   sparse: false,
   unique: true,
@@ -79,7 +85,8 @@ try {
 
   gg._drop(eventLog)
 
-  const skeletonRel = gg._relation(skeletonEdges, [skeletonVertices], [skeletonVertices])
+  const skeletonRel = gg._relation(skeletonEdgeSpokes, [skeletonVertices, skeletonEdgeHubs], [skeletonVertices,
+    skeletonEdgeHubs])
   skelEdgeDefs = gg._edgeDefinitions(skeletonRel)
 
   gg._drop(skeleton)

@@ -17,8 +17,11 @@
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
     "runTests": "scripts/run-tests.js",
-    "upsertSkeletonNode": "scripts/upsertSkeletonNode.js",
-    "expireSkeletonNode": "scripts/expireSkeletonNode.js"
+    "updateSkeletonGraph-vertexCreate": "scripts/updateSkeletonGraph-vertexCreate.js",
+    "updateSkeletonGraph-vertexDelete": "scripts/updateSkeletonGraph-vertexDelete.js",
+    "updateSkeletonGraph-edgeCreate": "scripts/updateSkeletonGraph-edgeCreate.js",
+    "updateSkeletonGraph-edgeDelete": "scripts/updateSkeletonGraph-edgeDelete.js",
+    "updateSkeletonGraph-edgeMove": "scripts/updateSkeletonGraph-edgeMove.js"
   },
   "tests": [
     "test/unit/lib/**/*.js",
@@ -63,15 +66,21 @@
       "type": "string",
       "required": true
     },
-    "skeleton-edge-coll-suffix": {
-      "description": "The suffix of the (edge) collection where structural edges are stored.",
-      "default": "_skeleton_edges",
+    "skeleton-edge-hub-coll-suffix": {
+      "description": "The suffix of the (vertex) collection where structural edge hubs are stored.",
+      "default": "_skeleton_edge_hubs",
       "type": "string",
       "required": true
     },
-    "skeleton-queue-shards": {
-      "description": "The number of shards per skeleton queue.",
-      "default": 5,
+    "skeleton-edge-spoke-coll-suffix": {
+      "description": "The suffix of the (edge) collection where structural edge spokes are stored.",
+      "default": "_skeleton_edge_spokes",
+      "type": "string",
+      "required": true
+    },
+    "skeleton-graph-update-batch-size": {
+      "description": "The maximum number of skeleton nodes to write on each job run.",
+      "default": 1000,
       "type": "integer",
       "required": true
     }

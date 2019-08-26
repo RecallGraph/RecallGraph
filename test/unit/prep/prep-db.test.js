@@ -5,9 +5,8 @@ const { expect } = require('chai')
 const init = require('../../helpers/init')
 // noinspection NpmUsedModulesInstalled
 const { db } = require('@arangodb')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
 // noinspection NpmUsedModulesInstalled
-const { values, chain } = require('lodash')
+const { chain } = require('lodash')
 
 describe('Prep - clean and load', () => {
   before(() => init.setup({ ensureSampleDataLoad: true, forceTruncateTestData: true, forceTruncateService: true }))
@@ -19,17 +18,8 @@ describe('Prep - clean and load', () => {
     const vertexColl = db._collection(vertexCollName)
     const edgeColl = db._collection(edgeCollName)
 
-    // coll.count() sometimes gives stale results for unknown reasons.
-    expect(vertexColl.all().toArray().length).to.equal(0)
-    expect(edgeColl.all().toArray().length).to.equal(0)
-  })
-
-  it('should have no documents in service collections', () => {
-    values(SERVICE_COLLECTIONS).forEach(collName => {
-      const coll = db._collection(collName)
-
-      expect(coll.all().toArray().length).to.be.above(0)
-    })
+    expect(vertexColl.count()).to.equal(0)
+    expect(edgeColl.count()).to.equal(0)
   })
 
   it('should have non-zero document count in sample data collections', () => {
@@ -40,7 +30,7 @@ describe('Prep - clean and load', () => {
       .forEach(collName => {
         const coll = db._collection(collName)
 
-        expect(coll.all().toArray().length).to.be.above(0)
+        expect(coll.count()).to.be.above(0)
       })
   })
 })

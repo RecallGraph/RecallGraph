@@ -11,18 +11,18 @@ const skeletonVerticesColl = db._collection(SERVICE_COLLECTIONS.skeletonVertices
 // noinspection JSUnresolvedVariable
 const limit = module.context.service.configuration['skeleton-graph-update-batch-size']
 
-// Sync Vertex Create Events
+// Sync Vertex Delete Events
 module.exports = query`
   for e in ${eventColl}
-    filter e.event == 'created'
+    filter e.event == 'deleted'
     filter parse_identifier(e.meta._id).collection in ${vertexCollections}
     let sv = (
       for s in ${skeletonVerticesColl}
-        filter s.meta._id == e.meta._id
-      return 1
+        filter (s.meta._id == e.meta._id) && !s.valid_until
+      return s._key
     )
-    filter length(sv) == 0
+    filter length(sv) == 1
     limit ${limit}
-  insert {meta: keep(e.meta, '_id', '_key'), valid_since: e.ctime} into ${skeletonVerticesColl}
+  update sv[0] with { valid_until: e.ctime } into ${skeletonVerticesColl}
   return {skid: NEW._id, nid: NEW.meta._id}
 `.toArray()
