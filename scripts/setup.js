@@ -133,7 +133,7 @@ queue.push({
   success: (result, jobData,
     job) => {
     if (Object.keys(result).some(key => result[key].length)) {
-      console.log(`Passed job: ${JSON.stringify({
+      console.debug(`Passed job: ${JSON.stringify({
         result,
         job: [job.queue, job.type, job.runs, job.runFailures]
       })}`)

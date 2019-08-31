@@ -1,10 +1,14 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
+// noinspection NpmUsedModulesInstalled
 const request = require('@arangodb/request')
+// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
+// noinspection NpmUsedModulesInstalled
 const { isObject, concat, defaults, omitBy, isNil } = require('lodash')
 const {
   getOriginKeys,
@@ -14,6 +18,7 @@ const {
   getSampleTestCollNames,
   getNodeBraceSampleIds
 } = require('../../../../helpers/logTestHelpers')
+// noinspection NpmUsedModulesInstalled
 const { db, query, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -96,7 +101,7 @@ describe('Routes - log (Path as query param)', () => {
       }
     }
 
-    return testGroupedEvents('graph', reqParams, logWrapper)
+    testGroupedEvents('graph', reqParams, logWrapper)
   })
 
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
@@ -474,9 +479,7 @@ function logWrapper (reqParams, combo, method = 'get') {
   const response = request[method](`${baseUrl}/event/log`, reqParams)
 
   expect(response).to.be.an.instanceOf(Object)
-  expect(response.statusCode).to.equal(
-    200
-  )
+  expect(response.statusCode).to.equal(200)
 
   return JSON.parse(response.body)
 }

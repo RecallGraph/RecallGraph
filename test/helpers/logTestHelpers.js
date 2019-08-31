@@ -171,7 +171,7 @@ exports.testUngroupedEvents = function testUngroupedEvents (
   const expectedEventsSansCommands = expectedEvents.map(partialRight(omit, 'command'))
   expect(allEvents).to.deep.equal(expectedEventsSansCommands)
 
-  if (expectedEvents.length > 0) {
+  if (allEvents.length) {
     const timeRange = getRandomSubRange(expectedEvents)
     const sliceRange = getRandomSubRange(range(1, timeRange[1] - timeRange[0]))
     const since = [0, Math.floor(expectedEvents[timeRange[1]].ctime)]
@@ -236,7 +236,6 @@ exports.testUngroupedEvents = function testUngroupedEvents (
       expect(events[0]).to.deep.equal(slicedSortedTimeSlicedEvents[0])
       events.forEach((event, idx) => {
         expect(event).to.be.an.instanceOf(Object)
-        expect(event).to.have.property('_id')
         expect(event._id).to.equal(slicedSortedTimeSlicedEvents[idx]._id)
       })
     })
@@ -288,6 +287,7 @@ const queryPartsInializers = {
 }
 
 const initQueryParts = memoize(scope => queryPartsInializers[scope]())
+exports.initQueryParts = initQueryParts
 
 exports.testGroupedEvents = function testGroupedEvents (
   scope,
@@ -360,7 +360,6 @@ exports.testGroupedEvents = function testGroupedEvents (
       const aggrField = co ? 'total' : 'events'
       eventGroups.forEach((eventGroup, idx1) => {
         expect(eventGroup).to.be.an.instanceOf(Object)
-        expect(eventGroup).to.have.property(gb)
         expect(eventGroup[gb]).to.equal(expectedEventGroups[idx1][gb])
 
         expect(eventGroup).to.have.property(aggrField)
@@ -374,7 +373,6 @@ exports.testGroupedEvents = function testGroupedEvents (
             expect(eventGroup[aggrField][0]).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
             eventGroup[aggrField].forEach((event, idx2) => {
               expect(event).to.be.an.instanceOf(Object)
-              expect(event).to.have.property('_id')
               expect(event._id).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
             })
           }
@@ -403,6 +401,8 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
     return aql.literal(`${groupingPrefix} ${groupingSuffix}`)
   }
 }
+
+exports.getGroupingClauseForExpectedResultsQuery = getGroupingClauseForExpectedResultsQuery
 
 exports.getNodeBraceSampleIds = function getNodeBraceSampleIds (
   maxLength = Number.POSITIVE_INFINITY

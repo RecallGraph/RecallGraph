@@ -1,63 +1,76 @@
 'use strict'
 
-const { expect } = require('chai')
-const { query } = require('@arangodb')
+// noinspection NpmUsedModulesInstalled
 const diff = require('../../../../../lib/operations/diff')
 const init = require('../../../../helpers/init')
-const jiff = require('jiff')
-const { TRANSIENT_EVENT_SUPERNODE, SERVICE_GRAPHS, SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-const { differenceBy } = require('lodash')
+const { testDiffs } = require('../../../../helpers/diffTestHelpers')
+const { getRandomGraphPathPattern, getSampleTestCollNames, getOriginKeys, getNodeBraceSampleIds } = require('../../../../helpers/logTestHelpers')
+// noinspection NpmUsedModulesInstalled
+const { aql, db } = require('@arangodb')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 
-describe('Diff - DB Scope', () => {
+const eventColl = db._collection(SERVICE_COLLECTIONS.events)
+const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
+
+describe('Diff', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
 
-  it('should return forward diffs in DB scope for the root path, when reverse is false', () => {
-    const path = '/'
+  it('should return diffs in DB scope for the root path', () => testDiffs('database', '/', diff))
 
-    const allDiffs = diff(path)
-    expect(allDiffs).to.be.an.instanceOf(Array)
+  it('should return diffs in Graph scope for a graph path', () => testDiffs('graph', getRandomGraphPathPattern(), diff))
 
-    const expectedDiffs = query`
-      for v, e, p in 2..${Number.MAX_SAFE_INTEGER}
-        outbound ${TRANSIENT_EVENT_SUPERNODE}
-        graph ${SERVICE_GRAPHS.eventLog}
-        filter is_same_collection(${SERVICE_COLLECTIONS.events}, v)
-        collect node = v.meta._id into commands = e.command
-      return {node, commands}
-    `.toArray()
+  it('should return diffs in Collection scope for a collection path', () => {
+    const sampleTestCollNames = getSampleTestCollNames()
+    const path =
+      sampleTestCollNames.length > 1
+        ? `/c/{${sampleTestCollNames}}`
+        : `/c/${sampleTestCollNames}`
+    const queryParts = [
+      aql`
+          for v in ${eventColl}
+          filter v._key not in ${getOriginKeys()}
+          filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
+        `
+    ]
 
-    expect(allDiffs, JSON.stringify({
-      all: differenceBy(allDiffs, expectedDiffs, 'node'),
-      expected: differenceBy(expectedDiffs, allDiffs, 'node')
-    })).to.have.deep.members(expectedDiffs)
+    return testDiffs('collection', path, diff, queryParts)
   })
 
-  it('should return reverse diffs in DB scope for the root path, when reverse is true', () => {
-    const path = '/'
+  it('should return diffs in Node Glob scope for a node-glob path', () => {
+    const sampleTestCollNames = getSampleTestCollNames()
+    const path =
+      sampleTestCollNames.length > 1
+        ? `/ng/{${sampleTestCollNames}}/*`
+        : `/ng/${sampleTestCollNames}/*`
+    const queryParts = [
+      aql`
+          for v in ${eventColl}
+          filter v._key not in ${getOriginKeys()}
+          filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
+        `
+    ]
 
-    const allDiffs = diff(path, { reverse: true })
-    expect(allDiffs).to.be.an.instanceOf(Array)
+    return testDiffs('nodeGlob', path, diff, queryParts)
+  })
 
-    const expectedDiffs = query`
-      for v, e, p in 2..${Number.MAX_SAFE_INTEGER}
-        outbound ${TRANSIENT_EVENT_SUPERNODE}
-        graph ${SERVICE_GRAPHS.eventLog}
-        filter is_same_collection(${SERVICE_COLLECTIONS.events}, v)
-        collect node = v.meta._id into commands = e.command
-      return {node, commands: reverse(commands)}
-    `.toArray()
+  it('should return diffs in Node Brace scope for a node-brace path', () => {
+    const { path, sampleIds } = getNodeBraceSampleIds()
+    const queryParts = [
+      aql`
+          for v in ${eventColl}
+          filter v._key not in ${getOriginKeys()}
+          filter v.meta._id in ${sampleIds}
+          for e in ${commandColl}
+          filter e._to == v._id
+        `
+    ]
 
-    for (let item of expectedDiffs) {
-      for (let i = 0; i < item.commands.length; i++) {
-        item.commands[i] = jiff.inverse(item.commands[i])
-      }
-    }
-
-    expect(allDiffs, JSON.stringify({
-      all: differenceBy(allDiffs, expectedDiffs, 'node'),
-      expected: differenceBy(expectedDiffs, allDiffs, 'node')
-    })).to.have.deep.members(expectedDiffs)
+    testDiffs('nodeBrace', path, diff, queryParts)
   })
 })

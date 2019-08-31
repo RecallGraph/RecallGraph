@@ -1,5 +1,6 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../helpers/init')
 const { log } = require('../../../../lib/handlers/logHandlers')
@@ -12,7 +13,9 @@ const {
   getSampleTestCollNames,
   getNodeBraceSampleIds
 } = require('../../../helpers/logTestHelpers')
+// noinspection NpmUsedModulesInstalled
 const { db, query, aql } = require('@arangodb')
+// noinspection NpmUsedModulesInstalled
 const { isObject, concat, defaults } = require('lodash')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
