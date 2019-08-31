@@ -4,24 +4,85 @@ node_js: node
 services: docker
 cache:
   npm: true
-  directories:
-    - .nyc_output
+#  directories:
+#    - .nyc_output
 
 env:
   global:
     - ARANGODB_VERSION=3.4
     - PATH=$HOME/.local/bin:$PATH
-    - CACHE_NAME=GLOBAL
+  #    - CACHE_NAME=GLOBAL
   matrix:
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=rocksdb-unit
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=rocksdb-integration
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/**/*.js"]' NYC_OUT=mmfiles-unit
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/**/*.js"]' NYC_OUT=mmfiles-integration
+    #mmfiles
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/document/*.js"]' NYC_OUT=mmfiles-integration-document
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-db GREP='Path as query param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-graph GREP='Path as query param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-coll GREP='Path as query param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-ng GREP='Path as query param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-nb GREP='Path as query param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-db GREP='Path as body param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-graph GREP='Path as body param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-coll GREP='Path as body param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-ng GREP='Path as body param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=mmfiles-unit-lib-rest
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-db GREP='Path as query param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-graph GREP='Path as query param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-coll GREP='Path as query param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-ng GREP='Path as query param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-nb GREP='Path as query param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-db GREP='Path as body param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-graph GREP='Path as body param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-coll GREP='Path as body param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-ng GREP='Path as body param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-rest
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-db GREP='Log - DB Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-graph GREP='Log - Graph Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-coll GREP='Log - Collection Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-ng GREP='Log - Node Glob Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-nb GREP='Log - Node Brace Scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/diff/*.js"]' NYC_OUT=mmfiles-unit-lib-operations-diff
+
+    #rocksdb
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/document/*.js"]' NYC_OUT=rocksdb-integration-document
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-db GREP='Path as query param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-graph GREP='Path as query param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-coll GREP='Path as query param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-ng GREP='Path as query param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-nb GREP='Path as query param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-db GREP='Path as body param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-graph GREP='Path as body param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-coll GREP='Path as body param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-ng GREP='Path as body param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=rocksdb-unit-lib-rest
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-db GREP='Path as query param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-graph GREP='Path as query param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-coll GREP='Path as query param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-ng GREP='Path as query param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-nb GREP='Path as query param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-db GREP='Path as body param.*DB scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-graph GREP='Path as body param.*Graph scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-coll GREP='Path as body param.*Collection scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-ng GREP='Path as body param.*Node Glob scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-rest
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-db GREP='Log - DB Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-graph GREP='Log - Graph Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-coll GREP='Log - Collection Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-ng GREP='Log - Node Glob Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-nb GREP='Log - Node Brace Scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/diff/*.js"]' NYC_OUT=rocksdb-unit-lib-operations-diff
 
 install:
   - npm install
+  - pip install --user awscli
 
 before_script:
+  - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+  - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+  - aws configure set region us-east-1
   - rm -rf ./.nyc_output/*
   - npx nyc instrument . ./.nyc_output/instrumented
   - cp -r ./.nyc_output/instrumented/lib .
@@ -29,18 +90,29 @@ before_script:
   - docker run
     -e ARANGO_RANDOM_ROOT_PASSWORD=1
     -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
-    -e EVTEST_FILES=$EVTEST_FILES
+    -e EVTEST_FILES="$EVTEST_FILES"
     -e NYC_OUT=$NYC_OUT
+    -e GREP="$GREP"
+    -e TRAVIS_JOB_NUMBER="$TRAVIS_JOB_NUMBER"
     -v "$PWD":/mnt/evstore
     -d --name arangodb arangodb:$ARANGODB_VERSION
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
-  - sleep 30
+  - sleep 60
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
   - docker exec arangodb /mnt/evstore/test/travis/install.sh
 
-script: travis_wait 60 docker exec arangodb /mnt/evstore/test/travis/run.sh
+script: ./test/travis/travis-runner.sh
 
-before_cache: rm -rf ./.nyc_output/instrumented
+after_script:
+  - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
+  - echo "Copied test reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+
+after_success:
+  - rm -rf ./.nyc_output/instrumented
+  - aws s3 sync ./.nyc_output/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
+  - echo "Copied coverage data to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+
+#before_cache: rm -rf ./.nyc_output/instrumented
 
 notifications:
   webhooks:
@@ -63,8 +135,15 @@ jobs:
 
       install:
         - npm install
+        - pip install --user awscli
 
       before_script:
+        - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+        - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+        - aws configure set region us-east-1
+        - aws s3 sync s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/ ./.nyc_output/ --exclude '*' --include 'coverage*.json'
+        - echo 'Found following files in ./.nyc_output/:'
+        - ls -l ./.nyc_output
         - npx nyc merge ./.nyc_output ./.nyc_output/out.json
         - npx nyc report --report-dir=./test/reports -r lcovonly
         - npx eslint ./main.js ./lib/ ./scripts
@@ -75,3 +154,8 @@ jobs:
         - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ] || [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
             sonar-scanner;
           fi'
+      after_script:
+        - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
+        - echo "Copied coverage and lint reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+        - aws s3 cp ./.nyc_output/out.json s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
+        - echo "Copied merged coverage data to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"

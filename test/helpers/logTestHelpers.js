@@ -1,5 +1,6 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const {
   random,
   chain,
@@ -13,20 +14,19 @@ const {
   memoize,
   cloneDeep,
   concat,
-  sampleSize
+  sampleSize,
+  omit,
+  partialRight
 } = require('lodash')
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init')
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const log = require('../../lib/operations/log')
-const { getGroupingClause } = require('../../lib/operations/log/helpers')
+const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/helpers')
+// noinspection NpmUsedModulesInstalled
 const { aql, db } = require('@arangodb')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
-const {
-  getSortingClause,
-  getLimitClause,
-  getReturnClause,
-  getTimeBoundFilters
-} = require('../../lib/operations/log/helpers')
+const { getSortingClause, getReturnClause, getGroupingClause } = require('../../lib/operations/log/helpers')
 
 function getRandomSubRange (
   objWithLength,
@@ -73,6 +73,7 @@ function getRandomSampleCollectionPatterns (bracesOnly = false) {
     .sampleSize(sampleSize)
 
   if (bracesOnly) {
+    // noinspection JSUnresolvedFunction
     return collsWrapper.value()
   } else {
     return collsWrapper
@@ -87,12 +88,14 @@ function getRandomSampleCollectionPatterns (bracesOnly = false) {
 }
 
 function getTestDataCollectionPatterns () {
+  // noinspection JSUnresolvedVariable
   const testDataCollectionPatterns = chain(TEST_DATA_COLLECTIONS)
     .values()
     .map(coll => coll.substring(module.context.collectionPrefix.length))
     .value()
     .join(',')
 
+  // noinspection JSUnresolvedVariable
   return `${module.context.collectionPrefix}{test_does_not_exist,${testDataCollectionPatterns}}`
 }
 
@@ -106,6 +109,7 @@ exports.getRandomGraphPathPattern = function getRandomGraphPathPattern () {
     })
     .join(',')
 
+  // noinspection JSUnresolvedVariable
   return `/g/{${graphPatterns},${module.context.collectionPrefix}test_does_not_exist}`
 }
 
@@ -164,7 +168,8 @@ exports.testUngroupedEvents = function testUngroupedEvents (
   expectedEvents,
   logFn
 ) {
-  expect(allEvents).to.deep.equal(expectedEvents)
+  const expectedEventsSansCommands = expectedEvents.map(partialRight(omit, 'command'))
+  expect(allEvents).to.deep.equal(expectedEventsSansCommands)
 
   if (expectedEvents.length > 0) {
     const timeRange = getRandomSubRange(expectedEvents)
@@ -176,6 +181,10 @@ exports.testUngroupedEvents = function testUngroupedEvents (
     const sort = [null, 'asc', 'desc']
     const groupBy = [null]
     const countsOnly = [false, true]
+    const groupSort = [null, 'asc', 'desc']
+    const groupSkip = [0, 1]
+    const groupLimit = [0, 2]
+    const returnCommands = [false, true]
     const combos = cartesian({
       since,
       until,
@@ -183,7 +192,11 @@ exports.testUngroupedEvents = function testUngroupedEvents (
       limit,
       sort,
       groupBy,
-      countsOnly
+      countsOnly,
+      groupSort,
+      groupSkip,
+      groupLimit,
+      returnCommands
     })
 
     combos.forEach(combo => {
@@ -191,13 +204,15 @@ exports.testUngroupedEvents = function testUngroupedEvents (
 
       expect(events).to.be.an.instanceOf(Array)
 
-      const earliestTimeBoundIndex = combo.since
-        ? findLastIndex(expectedEvents, e => e.ctime >= combo.since)
-        : expectedEvents.length - 1
-      const latestTimeBoundIndex =
-        combo.until && findIndex(expectedEvents, e => e.ctime <= combo.until)
+      const relevantExpectedEvents = combo.returnCommands ? expectedEvents : expectedEventsSansCommands
 
-      const timeSlicedEvents = expectedEvents.slice(
+      const earliestTimeBoundIndex = combo.since
+        ? findLastIndex(relevantExpectedEvents, e => e.ctime >= combo.since)
+        : relevantExpectedEvents.length - 1
+      const latestTimeBoundIndex =
+        combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
+
+      const timeSlicedEvents = relevantExpectedEvents.slice(
         latestTimeBoundIndex,
         earliestTimeBoundIndex + 1
       )
@@ -217,12 +232,19 @@ exports.testUngroupedEvents = function testUngroupedEvents (
         slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents
       }
 
-      expect(events).to.deep.equal(slicedSortedTimeSlicedEvents)
+      expect(events.length).to.equal(slicedSortedTimeSlicedEvents.length)
+      expect(events[0]).to.deep.equal(slicedSortedTimeSlicedEvents[0])
+      events.forEach((event, idx) => {
+        expect(event).to.be.an.instanceOf(Object)
+        expect(event).to.have.property('_id')
+        expect(event._id).to.equal(slicedSortedTimeSlicedEvents[idx]._id)
+      })
     })
   }
 }
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
+const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 function getOriginKeys () {
   const originKeys = differenceWith(
@@ -242,6 +264,8 @@ const queryPartsInializers = {
     aql`
       for v in ${eventColl}
       filter v._key not in ${getOriginKeys()}
+      for e in ${commandColl}
+      filter e._to == v._id
     `
   ],
   graph: () => {
@@ -256,6 +280,8 @@ const queryPartsInializers = {
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
         filter regex_split(v.meta._id, '/')[0] in ${sampleGraphCollNames}
+        for e in ${commandColl}
+        filter e._to == v._id
       `
     ]
   }
@@ -329,7 +355,31 @@ exports.testGroupedEvents = function testGroupedEvents (
       const query = aql.join(queryParts, '\n')
       const expectedEventGroups = db._query(query).toArray()
 
-      expect(eventGroups).to.deep.equal(expectedEventGroups)
+      expect(eventGroups.length).to.equal(expectedEventGroups.length)
+
+      const aggrField = co ? 'total' : 'events'
+      eventGroups.forEach((eventGroup, idx1) => {
+        expect(eventGroup).to.be.an.instanceOf(Object)
+        expect(eventGroup).to.have.property(gb)
+        expect(eventGroup[gb]).to.equal(expectedEventGroups[idx1][gb])
+
+        expect(eventGroup).to.have.property(aggrField)
+        if (co) {
+          expect(eventGroup[aggrField]).to.equal(expectedEventGroups[idx1][aggrField])
+        } else {
+          expect(eventGroup[aggrField]).to.be.an.instanceOf(Array)
+          expect(eventGroup[aggrField].length).to.equal(expectedEventGroups[idx1][aggrField].length)
+
+          if (eventGroup[aggrField].length > 0) {
+            expect(eventGroup[aggrField][0]).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
+            eventGroup[aggrField].forEach((event, idx2) => {
+              expect(event).to.be.an.instanceOf(Object)
+              expect(event).to.have.property('_id')
+              expect(event._id).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
+            })
+          }
+        }
+      })
     })
   }
 }
@@ -358,11 +408,13 @@ exports.getNodeBraceSampleIds = function getNodeBraceSampleIds (
   maxLength = Number.POSITIVE_INFINITY
 ) {
   const rootPathEvents = log('/')
+  // noinspection JSUnresolvedVariable
   const length = Number.isFinite(maxLength)
     ? Math.min(rootPathEvents.length, maxLength)
     : rootPathEvents.length
   const size = random(1, length)
   const sampleIds = []
+  // noinspection JSCheckFunctionSignatures
   const pathSuffixes = chain(rootPathEvents)
     .shuffle()
     .sampleSize(size)

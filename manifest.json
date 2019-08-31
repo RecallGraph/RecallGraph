@@ -16,10 +16,11 @@
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
-    "runTests": "scripts/run-tests.js"
+    "runTests": "scripts/run-tests.js",
+    "updateSkeletonGraph": "scripts/updateSkeletonGraph.js"
   },
   "tests": [
-    "test/unit/**/*.js",
+    "test/unit/lib/**/*.js",
     "test/integration/**/*.js"
   ],
   "configuration": {
@@ -61,10 +62,22 @@
       "type": "string",
       "required": true
     },
-    "skeleton-edge-coll-suffix": {
-      "description": "The suffix of the (edge) collection where structural edges are stored.",
-      "default": "_skeleton_edges",
+    "skeleton-edge-hub-coll-suffix": {
+      "description": "The suffix of the (vertex) collection where structural edge hubs are stored.",
+      "default": "_skeleton_edge_hubs",
       "type": "string",
+      "required": true
+    },
+    "skeleton-edge-spoke-coll-suffix": {
+      "description": "The suffix of the (edge) collection where structural edge spokes are stored.",
+      "default": "_skeleton_edge_spokes",
+      "type": "string",
+      "required": true
+    },
+    "skeleton-graph-update-batch-size": {
+      "description": "The maximum number of skeleton nodes to write on each job run.",
+      "default": 1000,
+      "type": "integer",
       "required": true
     }
   }
