@@ -17,11 +17,7 @@
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
     "runTests": "scripts/run-tests.js",
-    "updateSkeletonGraph-vertexCreate": "scripts/updateSkeletonGraph-vertexCreate.js",
-    "updateSkeletonGraph-vertexDelete": "scripts/updateSkeletonGraph-vertexDelete.js",
-    "updateSkeletonGraph-edgeCreate": "scripts/updateSkeletonGraph-edgeCreate.js",
-    "updateSkeletonGraph-edgeDelete": "scripts/updateSkeletonGraph-edgeDelete.js",
-    "updateSkeletonGraph-edgeMove": "scripts/updateSkeletonGraph-edgeMove.js"
+    "updateSkeletonGraph": "scripts/updateSkeletonGraph.js"
   },
   "tests": [
     "test/unit/lib/**/*.js",
