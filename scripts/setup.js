@@ -1,29 +1,37 @@
 'use strict'
+// noinspection NpmUsedModulesInstalled
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
+// noinspection NpmUsedModulesInstalled
 const gg = require('@arangodb/general-graph')
+// noinspection NpmUsedModulesInstalled
+const queues = require('@arangodb/foxx/queues')
 const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
 
-const { events, commands, snapshots, evtSSLinks, skeletonVertices, skeletonEdges } = SERVICE_COLLECTIONS
-const documentCollections = [events, snapshots, skeletonVertices]
-const edgeCollections = [commands, evtSSLinks, skeletonEdges]
+const { events, commands, snapshots, evtSSLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
+const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
+const edgeCollections = [commands, evtSSLinks, skeletonEdgeSpokes]
 
 for (const localName of documentCollections) {
   if (!db._collection(localName)) {
     db._createDocumentCollection(localName)
-  } else if (module.context.isProduction) {
-    console.debug(
-      `collection ${localName} already exists. Leaving it untouched.`
-    )
+  } else { // noinspection JSUnresolvedVariable
+    if (module.context.isProduction) {
+      console.debug(
+        `collection ${localName} already exists. Leaving it untouched.`
+      )
+    }
   }
 }
 
 for (const localName of edgeCollections) {
   if (!db._collection(localName)) {
     db._createEdgeCollection(localName)
-  } else if (module.context.isProduction) {
-    console.debug(
-      `collection ${localName} already exists. Leaving it untouched.`
-    )
+  } else { // noinspection JSUnresolvedVariable
+    if (module.context.isProduction) {
+      console.debug(
+        `collection ${localName} already exists. Leaving it untouched.`
+      )
+    }
   }
 }
 
@@ -61,8 +69,8 @@ skeletonVerticesColl.ensureIndex({
   fields: ['meta._id']
 })
 
-const skeletonEdgesColl = db._collection(skeletonEdges)
-skeletonEdgesColl.ensureIndex({
+const skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
+skeletonEdgeHubsColl.ensureIndex({
   type: 'hash',
   sparse: false,
   unique: true,
@@ -79,7 +87,8 @@ try {
 
   gg._drop(eventLog)
 
-  const skeletonRel = gg._relation(skeletonEdges, [skeletonVertices], [skeletonVertices])
+  const skeletonRel = gg._relation(skeletonEdgeSpokes, [skeletonVertices, skeletonEdgeHubs], [skeletonVertices,
+    skeletonEdgeHubs])
   skelEdgeDefs = gg._edgeDefinitions(skeletonRel)
 
   gg._drop(skeleton)
@@ -91,5 +100,45 @@ try {
   gg._create(eventLog, evlEdgeDefs)
   gg._create(skeleton, skelEdgeDefs)
 }
+
+// Setup crons
+const queue = queues.create('crons', 1)
+// noinspection JSUnresolvedVariable
+const mount = module.context.mount
+const cronJob = 'updateSkeletonGraph'
+
+const stored = queue.all({
+  name: cronJob,
+  mount
+})
+
+stored.forEach(jobId => {
+  const job = queue.get(jobId)
+
+  console.log('Deleting stored job: %o', job)
+  queue.delete(jobId)
+})
+
+// noinspection JSUnusedGlobalSymbols
+queue.push({
+  mount,
+  name: cronJob
+}, null, {
+  maxFailures: Infinity,
+  repeatTimes: Infinity,
+  failure: (result, jobData, job) => console.error(`Failed job: ${JSON.stringify({
+    result,
+    job: [job.queue, job.type, job.failures, job.runs, job.runFailures]
+  })}`),
+  success: (result, jobData,
+    job) => {
+    if (Object.keys(result).some(key => result[key].length)) {
+      console.log(`Passed job: ${JSON.stringify({
+        result,
+        job: [job.queue, job.type, job.runs, job.runFailures]
+      })}`)
+    }
+  }
+})
 
 console.log('Finished setup.')
