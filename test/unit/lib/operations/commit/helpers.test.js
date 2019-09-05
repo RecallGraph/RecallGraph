@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const {
@@ -14,9 +15,7 @@ const {
   prepInsert,
   prepRemove,
   prepReplace,
-  prepUpdate,
-  upsertSkeletonNode,
-  expireSkeletonNode
+  prepUpdate
 } = require('../../../../../lib/operations/commit/helpers')
 const {
   createSingle,
@@ -26,11 +25,13 @@ const {
   replaceSingle
 } = require('../../../../../lib/handlers/replaceHandlers')
 const { removeSingle } = require('../../../../../lib/handlers/removeHandlers')
+// noinspection NpmUsedModulesInstalled
 const { db, errors: ARANGO_ERRORS, time: dbtime } = require('@arangodb')
 const {
   SERVICE_COLLECTIONS,
   snapshotInterval
 } = require('../../../../../lib/helpers')
+// noinspection NpmUsedModulesInstalled
 const { omit, pick } = require('lodash')
 const jiff = require('jiff')
 
@@ -1881,154 +1882,5 @@ describe('Commit Helpers - prepUpdate', () => {
         'errorNum',
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-  })
-})
-
-describe('Commit Helpers - upsertSkeletonNode', () => {
-  before(init.setup)
-
-  after(init.teardown)
-
-  it('should create a job with valid data when a vertex is provided', () => {
-    const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
-    const body = {
-      k1: 'v1',
-      k2: 'v1',
-      src: `${__filename}:should create a job with valid data when a vertex is provided`
-    }
-    const time = dbtime()
-    const node = coll.insert(body)
-
-    const { jobId, queue } = upsertSkeletonNode(node, time)
-    // noinspection BadExpressionStatementJS
-    expect(jobId).to.be.not.empty
-    expect(queue).to.respondTo('get')
-
-    const job = queue.get(jobId)
-
-    const jobData = job.data
-    expect(jobData).to.be.an.instanceOf(Array)
-    expect(jobData).to.have.lengthOf(2)
-    expect(jobData[0]).to.deep.equal(node)
-    expect(jobData[1]).to.equal(time)
-  })
-
-  it('should create a job with valid data when an edge is provided', () => {
-    const pathParams = {
-      collection: init.TEST_DATA_COLLECTIONS.vertex
-    }
-    const vbody = [
-      {
-        k1: 'v1',
-        src: `${__filename}:should create a job with valid data when an edge is provided`
-      },
-      {
-        k1: 'v1',
-        src: `${__filename}:should create a job with valid data when an edge is provided`
-      }
-    ]
-    const vnodes = createMultiple({ pathParams, body: vbody })
-
-    const ebody = {
-      _from: vnodes[0]._id,
-      _to: vnodes[1]._id,
-      k1: 'v1',
-      src: `${__filename}:should create a job with valid data when an edge is provided`
-    }
-    const coll = db._collection(init.TEST_DATA_COLLECTIONS.edge)
-    const time = dbtime()
-    const enode = coll.insert(ebody, { returnNew: true }).new
-
-    const { jobId, queue } = upsertSkeletonNode(enode, time)
-    // noinspection BadExpressionStatementJS
-    expect(jobId).to.be.not.empty
-    expect(queue).to.respondTo('get')
-
-    const job = queue.get(jobId)
-
-    const jobData = job.data
-    expect(jobData).to.be.an.instanceOf(Array)
-    expect(jobData).to.have.lengthOf(2)
-    expect(jobData[0]).to.deep.equal(enode)
-    expect(jobData[1]).to.equal(time)
-  })
-})
-
-describe('Commit Helpers - expireSkeletonNode', () => {
-  before(init.setup)
-
-  after(init.teardown)
-
-  it('should create a job with valid data when a deleted vertex is provided', () => {
-    const pathParams = {
-      collection: init.TEST_DATA_COLLECTIONS.vertex
-    }
-    const body = {
-      k1: 'v1',
-      k2: 'v1',
-      src: `${__filename}:should create a job with valid data when a deleted vertex is provided`
-    }
-    const node = createSingle({ pathParams, body })
-
-    const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
-    const time = dbtime()
-    coll.remove(node)
-
-    const { jobId, queue } = expireSkeletonNode(node._id, time)
-    // noinspection BadExpressionStatementJS
-    expect(jobId).to.be.not.empty
-    expect(queue).to.respondTo('get')
-
-    const job = queue.get(jobId)
-
-    const jobData = job.data
-    expect(jobData).to.be.an.instanceOf(Array)
-    expect(jobData).to.have.lengthOf(2)
-    expect(jobData[0]).to.equal(node._id)
-    expect(jobData[1]).to.equal(time)
-  })
-
-  it('should create a job with valid data when a deleted edge is provided', () => {
-    const pathParams = {
-      collection: init.TEST_DATA_COLLECTIONS.vertex
-    }
-    const vbody = [
-      {
-        k1: 'v1',
-        src: `${__filename}:should create a job with valid data when a deleted edge is provided`
-      },
-      {
-        k1: 'v1',
-        src: `${__filename}:should create a job with valid data when a deleted edge is provided`
-      }
-    ]
-    const vnodes = createMultiple({ pathParams, body: vbody })
-
-    const ebody = {
-      _from: vnodes[0]._id,
-      _to: vnodes[1]._id,
-      k1: 'v1',
-      src: `${__filename}:should create a job with valid data when a deleted edge is provided`
-    }
-
-    pathParams.collection = init.TEST_DATA_COLLECTIONS.edge
-    const enode = createSingle({ pathParams, body: ebody })
-
-    const coll = db._collection(init.TEST_DATA_COLLECTIONS.edge)
-    const time = dbtime()
-    coll.remove(enode)
-
-    const { jobId, queue } = expireSkeletonNode(enode._id, time)
-    // noinspection BadExpressionStatementJS
-    expect(jobId).to.be.not.empty
-    expect(queue).to.respondTo('get')
-
-    const job = queue.get(jobId)
-
-    const jobData = job.data
-    expect(jobData).to.be.an.instanceOf(Array)
-    expect(jobData).to.have.lengthOf(2)
-    expect(jobData[0]).to.equal(enode._id)
-    expect(jobData[1]).to.equal(time)
   })
 })
