@@ -3,7 +3,6 @@
 // noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const { getRandomSubRange, cartesian, initQueryParts, getGroupingClauseForExpectedResultsQuery } = require('./logTestHelpers')
-const log = require('../../lib/operations/log')
 // noinspection NpmUsedModulesInstalled
 const { cloneDeep } = require('lodash')
 // noinspection NpmUsedModulesInstalled
@@ -12,8 +11,8 @@ const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/he
 const { getSortingClause, getReturnClause } = require('../../lib/operations/log/helpers')
 const jiff = require('jiff')
 
-exports.testDiffs = function testDiffs (scope, pathParam, diffFn, qp = null) {
-  const allEvents = log(pathParam) // Ungrouped events in desc order by ctime.
+exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = null) {
+  const allEvents = logfn(pathParam) // Ungrouped events in desc order by ctime.
 
   // noinspection JSUnresolvedVariable
   if (allEvents.length) {

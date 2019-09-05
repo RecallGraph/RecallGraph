@@ -2,6 +2,7 @@
 
 // noinspection NpmUsedModulesInstalled
 const {
+  isObject,
   random,
   chain,
   pick,
@@ -16,12 +17,20 @@ const {
   concat,
   sampleSize,
   omit,
-  partialRight
+  partialRight,
+  defaults,
+  omitBy,
+  isNil
 } = require('lodash')
+// noinspection NpmUsedModulesInstalled
+const request = require('@arangodb/request')
+// noinspection JSUnresolvedVariable
+const { baseUrl } = module.context
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init')
 // noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const log = require('../../lib/operations/log')
+const { log: logHandler } = require('../../lib/handlers/logHandlers')
 const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/helpers')
 // noinspection NpmUsedModulesInstalled
 const { aql, db } = require('@arangodb')
@@ -460,4 +469,35 @@ exports.getSampleTestCollNames = function getSampleTestCollNames () {
   const size = random(1, testCollNames.length)
 
   return sampleSize(testCollNames, size)
+}
+
+function logGetWrapper (reqParams, combo, method = 'get') {
+  defaults(reqParams, { qs: {} })
+
+  if (isObject(combo)) {
+    Object.assign(reqParams.qs, omitBy(combo, isNil))
+  }
+
+  const response = request[method](`${baseUrl}/event/log`, reqParams)
+
+  expect(response).to.be.an.instanceOf(Object)
+  expect(response.statusCode).to.equal(200)
+
+  return JSON.parse(response.body)
+}
+
+exports.logGetWrapper = logGetWrapper
+
+exports.logPostWrapper = function logPostWrapper (reqParams, combo) {
+  return logGetWrapper(reqParams, combo, 'post')
+}
+
+exports.logHandlerWrapper = function logHandlerWrapper (pathParam, combo) {
+  defaults(pathParam, { queryParams: {} })
+
+  if (isObject(combo)) {
+    Object.assign(pathParam.queryParams, combo)
+  }
+
+  return logHandler(pathParam)
 }

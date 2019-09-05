@@ -1,7 +1,7 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const diff = require('../../../../../lib/operations/diff')
+const log = require('../../../../../lib/operations/log')
 const init = require('../../../../helpers/init')
 const { testDiffs } = require('../../../../helpers/diffTestHelpers')
 const { getRandomGraphPathPattern, getSampleTestCollNames, getOriginKeys, getNodeBraceSampleIds } = require('../../../../helpers/logTestHelpers')
@@ -17,9 +17,9 @@ describe('Diff', () => {
 
   after(init.teardown)
 
-  it('should return diffs in DB scope for the root path', () => testDiffs('database', '/', diff))
+  it('should return diffs in DB scope for the root path', () => testDiffs('database', '/', diff, log))
 
-  it('should return diffs in Graph scope for a graph path', () => testDiffs('graph', getRandomGraphPathPattern(), diff))
+  it('should return diffs in Graph scope for a graph path', () => testDiffs('graph', getRandomGraphPathPattern(), diff, log))
 
   it('should return diffs in Collection scope for a collection path', () => {
     const sampleTestCollNames = getSampleTestCollNames()
@@ -37,7 +37,7 @@ describe('Diff', () => {
         `
     ]
 
-    return testDiffs('collection', path, diff, queryParts)
+    return testDiffs('collection', path, diff, log, queryParts)
   })
 
   it('should return diffs in Node Glob scope for a node-glob path', () => {
@@ -56,7 +56,7 @@ describe('Diff', () => {
         `
     ]
 
-    return testDiffs('nodeGlob', path, diff, queryParts)
+    return testDiffs('nodeGlob', path, diff, log, queryParts)
   })
 
   it('should return diffs in Node Brace scope for a node-brace path', () => {
@@ -71,6 +71,6 @@ describe('Diff', () => {
         `
     ]
 
-    testDiffs('nodeBrace', path, diff, queryParts)
+    testDiffs('nodeBrace', path, diff, log, queryParts)
   })
 })

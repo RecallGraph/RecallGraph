@@ -14,7 +14,9 @@ const {
   getOriginKeys,
   getRandomGraphPathPattern,
   getSampleTestCollNames,
-  getNodeBraceSampleIds
+  getNodeBraceSampleIds,
+  logGetWrapper,
+  logWrapperPost
 } = require('../../../../helpers/logTestHelpers')
 const { testDiffs } = require('../../../../helpers/diffTestHelpers')
 // noinspection NpmUsedModulesInstalled
@@ -36,7 +38,7 @@ describe('Routes - diff (Path as query param)', () => {
       }
     }
 
-    testDiffs('database', reqParams, diffWrapper)
+    testDiffs('database', reqParams, diffWrapper, logGetWrapper)
   })
 
   it('should return diffs in Graph scope for a graph path', () => {
@@ -47,7 +49,7 @@ describe('Routes - diff (Path as query param)', () => {
       }
     }
 
-    testDiffs('graph', reqParams, diffWrapper)
+    testDiffs('graph', reqParams, diffWrapper, logGetWrapper)
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
@@ -70,7 +72,7 @@ describe('Routes - diff (Path as query param)', () => {
         `
     ]
 
-    testDiffs('collection', reqParams, diffWrapper, queryParts)
+    testDiffs('collection', reqParams, diffWrapper, logGetWrapper, queryParts)
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
@@ -93,7 +95,7 @@ describe('Routes - diff (Path as query param)', () => {
       `
     ]
 
-    testDiffs('nodeGlob', reqParams, diffWrapper, queryParts)
+    testDiffs('nodeGlob', reqParams, diffWrapper, logGetWrapper, queryParts)
   })
 
   it('should return grouped events in Node Brace scope for a node-brace path, when groupBy is specified', () => {
@@ -112,7 +114,7 @@ describe('Routes - diff (Path as query param)', () => {
         `
     ]
 
-    testDiffs('nodeBrace', reqParams, diffWrapper, queryParts)
+    testDiffs('nodeBrace', reqParams, diffWrapper, logGetWrapper, queryParts)
   })
 })
 
@@ -129,7 +131,7 @@ describe('Routes - diff (Path as body param)', () => {
       }
     }
 
-    testDiffs('database', reqParams, diffWrapperPost)
+    testDiffs('database', reqParams, diffWrapperPost, logWrapperPost)
   })
 
   it('should return diffs in Graph scope for a graph path', () => {
@@ -140,7 +142,7 @@ describe('Routes - diff (Path as body param)', () => {
       }
     }
 
-    testDiffs('graph', reqParams, diffWrapperPost)
+    testDiffs('graph', reqParams, diffWrapperPost, logWrapperPost)
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
@@ -163,7 +165,7 @@ describe('Routes - diff (Path as body param)', () => {
         `
     ]
 
-    testDiffs('collection', reqParams, diffWrapperPost, queryParts)
+    testDiffs('collection', reqParams, diffWrapperPost, logWrapperPost, queryParts)
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
@@ -186,7 +188,7 @@ describe('Routes - diff (Path as body param)', () => {
       `
     ]
 
-    testDiffs('nodeGlob', reqParams, diffWrapperPost, queryParts)
+    testDiffs('nodeGlob', reqParams, diffWrapperPost, logWrapperPost, queryParts)
   })
 
   it('should return grouped events in Node Brace scope for a node-brace path, when groupBy is specified', () => {
@@ -205,7 +207,7 @@ describe('Routes - diff (Path as body param)', () => {
         `
     ]
 
-    testDiffs('nodeBrace', reqParams, diffWrapperPost, queryParts)
+    testDiffs('nodeBrace', reqParams, diffWrapperPost, logWrapperPost, queryParts)
   })
 })
 

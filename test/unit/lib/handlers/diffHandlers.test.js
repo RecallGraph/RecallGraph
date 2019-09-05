@@ -7,7 +7,8 @@ const {
   getOriginKeys,
   getRandomGraphPathPattern,
   getSampleTestCollNames,
-  getNodeBraceSampleIds
+  getNodeBraceSampleIds,
+  logHandlerWrapper
 } = require('../../../helpers/logTestHelpers')
 const { testDiffs } = require('../../../helpers/diffTestHelpers')
 // noinspection NpmUsedModulesInstalled
@@ -30,7 +31,7 @@ describe('Diff Handlers - Path as query param', () => {
       }
     }
 
-    return testDiffs('database', req, diffWrapper)
+    return testDiffs('database', req, diffWrapper, logHandlerWrapper)
   })
 
   it('should return diffs in Graph scope for a graph path', () => {
@@ -40,7 +41,7 @@ describe('Diff Handlers - Path as query param', () => {
       }
     }
 
-    return testDiffs('graph', req, diffWrapper)
+    return testDiffs('graph', req, diffWrapper, logHandlerWrapper)
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
@@ -62,7 +63,7 @@ describe('Diff Handlers - Path as query param', () => {
         `
     ]
 
-    return testDiffs('collection', req, diffWrapper, queryParts)
+    return testDiffs('collection', req, diffWrapper, logHandlerWrapper, queryParts)
   })
 
   it('should return diffs in Node Glob scope for a node-glob path', () => {
@@ -82,7 +83,7 @@ describe('Diff Handlers - Path as query param', () => {
         `
     ]
 
-    return testDiffs('nodeGlob', req, diffWrapper, queryParts)
+    return testDiffs('nodeGlob', req, diffWrapper, logHandlerWrapper, queryParts)
   })
 
   it('should return diffs in Node Brace scope for a node-brace path', () => {
@@ -100,7 +101,7 @@ describe('Diff Handlers - Path as query param', () => {
         `
     ]
 
-    testDiffs('nodeBrace', req, diffWrapper, queryParts)
+    testDiffs('nodeBrace', req, diffWrapper, logHandlerWrapper, queryParts)
   })
 })
 
@@ -116,7 +117,7 @@ describe('Diff Handlers - Path as body param', () => {
       }
     }
 
-    return testDiffs('database', req, diffWrapper)
+    return testDiffs('database', req, diffWrapper, logHandlerWrapper)
   })
 
   it('should return diffs in Graph scope for a graph path', () => {
@@ -126,7 +127,7 @@ describe('Diff Handlers - Path as body param', () => {
       }
     }
 
-    return testDiffs('graph', req, diffWrapper)
+    return testDiffs('graph', req, diffWrapper, logHandlerWrapper)
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
@@ -148,7 +149,7 @@ describe('Diff Handlers - Path as body param', () => {
         `
     ]
 
-    return testDiffs('collection', req, diffWrapper, queryParts)
+    return testDiffs('collection', req, diffWrapper, logHandlerWrapper, queryParts)
   })
 
   it('should return diffs in Node Glob scope for a node-glob path', () => {
@@ -168,7 +169,7 @@ describe('Diff Handlers - Path as body param', () => {
         `
     ]
 
-    return testDiffs('nodeGlob', req, diffWrapper, queryParts)
+    return testDiffs('nodeGlob', req, diffWrapper, logHandlerWrapper, queryParts)
   })
 
   it('should return diffs in Node Brace scope for a node-brace path', () => {
@@ -186,7 +187,7 @@ describe('Diff Handlers - Path as body param', () => {
         `
     ]
 
-    testDiffs('nodeBrace', req, diffWrapper, queryParts)
+    testDiffs('nodeBrace', req, diffWrapper, logHandlerWrapper, queryParts)
   })
 })
 
