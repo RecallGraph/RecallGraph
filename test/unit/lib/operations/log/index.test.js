@@ -1,10 +1,13 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
+// noinspection NpmUsedModulesInstalled
 const { db, query, aql } = require('@arangodb')
 const log = require('../../../../../lib/operations/log')
 const init = require('../../../../helpers/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
+// noinspection NpmUsedModulesInstalled
 const { concat } = require('lodash')
 const {
   testUngroupedEvents,
@@ -13,9 +16,10 @@ const {
   testGroupedEvents,
   getSampleTestCollNames,
   getOriginKeys
-} = require('../../../../helpers/eventTestHelpers')
+} = require('../../../../helpers/logTestHelpers')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
+const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 describe('Log - DB Scope', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -31,8 +35,10 @@ describe('Log - DB Scope', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -66,8 +72,10 @@ describe('Log - Graph Scope', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -96,8 +104,10 @@ describe('Log - Collection Scope', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -114,6 +124,8 @@ describe('Log - Collection Scope', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
@@ -140,8 +152,10 @@ describe('Log - Node Glob Scope', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e,'_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -158,6 +172,8 @@ describe('Log - Node Glob Scope', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
@@ -180,8 +196,10 @@ describe('Log - Node Brace Scope', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -194,6 +212,8 @@ describe('Log - Node Brace Scope', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter v.meta._id in ${sampleIds}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 

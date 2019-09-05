@@ -1,5 +1,6 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../helpers/init')
 const { snapshotInterval } = require('../../../lib/helpers')
@@ -18,6 +19,7 @@ describe('Helpers - snapshotInterval', () => {
 
   it('should return the default snapshot interval', () => {
     const ssInterval = snapshotInterval('non-existent-collection')
+    // noinspection JSUnresolvedVariable
     const defaultSnapshotInterval =
       module.context.service.configuration['snapshot-intervals']._default
 

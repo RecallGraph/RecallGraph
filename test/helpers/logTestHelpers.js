@@ -1,6 +1,8 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const {
+  isObject,
   random,
   chain,
   pick,
@@ -13,13 +15,24 @@ const {
   memoize,
   cloneDeep,
   concat,
-  differenceBy,
-  sampleSize
+  sampleSize,
+  omit,
+  partialRight,
+  defaults,
+  omitBy,
+  isNil
 } = require('lodash')
+// noinspection NpmUsedModulesInstalled
+const request = require('@arangodb/request')
+// noinspection JSUnresolvedVariable
+const { baseUrl } = module.context
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('./init')
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const log = require('../../lib/operations/log')
+const { log: logHandler } = require('../../lib/handlers/logHandlers')
 const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/helpers')
+// noinspection NpmUsedModulesInstalled
 const { aql, db } = require('@arangodb')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../lib/operations/log/helpers')
@@ -69,6 +82,7 @@ function getRandomSampleCollectionPatterns (bracesOnly = false) {
     .sampleSize(sampleSize)
 
   if (bracesOnly) {
+    // noinspection JSUnresolvedFunction
     return collsWrapper.value()
   } else {
     return collsWrapper
@@ -83,12 +97,14 @@ function getRandomSampleCollectionPatterns (bracesOnly = false) {
 }
 
 function getTestDataCollectionPatterns () {
+  // noinspection JSUnresolvedVariable
   const testDataCollectionPatterns = chain(TEST_DATA_COLLECTIONS)
     .values()
     .map(coll => coll.substring(module.context.collectionPrefix.length))
     .value()
     .join(',')
 
+  // noinspection JSUnresolvedVariable
   return `${module.context.collectionPrefix}{test_does_not_exist,${testDataCollectionPatterns}}`
 }
 
@@ -102,6 +118,7 @@ exports.getRandomGraphPathPattern = function getRandomGraphPathPattern () {
     })
     .join(',')
 
+  // noinspection JSUnresolvedVariable
   return `/g/{${graphPatterns},${module.context.collectionPrefix}test_does_not_exist}`
 }
 
@@ -160,32 +177,35 @@ exports.testUngroupedEvents = function testUngroupedEvents (
   expectedEvents,
   logFn
 ) {
-  expect(
-    allEvents,
-    JSON.stringify({
-      all: differenceBy(allEvents, expectedEvents, '_id'),
-      expected: differenceBy(expectedEvents, allEvents, '_id')
-    })
-  ).to.deep.equal(expectedEvents)
+  const expectedEventsSansCommands = expectedEvents.map(partialRight(omit, 'command'))
+  expect(allEvents).to.deep.equal(expectedEventsSansCommands)
 
-  if (expectedEvents.length > 0) {
+  if (allEvents.length) {
     const timeRange = getRandomSubRange(expectedEvents)
     const sliceRange = getRandomSubRange(range(1, timeRange[1] - timeRange[0]))
     const since = [0, Math.floor(expectedEvents[timeRange[1]].ctime)]
     const until = [0, Math.ceil(expectedEvents[timeRange[0]].ctime)]
     const skip = [0, sliceRange[0]]
     const limit = [0, sliceRange[1]]
-    const sortType = [null, 'asc', 'desc']
+    const sort = [null, 'asc', 'desc']
     const groupBy = [null]
     const countsOnly = [false, true]
+    const groupSort = [null, 'asc', 'desc']
+    const groupSkip = [0, 1]
+    const groupLimit = [0, 2]
+    const returnCommands = [false, true]
     const combos = cartesian({
       since,
       until,
       skip,
       limit,
-      sortType,
+      sort,
       groupBy,
-      countsOnly
+      countsOnly,
+      groupSort,
+      groupSkip,
+      groupLimit,
+      returnCommands
     })
 
     combos.forEach(combo => {
@@ -193,18 +213,20 @@ exports.testUngroupedEvents = function testUngroupedEvents (
 
       expect(events).to.be.an.instanceOf(Array)
 
-      const earliestTimeBoundIndex = combo.since
-        ? findLastIndex(expectedEvents, e => e.ctime >= combo.since)
-        : expectedEvents.length - 1
-      const latestTimeBoundIndex =
-        combo.until && findIndex(expectedEvents, e => e.ctime <= combo.until)
+      const relevantExpectedEvents = combo.returnCommands ? expectedEvents : expectedEventsSansCommands
 
-      const timeSlicedEvents = expectedEvents.slice(
+      const earliestTimeBoundIndex = combo.since
+        ? findLastIndex(relevantExpectedEvents, e => e.ctime >= combo.since)
+        : relevantExpectedEvents.length - 1
+      const latestTimeBoundIndex =
+        combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
+
+      const timeSlicedEvents = relevantExpectedEvents.slice(
         latestTimeBoundIndex,
         earliestTimeBoundIndex + 1
       )
       const sortedTimeSlicedEvents =
-        combo.sortType === 'asc'
+        combo.sort === 'asc'
           ? timeSlicedEvents.reverse()
           : timeSlicedEvents
 
@@ -219,20 +241,18 @@ exports.testUngroupedEvents = function testUngroupedEvents (
         slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents
       }
 
-      expect(
-        events,
-        JSON.stringify({
-          pathParam,
-          combo,
-          events: differenceBy(events, slicedSortedTimeSlicedEvents, '_id'),
-          expected: differenceBy(slicedSortedTimeSlicedEvents, events, '_id')
-        })
-      ).to.deep.equal(slicedSortedTimeSlicedEvents)
+      expect(events.length).to.equal(slicedSortedTimeSlicedEvents.length)
+      expect(events[0]).to.deep.equal(slicedSortedTimeSlicedEvents[0])
+      events.forEach((event, idx) => {
+        expect(event).to.be.an.instanceOf(Object)
+        expect(event._id).to.equal(slicedSortedTimeSlicedEvents[idx]._id)
+      })
     })
   }
 }
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
+const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 function getOriginKeys () {
   const originKeys = differenceWith(
@@ -252,6 +272,8 @@ const queryPartsInializers = {
     aql`
       for v in ${eventColl}
       filter v._key not in ${getOriginKeys()}
+      for e in ${commandColl}
+      filter e._to == v._id
     `
   ],
   graph: () => {
@@ -266,12 +288,15 @@ const queryPartsInializers = {
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
         filter regex_split(v.meta._id, '/')[0] in ${sampleGraphCollNames}
+        for e in ${commandColl}
+        filter e._to == v._id
       `
     ]
   }
 }
 
 const initQueryParts = memoize(scope => queryPartsInializers[scope]())
+exports.initQueryParts = initQueryParts
 
 exports.testGroupedEvents = function testGroupedEvents (
   scope,
@@ -285,20 +310,28 @@ exports.testGroupedEvents = function testGroupedEvents (
     const timeRange = getRandomSubRange(allEvents)
     const since = [0, Math.floor(allEvents[timeRange[1]].ctime)]
     const until = [0, Math.ceil(allEvents[timeRange[0]].ctime)]
+    const sort = [null, 'asc', 'desc']
     const skip = [0, 1]
     const limit = [0, 2]
-    const sortType = [null, 'asc', 'desc']
     const groupBy = ['node', 'collection', 'event']
     const countsOnly = [false, true]
+    const groupSort = [null, 'asc', 'desc']
+    const groupSkip = [0, 1]
+    const groupLimit = [0, 2]
+    const returnCommands = [false, true]
 
     const combos = cartesian({
       since,
       until,
       skip,
       limit,
-      sortType,
+      sort,
       groupBy,
-      countsOnly
+      countsOnly,
+      groupSort,
+      groupSkip,
+      groupLimit,
+      returnCommands
     })
     combos.forEach(combo => {
       const eventGroups = logFn(pathParam, combo)
@@ -310,38 +343,57 @@ exports.testGroupedEvents = function testGroupedEvents (
         until: utl,
         skip: skp,
         limit: lmt,
-        sortType: st,
+        sort: st,
         groupBy: gb,
-        countsOnly: co
+        countsOnly: co,
+        groupSort: gst,
+        groupSkip: gskp,
+        groupLimit: glmt,
+        returnCommands: rc
       } = combo
       const queryParts = cloneDeep(qp || initQueryParts(scope))
 
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
       timeBoundFilters.forEach(filter => queryParts.push(filter))
 
-      queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co))
+      queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co, rc))
       queryParts.push(getSortingClause(st, gb, co))
       queryParts.push(getLimitClause(lmt, skp))
-      queryParts.push(getReturnClause(st, gb, co))
+      queryParts.push(getReturnClause(gb, co, gst, gskp, glmt, rc))
 
       const query = aql.join(queryParts, '\n')
       const expectedEventGroups = db._query(query).toArray()
 
-      expect(
-        eventGroups,
-        JSON.stringify({
-          combo,
-          eventGrps: differenceBy(eventGroups, expectedEventGroups, '_id'),
-          expectedGrps: differenceBy(expectedEventGroups, eventGroups, '_id')
-        })
-      ).to.deep.equal(expectedEventGroups)
+      expect(eventGroups.length).to.equal(expectedEventGroups.length)
+
+      const aggrField = co ? 'total' : 'events'
+      eventGroups.forEach((eventGroup, idx1) => {
+        expect(eventGroup).to.be.an.instanceOf(Object)
+        expect(eventGroup[gb]).to.equal(expectedEventGroups[idx1][gb])
+
+        expect(eventGroup).to.have.property(aggrField)
+        if (co) {
+          expect(eventGroup[aggrField]).to.equal(expectedEventGroups[idx1][aggrField])
+        } else {
+          expect(eventGroup[aggrField]).to.be.an.instanceOf(Array)
+          expect(eventGroup[aggrField].length).to.equal(expectedEventGroups[idx1][aggrField].length)
+
+          if (eventGroup[aggrField].length > 0) {
+            expect(eventGroup[aggrField][0]).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
+            eventGroup[aggrField].forEach((event, idx2) => {
+              expect(event).to.be.an.instanceOf(Object)
+              expect(event._id).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
+            })
+          }
+        }
+      })
     })
   }
 }
 
-function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly) {
+function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCommands) {
   if (groupBy !== 'collection') {
-    return getGroupingClause(groupBy, countsOnly)
+    return getGroupingClause(groupBy, countsOnly, returnCommands)
   } else {
     const groupingPrefix =
       'collect collection = regex_split(v.meta._id, "/")[0]'
@@ -349,23 +401,29 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly) {
     let groupingSuffix
     if (countsOnly) {
       groupingSuffix = 'with count into total'
+    } else if (returnCommands) {
+      groupingSuffix = 'into events = merge(v, {command: e.command})'
     } else {
-      groupingSuffix = 'into events = keep(v, \'_id\', \'ctime\', \'event\', \'meta\')'
+      groupingSuffix = 'into events = v'
     }
 
     return aql.literal(`${groupingPrefix} ${groupingSuffix}`)
   }
 }
 
+exports.getGroupingClauseForExpectedResultsQuery = getGroupingClauseForExpectedResultsQuery
+
 exports.getNodeBraceSampleIds = function getNodeBraceSampleIds (
   maxLength = Number.POSITIVE_INFINITY
 ) {
   const rootPathEvents = log('/')
+  // noinspection JSUnresolvedVariable
   const length = Number.isFinite(maxLength)
     ? Math.min(rootPathEvents.length, maxLength)
     : rootPathEvents.length
   const size = random(1, length)
   const sampleIds = []
+  // noinspection JSCheckFunctionSignatures
   const pathSuffixes = chain(rootPathEvents)
     .shuffle()
     .sampleSize(size)
@@ -411,4 +469,35 @@ exports.getSampleTestCollNames = function getSampleTestCollNames () {
   const size = random(1, testCollNames.length)
 
   return sampleSize(testCollNames, size)
+}
+
+function logGetWrapper (reqParams, combo, method = 'get') {
+  defaults(reqParams, { qs: {} })
+
+  if (isObject(combo)) {
+    Object.assign(reqParams.qs, omitBy(combo, isNil))
+  }
+
+  const response = request[method](`${baseUrl}/event/log`, reqParams)
+
+  expect(response).to.be.an.instanceOf(Object)
+  expect(response.statusCode).to.equal(200)
+
+  return JSON.parse(response.body)
+}
+
+exports.logGetWrapper = logGetWrapper
+
+exports.logPostWrapper = function logPostWrapper (reqParams, combo) {
+  return logGetWrapper(reqParams, combo, 'post')
+}
+
+exports.logHandlerWrapper = function logHandlerWrapper (pathParam, combo) {
+  defaults(pathParam, { queryParams: {} })
+
+  if (isObject(combo)) {
+    Object.assign(pathParam.queryParams, combo)
+  }
+
+  return logHandler(pathParam)
 }

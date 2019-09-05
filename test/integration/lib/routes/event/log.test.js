@@ -1,22 +1,24 @@
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
-const request = require('@arangodb/request')
-const { baseUrl } = module.context
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-const { isObject, concat, defaults, omitBy, isNil } = require('lodash')
 const {
   getOriginKeys,
   testUngroupedEvents,
   testGroupedEvents,
   getRandomGraphPathPattern,
   getSampleTestCollNames,
-  getNodeBraceSampleIds
-} = require('../../../../helpers/eventTestHelpers')
+  getNodeBraceSampleIds,
+  logGetWrapper,
+  logWrapperPost
+} = require('../../../../helpers/logTestHelpers')
+// noinspection NpmUsedModulesInstalled
 const { db, query, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
+const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 describe('Routes - log (Path as query param)', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -30,18 +32,20 @@ describe('Routes - log (Path as query param)', () => {
         path: '/'
       }
     }
-    const allEvents = logWrapper(reqParams) // Ungrouped events in desc order by ctime.
+    const allEvents = logGetWrapper(reqParams) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
-    testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
+    testUngroupedEvents(reqParams, allEvents, expectedEvents, logGetWrapper)
   })
 
   it('should return grouped events in DB scope for the root path, when groupBy is specified', () => {
@@ -52,7 +56,7 @@ describe('Routes - log (Path as query param)', () => {
       }
     }
 
-    testGroupedEvents('database', reqParams, logWrapper)
+    testGroupedEvents('database', reqParams, logGetWrapper)
   })
 
   it('should return ungrouped events in Graph scope for a graph path, when no groupBy is specified', () => {
@@ -63,24 +67,23 @@ describe('Routes - log (Path as query param)', () => {
       }
     }
 
-    const allEvents = logWrapper(reqParams) // Ungrouped events in desc order by ctime.
+    const allEvents = logGetWrapper(reqParams) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
     const sampleDataRefs = init.getSampleDataRefs()
-    const sampleGraphCollNames = concat(
-      sampleDataRefs.vertexCollections,
-      sampleDataRefs.edgeCollections
-    )
+    const sampleGraphCollNames = sampleDataRefs.vertexCollections.concat(sampleDataRefs.edgeCollections)
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
-    testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
+    testUngroupedEvents(reqParams, allEvents, expectedEvents, logGetWrapper)
   })
 
   it('should return grouped events in Graph scope for a graph path, when groupBy is specified', () => {
@@ -91,7 +94,7 @@ describe('Routes - log (Path as query param)', () => {
       }
     }
 
-    return testGroupedEvents('graph', reqParams, logWrapper)
+    testGroupedEvents('graph', reqParams, logGetWrapper)
   })
 
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
@@ -104,7 +107,7 @@ describe('Routes - log (Path as query param)', () => {
       json: true,
       qs: { path }
     }
-    const allEvents = logWrapper(reqParams) // Ungrouped events in desc order by ctime.
+    const allEvents = logGetWrapper(reqParams) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
@@ -112,11 +115,13 @@ describe('Routes - log (Path as query param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
-    testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
+    testUngroupedEvents(reqParams, allEvents, expectedEvents, logGetWrapper)
   })
 
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
@@ -134,10 +139,12 @@ describe('Routes - log (Path as query param)', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
-    testGroupedEvents('collection', reqParams, logWrapper, queryParts)
+    testGroupedEvents('collection', reqParams, logGetWrapper, queryParts)
   })
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
@@ -150,7 +157,7 @@ describe('Routes - log (Path as query param)', () => {
       json: true,
       qs: { path }
     }
-    const allEvents = logWrapper(reqParams) // Ungrouped events in desc order by ctime.
+    const allEvents = logGetWrapper(reqParams) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
@@ -158,11 +165,13 @@ describe('Routes - log (Path as query param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e,'_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
-    testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
+    testUngroupedEvents(reqParams, allEvents, expectedEvents, logGetWrapper)
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
@@ -180,10 +189,12 @@ describe('Routes - log (Path as query param)', () => {
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
         filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+        for e in ${commandColl}
+        filter e._to == v._id
       `
     ]
 
-    testGroupedEvents('nodeGlob', reqParams, logWrapper, queryParts)
+    testGroupedEvents('nodeGlob', reqParams, logGetWrapper, queryParts)
   })
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when no groupBy is specified', () => {
@@ -192,7 +203,7 @@ describe('Routes - log (Path as query param)', () => {
       json: true,
       qs: { path }
     }
-    const allEvents = logWrapper(reqParams) // Ungrouped events in desc order by ctime.
+    const allEvents = logGetWrapper(reqParams) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
@@ -200,11 +211,13 @@ describe('Routes - log (Path as query param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
-    testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapper)
+    testUngroupedEvents(reqParams, allEvents, expectedEvents, logGetWrapper)
   })
 
   it('should return grouped events in Node Brace scope for a node-brace path, when groupBy is specified', () => {
@@ -218,10 +231,12 @@ describe('Routes - log (Path as query param)', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter v.meta._id in ${sampleIds}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
-    testGroupedEvents('nodeBrace', reqParams, logWrapper, queryParts)
+    testGroupedEvents('nodeBrace', reqParams, logGetWrapper, queryParts)
   })
 })
 
@@ -244,8 +259,10 @@ describe('Routes - log (Path as body param)', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapperPost)
@@ -275,16 +292,15 @@ describe('Routes - log (Path as body param)', () => {
     expect(allEvents).to.be.an.instanceOf(Array)
 
     const sampleDataRefs = init.getSampleDataRefs()
-    const sampleGraphCollNames = concat(
-      sampleDataRefs.vertexCollections,
-      sampleDataRefs.edgeCollections
-    )
+    const sampleGraphCollNames = sampleDataRefs.vertexCollections.concat(sampleDataRefs.edgeCollections)
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapperPost)
@@ -319,8 +335,10 @@ describe('Routes - log (Path as body param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(req, allEvents, expectedEvents, logWrapperPost)
@@ -341,6 +359,8 @@ describe('Routes - log (Path as body param)', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
@@ -364,8 +384,10 @@ describe('Routes - log (Path as body param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e,'_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(req, allEvents, expectedEvents, logWrapperPost)
@@ -386,6 +408,8 @@ describe('Routes - log (Path as body param)', () => {
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
         filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+        for e in ${commandColl}
+        filter e._to == v._id
       `
     ]
 
@@ -406,8 +430,10 @@ describe('Routes - log (Path as body param)', () => {
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
           filter e.meta._id in ${sampleIds}
+          for c in ${commandColl}
+            filter c._to == e._id
           sort e.ctime desc
-        return keep(e, '_id', 'ctime', 'event', 'meta')
+        return merge(e, keep(c, 'command'))
       `.toArray()
 
     testUngroupedEvents(reqParams, allEvents, expectedEvents, logWrapperPost)
@@ -424,30 +450,11 @@ describe('Routes - log (Path as body param)', () => {
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
           filter v.meta._id in ${sampleIds}
+          for e in ${commandColl}
+          filter e._to == v._id
         `
     ]
 
     testGroupedEvents('nodeBrace', reqParams, logWrapperPost, queryParts)
   })
 })
-
-function logWrapper (reqParams, combo, method = 'get') {
-  defaults(reqParams, { qs: {} })
-
-  if (isObject(combo)) {
-    Object.assign(reqParams.qs, omitBy(combo, isNil))
-  }
-
-  const response = request[method](`${baseUrl}/event/log`, reqParams)
-
-  expect(response).to.be.an.instanceOf(Object)
-  expect(response.statusCode, JSON.stringify({ reqParams, response })).to.equal(
-    200
-  )
-
-  return JSON.parse(response.body)
-}
-
-function logWrapperPost (reqParams, combo) {
-  return logWrapper(reqParams, combo, 'post')
-}
