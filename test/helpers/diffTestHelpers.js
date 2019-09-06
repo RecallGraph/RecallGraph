@@ -4,7 +4,7 @@
 const { expect } = require('chai')
 const { getRandomSubRange, cartesian, initQueryParts, getGroupingClauseForExpectedResultsQuery } = require('./logTestHelpers')
 // noinspection NpmUsedModulesInstalled
-const { cloneDeep } = require('lodash')
+const { cloneDeep, omit } = require('lodash')
 // noinspection NpmUsedModulesInstalled
 const { aql, db } = require('@arangodb')
 const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/helpers')
@@ -65,7 +65,8 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
       const expectedEventGroups = db._query(query).toArray()
       const expectedDiffs = expectedEventGroups.map(item => ({
         node: item.node,
-        commands: item.events.map(event => rv ? jiff.inverse(event.command) : event.command)
+        commands: item.events.map(event => rv ? jiff.inverse(event.command).map(
+          step => omit(step, 'context')) : event.command)
       }))
 
       // noinspection JSUnresolvedVariable
