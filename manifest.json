@@ -56,6 +56,12 @@
       "type": "string",
       "required": true
     },
+    "snapshot-link-coll-suffix": {
+      "description": "The suffix of the (edge) collection where snapshot links are stored.",
+      "default": "_snapshot_links",
+      "type": "string",
+      "required": true
+    },
     "skeleton-vertex-coll-suffix": {
       "description": "The suffix of the (vertex) collection where structural vertices are stored.",
       "default": "_skeleton_vertices",
