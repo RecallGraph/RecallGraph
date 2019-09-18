@@ -292,15 +292,15 @@ describe('Commit Helpers - insertEvtSSLink', () => {
 
   it('should return a new event-snapshot link', () => {
     const evtSSCollName = SERVICE_COLLECTIONS.evtSSLinks
-    const [from, to] = [`${evtSSCollName}/void-1`, `${evtSSCollName}/void-2`]
-    const enode = insertEvtSSLink(from, to)
+    const [evtNodeId, ssNodeId] = [`${evtSSCollName}/void-1`, `${evtSSCollName}/void-2`]
+    const enode = insertEvtSSLink(evtNodeId, ssNodeId)
 
     expect(enode).to.be.an.instanceOf(Object)
     expect(enode).to.have.property('_id')
     expect(enode).to.have.property('_key')
     expect(enode).to.have.property('_rev')
-    expect(enode._from).to.equal(from)
-    expect(enode._to).to.equal(to)
+    expect(enode._from).to.equal(evtNodeId)
+    expect(enode._to).to.equal(ssNodeId)
   })
 })
 

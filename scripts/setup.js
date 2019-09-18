@@ -7,9 +7,9 @@ const gg = require('@arangodb/general-graph')
 const queues = require('@arangodb/foxx/queues')
 const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
 
-const { events, commands, snapshots, evtSSLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
+const { events, commands, snapshots, evtSSLinks, snapshotLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
 const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
-const edgeCollections = [commands, evtSSLinks, skeletonEdgeSpokes]
+const edgeCollections = [commands, evtSSLinks, snapshotLinks, skeletonEdgeSpokes]
 
 for (const localName of documentCollections) {
   if (!db._collection(localName)) {
@@ -82,8 +82,9 @@ const { eventLog, skeleton } = SERVICE_GRAPHS
 let evlEdgeDefs, skelEdgeDefs
 try {
   const commandRel = gg._relation(commands, [events], [events])
-  const ssRel = gg._relation(evtSSLinks, [events], [snapshots])
-  evlEdgeDefs = gg._edgeDefinitions(commandRel, ssRel)
+  const ssRel = gg._relation(snapshotLinks, [snapshots], [snapshots])
+  const evtSSRel = gg._relation(evtSSLinks, [events], [snapshots])
+  evlEdgeDefs = gg._edgeDefinitions(commandRel, ssRel, evtSSRel)
 
   gg._drop(eventLog)
 
