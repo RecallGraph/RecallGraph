@@ -220,8 +220,7 @@ describe('Commit Helpers - insertEventNode', () => {
       coll.name(),
       cEvtNode,
       node,
-      ctime,
-      mtime
+      ctime
     )
     const rEvtNode = insertEventNode(node, mtime, 'updated', ssData)
 
@@ -624,9 +623,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -678,9 +675,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -808,9 +803,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -884,9 +877,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1330,9 +1321,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1389,9 +1378,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1448,9 +1435,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1507,9 +1492,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1566,9 +1549,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1624,9 +1605,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1761,9 +1740,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 
@@ -1842,9 +1819,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode).to.have.property('_id')
     expect(ssData.ssNode).to.have.property('_key')
     expect(ssData.ssNode).to.have.property('_rev')
-    expect(ssData.ssNode.meta).to.be.an.instanceOf(Object)
-    expect(ssData.ssNode.meta.ctime).to.equal(prevEvent.ctime)
-    expect(ssData.ssNode.meta.mtime).to.equal(time)
+    expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
 

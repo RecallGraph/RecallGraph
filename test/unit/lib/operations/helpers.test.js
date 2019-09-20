@@ -13,7 +13,11 @@ const {
   getLimitClause,
   getTimeBoundFilters,
   getEventLogQueryInitializer,
-  getNonServiceCollections
+  getNonServiceCollections,
+  getScopeAndSearchPatternFor,
+  getScopeFilters,
+  getScopeInitializers,
+  getSort
 } = require('../../../../lib/operations/helpers')
 const {
   getRandomGraphPathPattern,
@@ -88,227 +92,186 @@ describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', 
   })
 })
 
-// describe('Log Helpers - getScopeFor', () => {
-//   before(() => init.setup({ ensureSampleDataLoad: true }))
-//
-//   after(init.teardown)
-//
-//   it('should return the DB scope for the root path', () => {
-//     const path = '/'
-//     const scope = getScopeFor(path)
-//
-//     expect(scope).to.be.an.instanceOf(Object)
-//     expect(scope.pathPattern).to.equal(path)
-//     expect(scope).to.not.respondTo('filters')
-//     expect(scope).to.not.respondTo('initializers')
-//   })
-//
-//   it('should return the Graph scope for a graph-prefixed path pattern', () => {
-//     const path = getRandomGraphPathPattern()
-//     const scope = getScopeFor(path)
-//
-//     expect(scope).to.be.an.instanceOf(Object)
-//     expect(scope.pathPattern).to.include('/g/')
-//     expect(scope).to.respondTo('filters')
-//     expect(scope).to.not.respondTo('initializers')
-//   })
-//
-//   it('should return the Collection scope for a collection-prefixed path pattern', () => {
-//     const path = getRandomCollectionPathPattern()
-//     const scope = getScopeFor(path)
-//
-//     expect(scope).to.be.an.instanceOf(Object)
-//     expect(scope.pathPattern).to.include('/c/')
-//     expect(scope).to.respondTo('filters')
-//     expect(scope).to.not.respondTo('initializers')
-//   })
-//
-//   it('should return the Node Glob scope for a node-glob-prefixed path pattern', () => {
-//     const path = getRandomNodeGlobPathPattern()
-//     const scope = getScopeFor(path)
-//
-//     expect(scope).to.be.an.instanceOf(Object)
-//     expect(scope.pathPattern).to.include('/ng/')
-//     expect(scope).to.respondTo('filters')
-//     expect(scope).to.not.respondTo('initializers')
-//   })
-//
-//   it('should return the Node Brace scope for a node-prefixed path pattern', () => {
-//     const path = getRandomNodeBracePathPattern()
-//     const scope = getScopeFor(path)
-//
-//     expect(scope).to.be.an.instanceOf(Object)
-//     expect(scope.pathPattern).to.include('/n/')
-//     expect(scope).to.respondTo('filters')
-//     expect(scope).to.respondTo('initializers')
-//   })
-// })
+describe('Op Helpers - getScopeAndSearchPatternFor', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }))
 
-// describe('Log Helpers - getSearchPattern', () => {
-//   before(() => init.setup({ ensureSampleDataLoad: true }))
-//
-//   after(init.teardown)
-//
-//   it('should return the DB search pattern for the root path', () => {
-//     const path = '/'
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//
-//     expect(path).to.include(searchPattern)
-//   })
-//
-//   it('should return the Graph search pattern for a graph-prefixed path pattern', () => {
-//     const path = getRandomGraphPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//
-//     expect(path).to.include(searchPattern)
-//   })
-//
-//   it('should return the Collection search pattern for a collection-prefixed path pattern', () => {
-//     const path = getRandomCollectionPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//
-//     expect(path).to.include(searchPattern)
-//   })
-//
-//   it('should return the Node Glob search pattern for a node-glob-prefixed path pattern', () => {
-//     const path = getRandomNodeGlobPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//
-//     expect(path).to.include(searchPattern)
-//   })
-//
-//   it('should return the Node Brace search pattern for a node-prefixed path pattern', () => {
-//     const path = getRandomNodeBracePathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//
-//     expect(path).to.include(searchPattern)
-//   })
-// })
+  after(init.teardown)
 
-// describe('Log Helpers - getScopeFilters', () => {
-//   before(() => init.setup({ ensureSampleDataLoad: true }))
-//
-//   after(init.teardown)
-//
-//   it('should return the DB scope filters for the root path', () => {
-//     const path = '/'
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeFilters = getScopeFilters(scope, searchPattern)
-//
-//     expect(scopeFilters).to.be.an.instanceOf(Object)
-//     // noinspection BadExpressionStatementJS
-//     expect(scopeFilters.query).to.be.empty
-//   })
-//
-//   it('should return the Graph scope filters for a graph-prefixed path pattern', () => {
-//     const path = getRandomGraphPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeFilters = getScopeFilters(scope, searchPattern)
-//
-//     expect(scopeFilters).to.be.an.instanceOf(Object)
-//     expect(scopeFilters.query).to.include('filter')
-//   })
-//
-//   it('should return the Collection scope filters for a collection-prefixed path pattern', () => {
-//     const path = getRandomCollectionPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeFilters = getScopeFilters(scope, searchPattern)
-//
-//     expect(scopeFilters).to.be.an.instanceOf(Object)
-//     expect(scopeFilters.query).to.include('filter')
-//   })
-//
-//   it('should return the Node Glob scope filters for a node-glob-prefixed path pattern', () => {
-//     const path = getRandomNodeGlobPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeFilters = getScopeFilters(scope, searchPattern)
-//
-//     expect(scopeFilters).to.be.an.instanceOf(Object)
-//     expect(scopeFilters.query).to.include('filter')
-//   })
-//
-//   it('should return the Node Brace scope filters for a node-prefixed path pattern', () => {
-//     const path = getRandomNodeBracePathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeFilters = getScopeFilters(scope, searchPattern)
-//
-//     expect(scopeFilters).to.be.an.instanceOf(Object)
-//     expect(scopeFilters.query).to.include('filter')
-//   })
-// })
+  it('should return the DB scope for the root path', () => {
+    const path = '/'
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
 
-// describe('Log Helpers - getScopeInitializers', () => {
-//   before(() => init.setup({ ensureSampleDataLoad: true }))
-//
-//   after(init.teardown)
-//
-//   it('should return the DB scope initializers for the root path', () => {
-//     const path = '/'
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeInitializers = getScopeInitializers(scope, searchPattern)
-//
-//     expect(scopeInitializers).to.be.an.instanceOf(Object)
-//     // noinspection BadExpressionStatementJS
-//     expect(scopeInitializers.query).to.be.empty
-//   })
-//
-//   it('should return the Graph scope initializers for a graph-prefixed path pattern', () => {
-//     const path = getRandomGraphPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeInitializers = getScopeInitializers(scope, searchPattern)
-//
-//     expect(scopeInitializers).to.be.an.instanceOf(Object)
-//     // noinspection BadExpressionStatementJS
-//     expect(scopeInitializers.query).to.be.empty
-//   })
-//
-//   it('should return the Collection scope initializers for a collection-prefixed path pattern', () => {
-//     const path = getRandomCollectionPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeInitializers = getScopeInitializers(scope, searchPattern)
-//
-//     expect(scopeInitializers).to.be.an.instanceOf(Object)
-//     // noinspection BadExpressionStatementJS
-//     expect(scopeInitializers.query).to.be.empty
-//   })
-//
-//   it('should return the Node Glob scope initializers for a node-glob-prefixed path pattern', () => {
-//     const path = getRandomNodeGlobPathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeInitializers = getScopeInitializers(scope, searchPattern)
-//
-//     expect(scopeInitializers).to.be.an.instanceOf(Object)
-//     // noinspection BadExpressionStatementJS
-//     expect(scopeInitializers.query).to.be.empty
-//   })
-//
-//   it('should return the Node Brace scope initializers for a node-prefixed path pattern', () => {
-//     const path = getRandomNodeBracePathPattern()
-//     const scope = getScopeFor(path)
-//     const searchPattern = getSearchPattern(scope, path)
-//     const scopeInitializers = getScopeInitializers(scope, searchPattern)
-//
-//     expect(scopeInitializers).to.be.an.instanceOf(Object)
-//     // noinspection BadExpressionStatementJS
-//     expect(scopeInitializers.query).to.be.not.empty
-//   })
-// })
+    expect(scope).to.be.an.instanceOf(Object)
+    expect(scope.pathPattern).to.equal(path)
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.not.respondTo('filters')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.not.respondTo('initializers')
+    expect(path).to.include(searchPattern)
+  })
 
-describe('Log Helpers - getLimitClause', () => {
+  it('should return the Graph scope for a graph-prefixed path pattern', () => {
+    const path = getRandomGraphPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+
+    expect(scope).to.be.an.instanceOf(Object)
+    expect(scope.pathPattern).to.include('/g/')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.not.respondTo('initializers')
+    expect(path).to.include(searchPattern)
+  })
+
+  it('should return the Collection scope for a collection-prefixed path pattern', () => {
+    const path = getRandomCollectionPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+
+    expect(scope).to.be.an.instanceOf(Object)
+    expect(scope.pathPattern).to.include('/c/')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.not.respondTo('initializers')
+    expect(path).to.include(searchPattern)
+  })
+
+  it('should return the Node Glob scope for a node-glob-prefixed path pattern', () => {
+    const path = getRandomNodeGlobPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+
+    expect(scope).to.be.an.instanceOf(Object)
+    expect(scope.pathPattern).to.include('/ng/')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.not.respondTo('initializers')
+    expect(path).to.include(searchPattern)
+  })
+
+  it('should return the Node Brace scope for a node-prefixed path pattern', () => {
+    const path = getRandomNodeBracePathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+
+    expect(scope).to.be.an.instanceOf(Object)
+    expect(scope.pathPattern).to.include('/n/')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.respondTo('filters')
+    // noinspection JSUnresolvedFunction
+    expect(scope).to.respondTo('initializers')
+    expect(path).to.include(searchPattern)
+  })
+})
+
+describe('Op Helpers - getScopeFilters', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }))
+
+  after(init.teardown)
+
+  it('should return the DB scope filters for the root path', () => {
+    const path = '/'
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeFilters = getScopeFilters(scope, searchPattern)
+
+    expect(scopeFilters).to.be.an.instanceOf(Object)
+    // noinspection BadExpressionStatementJS
+    expect(scopeFilters.query).to.be.empty
+  })
+
+  it('should return the Graph scope filters for a graph-prefixed path pattern', () => {
+    const path = getRandomGraphPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeFilters = getScopeFilters(scope, searchPattern)
+
+    expect(scopeFilters).to.be.an.instanceOf(Object)
+    expect(scopeFilters.query).to.include('filter')
+  })
+
+  it('should return the Collection scope filters for a collection-prefixed path pattern', () => {
+    const path = getRandomCollectionPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeFilters = getScopeFilters(scope, searchPattern)
+
+    expect(scopeFilters).to.be.an.instanceOf(Object)
+    expect(scopeFilters.query).to.include('filter')
+  })
+
+  it('should return the Node Glob scope filters for a node-glob-prefixed path pattern', () => {
+    const path = getRandomNodeGlobPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeFilters = getScopeFilters(scope, searchPattern)
+
+    expect(scopeFilters).to.be.an.instanceOf(Object)
+    expect(scopeFilters.query).to.include('filter')
+  })
+
+  it('should return the Node Brace scope filters for a node-prefixed path pattern', () => {
+    const path = getRandomNodeBracePathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeFilters = getScopeFilters(scope, searchPattern)
+
+    expect(scopeFilters).to.be.an.instanceOf(Object)
+    expect(scopeFilters.query).to.include('filter')
+  })
+})
+
+describe('Op Helpers - getScopeInitializers', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }))
+
+  after(init.teardown)
+
+  it('should return the DB scope initializers for the root path', () => {
+    const path = '/'
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeInitializers = getScopeInitializers(scope, searchPattern)
+
+    expect(scopeInitializers).to.be.an.instanceOf(Object)
+    // noinspection BadExpressionStatementJS
+    expect(scopeInitializers.query).to.be.empty
+  })
+
+  it('should return the Graph scope initializers for a graph-prefixed path pattern', () => {
+    const path = getRandomGraphPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeInitializers = getScopeInitializers(scope, searchPattern)
+
+    expect(scopeInitializers).to.be.an.instanceOf(Object)
+    // noinspection BadExpressionStatementJS
+    expect(scopeInitializers.query).to.be.empty
+  })
+
+  it('should return the Collection scope initializers for a collection-prefixed path pattern', () => {
+    const path = getRandomCollectionPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeInitializers = getScopeInitializers(scope, searchPattern)
+
+    expect(scopeInitializers).to.be.an.instanceOf(Object)
+    // noinspection BadExpressionStatementJS
+    expect(scopeInitializers.query).to.be.empty
+  })
+
+  it('should return the Node Glob scope initializers for a node-glob-prefixed path pattern', () => {
+    const path = getRandomNodeGlobPathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeInitializers = getScopeInitializers(scope, searchPattern)
+
+    expect(scopeInitializers).to.be.an.instanceOf(Object)
+    // noinspection BadExpressionStatementJS
+    expect(scopeInitializers.query).to.be.empty
+  })
+
+  it('should return the Node Brace scope initializers for a node-prefixed path pattern', () => {
+    const path = getRandomNodeBracePathPattern()
+    const { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+    const scopeInitializers = getScopeInitializers(scope, searchPattern)
+
+    expect(scopeInitializers).to.be.an.instanceOf(Object)
+    // noinspection BadExpressionStatementJS
+    expect(scopeInitializers.query).to.be.not.empty
+  })
+})
+
+describe('Op Helpers - getLimitClause', () => {
   before(init.setup)
 
   after(init.teardown)
@@ -341,7 +304,7 @@ describe('Log Helpers - getLimitClause', () => {
   })
 })
 
-describe('Log Helpers - getTimeBoundFilters', () => {
+describe('Op Helpers - getTimeBoundFilters', () => {
   before(init.setup)
 
   after(init.teardown)
@@ -386,7 +349,7 @@ describe('Log Helpers - getTimeBoundFilters', () => {
   })
 })
 
-describe('Log Helpers - getEventLogQueryInitializer', () => {
+describe('Op Helpers - getEventLogQueryInitializer', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
@@ -417,7 +380,7 @@ describe('Log Helpers - getEventLogQueryInitializer', () => {
   })
 })
 
-describe('Log Helpers - getNonServiceCollections', () => {
+describe('Op Helpers - getNonServiceCollections', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
@@ -432,5 +395,29 @@ describe('Log Helpers - getNonServiceCollections', () => {
     expect(nonServiceCollections).to.be.an.instanceOf(Array)
     // noinspection JSValidateTypes
     expect(nonServiceCollections).to.include.members(sampleNonServiceCollections)
+  })
+})
+
+describe('Op Helpers - getSort', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }))
+
+  after(init.teardown)
+
+  it('should return asc for "asc" input', () => {
+    const sortDir = getSort('asc')
+
+    expect(sortDir).to.equal('asc')
+  })
+
+  it('should return desc for "desc" input', () => {
+    const sortDir = getSort('desc')
+
+    expect(sortDir).to.equal('desc')
+  })
+
+  it('should return desc for empty input', () => {
+    const sortDir = getSort()
+
+    expect(sortDir).to.equal('desc')
   })
 })

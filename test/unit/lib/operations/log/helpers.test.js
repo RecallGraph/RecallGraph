@@ -4,7 +4,6 @@
 // noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const {
-  getLimitClause,
   getSortingClause,
   getGroupingClause,
   getReturnClause
@@ -13,39 +12,6 @@ const init = require('../../../../helpers/init')
 const {
   cartesian
 } = require('../../../../helpers/logTestHelpers')
-
-describe('Log Helpers - getLimitClause', () => {
-  before(init.setup)
-
-  after(init.teardown)
-
-  it('should return a blank clause when no skip and limit are specified', () => {
-    const limitClause = getLimitClause()
-
-    expect(limitClause).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
-    expect(limitClause.query).to.be.empty
-  })
-
-  it('should return a limit clause expression when only limit is specified', () => {
-    const limit = 1
-    const limitClause = getLimitClause(limit)
-
-    expect(limitClause).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
-    expect(limitClause.query).to.match(/^limit +@\w+$/i)
-  })
-
-  it('should return a limit clause expression when both limit and skip are specified', () => {
-    const limit = 1
-    const skip = 2
-    const limitClause = getLimitClause(limit, skip)
-
-    expect(limitClause).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
-    expect(limitClause.query).to.match(/^limit @\w+, @\w+$/i)
-  })
-})
 
 describe('Log Helpers - getSortingClause', () => {
   before(init.setup)
