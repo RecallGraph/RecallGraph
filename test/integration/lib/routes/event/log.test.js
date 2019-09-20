@@ -5,15 +5,17 @@ const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const {
-  getOriginKeys,
   testUngroupedEvents,
   testGroupedEvents,
-  getRandomGraphPathPattern,
-  getSampleTestCollNames,
-  getNodeBraceSampleIds,
   logGetWrapper,
   logPostWrapper
-} = require('../../../../helpers/logTestHelpers')
+} = require('../../../../helpers/event/log')
+const {
+  getOriginKeys,
+  getRandomGraphPathPattern,
+  getSampleTestCollNames,
+  getNodeBraceSampleIds
+} = require('../../../../helpers/event')
 // noinspection NpmUsedModulesInstalled
 const { db, query, aql } = require('@arangodb')
 

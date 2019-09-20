@@ -3,14 +3,14 @@
 const init = require('../../../helpers/init')
 const { diff } = require('../../../../lib/handlers/diffHandlers')
 const { SERVICE_COLLECTIONS } = require('../../../../lib/helpers')
+const { logHandlerWrapper } = require('../../../helpers/event/log')
 const {
   getOriginKeys,
   getRandomGraphPathPattern,
   getSampleTestCollNames,
-  getNodeBraceSampleIds,
-  logHandlerWrapper
-} = require('../../../helpers/logTestHelpers')
-const { testDiffs } = require('../../../helpers/diffTestHelpers')
+  getNodeBraceSampleIds
+} = require('../../../helpers/event')
+const { testDiffs } = require('../../../helpers/event/diff')
 // noinspection NpmUsedModulesInstalled
 const { db, aql } = require('@arangodb')
 // noinspection NpmUsedModulesInstalled

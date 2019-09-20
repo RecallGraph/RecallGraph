@@ -25,7 +25,7 @@ const {
   getRandomNodeGlobPathPattern,
   getRandomNodeBracePathPattern,
   cartesian
-} = require('../../../helpers/logTestHelpers')
+} = require('../../../helpers/event')
 // noinspection NpmUsedModulesInstalled
 const { concat, values } = require('lodash')
 

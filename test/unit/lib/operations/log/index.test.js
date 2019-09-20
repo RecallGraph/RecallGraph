@@ -11,12 +11,11 @@ const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const { concat } = require('lodash')
 const {
   testUngroupedEvents,
-  getRandomGraphPathPattern,
-  getNodeBraceSampleIds,
-  testGroupedEvents,
-  getSampleTestCollNames,
-  getOriginKeys
-} = require('../../../../helpers/logTestHelpers')
+  testGroupedEvents
+} = require('../../../../helpers/event/log')
+const {
+  getRandomGraphPathPattern, getSampleTestCollNames, getOriginKeys, getNodeBraceSampleIds
+} = require('../../../../helpers/event')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 const commandColl = db._collection(SERVICE_COLLECTIONS.commands)

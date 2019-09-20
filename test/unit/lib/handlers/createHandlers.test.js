@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../helpers/init')
 const {
@@ -11,6 +12,7 @@ const {
   removeSingle,
   removeMultiple
 } = require('../../../../lib/handlers/removeHandlers')
+// noinspection NpmUsedModulesInstalled
 const { errors: ARANGO_ERRORS } = require('@arangodb')
 
 describe('Create Handlers', () => {

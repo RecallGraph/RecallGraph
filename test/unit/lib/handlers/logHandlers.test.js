@@ -6,14 +6,16 @@ const init = require('../../../helpers/init')
 const { log } = require('../../../../lib/handlers/logHandlers')
 const { SERVICE_COLLECTIONS } = require('../../../../lib/helpers')
 const {
-  getOriginKeys,
   testUngroupedEvents,
   testGroupedEvents,
+  logHandlerWrapper
+} = require('../../../helpers/event/log')
+const {
+  getOriginKeys,
   getRandomGraphPathPattern,
   getSampleTestCollNames,
-  getNodeBraceSampleIds,
-  logHandlerWrapper
-} = require('../../../helpers/logTestHelpers')
+  getNodeBraceSampleIds
+} = require('../../../helpers/event')
 // noinspection NpmUsedModulesInstalled
 const { db, query, aql } = require('@arangodb')
 

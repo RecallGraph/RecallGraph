@@ -2,13 +2,14 @@
 
 // noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
-const { getRandomSubRange, cartesian, initQueryParts, getGroupingClauseForExpectedResultsQuery } = require('./logTestHelpers')
+const { getGroupingClauseForExpectedResultsQuery } = require('./log')
+const { getRandomSubRange, cartesian, initQueryParts } = require('.')
 // noinspection NpmUsedModulesInstalled
 const { cloneDeep, omit } = require('lodash')
 // noinspection NpmUsedModulesInstalled
 const { aql, db } = require('@arangodb')
-const { getLimitClause, getTimeBoundFilters } = require('../../lib/operations/helpers')
-const { getSortingClause, getReturnClause } = require('../../lib/operations/log/helpers')
+const { getLimitClause, getTimeBoundFilters } = require('../../../lib/operations/helpers')
+const { getSortingClause, getReturnClause } = require('../../../lib/operations/log/helpers')
 const jiff = require('jiff')
 
 exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = null) {

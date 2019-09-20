@@ -11,7 +11,7 @@ const {
 const init = require('../../../../helpers/init')
 const {
   cartesian
-} = require('../../../../helpers/logTestHelpers')
+} = require('../../../../helpers/event')
 
 describe('Log Helpers - getSortingClause', () => {
   before(init.setup)

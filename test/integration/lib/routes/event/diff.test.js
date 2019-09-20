@@ -10,15 +10,14 @@ const { baseUrl } = module.context
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 // noinspection NpmUsedModulesInstalled
 const { isObject, defaults, omitBy, isNil } = require('lodash')
+const { logGetWrapper, logPostWrapper } = require('../../../../helpers/event/log')
 const {
   getOriginKeys,
   getRandomGraphPathPattern,
   getSampleTestCollNames,
-  getNodeBraceSampleIds,
-  logGetWrapper,
-  logPostWrapper
-} = require('../../../../helpers/logTestHelpers')
-const { testDiffs } = require('../../../../helpers/diffTestHelpers')
+  getNodeBraceSampleIds
+} = require('../../../../helpers/event')
+const { testDiffs } = require('../../../../helpers/event/diff')
 // noinspection NpmUsedModulesInstalled
 const { db, aql } = require('@arangodb')
 

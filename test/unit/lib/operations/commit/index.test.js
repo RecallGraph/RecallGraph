@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
+// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const { DB_OPS } = require('../../../../../lib/helpers')
@@ -8,7 +9,9 @@ const commit = require('../../../../../lib/operations/commit')
 const {
   createMultiple
 } = require('../../../../../lib/handlers/createHandlers')
+// noinspection NpmUsedModulesInstalled
 const { errors: ARANGO_ERRORS } = require('@arangodb')
+// noinspection NpmUsedModulesInstalled
 const { pick } = require('lodash')
 
 describe('Commit', () => {
@@ -32,11 +35,13 @@ describe('Commit', () => {
     expect(cnode).to.have.property('_id')
     expect(cnode).to.have.property('_key')
     expect(cnode).to.have.property('_rev')
+    expect(cnode).to.have.property('new')
     expect(cnode.new).to.be.an.instanceOf(Object)
     expect(cnode.new._id).to.equal(cnode._id)
     expect(cnode.new._key).to.equal(cnode._key)
     expect(cnode.new._rev).to.equal(cnode._rev)
     expect(cnode.new.k1).to.equal('v1')
+    expect(cnode).to.have.property('old')
     expect(cnode.old).to.be.an.instanceOf(Object)
     // noinspection BadExpressionStatementJS
     expect(cnode.old).to.be.empty
