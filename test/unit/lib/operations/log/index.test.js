@@ -1,13 +1,12 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
-// noinspection NpmUsedModulesInstalled
+
 const { db, query, aql } = require('@arangodb')
 const log = require('../../../../../lib/operations/log')
 const init = require('../../../../helpers/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-// noinspection NpmUsedModulesInstalled
+
 const { concat } = require('lodash')
 const {
   testUngroupedEvents,
@@ -92,9 +91,9 @@ describe('Log - Collection Scope', () => {
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
@@ -115,9 +114,9 @@ describe('Log - Collection Scope', () => {
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const queryParts = [
       aql`
           for v in ${eventColl}
@@ -140,9 +139,9 @@ describe('Log - Node Glob Scope', () => {
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
@@ -163,9 +162,9 @@ describe('Log - Node Glob Scope', () => {
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const queryParts = [
       aql`
           for v in ${eventColl}

@@ -1,14 +1,13 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
-// noinspection NpmUsedModulesInstalled
+
 const request = require('@arangodb/request')
 // noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-// noinspection NpmUsedModulesInstalled
+
 const { isObject, defaults, omitBy, isNil } = require('lodash')
 const { logGetWrapper, logPostWrapper } = require('../../../../helpers/event/log')
 const {
@@ -18,7 +17,7 @@ const {
   getNodeBraceSampleIds
 } = require('../../../../helpers/event')
 const { testDiffs } = require('../../../../helpers/event/diff')
-// noinspection NpmUsedModulesInstalled
+
 const { db, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -54,9 +53,9 @@ describe('Routes - diff (Path as query param)', () => {
   it('should return diffs in Collection scope for a collection path', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const reqParams = {
       json: true,
       qs: { path }
@@ -77,9 +76,9 @@ describe('Routes - diff (Path as query param)', () => {
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const reqParams = {
       json: true,
       qs: { path }
@@ -147,9 +146,9 @@ describe('Routes - diff (Path as body param)', () => {
   it('should return diffs in Collection scope for a collection path', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const reqParams = {
       json: true,
       qs: { path }
@@ -170,9 +169,9 @@ describe('Routes - diff (Path as body param)', () => {
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const reqParams = {
       json: true,
       qs: { path }

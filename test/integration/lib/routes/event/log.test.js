@@ -1,6 +1,5 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
@@ -16,7 +15,7 @@ const {
   getSampleTestCollNames,
   getNodeBraceSampleIds
 } = require('../../../../helpers/event')
-// noinspection NpmUsedModulesInstalled
+
 const { db, query, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -102,9 +101,9 @@ describe('Routes - log (Path as query param)', () => {
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const reqParams = {
       json: true,
       qs: { path }
@@ -129,9 +128,9 @@ describe('Routes - log (Path as query param)', () => {
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const reqParams = {
       json: true,
       qs: { path }
@@ -152,9 +151,9 @@ describe('Routes - log (Path as query param)', () => {
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const reqParams = {
       json: true,
       qs: { path }
@@ -179,9 +178,9 @@ describe('Routes - log (Path as query param)', () => {
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const reqParams = {
       json: true,
       qs: { path }
@@ -322,9 +321,9 @@ describe('Routes - log (Path as body param)', () => {
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const req = {
       json: true,
       body: { path }
@@ -349,9 +348,9 @@ describe('Routes - log (Path as body param)', () => {
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const reqParams = {
       json: true,
       body: { path }
@@ -372,9 +371,9 @@ describe('Routes - log (Path as body param)', () => {
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const req = {
       json: true,
       body: { path }
@@ -398,9 +397,9 @@ describe('Routes - log (Path as body param)', () => {
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const reqParams = {
       json: true,
       body: { path }

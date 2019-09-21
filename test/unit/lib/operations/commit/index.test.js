@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const { DB_OPS } = require('../../../../../lib/helpers')
@@ -9,9 +8,9 @@ const commit = require('../../../../../lib/operations/commit')
 const {
   createMultiple
 } = require('../../../../../lib/handlers/createHandlers')
-// noinspection NpmUsedModulesInstalled
+
 const { errors: ARANGO_ERRORS } = require('@arangodb')
-// noinspection NpmUsedModulesInstalled
+
 const { pick } = require('lodash')
 
 describe('Commit', () => {

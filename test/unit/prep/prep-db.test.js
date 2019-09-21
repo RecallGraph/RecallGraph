@@ -1,11 +1,10 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../helpers/init')
-// noinspection NpmUsedModulesInstalled
+
 const { db } = require('@arangodb')
-// noinspection NpmUsedModulesInstalled
+
 const { chain } = require('lodash')
 
 describe('Prep - clean and load', () => {

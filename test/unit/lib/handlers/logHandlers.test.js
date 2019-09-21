@@ -1,6 +1,5 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../helpers/init')
 const { log } = require('../../../../lib/handlers/logHandlers')
@@ -16,7 +15,7 @@ const {
   getSampleTestCollNames,
   getNodeBraceSampleIds
 } = require('../../../helpers/event')
-// noinspection NpmUsedModulesInstalled
+
 const { db, query, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -98,9 +97,9 @@ describe('Log Handlers - Path as query param', () => {
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const req = {
       queryParams: { path }
     }
@@ -124,9 +123,9 @@ describe('Log Handlers - Path as query param', () => {
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const req = {
       queryParams: { path }
     }
@@ -146,9 +145,9 @@ describe('Log Handlers - Path as query param', () => {
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const req = { queryParams: { path } }
     const allEvents = log(req) // Ungrouped events in desc order by ctime.
 
@@ -169,9 +168,9 @@ describe('Log Handlers - Path as query param', () => {
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const req = { queryParams: { path } }
     const queryParts = [
       aql`
@@ -305,9 +304,9 @@ describe('Log Handlers - Path as body param', () => {
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const req = {
       queryParams: {},
       body: { path }
@@ -332,9 +331,9 @@ describe('Log Handlers - Path as body param', () => {
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const req = {
       body: { path }
     }
@@ -354,9 +353,9 @@ describe('Log Handlers - Path as body param', () => {
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const req = {
       queryParams: {},
       body: { path }
@@ -380,9 +379,9 @@ describe('Log Handlers - Path as body param', () => {
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const req = { body: { path } }
     const queryParts = [
       aql`

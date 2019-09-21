@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const {
@@ -14,7 +13,7 @@ const {
 const { SERVICE_COLLECTIONS, TRANSIENT_EVENT_SUPERNODE } = require('../../../../../lib/helpers')
 const diff = require('../../../../../lib/operations/diff')
 const jiff = require('jiff')
-// noinspection NpmUsedModulesInstalled
+
 const { db, query } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -161,7 +160,7 @@ describe('Show Helpers - getReturnClause', () => {
   after(init.teardown)
 
   it('should return a default return clause when groupBy is null, and countsOnly is falsey, irrespective of other' +
-    ' params', () => {
+     ' params', () => {
     const groupBy = null
     const countsOnly = false
     const groupSort = [undefined, 'asc', 'desc']
@@ -185,7 +184,7 @@ describe('Show Helpers - getReturnClause', () => {
   })
 
   it('should return a default return clause when groupBy is null and countsOnly is true, irrespective of other' +
-    ' params',
+     ' params',
   () => {
     const groupBy = null
     const countsOnly = true
@@ -210,7 +209,7 @@ describe('Show Helpers - getReturnClause', () => {
   })
 
   it('should return a default return clause when groupBy is specified and countsOnly is true, irrespective of other' +
-    ' params',
+     ' params',
   () => {
     const groupBy = ['collection', 'type']
     const countsOnly = true
@@ -266,8 +265,10 @@ describe('Show Helpers - getShowQueryInitializer', () => {
   after(init.teardown)
 
   it('should return queryParts', () => {
-    const path = ['/', getRandomGraphPathPattern(), getRandomCollectionPathPattern(), getRandomNodeGlobPathPattern(),
-      getRandomNodeBracePathPattern()]
+    const path = [
+      '/', getRandomGraphPathPattern(), getRandomCollectionPathPattern(), getRandomNodeGlobPathPattern(),
+      getRandomNodeBracePathPattern()
+    ]
     const timestamp = Date.now() / 1000.0
 
     path.forEach(p => {

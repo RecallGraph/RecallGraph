@@ -1,9 +1,9 @@
 'use strict'
 
 const log = require('../../../lib/operations/log')
-// noinspection NpmUsedModulesInstalled
+
 const { aql, db } = require('@arangodb')
-// noinspection NpmUsedModulesInstalled
+
 const {
   random,
   chain,
@@ -79,9 +79,9 @@ function getRandomSubRange (
   if (objWithLength.length > 0) {
     const lower = random(0, objWithLength.length - 1)
     const upperIndexBound =
-      (Number.isFinite(maxLength)
-        ? Math.min(objWithLength.length, lower + maxLength)
-        : objWithLength.length) - 1
+            (Number.isFinite(maxLength)
+              ? Math.min(objWithLength.length, lower + maxLength)
+              : objWithLength.length) - 1
     const upper = random(lower, upperIndexBound)
 
     return [lower, upper]
@@ -130,9 +130,9 @@ exports.getNodeBraceSampleIds = function getNodeBraceSampleIds (
     .value()
 
   const path =
-    pathSuffixes.length > 1
-      ? `/n/{${pathSuffixes.join(',')}}`
-      : `/n/${pathSuffixes[0]}`
+          pathSuffixes.length > 1
+            ? `/n/{${pathSuffixes.join(',')}}`
+            : `/n/${pathSuffixes[0]}`
 
   return { path, sampleIds }
 }

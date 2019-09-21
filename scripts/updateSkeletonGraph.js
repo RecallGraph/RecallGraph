@@ -1,10 +1,9 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { db, query } = require('@arangodb')
 const { SERVICE_COLLECTIONS, COLLECTION_TYPES, getCollectionType, SERVICE_GRAPHS } = require('../lib/helpers')
 const { getNonServiceCollections } = require('../lib/operations/helpers')
-// noinspection NpmUsedModulesInstalled
+
 const { chain, pick } = require('lodash')
 
 const edgeCollections = getNonServiceCollections().filter(coll => getCollectionType(coll) === COLLECTION_TYPES.EDGE)
@@ -119,35 +118,47 @@ function syncEdgeCreates () {
     .forEach(event => {
       const { hubNode, fromSpokeNode, toSpokeNode } = db._executeTransaction({
         collections: {
-          write: [SERVICE_COLLECTIONS.skeletonEdgeHubs, SERVICE_COLLECTIONS.skeletonEdgeSpokes]
+          write: [
+            SERVICE_COLLECTIONS.skeletonEdgeHubs,
+            SERVICE_COLLECTIONS.skeletonEdgeSpokes
+          ]
         },
         action: function (params) {
-          // noinspection NpmUsedModulesInstalled
           const { db } = require('@arangodb')
-          const { SERVICE_COLLECTIONS } = require('../lib/helpers')
+          const { SERVICE_COLLECTIONS } = require(
+            '../lib/helpers')
 
-          const skeletonEdgeHubsColl = db._collection(SERVICE_COLLECTIONS.skeletonEdgeHubs)
-          const skeletonEdgeSpokesColl = db._collection(SERVICE_COLLECTIONS.skeletonEdgeSpokes)
+          const skeletonEdgeHubsColl = db._collection(
+            SERVICE_COLLECTIONS.skeletonEdgeHubs)
+          const skeletonEdgeSpokesColl = db._collection(
+            SERVICE_COLLECTIONS.skeletonEdgeSpokes)
           const { event, groupedRefs } = params
 
-          const hubNode = skeletonEdgeHubsColl.insert(event)
+          const hubNode = skeletonEdgeHubsColl.insert(
+            event)
           const fromNode = groupedRefs[event.meta._from][0]
           const toNode = groupedRefs[event.meta._to][0]
 
-          const fromSpokeNode = skeletonEdgeSpokesColl.insert({
-            _from: fromNode,
-            _to: hubNode._id,
-            hub: hubNode._id,
-            valid_since: event.valid_since
-          }, { returnNew: true }).new
-          const toSpokeNode = skeletonEdgeSpokesColl.insert({
-            _from: hubNode._id,
-            _to: toNode,
-            hub: hubNode._id,
-            valid_since: event.valid_since
-          }, { returnNew: true }).new
+          const fromSpokeNode = skeletonEdgeSpokesColl.insert(
+            {
+              _from: fromNode,
+              _to: hubNode._id,
+              hub: hubNode._id,
+              valid_since: event.valid_since
+            }, { returnNew: true }).new
+          const toSpokeNode = skeletonEdgeSpokesColl.insert(
+            {
+              _from: hubNode._id,
+              _to: toNode,
+              hub: hubNode._id,
+              valid_since: event.valid_since
+            }, { returnNew: true }).new
 
-          return { hubNode, fromSpokeNode, toSpokeNode }
+          return {
+            hubNode,
+            fromSpokeNode,
+            toSpokeNode
+          }
         },
         params: { event, groupedRefs }
       })
@@ -204,10 +215,10 @@ function syncEdgeMoves () {
         write: [SERVICE_COLLECTIONS.skeletonEdgeSpokes]
       },
       action: function (event) {
-        // noinspection NpmUsedModulesInstalled
         const { db } = require('@arangodb')
 
-        const skeletonEdgeSpokesColl = db._collection(SERVICE_COLLECTIONS.skeletonEdgeSpokes)
+        const skeletonEdgeSpokesColl = db._collection(
+          SERVICE_COLLECTIONS.skeletonEdgeSpokes)
         const inserts = []
         const updateKeys = []
         const updateValues = []
@@ -220,7 +231,8 @@ function syncEdgeMoves () {
           // noinspection JSUnresolvedVariable
           if (event.sv[refs[ref][0]]) {
             // noinspection JSUnresolvedVariable
-            const handle = event.se.find(e => e[ref] === event.sv[refs[ref][0]])._key
+            const handle = event.se.find(
+              e => e[ref] === event.sv[refs[ref][0]])._key
             updateKeys.push(handle)
             updateValues.push({ valid_until: event.time })
 
@@ -235,7 +247,8 @@ function syncEdgeMoves () {
         }
 
         const i = skeletonEdgeSpokesColl.insert(inserts, { returnNew: true })
-        const u = skeletonEdgeSpokesColl.update(updateKeys, updateValues, { returnNew: true })
+        const u = skeletonEdgeSpokesColl.update(updateKeys, updateValues,
+          { returnNew: true })
 
         return {
           inserts: i.map(e => pick(e.new, '_id', '_from', '_to')),

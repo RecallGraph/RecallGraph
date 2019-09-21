@@ -1,12 +1,11 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const { getGroupingClauseForExpectedResultsQuery } = require('./log')
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')
-// noinspection NpmUsedModulesInstalled
+
 const { cloneDeep, omit } = require('lodash')
-// noinspection NpmUsedModulesInstalled
+
 const { aql, db } = require('@arangodb')
 const { getLimitClause, getTimeBoundFilters } = require('../../../lib/operations/helpers')
 const { getSortingClause, getReturnClause } = require('../../../lib/operations/log/helpers')

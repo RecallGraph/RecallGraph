@@ -1,6 +1,5 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const {
   isObject,
   findIndex,
@@ -13,15 +12,15 @@ const {
   omitBy,
   isNil
 } = require('lodash')
-// noinspection NpmUsedModulesInstalled
+
 const request = require('@arangodb/request')
 // noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
-// noinspection NpmUsedModulesInstalled
+
 const { expect } = require('chai')
 const { log: logHandler } = require('../../../lib/handlers/logHandlers')
 const { getLimitClause, getTimeBoundFilters } = require('../../../lib/operations/helpers')
-// noinspection NpmUsedModulesInstalled
+
 const { aql, db } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')
@@ -74,16 +73,16 @@ exports.testUngroupedEvents = function testUngroupedEvents (
         ? findLastIndex(relevantExpectedEvents, e => e.ctime >= combo.since)
         : relevantExpectedEvents.length - 1
       const latestTimeBoundIndex =
-        combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
+              combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
 
       const timeSlicedEvents = relevantExpectedEvents.slice(
         latestTimeBoundIndex,
         earliestTimeBoundIndex + 1
       )
       const sortedTimeSlicedEvents =
-        combo.sort === 'asc'
-          ? timeSlicedEvents.reverse()
-          : timeSlicedEvents
+              combo.sort === 'asc'
+                ? timeSlicedEvents.reverse()
+                : timeSlicedEvents
 
       let slicedSortedTimeSlicedEvents
       let start = 0
@@ -204,7 +203,7 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
     return getGroupingClause(groupBy, countsOnly, returnCommands)
   } else {
     const groupingPrefix =
-      'collect collection = regex_split(v.meta._id, "/")[0]'
+            'collect collection = regex_split(v.meta._id, "/")[0]'
 
     let groupingSuffix
     if (countsOnly) {

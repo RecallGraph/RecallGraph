@@ -1,10 +1,9 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-// noinspection NpmUsedModulesInstalled
+
 const gg = require('@arangodb/general-graph')
-// noinspection NpmUsedModulesInstalled
+
 const {
   forEach,
   get,

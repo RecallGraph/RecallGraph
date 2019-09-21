@@ -1,9 +1,9 @@
 'use strict'
-// noinspection NpmUsedModulesInstalled
+
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
-// noinspection NpmUsedModulesInstalled
+
 const gg = require('@arangodb/general-graph')
-// noinspection NpmUsedModulesInstalled
+
 const queues = require('@arangodb/foxx/queues')
 const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
 
@@ -88,8 +88,10 @@ try {
 
   gg._drop(eventLog)
 
-  const skeletonRel = gg._relation(skeletonEdgeSpokes, [skeletonVertices, skeletonEdgeHubs], [skeletonVertices,
-    skeletonEdgeHubs])
+  const skeletonRel = gg._relation(skeletonEdgeSpokes, [skeletonVertices, skeletonEdgeHubs], [
+    skeletonVertices,
+    skeletonEdgeHubs
+  ])
   skelEdgeDefs = gg._edgeDefinitions(skeletonRel)
 
   gg._drop(skeleton)
@@ -129,7 +131,13 @@ queue.push({
   repeatTimes: Infinity,
   failure: (result, jobData, job) => console.error(`Failed job: ${JSON.stringify({
     result,
-    job: [job.queue, job.type, job.failures, job.runs, job.runFailures]
+    job: [
+      job.queue,
+      job.type,
+      job.failures,
+      job.runs,
+      job.runFailures
+    ]
   })}`),
   success: (result, jobData,
     job) => {

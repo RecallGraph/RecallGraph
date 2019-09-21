@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../helpers/init')
 const {
@@ -26,7 +25,7 @@ const {
   getRandomNodeBracePathPattern,
   cartesian
 } = require('../../../helpers/event')
-// noinspection NpmUsedModulesInstalled
+
 const { concat, values } = require('lodash')
 
 describe('Operations Helpers - get{DB,Graph,Collection,Node{Glob,Brace}}Scope', () => {
@@ -355,8 +354,10 @@ describe('Op Helpers - getEventLogQueryInitializer', () => {
   after(init.teardown)
 
   it('should return queryParts', () => {
-    const path = ['/', getRandomGraphPathPattern(), getRandomCollectionPathPattern(), getRandomNodeGlobPathPattern(),
-      getRandomNodeBracePathPattern()]
+    const path = [
+      '/', getRandomGraphPathPattern(), getRandomCollectionPathPattern(), getRandomNodeGlobPathPattern(),
+      getRandomNodeBracePathPattern()
+    ]
     const since = [0, 1]
     const until = [0, 1]
 
@@ -388,7 +389,8 @@ describe('Op Helpers - getNonServiceCollections', () => {
   it('should return non-service collections', () => {
     const sampleDataRefs = init.getSampleDataRefs()
     const testDataCollections = values(init.TEST_DATA_COLLECTIONS)
-    const sampleNonServiceCollections = concat(testDataCollections, sampleDataRefs.vertexCollections, sampleDataRefs.edgeCollections)
+    const sampleNonServiceCollections = concat(testDataCollections, sampleDataRefs.vertexCollections,
+      sampleDataRefs.edgeCollections)
 
     const nonServiceCollections = getNonServiceCollections()
 

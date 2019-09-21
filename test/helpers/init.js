@@ -1,12 +1,11 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { db } = require('@arangodb')
-// noinspection NpmUsedModulesInstalled
+
 const { merge, forEach, noop, omit } = require('lodash')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
 const loadSampleData = require('./loadSampleData')
-// noinspection NpmUsedModulesInstalled
+
 const cache = require('@arangodb/aql/cache')
 
 cache.properties({ mode: 'on' })

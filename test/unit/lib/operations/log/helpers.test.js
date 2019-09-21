@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const {
   getSortingClause,
@@ -156,7 +155,7 @@ describe('Log Helpers - getReturnClause', () => {
   })
 
   it('should return a default return clause when groupBy is specified and countsOnly is true, irrespective of other' +
-    ' params',
+     ' params',
   () => {
     const groupBy = ['node', 'collection', 'event']
     const countsOnly = true

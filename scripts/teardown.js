@@ -1,6 +1,5 @@
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const queues = require('@arangodb/foxx/queues')
 
 // Teardown crons

@@ -11,9 +11,9 @@ const {
   getNodeBraceSampleIds
 } = require('../../../helpers/event')
 const { testDiffs } = require('../../../helpers/event/diff')
-// noinspection NpmUsedModulesInstalled
+
 const { db, aql } = require('@arangodb')
-// noinspection NpmUsedModulesInstalled
+
 const { isObject, defaults } = require('lodash')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -47,9 +47,9 @@ describe('Diff Handlers - Path as query param', () => {
   it('should return diffs in Collection scope for a collection path', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const req = {
       queryParams: { path }
     }
@@ -69,9 +69,9 @@ describe('Diff Handlers - Path as query param', () => {
   it('should return diffs in Node Glob scope for a node-glob path', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const req = { queryParams: { path } }
     const queryParts = [
       aql`
@@ -133,9 +133,9 @@ describe('Diff Handlers - Path as body param', () => {
   it('should return diffs in Collection scope for a collection path', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/c/{${sampleTestCollNames}}`
-        : `/c/${sampleTestCollNames}`
+            sampleTestCollNames.length > 1
+              ? `/c/{${sampleTestCollNames}}`
+              : `/c/${sampleTestCollNames}`
     const req = {
       body: { path }
     }
@@ -155,9 +155,9 @@ describe('Diff Handlers - Path as body param', () => {
   it('should return diffs in Node Glob scope for a node-glob path', () => {
     const sampleTestCollNames = getSampleTestCollNames()
     const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+            sampleTestCollNames.length > 1
+              ? `/ng/{${sampleTestCollNames}}/*`
+              : `/ng/${sampleTestCollNames}/*`
     const req = { body: { path } }
     const queryParts = [
       aql`

@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 'use strict'
 
-// noinspection NpmUsedModulesInstalled
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const {
@@ -25,13 +24,13 @@ const {
   replaceSingle
 } = require('../../../../../lib/handlers/replaceHandlers')
 const { removeSingle } = require('../../../../../lib/handlers/removeHandlers')
-// noinspection NpmUsedModulesInstalled
+
 const { db, errors: ARANGO_ERRORS, time: dbtime } = require('@arangodb')
 const {
   SERVICE_COLLECTIONS,
   snapshotInterval
 } = require('../../../../../lib/helpers')
-// noinspection NpmUsedModulesInstalled
+
 const { omit, pick } = require('lodash')
 const jiff = require('jiff')
 
