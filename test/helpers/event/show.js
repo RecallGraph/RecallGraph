@@ -93,7 +93,6 @@ exports.testUngroupedNodes = function testUngroupedNodes (
 }
 
 exports.testGroupedNodes = function testGroupedNodes (
-  scope,
   pathParam,
   rawPath,
   timestamp,
