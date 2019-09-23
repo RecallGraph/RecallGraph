@@ -50,6 +50,13 @@ eventColl.ensureIndex({
   deduplicate: false,
   fields: ['ctime']
 })
+eventColl.ensureIndex({
+  type: 'skiplist',
+  sparse: true,
+  unique: false,
+  deduplicate: false,
+  fields: ['hops-from-origin']
+})
 
 const commandColl = db._collection(commands)
 commandColl.ensureIndex({

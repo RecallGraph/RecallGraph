@@ -70,6 +70,7 @@ function truncateServiceCollections () {
 let sampleDataRefs = {}
 let testDataCollectionsInitialized = false
 let sampleDataLoaded = false
+let milestones
 
 exports.setup = function setup ({
   forceTruncateTestData = false,
@@ -106,6 +107,7 @@ exports.setup = function setup ({
     sampleDataRefs = omit(results, 'messages')
     sampleDataLoadMessages = results.messages
     sampleDataLoaded = true
+    milestones = results.milestones
   }
 
   return {
@@ -121,3 +123,4 @@ exports.teardown = noop
 exports.TEST_DATA_COLLECTIONS = TEST_DATA_COLLECTIONS
 exports.TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
 exports.getSampleDataRefs = () => sampleDataRefs
+exports.getMilestones = () => milestones

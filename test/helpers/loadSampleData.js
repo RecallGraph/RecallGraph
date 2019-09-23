@@ -108,7 +108,8 @@ module.exports = function loadSampleData () {
     messages: [],
     vertexCollections: undefined,
     edgeCollections: undefined,
-    graphs: []
+    graphs: [],
+    milestones: []
   }
 
   // Load and insert raw data
@@ -142,6 +143,7 @@ module.exports = function loadSampleData () {
   let message = `Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Remove footnote references from raw data
   let cursor = rawData.all()
@@ -173,6 +175,7 @@ module.exports = function loadSampleData () {
   message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Remove empty/unspecified fields from raw data
   cursor = rawData.all()
@@ -201,6 +204,7 @@ module.exports = function loadSampleData () {
   message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Insert spaces at title-case boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -228,6 +232,7 @@ module.exports = function loadSampleData () {
   message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Insert spaces at alpha-numeric boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -252,6 +257,7 @@ module.exports = function loadSampleData () {
   message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate stars
   cursor = rawData.byExample({ Type: 'star' })
@@ -281,6 +287,7 @@ module.exports = function loadSampleData () {
   message = `Inserted ${insertCount} out of ${docCount} documents into ${stars.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate planets
   docCount = insertCount = errorCount = 0
@@ -324,6 +331,7 @@ module.exports = function loadSampleData () {
   message = `Inserted ${insertCount} out of ${docCount} documents into ${planets.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate dwarf planets
   docCount = insertCount = errorCount = 0
@@ -366,6 +374,7 @@ module.exports = function loadSampleData () {
   message = `Inserted ${insertCount} out of ${docCount} documents into ${dwarfPlanets.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate asteroids
   docCount = insertCount = errorCount = 0
@@ -408,6 +417,7 @@ module.exports = function loadSampleData () {
   message = `Inserted ${insertCount} out of ${docCount} documents into ${asteroids.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate comets
   docCount = insertCount = errorCount = 0
@@ -450,6 +460,7 @@ module.exports = function loadSampleData () {
   message = `Inserted ${insertCount} out of ${docCount} documents into ${comets.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate moons
   docCount = insertCount = errorCount = 0
@@ -515,6 +526,7 @@ module.exports = function loadSampleData () {
   message = `Inserted ${insertCount} out of ${docCount} documents into ${moons.name()} with ${errorCount} errors and ${warningCount} warnings`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Cleanup raw data of entries copied to other collections
   errorCount = 0
@@ -541,6 +553,7 @@ module.exports = function loadSampleData () {
   message = `Removed ${removeCount} out of ${docCount} documents from ${rawData.name()} with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // (Re-)Create Solar System Objects Graph
   // noinspection JSUnresolvedVariable

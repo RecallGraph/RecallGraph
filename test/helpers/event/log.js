@@ -170,26 +170,27 @@ exports.testGroupedEvents = function testGroupedEvents (
 
       const query = aql.join(queryParts, '\n')
       const expectedEventGroups = db._query(query).toArray()
+      const params = JSON.stringify({ pathParam, combo })
 
-      expect(eventGroups.length).to.equal(expectedEventGroups.length)
+      expect(eventGroups.length, params).to.equal(expectedEventGroups.length)
 
       const aggrField = co ? 'total' : 'events'
       eventGroups.forEach((eventGroup, idx1) => {
-        expect(eventGroup).to.be.an.instanceOf(Object)
-        expect(eventGroup[gb]).to.equal(expectedEventGroups[idx1][gb])
+        expect(eventGroup, params).to.be.an.instanceOf(Object)
+        expect(eventGroup[gb], params).to.equal(expectedEventGroups[idx1][gb])
 
-        expect(eventGroup).to.have.property(aggrField)
+        expect(eventGroup, params).to.have.property(aggrField)
         if (co) {
-          expect(eventGroup[aggrField]).to.equal(expectedEventGroups[idx1][aggrField])
+          expect(eventGroup[aggrField], params).to.equal(expectedEventGroups[idx1][aggrField])
         } else {
-          expect(eventGroup[aggrField]).to.be.an.instanceOf(Array)
-          expect(eventGroup[aggrField].length).to.equal(expectedEventGroups[idx1][aggrField].length)
+          expect(eventGroup[aggrField], params).to.be.an.instanceOf(Array)
+          expect(eventGroup[aggrField].length, params).to.equal(expectedEventGroups[idx1][aggrField].length)
 
           if (eventGroup[aggrField].length > 0) {
-            expect(eventGroup[aggrField][0]).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
+            expect(eventGroup[aggrField][0], params).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
             eventGroup[aggrField].forEach((event, idx2) => {
-              expect(event).to.be.an.instanceOf(Object)
-              expect(event._id).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
+              expect(event, params).to.be.an.instanceOf(Object)
+              expect(event._id, params).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
             })
           }
         }

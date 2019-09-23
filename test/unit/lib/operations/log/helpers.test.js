@@ -85,7 +85,7 @@ describe('Log Helpers - getSortingClause', () => {
   )
 })
 
-describe('Log Helpers - getGroupingClause', () => {
+describe('Log Helpers - getAggregationClause', () => {
   before(init.setup)
 
   after(init.teardown)
