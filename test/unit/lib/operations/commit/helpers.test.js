@@ -175,7 +175,7 @@ describe('Commit Helpers - insertEventNode', () => {
       node,
       time
     )
-    const evtNode = insertEventNode(node, time, 'created', ssData)
+    const evtNode = insertEventNode(node, time, 'created', ssData, latestEvent)
 
     // Cleanup: Orphaned event nodes should not exist
     eventColl.remove(evtNode)
@@ -192,6 +192,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode.ctime).to.equal(time)
     expect(evtNode['last-snapshot']).to.equal(ssData.ssNode._id)
     expect(evtNode['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast)
+    expect(evtNode['hops-from-origin']).to.equal(latestEvent['hops-from-origin'] + 1)
   })
 
   it('should return an event node for \'updated\' event', () => {
@@ -335,13 +336,15 @@ describe('Commit Helpers - getTransientEventOriginFor', () => {
       _id: `${SERVICE_COLLECTIONS.events}/${key}`,
       _key: key,
       'is-origin-node': true,
-      'origin-for': coll.name()
+      'origin-for': coll.name(),
+      'hops-from-last-snapshot': 1,
+      'hops-from-origin': 0
     }
 
     const origin = getTransientEventOriginFor(coll)
 
     Object.keys(expectedOrigin).forEach(key =>
-      expect(origin[key]).to.deep.equal(expectedOrigin[key])
+      expect(origin[key]).to.equal(expectedOrigin[key])
     )
   })
 })
