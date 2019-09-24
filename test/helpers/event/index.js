@@ -1,9 +1,7 @@
 'use strict'
 
 const log = require('../../../lib/operations/log')
-
 const { aql, db } = require('@arangodb')
-
 const {
   random,
   chain,

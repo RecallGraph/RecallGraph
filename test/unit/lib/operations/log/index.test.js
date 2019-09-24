@@ -1,12 +1,10 @@
 'use strict'
 
 const { expect } = require('chai')
-
 const { db, query, aql } = require('@arangodb')
 const log = require('../../../../../lib/operations/log')
 const init = require('../../../../helpers/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-
 const { concat } = require('lodash')
 const {
   testUngroupedEvents,

@@ -12,15 +12,12 @@ const {
   omitBy,
   isNil
 } = require('lodash')
-
 const request = require('@arangodb/request')
 // noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
-
 const { expect } = require('chai')
 const { log: logHandler } = require('../../../lib/handlers/logHandlers')
 const { getLimitClause, getTimeBoundFilters } = require('../../../lib/operations/helpers')
-
 const { aql, db } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')

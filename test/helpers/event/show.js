@@ -5,7 +5,6 @@ const {
   chain,
   sortBy
 } = require('lodash')
-
 // const request = require('@arangodb/request')
 // noinspection JSUnresolvedVariable
 // const { baseUrl } = module.context
