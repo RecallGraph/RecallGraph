@@ -19,7 +19,7 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
     const timeRange = getRandomSubRange(allEvents)
     const since = [0, Math.floor(allEvents[timeRange[1]].ctime)]
     const until = [0, Math.ceil(allEvents[timeRange[0]].ctime)]
-    const sort = [null, 'asc', 'desc']
+    const sort = ['asc', 'desc']
     const skip = [0, 1]
     const limit = [0, 2]
     const groupSkip = [0, 1]

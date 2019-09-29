@@ -573,7 +573,7 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   } finally {
-    const g = gg._create(ssGraph, edgeDefs, [rawData.name()])
+    const g = gg._create(ssGraph, edgeDefs)
 
     message = `Created graph ${ssGraph}`
     console.log(message)
