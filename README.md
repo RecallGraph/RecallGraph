@@ -1,10 +1,8 @@
 # CivicGraph
 
-Previously, _evstore_.
+**A versioning data store for time-variant graph data.**
 
 See this [**Demo App**](https://evening-lake-62717.herokuapp.com/) built using CivicGraph as the underlying temporal DB engine.
-
-**A versioning data store for time-variant graph data.**
 
 #### Core Metrics
 
