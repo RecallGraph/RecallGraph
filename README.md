@@ -2,7 +2,7 @@
 
 **A versioning data store for time-variant graph data.**
 
-See this [**Demo App**](https://evening-lake-62717.herokuapp.com/) built using CivicGraph as the underlying temporal DB engine.
+See this [**Demo App**](https://evening-lake-62717.herokuapp.com/) built using CivicGraph as the underlying temporal graph engine.
 
 #### Core Metrics
 
