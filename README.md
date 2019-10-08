@@ -2,7 +2,7 @@
 
 Previously, _evstore_.
 
-See this [**Demo App** built using CivicGraph as the underlying temporal DB engine](https://evening-lake-62717.herokuapp.com/).
+See this [**Demo App**](https://evening-lake-62717.herokuapp.com/) built using CivicGraph as the underlying temporal DB engine.
 
 **A versioning data store for time-variant graph data.**
 
