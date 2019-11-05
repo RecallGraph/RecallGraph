@@ -49,7 +49,7 @@ To get an idea of where such a data store might be used, see:
 
 **TL;DR:** CivicGraph is a potential fit for scenarios where data is characterized by inter-connected data points that change frequently (both in their individual attribute values and in their relations with each other), and whose past states are as important as their present, necessitating retention and queryability of their change history.
 
-## Capabilities
+## Salient API Features
 
 Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/CivicGraph/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
 
