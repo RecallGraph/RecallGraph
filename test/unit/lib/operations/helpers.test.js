@@ -416,10 +416,4 @@ describe('Op Helpers - getSort', () => {
 
     expect(sortDir).to.equal('desc')
   })
-
-  it('should return empty for empty input', () => {
-    const sortDir = getSort()
-
-    expect(sortDir).to.be.empty
-  })
 })

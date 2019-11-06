@@ -211,7 +211,7 @@ describe('Commit Helpers - insertEventNode', () => {
       node,
       ctime
     )
-    const cEvtNode = insertEventNode(node, ctime, 'created', ssData)
+    const cEvtNode = insertEventNode(node, ctime, 'created', ssData, latestEvent)
 
     node.k1 = 'v1'
     node = coll.replace(node._id, node)
@@ -222,7 +222,7 @@ describe('Commit Helpers - insertEventNode', () => {
       node,
       ctime
     )
-    const rEvtNode = insertEventNode(node, mtime, 'updated', ssData)
+    const rEvtNode = insertEventNode(node, mtime, 'updated', ssData, cEvtNode)
 
     // Cleanup: Orphaned event nodes should not exist
     eventColl.remove([cEvtNode, rEvtNode])
@@ -269,7 +269,8 @@ describe('Commit Helpers - insertCommandEdge', () => {
       omit(node, 'new'),
       ctime,
       'created',
-      ssData
+      ssData,
+      latestEvent
     )
 
     const enode = insertCommandEdge(latestEvent, evtNode, node.old, node.new)
