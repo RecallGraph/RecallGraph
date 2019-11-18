@@ -1,34 +1,16 @@
 'use strict'
 
-const { range, chain, sortBy } = require('lodash')
+const { range, chain, sortBy, isObject, defaults } = require('lodash')
 // const request = require('@arangodb/request')
 // const { db, query } = require('@arangodb')
 // noinspection JSUnresolvedVariable
 // const { baseUrl } = module.context
 const { expect } = require('chai')
-// const { show: showHandler } = require('../../../lib/handlers/showHandlers')
+const { show: showHandler } = require('../../../lib/handlers/showHandlers')
 const log = require('../../../lib/operations/log')
 const { getCollTypes } = require('../../../lib/operations/show/helpers')
 const { getRandomSubRange, cartesian } = require('.')
 const jiff = require('jiff')
-// const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
-//
-// const eventColl = db._collection(SERVICE_COLLECTIONS.events)
-
-// exports.getRandomNonOriginEvent = function getRandomNonOriginEvent () {
-//   const cursor = query`
-//     for e in ${eventColl}
-//       filter e['hops-from-origin'] > 0
-//       sort rand()
-//       limit 1
-//     return e
-//   `
-//   const event = cursor.next()
-//
-//   cursor.dispose()
-//
-//   return event
-// }
 
 exports.testUngroupedNodes = function testUngroupedNodes (
   pathParam,
@@ -242,3 +224,14 @@ function buildNodesFromEventLog (path, timestamp) {
 }
 
 exports.buildNodesFromEventLog = buildNodesFromEventLog
+
+exports.showHandlerWrapper = function showHandlerWrapper (pathParam, timestamp, combo) {
+  defaults(pathParam, { queryParams: {} })
+
+  if (isObject(combo)) {
+    pathParam.queryParams.timestamp = timestamp
+    Object.assign(pathParam.queryParams, combo)
+  }
+
+  return showHandler(pathParam)
+}

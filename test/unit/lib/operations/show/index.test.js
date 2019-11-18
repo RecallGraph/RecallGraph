@@ -20,7 +20,7 @@ describe('Show - DB Scope', () => {
     () => {
       const path = '/'
 
-      for (let timestamp of init.getMilestones()) {
+      for (const timestamp of init.getMilestones()) {
         const allNodes = show(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
