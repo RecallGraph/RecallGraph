@@ -1,16 +1,7 @@
 'use strict'
 
 const {
-  isObject,
-  findIndex,
-  findLastIndex,
-  range,
-  cloneDeep,
-  omit,
-  partialRight,
-  defaults,
-  omitBy,
-  isNil
+  isObject, findIndex, findLastIndex, range, cloneDeep, omit, partialRight, defaults, omitBy, isNil, ary
 } = require('lodash')
 const request = require('@arangodb/request')
 // noinspection JSUnresolvedVariable
@@ -70,16 +61,16 @@ exports.testUngroupedEvents = function testUngroupedEvents (
         ? findLastIndex(relevantExpectedEvents, e => e.ctime >= combo.since)
         : relevantExpectedEvents.length - 1
       const latestTimeBoundIndex =
-              combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
+        combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
 
       const timeSlicedEvents = relevantExpectedEvents.slice(
         latestTimeBoundIndex,
         earliestTimeBoundIndex + 1
       )
       const sortedTimeSlicedEvents =
-              combo.sort === 'asc'
-                ? timeSlicedEvents.reverse()
-                : timeSlicedEvents
+        combo.sort === 'asc'
+          ? timeSlicedEvents.reverse()
+          : timeSlicedEvents
 
       let slicedSortedTimeSlicedEvents
       let start = 0
@@ -201,7 +192,7 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
     return getGroupingClause(groupBy, countsOnly, returnCommands)
   } else {
     const groupingPrefix =
-            'collect collection = regex_split(v.meta._id, "/")[0]'
+      'collect collection = regex_split(v.meta._id, "/")[0]'
 
     let groupingSuffix
     if (countsOnly) {
@@ -218,7 +209,7 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
 
 exports.getGroupingClauseForExpectedResultsQuery = getGroupingClauseForExpectedResultsQuery
 
-function logGetWrapper (reqParams, combo, method = 'get') {
+function logRequestWrapper (reqParams, combo, method = 'get') {
   defaults(reqParams, { qs: {} })
 
   if (isObject(combo)) {
@@ -233,11 +224,9 @@ function logGetWrapper (reqParams, combo, method = 'get') {
   return JSON.parse(response.body)
 }
 
-exports.logGetWrapper = logGetWrapper
+exports.logGetWrapper = ary(logRequestWrapper, 2)
 
-exports.logPostWrapper = function logPostWrapper (reqParams, combo) {
-  return logGetWrapper(reqParams, combo, 'post')
-}
+exports.logPostWrapper = partialRight(logRequestWrapper, 'post')
 
 exports.logHandlerWrapper = function logHandlerWrapper (pathParam, combo) {
   defaults(pathParam, { queryParams: {} })

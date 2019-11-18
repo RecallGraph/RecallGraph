@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const show = require('../../../../../lib/operations/show')
 const init = require('../../../../helpers/init')
 const {
-  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
+  getRandomGraphPathPattern, getRandomCollectionPathPattern, getSampleTestCollNames, getNodeBraceSampleIds
 } = require('../../../../helpers/event')
 const log = require('../../../../../lib/operations/log')
 const {
@@ -162,7 +162,11 @@ describe('Show - Node Glob Scope', () => {
   it(
     'should return ungrouped nodes in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly is falsey',
     () => {
-      const path = getRandomNodeGlobPathPattern()
+      const sampleTestCollNames = getSampleTestCollNames()
+      const path =
+        sampleTestCollNames.length > 1
+          ? `/ng/{${sampleTestCollNames}}/*`
+          : `/ng/${sampleTestCollNames}/*`
 
       for (let timestamp of init.getMilestones()) {
         const allNodes = show(path, timestamp)
@@ -178,7 +182,11 @@ describe('Show - Node Glob Scope', () => {
   it(
     'should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly is true',
     () => {
-      const path = getRandomNodeGlobPathPattern()
+      const sampleTestCollNames = getSampleTestCollNames()
+      const path =
+        sampleTestCollNames.length > 1
+          ? `/ng/{${sampleTestCollNames}}/*`
+          : `/ng/${sampleTestCollNames}/*`
 
       for (let timestamp of init.getMilestones()) {
         const result = show(path, timestamp, { countsOnly: true })
@@ -195,7 +203,11 @@ describe('Show - Node Glob Scope', () => {
     })
 
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const path = getRandomNodeGlobPathPattern()
+    const sampleTestCollNames = getSampleTestCollNames()
+    const path =
+      sampleTestCollNames.length > 1
+        ? `/ng/{${sampleTestCollNames}}/*`
+        : `/ng/${sampleTestCollNames}/*`
 
     for (let timestamp of init.getMilestones()) {
       testGroupedNodes(path, path, timestamp, show)
@@ -211,7 +223,7 @@ describe('Show - Node Brace Scope', () => {
   it(
     'should return ungrouped nodes in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly is falsey',
     () => {
-      const path = getRandomNodeBracePathPattern()
+      const { path } = getNodeBraceSampleIds()
 
       for (let timestamp of init.getMilestones()) {
         const allNodes = show(path, timestamp)
@@ -227,7 +239,7 @@ describe('Show - Node Brace Scope', () => {
   it(
     'should return total node count in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly is true',
     () => {
-      const path = getRandomNodeBracePathPattern()
+      const { path } = getNodeBraceSampleIds()
 
       for (let timestamp of init.getMilestones()) {
         const result = show(path, timestamp, { countsOnly: true })
@@ -244,7 +256,7 @@ describe('Show - Node Brace Scope', () => {
     })
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const path = getRandomNodeBracePathPattern()
+    const { path } = getNodeBraceSampleIds()
 
     for (let timestamp of init.getMilestones()) {
       testGroupedNodes(path, path, timestamp, show)
