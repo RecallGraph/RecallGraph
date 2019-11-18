@@ -1,11 +1,8 @@
 'use strict'
 
-const {
-  range,
-  chain,
-  sortBy
-} = require('lodash')
+const { range, chain, sortBy } = require('lodash')
 // const request = require('@arangodb/request')
+// const { db, query } = require('@arangodb')
 // noinspection JSUnresolvedVariable
 // const { baseUrl } = module.context
 const { expect } = require('chai')
@@ -14,6 +11,9 @@ const log = require('../../../lib/operations/log')
 const { getCollTypes } = require('../../../lib/operations/show/helpers')
 const { getRandomSubRange, cartesian } = require('.')
 const jiff = require('jiff')
+// const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+//
+// const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 
 // exports.getRandomNonOriginEvent = function getRandomNonOriginEvent () {
 //   const cursor = query`
@@ -82,7 +82,8 @@ exports.testUngroupedNodes = function testUngroupedNodes (
     expect(nodes[0]).to.deep.equal(slicedSortedNodes[0])
 
     for (let i = 1; i < slicedSortedNodes.length; i++) {
-      const node = nodes[i]; const expectedNode = slicedSortedNodes[i]
+      const node = nodes[i]
+      const expectedNode = slicedSortedNodes[i]
 
       expect(node).to.be.an.instanceOf(Object)
       expect(node._id).to.equal(expectedNode._id)

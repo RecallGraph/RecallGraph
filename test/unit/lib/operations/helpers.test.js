@@ -401,7 +401,7 @@ describe('Op Helpers - getNonServiceCollections', () => {
 })
 
 describe('Op Helpers - getSort', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true }))
+  before(init.setup)
 
   after(init.teardown)
 
