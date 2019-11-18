@@ -1,6 +1,6 @@
 'use strict'
 
-const { range, chain, sortBy, isObject, defaults, omitBy, isNil, ary, partialRight } = require('lodash')
+const { range, chain, sortBy, isObject, defaults, omitBy, isNil, ary } = require('lodash')
 const request = require('@arangodb/request')
 // noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
@@ -241,7 +241,9 @@ function showRequestWrapper (reqParams, timestamp, combo, method = 'get') {
 
 exports.showGetWrapper = ary(showRequestWrapper, 3)
 
-exports.showPostWrapper = partialRight(showRequestWrapper, 'post')
+exports.showPostWrapper = function showPostWrapper (reqParams, timestamp, combo) {
+  return showRequestWrapper(reqParams, timestamp, combo, 'post')
+}
 
 exports.showHandlerWrapper = function showHandlerWrapper (pathParam, timestamp, combo) {
   defaults(pathParam, { queryParams: {} })

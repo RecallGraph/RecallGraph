@@ -226,7 +226,9 @@ function logRequestWrapper (reqParams, combo, method = 'get') {
 
 exports.logGetWrapper = ary(logRequestWrapper, 2)
 
-exports.logPostWrapper = partialRight(logRequestWrapper, 'post')
+exports.logPostWrapper = function logPostWrapper (reqParams, combo) {
+  return logRequestWrapper(reqParams, combo, 'post')
+}
 
 exports.logHandlerWrapper = function logHandlerWrapper (pathParam, combo) {
   defaults(pathParam, { queryParams: {} })
