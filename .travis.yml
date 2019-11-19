@@ -12,71 +12,27 @@ env:
   matrix:
     #mmfiles
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/document/*.js"]' NYC_OUT=mmfiles-integration-document
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-db GREP='Path as query param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-graph GREP='Path as query param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-coll GREP='Path as query param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-ng GREP='Path as query param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query-nb GREP='Path as query param.*Node Brace scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-db GREP='Path as body param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-graph GREP='Path as body param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-coll GREP='Path as body param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-ng GREP='Path as body param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body GREP='Path as body param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-diff
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-show
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body GREP='Path as body param'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js", "test/unit/lib/handlers/showHandlers.test.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=mmfiles-unit-lib-rest
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-db GREP='Path as query param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-graph GREP='Path as query param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-coll GREP='Path as query param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-ng GREP='Path as query param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-query-nb GREP='Path as query param.*Node Brace scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-db GREP='Path as body param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-graph GREP='Path as body param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-coll GREP='Path as body param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-ng GREP='Path as body param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-lib-handlers-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-rest
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-db GREP='Log - DB Scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-graph GREP='Log - Graph Scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-coll GREP='Log - Collection Scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-ng GREP='Log - Node Glob Scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-log-nb GREP='Log - Node Brace Scope'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-diff-query GREP='Path as query param'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-diff-body GREP='Path as body param'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-show-query GREP='Path as query param'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=mmfiles-unit-lib-operations-show-body GREP='Path as body param'
 
     #rocksdb
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/document/*.js"]' NYC_OUT=rocksdb-integration-document
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-db GREP='Path as query param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-graph GREP='Path as query param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-coll GREP='Path as query param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-ng GREP='Path as query param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query-nb GREP='Path as query param.*Node Brace scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-db GREP='Path as body param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-graph GREP='Path as body param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-coll GREP='Path as body param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-ng GREP='Path as body param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body GREP='Path as body param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-diff
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-show
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query GREP='Path as query param'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body GREP='Path as body param'
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js", "test/unit/lib/handlers/showHandlers.test.js", "test/unit/lib/middleware/*.js"]' NYC_OUT=rocksdb-unit-lib-rest
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-db GREP='Path as query param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-graph GREP='Path as query param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-coll GREP='Path as query param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-ng GREP='Path as query param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-query-nb GREP='Path as query param.*Node Brace scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-db GREP='Path as body param.*DB scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-graph GREP='Path as body param.*Graph scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-coll GREP='Path as body param.*Collection scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-ng GREP='Path as body param.*Node Glob scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-lib-handlers-log-body-nb GREP='Path as body param.*Node Brace scope'
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-rest
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-db GREP='Log - DB Scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-graph GREP='Log - Graph Scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-coll GREP='Log - Collection Scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-ng GREP='Log - Node Glob Scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-log-nb GREP='Log - Node Brace Scope'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-diff-query GREP='Path as query param'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-diff-body GREP='Path as body param'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-show-query GREP='Path as query param'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=rocksdb-unit-lib-operations-show-body GREP='Path as body param'
 
 install:
   - npm install
