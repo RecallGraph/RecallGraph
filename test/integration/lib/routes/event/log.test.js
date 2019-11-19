@@ -199,7 +199,7 @@ describe('Routes - log (Path as query param)', () => {
   })
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when no groupBy is specified', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds()
+    const { path, sampleIds } = getNodeBraceSampleIds(100)
     const reqParams = {
       json: true,
       qs: { path }

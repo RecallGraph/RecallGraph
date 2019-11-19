@@ -186,7 +186,7 @@ describe('Log Handlers - Path as query param', () => {
   })
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when no groupBy is specified', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds()
+    const { path, sampleIds } = getNodeBraceSampleIds(100)
     const req = {
       queryParams: { path }
     }
@@ -208,7 +208,7 @@ describe('Log Handlers - Path as query param', () => {
   })
 
   it('should return grouped events in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds()
+    const { path, sampleIds } = getNodeBraceSampleIds(100)
     const req = {
       queryParams: { path }
     }

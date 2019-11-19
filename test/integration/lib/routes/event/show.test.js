@@ -275,7 +275,7 @@ describe('Routes - show (Path as query param)', () => {
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const { path } = getNodeBraceSampleIds()
+    const { path } = getNodeBraceSampleIds(100)
 
     for (const timestamp of init.getMilestones()) {
       const reqParams = {
@@ -298,7 +298,7 @@ describe('Routes - show (Path as query param)', () => {
   it('should return total node count in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const { path } = getNodeBraceSampleIds()
+    const { path } = getNodeBraceSampleIds(100)
     const reqParams = {
       json: true,
       qs: {
@@ -321,7 +321,7 @@ describe('Routes - show (Path as query param)', () => {
   })
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path } = getNodeBraceSampleIds()
+    const { path } = getNodeBraceSampleIds(100)
     const reqParams = {
       json: true,
       qs: {

@@ -117,10 +117,10 @@ exports.testGroupedNodes = function testGroupedNodes (
       groupLimit: glmt
     } = combo
 
-    let groupedExpectedNodesWrapper = chain(ungroupedExpectedNodes)
+    let expectedNodesWrapper = chain(ungroupedExpectedNodes)
 
     if (co) {
-      groupedExpectedNodesWrapper = groupedExpectedNodesWrapper.groupBy(item => {
+      expectedNodesWrapper = expectedNodesWrapper.groupBy(item => {
         const collName = item._id.split('/')[0]
         return gb === 'collection' ? collName : collTypes[collName]
       })
@@ -130,7 +130,7 @@ exports.testGroupedNodes = function testGroupedNodes (
         }))
         .sortBy(group => st === 'desc' ? -group.total : group.total, gb)
     } else {
-      groupedExpectedNodesWrapper = groupedExpectedNodesWrapper.groupBy(item => {
+      expectedNodesWrapper = expectedNodesWrapper.groupBy(item => {
         const collName = item._id.split('/')[0]
         return gb === 'collection' ? collName : collTypes[collName]
       })
@@ -146,7 +146,7 @@ exports.testGroupedNodes = function testGroupedNodes (
         })
     }
 
-    groupedExpectedNodesWrapper = groupedExpectedNodesWrapper.thru(arr => {
+    expectedNodesWrapper = expectedNodesWrapper.thru(arr => {
       if (lmt) {
         const start = skp
         const end = start + lmt
@@ -158,7 +158,7 @@ exports.testGroupedNodes = function testGroupedNodes (
     })
 
     if (!co) {
-      groupedExpectedNodesWrapper = groupedExpectedNodesWrapper.map(group => {
+      expectedNodesWrapper = expectedNodesWrapper.map(group => {
         const nodes = group.nodes
         let sorted = sortBy(nodes, node => node._id)
         if (gst === 'desc') {
@@ -175,7 +175,7 @@ exports.testGroupedNodes = function testGroupedNodes (
       })
     }
 
-    const expectedNodeGroups = groupedExpectedNodesWrapper.value()
+    const expectedNodeGroups = expectedNodesWrapper.value()
     const params = JSON.stringify({ rawPath, timestamp, combo })
 
     expect(nodeGroups.length, params).to.equal(expectedNodeGroups.length)
@@ -225,7 +225,8 @@ function buildNodesFromEventLog (path, timestamp) {
 exports.buildNodesFromEventLog = buildNodesFromEventLog
 
 function showRequestWrapper (reqParams, timestamp, combo, method = 'get') {
-  defaults(reqParams, { qs: { timestamp } })
+  defaults(reqParams, { qs: {} })
+  reqParams.qs.timestamp = timestamp
 
   if (isObject(combo)) {
     Object.assign(reqParams.qs, omitBy(combo, isNil))

@@ -87,7 +87,7 @@ describe('Diff Handlers - Path as query param', () => {
   })
 
   it('should return diffs in Node Brace scope for a node-brace path', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds()
+    const { path, sampleIds } = getNodeBraceSampleIds(100)
     const req = {
       queryParams: { path }
     }
