@@ -1,7 +1,9 @@
 'use strict'
 
 const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
+
 const gg = require('@arangodb/general-graph')
+
 const {
   forEach,
   get,
@@ -18,7 +20,10 @@ const { replaceSingle } = require('../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../lib/handlers/removeHandlers')
 
 module.exports = function loadSampleData () {
+  console.log('Starting sample data load...')
+
   // Define collection metadata
+  // noinspection JSUnresolvedVariable
   const sampleDataCollections = {
     rawData: {
       type: 'document',
@@ -68,20 +73,25 @@ module.exports = function loadSampleData () {
       switch (collInfo.type) {
         case 'document':
           coll = db._createDocumentCollection(collInfo.name)
+          console.log(`Created ${collInfo.name}`)
 
           break
 
         case 'edge':
           coll = db._createEdgeCollection(collInfo.name)
+          console.log(`Created ${collInfo.name}`)
 
           break
       }
+    } else {
+      db._truncate(coll)
+      console.log(`Truncated ${collInfo.name}`)
     }
 
-    db._truncate(coll)
     get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index))
     colls[key] = coll
   })
+
   const {
     rawData,
     stars,
@@ -98,7 +108,8 @@ module.exports = function loadSampleData () {
     messages: [],
     vertexCollections: undefined,
     edgeCollections: undefined,
-    graphs: []
+    graphs: [],
+    milestones: []
   }
 
   // Load and insert raw data
@@ -110,6 +121,7 @@ module.exports = function loadSampleData () {
   let pathParams = {
     collection: rawData.name()
   }
+  // noinspection JSUnresolvedVariable
   fs.list(module.context.fileName(resourcePath))
     .filter(filename => dataPattern.test(filename))
     .map(filename => `../../${resourcePath}/${filename}`)
@@ -127,9 +139,11 @@ module.exports = function loadSampleData () {
         console.error(e)
       }
     })
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`
-  )
+
+  let message = `Inserted ${insertCount} out of ${docCount} documents into ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Remove footnote references from raw data
   let cursor = rawData.all()
@@ -157,9 +171,11 @@ module.exports = function loadSampleData () {
       }
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Remove empty/unspecified fields from raw data
   cursor = rawData.all()
@@ -184,9 +200,11 @@ module.exports = function loadSampleData () {
       }
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Insert spaces at title-case boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -210,9 +228,11 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Insert spaces at alpha-numeric boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -233,9 +253,11 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Replaced ${replaceCount} out of ${docCount} documents in ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate stars
   cursor = rawData.byExample({ Type: 'star' })
@@ -261,9 +283,11 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${stars.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${stars.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate planets
   docCount = insertCount = errorCount = 0
@@ -303,9 +327,11 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${planets.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${planets.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate dwarf planets
   docCount = insertCount = errorCount = 0
@@ -344,9 +370,11 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${dwarfPlanets.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${dwarfPlanets.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate asteroids
   docCount = insertCount = errorCount = 0
@@ -385,9 +413,11 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${asteroids.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${asteroids.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate comets
   docCount = insertCount = errorCount = 0
@@ -426,9 +456,11 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${comets.name()} with ${errorCount} errors`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${comets.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Populate moons
   docCount = insertCount = errorCount = 0
@@ -449,11 +481,13 @@ module.exports = function loadSampleData () {
   while (cursor.hasNext()) {
     docCount++
     const obj = cursor.next()
+    // noinspection JSUnresolvedVariable
     if (obj.rawObject) {
       try {
         pathParams = {
           collection: moons.name()
         }
+        // noinspection JSUnresolvedVariable
         const moon = createSingle({ pathParams, body: obj.moon })
 
         const linEdge = {
@@ -468,7 +502,9 @@ module.exports = function loadSampleData () {
         pathParams = {
           collection: rawData.name()
         }
+        // noinspection JSUnresolvedVariable
         obj.moon._ref = obj.moon._ref ? [obj.moon._ref, moon._id] : moon._id
+        // noinspection JSUnresolvedVariable
         replaceSingle({ pathParams, body: obj.moon })
 
         insertCount++
@@ -478,15 +514,19 @@ module.exports = function loadSampleData () {
       }
     } else {
       warningCount++
+      // noinspection JSUnresolvedVariable
       failedMoonKeys.push(obj.moon._key)
+      // noinspection JSUnresolvedVariable
       console.warn(
         `No suitable parent object found for moon ${obj.moon._id}. Skipped.`
       )
     }
   }
-  results.messages.push(
-    `Inserted ${insertCount} out of ${docCount} documents into ${moons.name()} with ${errorCount} errors and ${warningCount} warnings`
-  )
+
+  message = `Inserted ${insertCount} out of ${docCount} documents into ${moons.name()} with ${errorCount} errors and ${warningCount} warnings`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // Cleanup raw data of entries copied to other collections
   errorCount = 0
@@ -509,11 +549,14 @@ module.exports = function loadSampleData () {
       removeCount++
     }
   })
-  results.messages.push(
-    `Removed ${removeCount} out of ${docCount} documents from ${rawData.name()} with ${errorCount} errors`
-  )
+
+  message = `Removed ${removeCount} out of ${docCount} documents from ${rawData.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // (Re-)Create Solar System Objects Graph
+  // noinspection JSUnresolvedVariable
   const ssGraph = `${module.context.collectionPrefix}test_ss_lineage`
   let edgeDefs
   try {
@@ -530,9 +573,12 @@ module.exports = function loadSampleData () {
       console.error(e)
     }
   } finally {
-    const g = gg._create(ssGraph, edgeDefs, [rawData.name()])
+    const g = gg._create(ssGraph, edgeDefs)
 
-    results.messages.push(`Created graph ${ssGraph}`)
+    message = `Created graph ${ssGraph}`
+    console.log(message)
+    results.messages.push(message)
+
     results.graphs.push(ssGraph)
     results.vertexCollections = invokeMap(g._vertexCollections(), 'name')
     results.edgeCollections = invokeMap(g._edgeCollections(), 'name')

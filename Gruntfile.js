@@ -9,7 +9,14 @@ module.exports = function (grunt) {
     manifest: grunt.file.readJSON('manifest.json'),
     buildDir: './build',
     eslint: {
-      src: ['main.js', 'lib', 'scripts', 'test/{unit,helpers,integration,travis}', 'Gruntfile.js', 'tasks'],
+      src: [
+        'main.js',
+        'lib',
+        'scripts',
+        'test/{unit,helpers,integration,travis}',
+        'Gruntfile.js',
+        'tasks'
+      ],
       options: {
         configFile: '.eslintrc.json',
         format: 'json',
@@ -18,19 +25,30 @@ module.exports = function (grunt) {
     },
     copy: {
       lib: {
-        files: [{
-          expand: true,
-          src: 'lib/**',
-          dest: '<%= buildDir %>'
-        }]
+        files: [
+          {
+            expand: true,
+            src: 'lib/**',
+            dest: '<%= buildDir %>'
+          }
+        ]
       },
       main: {
-        files: [{
-          expand: true,
-          src: ['scripts/**', 'test/{unit,helpers,integration,resources}/**', 'LICENSE', 'main.js', 'manifest.json',
-            'package.json', 'README.md'],
-          dest: '<%= buildDir %>'
-        }]
+        files: [
+          {
+            expand: true,
+            src: [
+              'scripts/**',
+              'test/{unit,helpers,integration,resources}/**',
+              'LICENSE',
+              'main.js',
+              'manifest.json',
+              'package.json',
+              'README.md'
+            ],
+            dest: '<%= buildDir %>'
+          }
+        ]
       }
     },
     clean: {
@@ -169,6 +187,8 @@ module.exports = function (grunt) {
   grunt.registerTask('initialize', ['build', 'uninstall', 'install'])
   grunt.registerTask('dist', ['build', 'mkdir:dist', 'bundle'])
   grunt.registerTask('test', ['build', 'replace', 'exec:runTests'])
-  grunt.registerTask('testWithCoverage', ['instrument', 'copy:main', 'installSvcDeps', 'replace', 'exec:runTests:true',
-    'checkCoverage', 'lcovReport'])
+  grunt.registerTask('testWithCoverage', [
+    'instrument', 'copy:main', 'installSvcDeps', 'replace', 'exec:runTests:true',
+    'checkCoverage', 'lcovReport'
+  ])
 }

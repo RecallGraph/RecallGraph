@@ -18,8 +18,9 @@ describe('Helpers - snapshotInterval', () => {
 
   it('should return the default snapshot interval', () => {
     const ssInterval = snapshotInterval('non-existent-collection')
+    // noinspection JSUnresolvedVariable
     const defaultSnapshotInterval =
-      module.context.service.configuration['snapshot-intervals']._default
+            module.context.service.configuration['snapshot-intervals']._default
 
     expect(ssInterval).to.equal(defaultSnapshotInterval)
   })

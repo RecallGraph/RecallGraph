@@ -1,8 +1,8 @@
 {
   "$schema": "http://json.schemastore.org/foxx-manifest",
-  "name": "evstore",
-  "version": "0.0.1",
-  "description": "A git-inspired event store for ArangoDB (Foxx microservice)",
+  "name": "CivicGraph",
+  "version": "0.0.2",
+  "description": "Git-inspired versioned storage for time-variant graph data",
   "keywords": [
     "event-store",
     "version-control"
@@ -16,10 +16,11 @@
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
-    "runTests": "scripts/run-tests.js"
+    "runTests": "scripts/run-tests.js",
+    "updateSkeletonGraph": "scripts/updateSkeletonGraph.js"
   },
   "tests": [
-    "test/unit/**/*.js",
+    "test/unit/lib/**/*.js",
     "test/integration/**/*.js"
   ],
   "configuration": {
@@ -32,27 +33,57 @@
       "required": true
     },
     "event-coll-suffix": {
-      "description": "The suffix suffix of the (vertex) collection where events are stored.",
+      "description": "The suffix of the (vertex) collection where events are stored.",
       "default": "_events",
       "type": "string",
       "required": true
     },
     "snapshot-coll-suffix": {
-      "description": "The suffix suffix of the (vertex) collection where snapshots are stored.",
+      "description": "The suffix of the (vertex) collection where snapshots are stored.",
       "default": "_snapshots",
       "type": "string",
       "required": true
     },
     "command-coll-suffix": {
-      "description": "The suffix suffix of the (edge) collection where commands are stored.",
+      "description": "The suffix of the (edge) collection where commands are stored.",
       "default": "_commands",
       "type": "string",
       "required": true
     },
     "event-snapshot-link-coll-suffix": {
-      "description": "The suffix suffix of the (edge) collection where event-snapshot links are stored.",
+      "description": "The suffix of the (edge) collection where event-snapshot links are stored.",
       "default": "_event_snapshot_links",
       "type": "string",
+      "required": true
+    },
+    "snapshot-link-coll-suffix": {
+      "description": "The suffix of the (edge) collection where snapshot links are stored.",
+      "default": "_snapshot_links",
+      "type": "string",
+      "required": true
+    },
+    "skeleton-vertex-coll-suffix": {
+      "description": "The suffix of the (vertex) collection where structural vertices are stored.",
+      "default": "_skeleton_vertices",
+      "type": "string",
+      "required": true
+    },
+    "skeleton-edge-hub-coll-suffix": {
+      "description": "The suffix of the (vertex) collection where structural edge hubs are stored.",
+      "default": "_skeleton_edge_hubs",
+      "type": "string",
+      "required": true
+    },
+    "skeleton-edge-spoke-coll-suffix": {
+      "description": "The suffix of the (edge) collection where structural edge spokes are stored.",
+      "default": "_skeleton_edge_spokes",
+      "type": "string",
+      "required": true
+    },
+    "skeleton-graph-update-batch-size": {
+      "description": "The maximum number of skeleton nodes to write on each job run.",
+      "default": 1000,
+      "type": "integer",
       "required": true
     }
   }

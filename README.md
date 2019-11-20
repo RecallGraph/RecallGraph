@@ -1,100 +1,87 @@
-# EVSTORE (Foxx Microservice)
+# CivicGraph
 
-A git-inspired event store for ArangoDB.
+**A versioning data store for time-variant graph data.**
+
+See this [**Demo App**](https://evening-lake-62717.herokuapp.com/) built using CivicGraph as the underlying time-versioned graph engine.
 
 #### Core Metrics
 
-[![Dependencies](https://img.shields.io/david/adityamukho/evstore.svg?style=flat-square)](https://david-dm.org/adityamukho/evstore)
-[![Build Status](https://travis-ci.org/adityamukho/evstore.svg?branch=master)](https://travis-ci.org/adityamukho/evstore)
+[![Build Status](https://travis-ci.org/CivicGraph/CivicGraph.svg?branch=development)](https://travis-ci.org/CivicGraph/CivicGraph)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=Coverage)
-[![Join the chat at https://gitter.im/evstore/community](https://badges.gitter.im/evstore/community.svg)](https://gitter.im/evstore/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 
 #### Additional Metrics
 
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=ncloc)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 ---
 
-### DISCLAIMER
+## DISCLAIMER
 
 - This project is under active development.
 - Expect heavy feature churn and unstable builds in the initial days.
 - **DO NOT** use in production systems until a stable build is announced!
 
-### Introduction
+## Introduction
 
-_evstore_ is an event-based datastore with version-control - like features.
+CivicGraph is a 'versioned graph' data store - it retains all changes that its data (nodes and edges) have gone through to reach their current state. It is designed to eventually support graph traversals in time slices, letting the user query any past state of the graph just as easily as they can query the present state. The time slice could be a simple  _point in time_ or a _time range_, or a complex _inclusion/exclusion_ expression.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _git-like_ semantics in its interface, and is backed by a transactional event-sourced tracker.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB 3.4, with support for v3.5 in the works.
 
-### Quick Technical Overview
+## Development Roadmap
+1. Support for absolute/relative revision-based queries on individual nodes,
+1. Branching/tag support,
+1. Support for the _valid time_ dimension in addition to the currently implemented _transaction time_ dimension (https://www.researchgate.net/publication/221212735_A_Taxonomy_of_Time_in_Databases),
+1. Support for ArangoDB 3.5,
+1. Multiple, simultaneous materialized checkouts (a la `git`) of selectable sections of the database (entire DB, named graph, named collection, document list, document pattern), with eventual branch-level specificity,
+1. CQRS/ES operation mode (async implicit commits),
+1. Explicit commits,
+1. Support for ArangoDB clusters (limited at present by lack of support for ACID transactions in clusters).
 
-This quick overview is intended to introduce the user to some high level concepts that would let them get started with the service. A more detailed technical document would soon be made available in the project's wiki.
+## Do I Need a 'Versioned Graph' Database?
 
-_evstore_ exposes multiple write methods for individual/multiple nodes (documents/edges). Supported write method contracts (current and planned) are intended to closely follow the core REST API that ArangoDB already exports. These include:
+To get an idea of where such a data store might be used, see:
 
-1. Create (POST)
-2. Replace (PUT)
-3. Update (PATCH)
-4. Delete (DELETE)
+1. [The Case for Versioned Graph Databases](https://adityamukho.com/the-case-for-versioned-graph-databases/),
+1. [Illustrative Problems in Dynamic Network Analysis](https://en.wikipedia.org/wiki/Dynamic_network_analysis#Illustrative_problems_that_people_in_the_DNA_area_work_on)
 
-Node read methods would be no different from what the core REST API already provides, and so they are left out the microservice.
+**TL;DR:** CivicGraph is a potential fit for scenarios where data is characterized by inter-connected data points that change frequently (both in their individual attribute values and in their relations with each other), and whose past states are as important as their present, necessitating retention and queryability of their change history.
 
-When a write method is invoked on a node, the following things happen behind the scenes:
+## Salient API Features
 
-1. A transaction is opened with read and write (non-exclusive) locks on appropriate collections.
-2. The provided node is written.
-3. An event object corresponding to the write is created, that records the current time, event type (create/update/delete) and some meta information about the node. This event is appended to a service-managed **document** collection.
-4. A command object is created using [JSON Patch RFC6902](https://tools.ietf.org/html/rfc6902) to compute a reversible diff from the last known state (`{}` by default) to the current state of the node. This command is appended to a service-managed **edge** collection, linking the current event to the last one (an `origin` event by default).
-5. Optionally, if a specified number of events have been recorded for the node, a snapshot object is created which records the entire current state of the node. This snapshot object is linked to the current event and persisted to a service-managed collection. The number of events that must occur between two consecutive snapshots is configurable at a default level as well as a collection-specific level in the service configuration.
-6. The transaction is committed.
+Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/CivicGraph/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
 
-If something goes wrong at any step in the above process, the transaction is rolled back.
+### Document
 
-This way, every time something happens to a node (a create/update/delete event), a permanent, immutable record of that event is stored forever in the database. These records can be queried in different ways to either:
+- **(Implemented)** Create - Create single/multiple nodes (vertexes/edges).
+- **(Implemented)** Replace - Replace entire single/multiple nodes with new content.
+- **(Implemented)** Delete - Delete single/multiple nodes.
+- **(Implemented)** Update - Add/Update specific fields in single/multiple nodes.
 
-- view a node's mutation history, or
-- rewind a node to any point in time in its mutation history, or
-- even bring a deleted node back to life!
+### Operations
 
-Snapshots, when available, are used on a best-effort basis to minimize the number of diff calculations required to perform a rewind/fast-forward.
+- **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client).
+- **(Implemented)** Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick).
+- **(Implemented)** Diff - Fetch a list of forward or reverse commands (diffs) between commit endpoints for specified nodes.
+- **(Implemented)** Show - Fetch a set of nodes and edges, optionally grouped and filtered, that match a given path pattern, at a given point in time.
 
-**The process described above makes the implicit assumption that all mutation methods for a node were invoked through _evstore_'s API, allowing it to record all changes, and no direct manipulation happened**. But what if somehow, a node underwent a few direct mutations via other means (AQL/Core REST API/Client)?
+## Setting Up
 
-Well, all is not lost in this case, since _evstore_, like Git, supports a **commit** operation that lets you explicitly add an event record post hoc. Obviously, this would create only a single diff from the last known state to the current state, and any intermediate mutations would collapse into that diff. Unfortunately, there is no way around this.
+### For Users
 
-_evstore_ manages all its bookkeeping in a set of service-managed collections, and does not write anything to user-defined collections, other than the specific node records that the user explicitly asked to save. This means that the user gets a clean view of their own collections/data, not polluted by any service metadata (just like Git's working tree). They can query this data as though the service is not even there!
-
-### Salient API Features
-
-Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/evstore/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console.
-
-#### Document
-
-- **(Implemented)** Create - Create single/multiple nodes (vertexes/edges)
-- **(Implemented)** Replace - Replace entire single/multiple nodes with new content
-- **(Implemented)** Delete - Delete single/multiple nodes
-- **(Implemented)** Update - Add/Update specific fields in single/multiple nodes
-
-#### Operations
-
-- **(Planned)** Explicit Commits - Commit a node's changes separately, after it has been written to DB via other means (AQL/Core REST API/Client)
-- **(Implemented)** Log - Fetch a filtered and optionally grouped log of events for a given path pattern (path determines scope of nodes to pick)
-- **(Planned)** Diff - Fetch a list of forward or reverse commands (diffs) between commit endpoints for specified nodes (might use `log` behind the scenes)
-- **(Planned)** Patch - Apply a set of diffs to specified nodes to rewind/fast-forward them in time (will use `diff` behind the scenes)
-
-### Setting Up
-
-1. Clone this repository.
+1. Download the [latest release](https://github.com/adityamukho/CivicGraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 3. Try out the API endpoints through the Swagger console.
 
-### Testing
+**Note:** A One-Click deployment option will be available soon for those who wish to give CivicGraph a spin without having to setup and deploy on their machines.
+
+### For Contributors
+
+For developers who wish to contribute to this project, see the [contribution guidelines](https://github.com/adityamukho/CivicGraph/blob/development/CONTRIBUTING.md) below for instructions on setting up a working dev environment on your machine. 
+
+## Testing
 
 **IMPORTANT:** Running tests will create some test collections apart from the usual service collections. This has a few caveats. **Carefully read the following points before running this service's test suites:**
 
@@ -106,7 +93,7 @@ To avoid getting into trouble while testing, it is best to deploy this service t
 
 Run tests via the web interface or `foxx-cli`. Note that the tests take quite some time to finish, and only print their results in a batch at the end.
 
-#### Running Selective Tests
+### Running Selective Tests
 
 To run tests selectively on specific files or test suites, run
 
@@ -116,27 +103,19 @@ $ foxx run [options] <mount> runTests [args]
 
 For a description on what `args` are available for the above command, see [here](https://gist.github.com/adityamukho/d1a042bb808d871d7d4ef0f266191867#file-usage-md).
 
-### Docs
+## Docs
 
 - Some documentation is already available through the Swagger interface.
-- Detailed API docs are available [here](https://github.com/adityamukho/evstore/wiki/API).
+- Detailed API docs are available [here](https://github.com/adityamukho/CivicGraph/wiki/API).
 - Detailed technical documentation is actively being worked on, and will be available in the project wiki very soon.
 
-### Limitations
+## Limitations
 
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
-2. Since ArangoDB 3.4 does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed for such deployments.
+2. As of version 3.4, ArangoDB does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed for such deployments.
 
-### Contribution Guidelines
-
-A formal contribution guideline document will be prepared eventually. In the meantime,
-
-- stick to the exisiting coding and formatting styles,
-- maintain the current file and folder structure (it is quite simple and self-explanatory right now. Drop me a line if something isn't clear),
-- write test cases for every new piece of functionality and ensure good code coverage. Automated builds and coverage reports will be set up soon.
-
-### Get in Touch
+## Get in Touch
 
 - Raise an issue or PR on this repo, or
 - Mail me (email link in Github profile), or
-- DM me on Slack - `adityamukho@arangodb-community.slack.com`.
+- Join the Gitter channel - [https://gitter.im/CivicGraph/community](https://gitter.im/CivicGraph/community).

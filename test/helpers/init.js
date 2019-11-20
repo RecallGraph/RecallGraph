@@ -1,14 +1,20 @@
 'use strict'
 
 const { db } = require('@arangodb')
+
 const { merge, forEach, noop, omit } = require('lodash')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
 const loadSampleData = require('./loadSampleData')
+
+const cache = require('@arangodb/aql/cache')
+
+cache.properties({ mode: 'on' })
 
 const TEST_DOCUMENT_COLLECTIONS = {
   vertex: module.context.collectionName('test_vertex')
 }
 
+// noinspection JSUnresolvedVariable
 const TEST_EDGE_COLLECTIONS = {
   edge: module.context.collectionName('test_edge')
 }
@@ -39,6 +45,7 @@ function setSnapshotIntervals () {
   forEach(
     TEST_DATA_COLLECTIONS,
     collName => {
+      // noinspection JSUnresolvedVariable
       module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
     }
   )
@@ -62,7 +69,8 @@ function truncateServiceCollections () {
 
 let sampleDataRefs = {}
 let testDataCollectionsInitialized = false
-let testSampleCollectionsInitialized = false
+let sampleDataLoaded = false
+let milestones
 
 exports.setup = function setup ({
   forceTruncateTestData = false,
@@ -91,20 +99,21 @@ exports.setup = function setup ({
     serviceCollectionsTruncated = truncateServiceCollections()
   }
 
-  if (ensureSampleDataLoad && !testSampleCollectionsInitialized) {
+  if (ensureSampleDataLoad && !sampleDataLoaded) {
     serviceCollectionsTruncated =
       serviceCollectionsTruncated || truncateServiceCollections()
 
     const results = loadSampleData()
     sampleDataRefs = omit(results, 'messages')
     sampleDataLoadMessages = results.messages
-    testSampleCollectionsInitialized = true
+    sampleDataLoaded = true
+    milestones = results.milestones
   }
 
   return {
     serviceCollectionsTruncated,
     testDataCollectionsTruncated,
-    sampleDataLoaded: testSampleCollectionsInitialized,
+    sampleDataLoaded,
     sampleDataLoadMessages
   }
 }
@@ -114,3 +123,4 @@ exports.teardown = noop
 exports.TEST_DATA_COLLECTIONS = TEST_DATA_COLLECTIONS
 exports.TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
 exports.getSampleDataRefs = () => sampleDataRefs
+exports.getMilestones = () => milestones

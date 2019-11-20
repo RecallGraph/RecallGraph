@@ -1,10 +1,10 @@
 {
-  "name": "evstore",
-  "version": "0.0.1",
-  "description": "A git-inspired event store for ArangoDB (Foxx microservice)",
+  "name": "civicgraph",
+  "version": "0.0.2",
+  "description": "Git-inspired versioned storage for time-variant graph data",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adityamukho/evstore"
+    "url": "https://github.com/adityamukho/CivicGraph"
   },
   "main": "main.js",
   "directories": {

@@ -2,8 +2,11 @@
 
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
+
 const request = require('@arangodb/request')
+// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
+
 const { errors: ARANGO_ERRORS } = require('@arangodb')
 
 describe('Routes - create', () => {

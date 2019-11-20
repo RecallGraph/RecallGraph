@@ -11,6 +11,7 @@ const {
   removeSingle,
   removeMultiple
 } = require('../../../../lib/handlers/removeHandlers')
+
 const { errors: ARANGO_ERRORS } = require('@arangodb')
 
 describe('Create Handlers', () => {
