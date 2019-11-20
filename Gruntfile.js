@@ -79,7 +79,7 @@ module.exports = function (grunt) {
     bundle: {
       command: ['build', 'foxx', 'bundle'],
       options: {
-        '--outfile': '../dist/evstore-<%= manifest.version %>.zip'
+        '--outfile': '../dist/CivicGraph-<%= manifest.version %>.zip'
       },
       flags: ['-f']
     },
