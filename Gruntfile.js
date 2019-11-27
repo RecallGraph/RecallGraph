@@ -115,7 +115,7 @@ module.exports = function (grunt) {
       options: {
         '--only': 'prod'
       },
-      flags: ['--no-package-lock', '--no-audit']
+      flags: ['--no-package-lock', '--no-audit', '--prefer-offline']
     },
     exec: {
       root: {

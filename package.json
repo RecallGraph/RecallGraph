@@ -24,7 +24,7 @@
   "dependencies": {
     "brace-expansion": "^1.1.11",
     "jiff": "^0.7.3",
-    "jsep": "^0.3.4"
+    "jsep": "CivicGraph/jsep#master"
   },
   "devDependencies": {
     "dotenv": "^7.0.0",

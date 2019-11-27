@@ -248,9 +248,9 @@ exports.showPostWrapper = function showPostWrapper (reqParams, timestamp, combo)
 
 exports.showHandlerWrapper = function showHandlerWrapper (pathParam, timestamp, combo) {
   defaults(pathParam, { queryParams: {} })
+  pathParam.queryParams.timestamp = timestamp
 
   if (isObject(combo)) {
-    pathParam.queryParams.timestamp = timestamp
     Object.assign(pathParam.queryParams, combo)
   }
 

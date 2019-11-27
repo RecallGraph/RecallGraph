@@ -140,32 +140,32 @@ describe('Filter Helpers - filter', () => {
 
     expect(filteredNodes).to.be.empty
 
-    filterExpr = 'reg(x, ".*bc$")'
+    filterExpr = 'regx(x, ".*bc$")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'reg(x, "^ab.*")'
+    filterExpr = 'regx(x, "^ab.*")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'reg(x, ".*bc.*")'
+    filterExpr = 'regx(x, ".*bc.*")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[3]])
 
-    filterExpr = 'reg(x, "^a?ab[bcd]+")'
+    filterExpr = 'regx(x, "^a?ab[bcd]+")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[3]])
 
-    filterExpr = 'reg(y, ".*bc")'
+    filterExpr = 'regx(y, ".*bc")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.be.empty
 
-    filterExpr = 'reg(x, 1)'
+    filterExpr = 'regx(x, 1)'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.be.empty
@@ -221,6 +221,20 @@ describe('Filter Helpers - filter', () => {
     expect(filteredNodes).to.deep.equal([nodes[3]])
   })
 
+  it('should filter on a single ThisExpression', () => {
+    const nodes = [{ x: { z: 1 }, y: 1 }, { x: { z: 0 }, y: 1 }, { x: 2, y: 1 }, { y: 1 }]
+
+    let filterExpr = '!(this.x == 2 && this.y > 0)'
+    let filteredNodes = filter(nodes, filterExpr)
+
+    expect(filteredNodes).to.deep.equal([nodes[0], nodes[1], nodes[3]])
+
+    filterExpr = '!(this["x"] == 2 || this.x.z >= 0)'
+    filteredNodes = filter(nodes, filterExpr)
+
+    expect(filteredNodes).to.deep.equal([nodes[3]])
+  })
+
   it('should filter on a single BinaryExpression', () => {
     let nodes = [{ x: { z: 1 }, y: 1 }, { x: { z: 0 }, y: 1 }, { x: 2, y: 1 }, { y: 1 }]
 
@@ -254,12 +268,12 @@ describe('Filter Helpers - filter', () => {
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[1]])
 
-    filterExpr = 'x == 2 and y > 0'
+    filterExpr = 'x == 2 && y > 0'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[2]])
 
-    filterExpr = 'x == 2 or x.z >= 0'
+    filterExpr = 'x == 2 || x.z >= 0'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal(nodes.slice(0, 3))
