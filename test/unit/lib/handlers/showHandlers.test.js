@@ -330,13 +330,17 @@ describe('Show Handlers - Path as body param', () => {
   it('should return ungrouped events in DB scope for the root path, when groupBy  is null, and countsOnly is falsey',
     () => {
       const path = '/'
-      const req = {
-        body: {
-          path
-        }
-      }
 
       for (const timestamp of init.getMilestones()) {
+        const req = {
+          queryParams: {
+            timestamp
+          },
+          body: {
+            path
+          }
+        }
+
         const allNodes = show(req)
 
         expect(allNodes).to.be.an.instanceOf(Array)
@@ -386,13 +390,17 @@ describe('Show Handlers - Path as body param', () => {
   it('should return ungrouped events in Graph scope for a graph path, when groupBy  is null, and countsOnly is' +
      ' falsey', () => {
     const path = getRandomGraphPathPattern()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (const timestamp of init.getMilestones()) {
+      const req = {
+        queryParams: {
+          timestamp
+        },
+        body: {
+          path
+        }
+      }
+
       const allNodes = show(req)
 
       expect(allNodes).to.be.an.instanceOf(Array)
@@ -442,13 +450,17 @@ describe('Show Handlers - Path as body param', () => {
   it('should return ungrouped events in Collections scope for a collection path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
     const path = getRandomCollectionPathPattern()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (const timestamp of init.getMilestones()) {
+      const req = {
+        queryParams: {
+          timestamp
+        },
+        body: {
+          path
+        }
+      }
+
       const allNodes = show(req)
 
       expect(allNodes).to.be.an.instanceOf(Array)
@@ -503,13 +515,17 @@ describe('Show Handlers - Path as body param', () => {
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
         : `/ng/${sampleTestCollNames}/*`
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (const timestamp of init.getMilestones()) {
+      const req = {
+        queryParams: {
+          timestamp
+        },
+        body: {
+          path
+        }
+      }
+
       const allNodes = show(req)
 
       expect(allNodes).to.be.an.instanceOf(Array)
@@ -568,13 +584,17 @@ describe('Show Handlers - Path as body param', () => {
   it('should return ungrouped events in Node Brace scope for a node-brace path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
     const { path } = getNodeBraceSampleIds()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (const timestamp of init.getMilestones()) {
+      const req = {
+        queryParams: {
+          timestamp
+        },
+        body: {
+          path
+        }
+      }
+
       const allNodes = show(req)
 
       expect(allNodes).to.be.an.instanceOf(Array)
