@@ -23,7 +23,6 @@ module.exports = function loadSampleData () {
   console.log('Starting sample data load...')
 
   // Define collection metadata
-  // noinspection JSUnresolvedVariable
   const sampleDataCollections = {
     rawData: {
       type: 'document',
@@ -121,7 +120,6 @@ module.exports = function loadSampleData () {
   let pathParams = {
     collection: rawData.name()
   }
-  // noinspection JSUnresolvedVariable
   fs.list(module.context.fileName(resourcePath))
     .filter(filename => dataPattern.test(filename))
     .map(filename => `../../${resourcePath}/${filename}`)
@@ -465,7 +463,6 @@ module.exports = function loadSampleData () {
   // Populate moons
   docCount = insertCount = errorCount = 0
   let warningCount = 0
-  // noinspection JSMismatchedCollectionQueryUpdate
   let failedMoonKeys = []
   cursor = query`
     for m in fulltext(${rawData}, 'Type', 'prefix:moon,|prefix:satellite')
@@ -481,13 +478,11 @@ module.exports = function loadSampleData () {
   while (cursor.hasNext()) {
     docCount++
     const obj = cursor.next()
-    // noinspection JSUnresolvedVariable
     if (obj.rawObject) {
       try {
         pathParams = {
           collection: moons.name()
         }
-        // noinspection JSUnresolvedVariable
         const moon = createSingle({ pathParams, body: obj.moon })
 
         const linEdge = {
@@ -502,9 +497,7 @@ module.exports = function loadSampleData () {
         pathParams = {
           collection: rawData.name()
         }
-        // noinspection JSUnresolvedVariable
         obj.moon._ref = obj.moon._ref ? [obj.moon._ref, moon._id] : moon._id
-        // noinspection JSUnresolvedVariable
         replaceSingle({ pathParams, body: obj.moon })
 
         insertCount++
@@ -514,9 +507,7 @@ module.exports = function loadSampleData () {
       }
     } else {
       warningCount++
-      // noinspection JSUnresolvedVariable
       failedMoonKeys.push(obj.moon._key)
-      // noinspection JSUnresolvedVariable
       console.warn(
         `No suitable parent object found for moon ${obj.moon._id}. Skipped.`
       )
@@ -556,7 +547,6 @@ module.exports = function loadSampleData () {
   results.milestones.push(Date.now() / 1000)
 
   // (Re-)Create Solar System Objects Graph
-  // noinspection JSUnresolvedVariable
   const ssGraph = `${module.context.collectionPrefix}test_ss_lineage`
   let edgeDefs
   try {

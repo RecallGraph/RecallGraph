@@ -574,7 +574,6 @@ describe('Replace Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
@@ -661,7 +660,6 @@ describe('Replace Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )

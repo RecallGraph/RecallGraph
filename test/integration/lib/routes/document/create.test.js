@@ -4,7 +4,6 @@ const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 
 const request = require('@arangodb/request')
-// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 
 const { errors: ARANGO_ERRORS } = require('@arangodb')
@@ -271,7 +270,6 @@ describe('Routes - create', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
       )
-      // noinspection BadExpressionStatementJS
       expect(resNode.errorMessage).to.include(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message
       )
@@ -478,7 +476,6 @@ describe('Routes - create', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
       )
-      // noinspection BadExpressionStatementJS
       expect(resNode.errorMessage).to.include(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message
       )

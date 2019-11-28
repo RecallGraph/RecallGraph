@@ -43,7 +43,6 @@ describe('Create Handlers', () => {
     expect(node.new._rev).to.equal(node._rev)
     expect(node.new.k1).to.equal('v1')
     expect(node.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(node.old).to.be.empty
   })
 
@@ -80,7 +79,6 @@ describe('Create Handlers', () => {
       expect(node.new._rev).to.equal(node._rev)
       expect(node.new.k1).to.equal('v1')
       expect(node.old).to.be.an.instanceOf(Object)
-      // noinspection BadExpressionStatementJS
       expect(node.old).to.be.empty
     })
   })
@@ -125,7 +123,6 @@ describe('Create Handlers', () => {
     expect(enode.new._to).to.equal(vnodes[1]._id)
     expect(enode.new.k1).to.equal('v1')
     expect(enode.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(enode.old).to.be.empty
   })
 
@@ -180,7 +177,6 @@ describe('Create Handlers', () => {
       expect(enode.new._to).to.equal(vnodes[1]._id)
       expect(enode.new.k1).to.equal('v1')
       expect(enode.old).to.be.an.instanceOf(Object)
-      // noinspection BadExpressionStatementJS
       expect(enode.old).to.be.empty
     })
   })
@@ -250,7 +246,6 @@ describe('Create Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.include(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message
       )
@@ -399,7 +394,6 @@ describe('Create Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.include(
         ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.message
       )

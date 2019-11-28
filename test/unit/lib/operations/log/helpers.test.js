@@ -31,7 +31,6 @@ describe('Log Helpers - getSortingClause', () => {
         )
 
         expect(sortingClause).to.be.an.instanceOf(Object)
-        // noinspection JSUnresolvedFunction
         expect(sortingClause).to.respondTo('toAQL')
         expect(sortingClause.toAQL()).to.match(/^sort \S+ (asc|desc), \S+ asc$/i)
       })
@@ -53,7 +52,6 @@ describe('Log Helpers - getSortingClause', () => {
         )
 
         expect(sortingClause).to.be.an.instanceOf(Object)
-        // noinspection JSUnresolvedFunction
         expect(sortingClause).to.respondTo('toAQL')
         expect(sortingClause.toAQL()).to.match(
           /^sort \S+ (asc|desc), \S+ asc$/i
@@ -77,7 +75,6 @@ describe('Log Helpers - getSortingClause', () => {
         )
 
         expect(sortingClause).to.be.an.instanceOf(Object)
-        // noinspection JSUnresolvedFunction
         expect(sortingClause).to.respondTo('toAQL')
         expect(sortingClause.toAQL()).to.match(/^sort \S+ asc$/i)
       })
@@ -99,9 +96,7 @@ describe('Log Helpers - getAggregationClause', () => {
       const groupingClause = getGroupingClause(groupBy, combo.countsOnly, combo.returnCommands)
 
       expect(groupingClause).to.be.an.instanceOf(Object)
-      // noinspection JSUnresolvedFunction
       expect(groupingClause).to.respondTo('toAQL')
-      // noinspection BadExpressionStatementJS
       expect(groupingClause.toAQL()).to.be.empty
     })
   })
@@ -115,7 +110,6 @@ describe('Log Helpers - getAggregationClause', () => {
       const groupingClause = getGroupingClause(combo.groupBy, combo.countsOnly, combo.returnCommands)
 
       expect(groupingClause).to.be.an.instanceOf(Object)
-      // noinspection JSUnresolvedFunction
       expect(groupingClause).to.respondTo('toAQL')
       expect(groupingClause.toAQL()).to.match(
         new RegExp(`collect ${combo.groupBy} = .*$`, 'i')
@@ -148,7 +142,6 @@ describe('Log Helpers - getReturnClause', () => {
       )
 
       expect(returnClause).to.be.an.instanceOf(Object)
-      // noinspection JSUnresolvedFunction
       expect(returnClause).to.respondTo('toAQL')
       expect(returnClause.toAQL()).include('return')
     })
@@ -175,7 +168,6 @@ describe('Log Helpers - getReturnClause', () => {
       )
 
       expect(returnClause).to.be.an.instanceOf(Object)
-      // noinspection JSUnresolvedFunction
       expect(returnClause).to.respondTo('toAQL')
       expect(returnClause.toAQL()).include('return')
     })

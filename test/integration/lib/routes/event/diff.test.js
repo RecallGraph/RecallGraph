@@ -4,7 +4,6 @@ const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 
 const request = require('@arangodb/request')
-// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 

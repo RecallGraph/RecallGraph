@@ -2,7 +2,6 @@
 
 const { range, chain, sortBy, isObject, defaults, omitBy, isNil, ary } = require('lodash')
 const request = require('@arangodb/request')
-// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { show: showHandler } = require('../../../lib/handlers/showHandlers')
@@ -207,7 +206,6 @@ exports.testGroupedNodes = function testGroupedNodes (
 
 function buildNodesFromEventLog (path, timestamp) {
   const events = log(path, { until: timestamp, groupBy: 'node', groupSort: 'asc', returnCommands: true })
-  // noinspection JSUnresolvedFunction
   const diffs = events.filter(item => item.events[item.events.length - 1].event !== 'deleted')
     .map(item => item.events.map(event => event.command))
 

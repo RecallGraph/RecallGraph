@@ -18,7 +18,6 @@ describe('Middleware - verifyCollection', () => {
     const throwHandler = expect.fail
 
     verifyCollection({ pathParams }, { throw: throwHandler }, err => {
-      // noinspection BadExpressionStatementJS
       expect(err).to.not.exist
     })
   })
@@ -29,7 +28,6 @@ describe('Middleware - verifyCollection', () => {
     }
     const throwHandler = (errNum, errMsg) => {
       expect(errNum).to.equal(404)
-      // noinspection BadExpressionStatementJS
       expect(errMsg).to.be.not.empty
     }
 

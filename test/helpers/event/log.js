@@ -4,7 +4,6 @@ const {
   isObject, findIndex, findLastIndex, range, cloneDeep, omit, partialRight, defaults, omitBy, isNil, ary
 } = require('lodash')
 const request = require('@arangodb/request')
-// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { log: logHandler } = require('../../../lib/handlers/logHandlers')

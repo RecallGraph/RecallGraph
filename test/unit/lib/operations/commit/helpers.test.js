@@ -152,7 +152,6 @@ describe('Commit Helpers - getTransientOrCreateLatestSnapshot', () => {
 
     expect(ssNode).to.be.an.instanceOf(Object)
     expect(ssData.hopsFromLast).to.equal(2)
-    // noinspection BadExpressionStatementJS
     expect(ssData.prevSSid).to.be.undefined
   })
 })
@@ -377,7 +376,6 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.new._rev).to.equal(result._rev)
     expect(result.new.k1).to.equal('v1')
     expect(result.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.old).to.be.empty
 
     expect(event).to.equal('created')
@@ -471,7 +469,6 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.new._to).to.equal(vnodes[1]._id)
     expect(result.new.k1).to.equal('v1')
     expect(result.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.old).to.be.empty
 
     expect(event).to.equal('created')
@@ -967,7 +964,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._key).to.equal(node._key)
     expect(result._rev).to.equal(node._rev)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1012,7 +1008,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._id).to.equal(node._id)
     expect(result._key).to.equal(node._key)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1126,7 +1121,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._key).to.equal(ecnode._key)
     expect(result._rev).to.equal(ecnode._rev)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1190,7 +1184,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._id).to.equal(ecnode._id)
     expect(result._key).to.equal(ecnode._key)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1475,7 +1468,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.new._id).to.equal(result._id)
     expect(result.new._key).to.equal(result._key)
     expect(result.new._rev).to.equal(result._rev)
-    // noinspection BadExpressionStatementJS
     expect(result.new.k1).to.be.null
     expect(result.new.k2).to.equal('v1')
     expect(result.old).to.be.an.instanceOf(Object)

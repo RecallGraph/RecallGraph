@@ -57,10 +57,8 @@ describe('Routes - show (Path as query param)', () => {
         expect(result).to.be.an.instanceOf(Object)
 
         const events = log('/', { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        // noinspection JSUnresolvedFunction
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        // noinspection JSUnresolvedVariable
         expect(result.total).to.equal(expectedTotal)
       }
     })
@@ -117,10 +115,8 @@ describe('Routes - show (Path as query param)', () => {
         expect(result).to.be.an.instanceOf(Object)
 
         const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        // noinspection JSUnresolvedFunction
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        // noinspection JSUnresolvedVariable
         expect(result.total).to.equal(expectedTotal)
       }
     })
@@ -178,10 +174,8 @@ describe('Routes - show (Path as query param)', () => {
       expect(result).to.be.an.instanceOf(Object)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-      // noinspection JSUnresolvedFunction
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      // noinspection JSUnresolvedVariable
       expect(result.total).to.equal(expectedTotal)
     }
   })
@@ -247,10 +241,8 @@ describe('Routes - show (Path as query param)', () => {
       expect(result).to.be.an.instanceOf(Object)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-      // noinspection JSUnresolvedFunction
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      // noinspection JSUnresolvedVariable
       expect(result.total).to.equal(expectedTotal)
     }
   })
@@ -312,10 +304,8 @@ describe('Routes - show (Path as query param)', () => {
       expect(result).to.be.an.instanceOf(Object)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-      // noinspection JSUnresolvedFunction
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      // noinspection JSUnresolvedVariable
       expect(result.total).to.equal(expectedTotal)
     }
   })
@@ -378,10 +368,8 @@ describe('Routes - show (Path as body param)', () => {
         expect(result).to.be.an.instanceOf(Object)
 
         const events = log('/', { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        // noinspection JSUnresolvedFunction
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        // noinspection JSUnresolvedVariable
         expect(result.total).to.equal(expectedTotal)
       }
     })
@@ -438,10 +426,8 @@ describe('Routes - show (Path as body param)', () => {
         expect(result).to.be.an.instanceOf(Object)
 
         const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        // noinspection JSUnresolvedFunction
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        // noinspection JSUnresolvedVariable
         expect(result.total).to.equal(expectedTotal)
       }
     })
@@ -499,10 +485,8 @@ describe('Routes - show (Path as body param)', () => {
       expect(result).to.be.an.instanceOf(Object)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-      // noinspection JSUnresolvedFunction
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      // noinspection JSUnresolvedVariable
       expect(result.total).to.equal(expectedTotal)
     }
   })
@@ -568,10 +552,8 @@ describe('Routes - show (Path as body param)', () => {
       expect(result).to.be.an.instanceOf(Object)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-      // noinspection JSUnresolvedFunction
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      // noinspection JSUnresolvedVariable
       expect(result.total).to.equal(expectedTotal)
     }
   })
@@ -633,10 +615,8 @@ describe('Routes - show (Path as body param)', () => {
       expect(result).to.be.an.instanceOf(Object)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-      // noinspection JSUnresolvedFunction
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      // noinspection JSUnresolvedVariable
       expect(result.total).to.equal(expectedTotal)
     }
   })

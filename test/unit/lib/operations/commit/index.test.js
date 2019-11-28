@@ -42,7 +42,6 @@ describe('Commit', () => {
     expect(cnode.new.k1).to.equal('v1')
     expect(cnode).to.have.property('old')
     expect(cnode.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(cnode.old).to.be.empty
   })
 
@@ -116,7 +115,6 @@ describe('Commit', () => {
     expect(cnode.new._to).to.equal(vnodes[1]._id)
     expect(cnode.new.k1).to.equal('v1')
     expect(cnode.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(cnode.old).to.be.empty
   })
 
@@ -507,7 +505,6 @@ describe('Commit', () => {
     expect(dnode._rev).to.equal(cnode._rev)
     expect(dnode.old).to.deep.equal(cnode)
     expect(dnode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(dnode.new).to.be.empty
   })
 
@@ -531,7 +528,6 @@ describe('Commit', () => {
     expect(dnode._rev).to.equal(cnode._rev)
     expect(dnode.old).to.deep.equal(cnode)
     expect(dnode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(dnode.new).to.be.empty
   })
 
@@ -627,7 +623,6 @@ describe('Commit', () => {
     expect(dnode._rev).to.equal(cnode._rev)
     expect(dnode.old).to.deep.equal(cnode)
     expect(dnode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(dnode.new).to.be.empty
   })
 
@@ -672,7 +667,6 @@ describe('Commit', () => {
     expect(dnode._rev).to.equal(cnode._rev)
     expect(dnode.old).to.deep.equal(cnode)
     expect(dnode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(dnode.new).to.be.empty
   })
 
@@ -877,7 +871,6 @@ describe('Commit', () => {
     expect(uunode.new._id).to.equal(uunode._id)
     expect(uunode.new._key).to.equal(uunode._key)
     expect(uunode.new._rev).to.equal(uunode._rev)
-    // noinspection BadExpressionStatementJS
     expect(uunode.new.k1).to.be.null
     expect(uunode.new.k2).to.equal('v1')
     expect(uunode.old).to.be.an.instanceOf(Object)
@@ -1240,7 +1233,6 @@ describe('Commit', () => {
     expect(uunode.new._rev).to.equal(uunode._rev)
     expect(uunode.new._from).to.equal(vnodes[0]._id)
     expect(uunode.new._to).to.equal(vnodes[1]._id)
-    // noinspection BadExpressionStatementJS
     expect(uunode.new.k1).to.be.null
     expect(uunode.new.k2).to.equal('v1')
     expect(uunode.old).to.be.an.instanceOf(Object)
@@ -1300,7 +1292,6 @@ describe('Commit', () => {
     expect(uunode.new._rev).to.equal(uunode._rev)
     expect(uunode.new._from).to.equal(vnodes[0]._id)
     expect(uunode.new._to).to.equal(vnodes[1]._id)
-    // noinspection BadExpressionStatementJS
     expect(uunode.new.k1).to.deep.equal({ b: 1 })
     expect(uunode.new.k2).to.equal('v1')
     expect(uunode.old).to.be.an.instanceOf(Object)
@@ -1360,7 +1351,6 @@ describe('Commit', () => {
     expect(uunode.new._rev).to.equal(uunode._rev)
     expect(uunode.new._from).to.equal(vnodes[0]._id)
     expect(uunode.new._to).to.equal(vnodes[1]._id)
-    // noinspection BadExpressionStatementJS
     expect(uunode.new.k1).to.deep.equal({ b: 1, a: 1 })
     expect(uunode.new.k2).to.equal('v1')
     expect(uunode.old).to.be.an.instanceOf(Object)

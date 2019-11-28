@@ -9,7 +9,6 @@ const minimatch = require('minimatch')
 const show = require('../../../lib/operations/show')
 const { cartesian } = require('../event')
 const { expect } = require('chai')
-// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const request = require('@arangodb/request')
 const { filter: filterHandler } = require('../../../lib/handlers/filterHandlers')
@@ -56,7 +55,6 @@ const OPS = {
   ]
 }
 
-// noinspection JSUnusedGlobalSymbols
 const FILTER_MAP = {
   Identifier: (ast, node) => node[ast.name],
   Literal: ast => ast.value,
@@ -198,7 +196,6 @@ exports.testNodes = function testNodes (pathParam, rawPath, timestamp, filterFn)
   combos.forEach(combo => {
     const allNodes = show(rawPath, timestamp, { sort: combo.sort, skip: combo.preSkip, limit: combo.preLimit })
 
-    // noinspection JSUnresolvedVariable
     if (allNodes.length) {
       const filterExpr = generateFilters(allNodes)
 
@@ -207,7 +204,6 @@ exports.testNodes = function testNodes (pathParam, rawPath, timestamp, filterFn)
       expect(filteredNodes).to.be.an.instanceOf(Array)
 
       const ast = jsep(filterExpr)
-      // noinspection JSUnresolvedFunction
       const expectedNodes = allNodes.filter(node => FILTER_MAP[ast.type](ast, node))
 
       if (!isEqual(filteredNodes, expectedNodes)) {
