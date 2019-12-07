@@ -148,7 +148,7 @@ exports.testGroupedEvents = function testGroupedEvents (
       const queryParts = cloneDeep(qp || initQueryParts(scope))
 
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
-      timeBoundFilters.forEach(filter => queryParts.push(filter))
+      timeBoundFilters.filters.forEach(filter => queryParts.push(filter))
 
       queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co, rc))
       queryParts.push(getSortingClause(st, gb, co))

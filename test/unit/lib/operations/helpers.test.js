@@ -153,7 +153,9 @@ describe('Op Helpers - getScopeFilters', () => {
     const scopeFilters = getScopeFilters(scope, searchPattern)
 
     expect(scopeFilters).to.be.an.instanceOf(Object)
-    expect(scopeFilters.query).to.be.empty
+    expect(scopeFilters.prune).to.be.not.empty
+    expect(scopeFilters.filter).to.be.an.instanceOf(Object)
+    expect(scopeFilters.filter.query).to.be.empty
   })
 
   it('should return the Graph scope filters for a graph-prefixed path pattern', () => {
@@ -162,7 +164,9 @@ describe('Op Helpers - getScopeFilters', () => {
     const scopeFilters = getScopeFilters(scope, searchPattern)
 
     expect(scopeFilters).to.be.an.instanceOf(Object)
-    expect(scopeFilters.query).to.include('filter')
+    expect(scopeFilters.prune).to.be.not.empty
+    expect(scopeFilters.filter).to.be.an.instanceOf(Object)
+    expect(scopeFilters.filter.query).to.include('filter')
   })
 
   it('should return the Collection scope filters for a collection-prefixed path pattern', () => {
@@ -171,7 +175,9 @@ describe('Op Helpers - getScopeFilters', () => {
     const scopeFilters = getScopeFilters(scope, searchPattern)
 
     expect(scopeFilters).to.be.an.instanceOf(Object)
-    expect(scopeFilters.query).to.include('filter')
+    expect(scopeFilters.prune).to.be.not.empty
+    expect(scopeFilters.filter).to.be.an.instanceOf(Object)
+    expect(scopeFilters.filter.query).to.include('filter')
   })
 
   it('should return the Node Glob scope filters for a node-glob-prefixed path pattern', () => {
@@ -180,7 +186,9 @@ describe('Op Helpers - getScopeFilters', () => {
     const scopeFilters = getScopeFilters(scope, searchPattern)
 
     expect(scopeFilters).to.be.an.instanceOf(Object)
-    expect(scopeFilters.query).to.include('filter')
+    expect(scopeFilters.prune).to.be.not.empty
+    expect(scopeFilters.filter).to.be.an.instanceOf(Object)
+    expect(scopeFilters.filter.query).to.include('filter')
   })
 
   it('should return the Node Brace scope filters for a node-prefixed path pattern', () => {
@@ -189,7 +197,9 @@ describe('Op Helpers - getScopeFilters', () => {
     const scopeFilters = getScopeFilters(scope, searchPattern)
 
     expect(scopeFilters).to.be.an.instanceOf(Object)
-    expect(scopeFilters.query).to.include('filter')
+    expect(scopeFilters.prune).to.be.not.empty
+    expect(scopeFilters.filter).to.be.an.instanceOf(Object)
+    expect(scopeFilters.filter.query).to.include('filter')
   })
 })
 
@@ -285,8 +295,10 @@ describe('Op Helpers - getTimeBoundFilters', () => {
 
     const timeBoundFilters = getTimeBoundFilters(since, until)
 
-    expect(timeBoundFilters).to.be.an.instanceOf(Array)
-    expect(timeBoundFilters).to.be.empty
+    expect(timeBoundFilters).to.be.an.instanceOf(Object)
+    expect(timeBoundFilters.prune).to.be.not.empty
+    expect(timeBoundFilters.filters).to.be.an.instanceOf(Array)
+    expect(timeBoundFilters.filters).to.be.empty
   })
 
   it('should return a single filter when just one of since or until are specified', () => {
@@ -294,10 +306,12 @@ describe('Op Helpers - getTimeBoundFilters', () => {
     combos.forEach(combo => {
       const timeBoundFilters = getTimeBoundFilters(combo.since, combo.until)
 
-      expect(timeBoundFilters).to.be.an.instanceOf(Array)
-      expect(timeBoundFilters).to.have.lengthOf(1)
-      expect(timeBoundFilters[0]).to.be.an.instanceOf(Object)
-      expect(timeBoundFilters[0].query).to.match(/filter v\.ctime [<>]= @\w+/)
+      expect(timeBoundFilters).to.be.an.instanceOf(Object)
+      expect(timeBoundFilters.prune).to.be.not.empty
+      expect(timeBoundFilters.filters).to.be.an.instanceOf(Array)
+      expect(timeBoundFilters.filters).to.have.lengthOf(1)
+      expect(timeBoundFilters.filters[0]).to.be.an.instanceOf(Object)
+      expect(timeBoundFilters.filters[0].query).to.match(/filter v\.ctime [<>]= @\w+/)
     })
   })
 
@@ -307,9 +321,11 @@ describe('Op Helpers - getTimeBoundFilters', () => {
 
     const timeBoundFilters = getTimeBoundFilters(since, until)
 
-    expect(timeBoundFilters).to.be.an.instanceOf(Array)
-    expect(timeBoundFilters).to.have.lengthOf(2)
-    timeBoundFilters.forEach(tbf => {
+    expect(timeBoundFilters).to.be.an.instanceOf(Object)
+    expect(timeBoundFilters.prune).to.be.not.empty
+    expect(timeBoundFilters.filters).to.be.an.instanceOf(Array)
+    expect(timeBoundFilters.filters).to.have.lengthOf(2)
+    timeBoundFilters.filters.forEach(tbf => {
       expect(tbf).to.be.an.instanceOf(Object)
       expect(tbf.query).to.match(/filter v\.ctime [<>]= @\w+/)
     })
@@ -334,7 +350,7 @@ describe('Op Helpers - getEventLogQueryInitializer', () => {
       const queryParts = getEventLogQueryInitializer(combo.path, combo.since, combo.until)
 
       expect(queryParts).to.be.an.instanceOf(Array)
-      expect(queryParts.length).to.be.within(3, 5)
+      expect(queryParts.length).to.be.within(4, 6)
       queryParts.forEach(queryPart => {
         expect(queryPart).to.be.an.instanceOf(Object)
         if (queryPart.hasOwnProperty('toAQL')) {
