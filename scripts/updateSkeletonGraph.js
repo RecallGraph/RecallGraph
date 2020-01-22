@@ -49,7 +49,7 @@ function syncVertexCreates () {
         return 1
       )
       filter length(sv) == 0
-    insert {meta: keep(e.meta, 'id', '_key'), valid_since: e.ctime} into ${skeletonVerticesColl}
+    insert {meta: keep(e.meta, 'id', 'key'), valid_since: e.ctime} into ${skeletonVerticesColl}
     return {skid: NEW._id, nid: NEW.meta.id}
   `.toArray()
 }
@@ -80,12 +80,12 @@ function syncEdgeCreates () {
       )
       filter length(sv) == 0
       limit ${limit}
-    return {meta: keep(e.meta, 'id', '_key', '_from', '_to'), valid_since: e.ctime}
+    return {meta: keep(e.meta, 'id', 'key', 'from', 'to'), valid_since: e.ctime}
   `.toArray()
 
   // noinspection JSUnresolvedFunction
   const groupedRefs = chain(unsyncedEdgeCreates)
-    .map(event => chain(event.meta).pick('_from', '_to').values().value())
+    .map(event => chain(event.meta).pick('from', 'to').values().value())
     .flatten()
     .uniq()
     .reduce((acc, node) => {
@@ -114,7 +114,7 @@ function syncEdgeCreates () {
     .value()
 
   unsyncedEdgeCreates
-    .filter(event => chain(event.meta).pick('_from', '_to').values().every(value => groupedRefs[value].length).value())
+    .filter(event => chain(event.meta).pick('from', 'to').values().every(value => groupedRefs[value].length).value())
     .forEach(event => {
       const { hubNode, fromSpokeNode, toSpokeNode } = db._executeTransaction({
         collections: {
@@ -136,8 +136,8 @@ function syncEdgeCreates () {
 
           const hubNode = skeletonEdgeHubsColl.insert(
             event)
-          const fromNode = groupedRefs[event.meta._from][0]
-          const toNode = groupedRefs[event.meta._to][0]
+          const fromNode = groupedRefs[event.meta.from][0]
+          const toNode = groupedRefs[event.meta.to][0]
 
           const fromSpokeNode = skeletonEdgeSpokesColl.insert(
             {
@@ -181,8 +181,8 @@ function syncEdgeMoves () {
   const unsyncedEdgeMoves = query`
     for e in ${eventColl}
       filter e.event == 'updated'
-      filter (has(e.meta, '_fromNew') || has(e.meta, '_toNew'))
-      let refs = keep(e.meta, '_fromNew', '_fromOld', '_toNew', '_toOld', 'id')
+      filter (has(e.meta, 'fromNew') || has(e.meta, 'toNew'))
+      let refs = keep(e.meta, 'fromNew', 'fromOld', 'toNew', 'toOld', 'id')
       let sv1 = (
         for a in attributes(refs)
           for s in ${skeletonEdgeHubsColl}
