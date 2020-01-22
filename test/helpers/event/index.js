@@ -99,7 +99,7 @@ exports.getNodeBraceSampleIds = function getNodeBraceSampleIds (
   const pathSuffixes = chain(rootPathEvents)
     .shuffle()
     .sampleSize(size)
-    .map('meta._id')
+    .map('meta.id')
     .uniq()
     .map(id => {
       sampleIds.push(id)
@@ -238,7 +238,7 @@ const queryPartsInializers = {
       aql`
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
-        filter regex_split(v.meta._id, '/')[0] in ${sampleGraphCollNames}
+        filter regex_split(v.meta.id, '/')[0] in ${sampleGraphCollNames}
         for e in ${commandColl}
         filter e._to == v._id
       `

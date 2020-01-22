@@ -81,7 +81,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('created')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 
@@ -103,7 +103,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('updated')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 
@@ -127,7 +127,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('updated')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 })
@@ -185,7 +185,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode).to.have.property('_rev')
     expect(evtNode.meta).to.be.an.instanceOf(Object)
     Object.keys(node).forEach(key =>
-      expect(evtNode.meta[key]).to.deep.equal(node[key])
+      expect(evtNode.meta[key.substring(1)]).to.deep.equal(node[key])
     )
     expect(evtNode.event).to.equal('created')
     expect(evtNode.ctime).to.equal(time)
@@ -232,7 +232,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(rEvtNode).to.have.property('_rev')
     expect(rEvtNode.meta).to.be.an.instanceOf(Object)
     Object.keys(node).forEach(key =>
-      expect(rEvtNode.meta[key]).to.deep.equal(node[key])
+      expect(rEvtNode.meta[key.substring(1)]).to.deep.equal(node[key])
     )
     expect(rEvtNode.event).to.equal('updated')
     expect(rEvtNode.ctime).to.equal(mtime)

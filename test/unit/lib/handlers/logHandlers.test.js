@@ -74,7 +74,7 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
+          filter regex_split(e.meta.id, '/')[0] in ${sampleGraphCollNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -110,7 +110,7 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(e.meta.id, '/')[0] in ${sampleTestCollNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -133,7 +133,7 @@ describe('Log Handlers - Path as query param', () => {
       aql`
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -155,7 +155,7 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(e.meta.id, '/')[0] in ${sampleTestCollNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -176,7 +176,7 @@ describe('Log Handlers - Path as query param', () => {
       aql`
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
-        filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+        filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
         for e in ${commandColl}
         filter e._to == v._id
       `
@@ -197,7 +197,7 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter e.meta._id in ${sampleIds}
+          filter e.meta.id in ${sampleIds}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -216,7 +216,7 @@ describe('Log Handlers - Path as query param', () => {
       aql`
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
-          filter v.meta._id in ${sampleIds}
+          filter v.meta.id in ${sampleIds}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -281,7 +281,7 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta._id, '/')[0] in ${sampleGraphCollNames}
+          filter regex_split(e.meta.id, '/')[0] in ${sampleGraphCollNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -318,7 +318,7 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(e.meta.id, '/')[0] in ${sampleTestCollNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -341,7 +341,7 @@ describe('Log Handlers - Path as body param', () => {
       aql`
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -366,7 +366,7 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(e.meta.id, '/')[0] in ${sampleTestCollNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -387,7 +387,7 @@ describe('Log Handlers - Path as body param', () => {
       aql`
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
-        filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+        filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
         for e in ${commandColl}
         filter e._to == v._id
       `
@@ -409,7 +409,7 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter e._key not in ${getOriginKeys()}
-          filter e.meta._id in ${sampleIds}
+          filter e.meta.id in ${sampleIds}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -428,7 +428,7 @@ describe('Log Handlers - Path as body param', () => {
       aql`
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
-          filter v.meta._id in ${sampleIds}
+          filter v.meta.id in ${sampleIds}
           for e in ${commandColl}
           filter e._to == v._id
         `

@@ -28,13 +28,13 @@ See this [**Demo App**](https://evening-lake-62717.herokuapp.com/) built using C
 
 CivicGraph is a 'versioned graph' data store - it retains all changes that its data (nodes and edges) have gone through to reach their current state. It is designed to eventually support graph traversals in time slices, letting the user query any past state of the graph just as easily as they can query the present state. The time slice could be a simple  _point in time_ or a _time range_, or a complex _inclusion/exclusion_ expression.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB 3.4, with support for v3.5 in the works.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB 3.5, with support for v3.6 in the pipeline.
 
 ## Development Roadmap
 1. Support for absolute/relative revision-based queries on individual nodes,
 1. Branching/tag support,
 1. Support for the _valid time_ dimension in addition to the currently implemented _transaction time_ dimension (https://www.researchgate.net/publication/221212735_A_Taxonomy_of_Time_in_Databases),
-1. Support for ArangoDB 3.5,
+1. Support for ArangoDB 3.6,
 1. Multiple, simultaneous materialized checkouts (a la `git`) of selectable sections of the database (entire DB, named graph, named collection, document list, document pattern), with eventual branch-level specificity,
 1. CQRS/ES operation mode (async implicit commits),
 1. Explicit commits,
@@ -72,7 +72,7 @@ Detailed API docs are available in the [project's wiki](https://github.com/adity
 ### For Users
 
 1. Download the [latest release](https://github.com/adityamukho/CivicGraph/releases/).
-2. Follow the instructions in the [Foxx Deployment Manual](https://docs.arangodb.com/3.4/Manual/Foxx/Deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
+2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 3. Try out the API endpoints through the Swagger console.
 
 **Note:** A One-Click deployment option will be available soon for those who wish to give CivicGraph a spin without having to setup and deploy on their machines.
@@ -112,7 +112,7 @@ For a description on what `args` are available for the above command, see [here]
 ## Limitations
 
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
-2. As of version 3.4, ArangoDB does not support ACID transactions in [cluster mode](https://docs.arangodb.com/3.4/Manual/Transactions/Limitations.html#in-clusters), transactional ACIDity is not guaranteed for such deployments.
+2. As of version 3.5, ArangoDB does not support ACID transactions for multi-document/collection writes in [cluster mode](https://www.arangodb.com/docs/3.5/transactions-limitations.html#in-clusters). Transactional ACIDity is not guaranteed for such deployments.
 
 ## Get in Touch
 

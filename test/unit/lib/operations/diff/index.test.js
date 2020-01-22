@@ -34,7 +34,7 @@ describe('Diff', () => {
       aql`
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -53,7 +53,7 @@ describe('Diff', () => {
       aql`
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta._id, '/')[0] in ${sampleTestCollNames}
+          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -68,7 +68,7 @@ describe('Diff', () => {
       aql`
           for v in ${eventColl}
           filter v._key not in ${getOriginKeys()}
-          filter v.meta._id in ${sampleIds}
+          filter v.meta.id in ${sampleIds}
           for e in ${commandColl}
           filter e._to == v._id
         `

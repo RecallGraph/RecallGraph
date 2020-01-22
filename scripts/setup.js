@@ -41,7 +41,7 @@ eventColl.ensureIndex({
   sparse: true,
   unique: false,
   deduplicate: false,
-  fields: ['meta._id', 'event', 'ctime']
+  fields: ['meta.id', 'event', 'ctime']
 })
 eventColl.ensureIndex({
   type: 'skiplist',
@@ -64,7 +64,7 @@ commandColl.ensureIndex({
   sparse: true,
   unique: true,
   deduplicate: false,
-  fields: ['_from', 'meta._id']
+  fields: ['_from', 'meta.id']
 })
 
 const skeletonVerticesColl = db._collection(skeletonVertices)
@@ -73,7 +73,7 @@ skeletonVerticesColl.ensureIndex({
   sparse: false,
   unique: true,
   deduplicate: false,
-  fields: ['meta._id']
+  fields: ['meta.id']
 })
 
 const skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
@@ -82,7 +82,7 @@ skeletonEdgeHubsColl.ensureIndex({
   sparse: false,
   unique: true,
   deduplicate: false,
-  fields: ['meta._id']
+  fields: ['meta.id']
 })
 
 const { eventLog, skeleton } = SERVICE_GRAPHS
