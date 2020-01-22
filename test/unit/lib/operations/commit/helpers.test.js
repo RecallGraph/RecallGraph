@@ -14,7 +14,8 @@ const {
   prepInsert,
   prepRemove,
   prepReplace,
-  prepUpdate
+  prepUpdate,
+  metaize
 } = require('../../../../../lib/operations/commit/helpers')
 const {
   createSingle,
@@ -31,7 +32,7 @@ const {
   snapshotInterval
 } = require('../../../../../lib/helpers')
 
-const { omit, pick } = require('lodash')
+const { omit, pick, mapValues } = require('lodash')
 const jiff = require('jiff')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -1852,5 +1853,34 @@ describe('Commit Helpers - prepUpdate', () => {
         'errorNum',
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
+  })
+})
+
+describe('Commit Helpers - metaize', () => {
+  before(init.setup)
+
+  after(init.teardown)
+
+  it('should remove leading underscores from the keys of the input object', () => {
+    const input = {
+      _abc: 1,
+      def: 'a',
+      d_e_f: {
+        _a: 1,
+        _a_b: 2,
+        ab: 3,
+        a_b: 4
+      },
+      _a_b_c: ['_a', '_a_b', 'ab', 'a_b']
+    }
+    const output = metaize(input)
+    const expectedOutput = mapValues({
+      abc: '_abc',
+      def: 'def',
+      d_e_f: 'd_e_f',
+      a_b_c: '_a_b_c'
+    }, v => input[v])
+
+    expect(output).to.deep.equal(expectedOutput)
   })
 })
