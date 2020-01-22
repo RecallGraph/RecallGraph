@@ -81,7 +81,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('created')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 
@@ -103,7 +103,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('updated')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 
@@ -127,7 +127,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('updated')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 })

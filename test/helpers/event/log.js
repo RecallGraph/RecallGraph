@@ -192,7 +192,7 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
     return getGroupingClause(groupBy, countsOnly, returnCommands)
   } else {
     const groupingPrefix =
-      'collect collection = regex_split(v.meta._id, "/")[0]'
+      'collect collection = regex_split(v.meta.id, "/")[0]'
 
     let groupingSuffix
     if (countsOnly) {

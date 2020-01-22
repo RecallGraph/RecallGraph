@@ -42,15 +42,15 @@ function syncVertexCreates () {
   return query`
     for e in ${eventColl}
       filter e.event == 'created'
-      filter parse_identifier(e.meta._id).collection in ${vertexCollections}
+      filter parse_identifier(e.meta.id).collection in ${vertexCollections}
       let sv = (
         for s in ${skeletonVerticesColl}
-          filter s.meta._id == e.meta._id
+          filter s.meta.id == e.meta.id
         return 1
       )
       filter length(sv) == 0
-    insert {meta: keep(e.meta, '_id', '_key'), valid_since: e.ctime} into ${skeletonVerticesColl}
-    return {skid: NEW._id, nid: NEW.meta._id}
+    insert {meta: keep(e.meta, 'id', '_key'), valid_since: e.ctime} into ${skeletonVerticesColl}
+    return {skid: NEW._id, nid: NEW.meta.id}
   `.toArray()
 }
 
@@ -58,11 +58,11 @@ function syncVertexDeletes () {
   return query`
     for e in ${eventColl}
       filter e.event == 'deleted'
-      filter parse_identifier(e.meta._id).collection in ${vertexCollections}
+      filter parse_identifier(e.meta.id).collection in ${vertexCollections}
       for s in ${skeletonVerticesColl}
-        filter (s.meta._id == e.meta._id) && !s.valid_until
+        filter (s.meta.id == e.meta.id) && !s.valid_until
         update s with { valid_until: e.ctime } into ${skeletonVerticesColl}
-    return {skid: s._id, nid: s.meta._id}
+    return {skid: s._id, nid: s.meta.id}
   `.toArray()
 }
 
@@ -72,15 +72,15 @@ function syncEdgeCreates () {
   const unsyncedEdgeCreates = query`
     for e in ${eventColl}
       filter e.event == 'created'
-      filter parse_identifier(e.meta._id).collection in ${edgeCollections}
+      filter parse_identifier(e.meta.id).collection in ${edgeCollections}
       let sv = (
         for s in ${skeletonEdgeHubsColl}
-          filter s.meta._id == e.meta._id
+          filter s.meta.id == e.meta.id
         return 1
       )
       filter length(sv) == 0
       limit ${limit}
-    return {meta: keep(e.meta, '_id', '_key', '_from', '_to'), valid_since: e.ctime}
+    return {meta: keep(e.meta, 'id', '_key', '_from', '_to'), valid_since: e.ctime}
   `.toArray()
 
   // noinspection JSUnresolvedFunction
@@ -105,7 +105,7 @@ function syncEdgeCreates () {
         for n in nodes
           let sv = (
             for s in ${skeletonCollections[key]}
-              filter s.meta._id == n
+              filter s.meta.id == n
             return s._id
           )
         return [n, sv]
@@ -182,17 +182,17 @@ function syncEdgeMoves () {
     for e in ${eventColl}
       filter e.event == 'updated'
       filter (has(e.meta, '_fromNew') || has(e.meta, '_toNew'))
-      let refs = keep(e.meta, '_fromNew', '_fromOld', '_toNew', '_toOld', '_id')
+      let refs = keep(e.meta, '_fromNew', '_fromOld', '_toNew', '_toOld', 'id')
       let sv1 = (
         for a in attributes(refs)
           for s in ${skeletonEdgeHubsColl}
-            filter s.meta._id == refs[a]
+            filter s.meta.id == refs[a]
           return {[a]: s._id}
       )
       let sv2 = (
         for a in attributes(refs)
           for s in ${skeletonVerticesColl}
-            filter s.meta._id == refs[a]
+            filter s.meta.id == refs[a]
           return {[a]: s._id}
       )
       let sv = merge(append(sv1,sv2))
@@ -272,14 +272,14 @@ function syncEdgeDeletes () {
   return query`
     for e in ${eventColl}
       filter e.event == 'deleted'
-      filter parse_identifier(e.meta._id).collection in ${edgeCollections}
+      filter parse_identifier(e.meta.id).collection in ${edgeCollections}
       for s in ${skeletonEdgeHubsColl}
-        filter (s.meta._id == e.meta._id) && !s.valid_until
+        filter (s.meta.id == e.meta.id) && !s.valid_until
         update s with { valid_until: e.ctime } into ${skeletonEdgeHubsColl}
         for ss in ${skeletonEdgeSpokesColl}
           filter ss.hub == s._id and !ss.valid_until
           update ss with { valid_until: e.ctime } into ${skeletonEdgeSpokesColl}
-          collect skhub = {hub: s._id, nid: s.meta._id} into skspokes = ss._id
+          collect skhub = {hub: s._id, nid: s.meta.id} into skspokes = ss._id
     return {skhub, skspokes}
   `.toArray()
 }
