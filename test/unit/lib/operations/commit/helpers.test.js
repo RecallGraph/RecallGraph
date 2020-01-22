@@ -186,7 +186,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode).to.have.property('_rev')
     expect(evtNode.meta).to.be.an.instanceOf(Object)
     Object.keys(node).forEach(key =>
-      expect(evtNode.meta[key.substring(1)]).to.deep.equal(node[key])
+      expect(evtNode.meta[key.replace(/^_/, '')]).to.deep.equal(node[key])
     )
     expect(evtNode.event).to.equal('created')
     expect(evtNode.ctime).to.equal(time)
@@ -233,7 +233,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(rEvtNode).to.have.property('_rev')
     expect(rEvtNode.meta).to.be.an.instanceOf(Object)
     Object.keys(node).forEach(key =>
-      expect(rEvtNode.meta[key.substring(1)]).to.deep.equal(node[key])
+      expect(rEvtNode.meta[key.replace(/^_/, '')]).to.deep.equal(node[key])
     )
     expect(rEvtNode.event).to.equal('updated')
     expect(rEvtNode.ctime).to.equal(mtime)
