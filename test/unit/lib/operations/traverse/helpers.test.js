@@ -9,9 +9,6 @@ const { createNodeBracepath, buildFilteredGraph, removeFreeEdges } = require(
 const { db, query } = require('@arangodb')
 const { shuffle, chain } = require('lodash')
 
-const [lineageColl, starsColl, planetsColl, moonsColl] = ['lineage', 'stars', 'planets', 'moons'].map(
-  suffix => db._collection(module.context.collectionName(`test_${suffix}`)))
-
 describe('Filter Helpers - traverseSkeletonGraph', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
@@ -68,6 +65,9 @@ describe('Filter Helpers - buildFilteredGraph', () => {
   after(init.teardown)
 
   it('should return a connected graph from the provided vertex and edge sets, given a start vertex', () => {
+    const [lineageColl, starsColl, planetsColl, moonsColl] = ['lineage', 'stars', 'planets', 'moons'].map(
+      suffix => db._collection(module.context.collectionName(`test_${suffix}`)))
+
     const edges = shuffle(lineageColl.all().toArray())
     const vertices = chain([starsColl, planetsColl, moonsColl]).flatMap(coll => coll.all().toArray()).shuffle().value()
     removeFreeEdges(vertices, edges)
@@ -110,6 +110,9 @@ describe('Filter Helpers - removeFreeEdges', () => {
   after(init.teardown)
 
   it('should remove free edges given a specific vertex and edge set', () => {
+    const [lineageColl, starsColl, planetsColl, moonsColl] = ['lineage', 'stars', 'planets', 'moons'].map(
+      suffix => db._collection(module.context.collectionName(`test_${suffix}`)))
+
     const edges = shuffle(lineageColl.all().toArray())
     const vertices = chain([starsColl, planetsColl, moonsColl]).flatMap(coll => coll.all().toArray()).shuffle().value()
     removeFreeEdges(vertices, edges)

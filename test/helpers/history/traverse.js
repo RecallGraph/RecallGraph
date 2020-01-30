@@ -16,10 +16,6 @@ const show = require('../../../lib/operations/show')
 const { filter } = require('../../../lib/operations/filter/helpers')
 
 const lineageCollName = module.context.collectionName('test_lineage')
-const collTypes = chain(getNonServiceCollections())
-  .map(collName => [collName, getCollectionType(collName)])
-  .fromPairs()
-  .value()
 const generateCombos = memoize(() => {
   return cartesian({
     timestamp: [null, ...init.getMilestones()],
@@ -42,6 +38,10 @@ exports.generateOptionCombos = function generateOptionCombos (bfs = true) {
 
 exports.testTraverseSkeletonGraphWithParams = function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
+  const collTypes = chain(getNonServiceCollections())
+    .map(collName => [collName, getCollectionType(collName)])
+    .fromPairs()
+    .value()
 
   const combos = generateCombos()
   combos.forEach(combo => {
@@ -66,6 +66,10 @@ exports.testTraverseSkeletonGraphWithParams = function testTraverseSkeletonGraph
 
 exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, useFilters = true) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
+  const collTypes = chain(getNonServiceCollections())
+    .map(collName => [collName, getCollectionType(collName)])
+    .fromPairs()
+    .value()
 
   const combos = generateCombos()
   combos.forEach(combo => {
