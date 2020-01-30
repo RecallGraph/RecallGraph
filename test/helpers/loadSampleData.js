@@ -1,25 +1,19 @@
 'use strict'
 
 const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-
 const gg = require('@arangodb/general-graph')
-
-const {
-  forEach,
-  get,
-  mapValues,
-  isEqual,
-  omitBy,
-  isEmpty,
-  trim,
-  invokeMap
-} = require('lodash')
+const { forEach, get, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap } = require('lodash')
 const fs = require('fs')
 const { createSingle } = require('../../lib/handlers/createHandlers')
 const { replaceSingle } = require('../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../lib/handlers/removeHandlers')
+const { createSkeletonUpdateCron, deleteSkeletonUpdateCron } = require('../../lib/helpers')
 
 module.exports = function loadSampleData () {
+  // Stop background skeleton graph update
+  console.log('Stopping skeleton update cron job...')
+  deleteSkeletonUpdateCron()
+
   console.log('Starting sample data load...')
 
   // Define collection metadata
@@ -545,6 +539,7 @@ module.exports = function loadSampleData () {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  console.log('Milestones: %o', results.milestones)
 
   // (Re-)Create Solar System Objects Graph
   const ssGraph = `${module.context.collectionPrefix}test_ss_lineage`
@@ -573,6 +568,15 @@ module.exports = function loadSampleData () {
     results.vertexCollections = invokeMap(g._vertexCollections(), 'name')
     results.edgeCollections = invokeMap(g._edgeCollections(), 'name')
   }
+
+  // Generate skeleton graph manually
+  console.log('Generating skeleton graph...')
+  require('../../scripts/updateSkeletonGraph')
+  console.log('Generated skeleton graph.')
+
+  // Re-instate skeleton update cron
+  console.log('Re-instating skeleton update cron job...')
+  createSkeletonUpdateCron()
 
   return results
 }

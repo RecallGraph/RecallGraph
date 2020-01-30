@@ -1,11 +1,8 @@
 'use strict'
 
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
-
 const gg = require('@arangodb/general-graph')
-
-const queues = require('@arangodb/foxx/queues')
-const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
+const { SERVICE_COLLECTIONS, SERVICE_GRAPHS, createSkeletonUpdateCron } = require('../lib/helpers')
 
 const { events, commands, snapshots, evtSSLinks, snapshotLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
 const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
@@ -112,49 +109,6 @@ try {
 }
 
 // Setup crons
-const queue = queues.create('crons', 1)
-// noinspection JSUnresolvedVariable
-const mount = module.context.mount
-const cronJob = 'updateSkeletonGraph'
-
-const stored = queue.all({
-  name: cronJob,
-  mount
-})
-
-stored.forEach(jobId => {
-  const job = queue.get(jobId)
-
-  console.log('Deleting stored job: %o', job)
-  queue.delete(jobId)
-})
-
-// noinspection JSUnusedGlobalSymbols
-queue.push({
-  mount,
-  name: cronJob
-}, null, {
-  maxFailures: Infinity,
-  repeatTimes: Infinity,
-  failure: (result, jobData, job) => console.error(`Failed job: ${JSON.stringify({
-    result,
-    job: [
-      job.queue,
-      job.type,
-      job.failures,
-      job.runs,
-      job.runFailures
-    ]
-  })}`),
-  success: (result, jobData,
-    job) => {
-    if (Object.keys(result).some(key => result[key].length)) {
-      console.debug(`Passed job: ${JSON.stringify({
-        result,
-        job: [job.queue, job.type, job.runs, job.runFailures]
-      })}`)
-    }
-  }
-})
+createSkeletonUpdateCron()
 
 console.log('Finished setup.')

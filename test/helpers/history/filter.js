@@ -187,6 +187,8 @@ function generateFilters (nodes) {
   return filterArr.join(' ')
 }
 
+exports.generateFilters = generateFilters
+
 exports.testNodes = function testNodes (pathParam, rawPath, timestamp, filterFn) {
   const sort = ['asc', 'desc']
   const preSkip = [0, 1]
