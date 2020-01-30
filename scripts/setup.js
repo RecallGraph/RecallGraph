@@ -84,6 +84,7 @@ skeletonEdgeHubsColl.ensureIndex({
 
 const { eventLog, skeleton } = SERVICE_GRAPHS
 let evlEdgeDefs, skelEdgeDefs
+
 try {
   const commandRel = gg._relation(commands, [events], [events])
   const ssRel = gg._relation(snapshotLinks, [snapshots], [snapshots])
@@ -91,7 +92,15 @@ try {
   evlEdgeDefs = gg._edgeDefinitions(commandRel, ssRel, evtSSRel)
 
   gg._drop(eventLog)
+} catch (e) {
+  if (e.errorNum !== ARANGO_ERRORS.ERROR_GRAPH_NOT_FOUND.code) {
+    console.error(e)
+  }
+} finally {
+  gg._create(eventLog, evlEdgeDefs)
+}
 
+try {
   const skeletonRel = gg._relation(skeletonEdgeSpokes, [skeletonVertices, skeletonEdgeHubs], [
     skeletonVertices,
     skeletonEdgeHubs
@@ -104,7 +113,6 @@ try {
     console.error(e)
   }
 } finally {
-  gg._create(eventLog, evlEdgeDefs)
   gg._create(skeleton, skelEdgeDefs)
 }
 
