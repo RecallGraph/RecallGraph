@@ -230,7 +230,7 @@ function showRequestWrapper (reqParams, timestamp, combo, method = 'get') {
     Object.assign(reqParams.qs, omitBy(combo, isNil))
   }
 
-  const response = request[method](`${baseUrl}/event/show`, reqParams)
+  const response = request[method](`${baseUrl}/history/show`, reqParams)
 
   expect(response).to.be.an.instanceOf(Object)
   expect(response.statusCode).to.equal(200)

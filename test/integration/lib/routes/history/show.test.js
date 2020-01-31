@@ -9,7 +9,7 @@ const {
   getRandomGraphPathPattern, getSampleTestCollNames, getNodeBraceSampleIds, getRandomCollectionPathPattern
 } = require('../../../../helpers/event')
 
-const log = require('lib/operations/log')
+const log = require('../../../../../lib/operations/log')
 
 describe('Routes - show (Path as query param)', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
