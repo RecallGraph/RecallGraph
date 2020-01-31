@@ -7,7 +7,7 @@ const { expect } = require('chai')
 const { show: showHandler } = require('../../../lib/handlers/showHandlers')
 const log = require('../../../lib/operations/log')
 const { getCollTypes } = require('../../../lib/operations/show/helpers')
-const { getRandomSubRange, cartesian } = require('.')
+const { getRandomSubRange, cartesian } = require('../event')
 const jiff = require('jiff')
 
 exports.testUngroupedNodes = function testUngroupedNodes (

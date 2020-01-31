@@ -5,7 +5,7 @@ const init = require('../../../helpers/init')
 const { show } = require('../../../../lib/handlers/showHandlers')
 const {
   testGroupedNodes, testUngroupedNodes, buildNodesFromEventLog, showHandlerWrapper
-} = require('../../../helpers/event/show')
+} = require('../../../helpers/history/show')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getSampleTestCollNames, getNodeBraceSampleIds
 } = require('../../../helpers/event')

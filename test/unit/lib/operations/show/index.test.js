@@ -9,7 +9,7 @@ const {
 const log = require('../../../../../lib/operations/log')
 const {
   testUngroupedNodes, testGroupedNodes, buildNodesFromEventLog
-} = require('../../../../helpers/event/show')
+} = require('../../../../helpers/history/show')
 
 describe('Show - DB Scope', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))

@@ -4,15 +4,12 @@ const { expect } = require('chai')
 const init = require('../../../../helpers/init')
 const {
   testUngroupedNodes, testGroupedNodes, showGetWrapper, showPostWrapper, buildNodesFromEventLog
-} = require('../../../../helpers/event/show')
+} = require('../../../../helpers/history/show')
 const {
-  getRandomGraphPathPattern,
-  getSampleTestCollNames,
-  getNodeBraceSampleIds,
-  getRandomCollectionPathPattern
+  getRandomGraphPathPattern, getSampleTestCollNames, getNodeBraceSampleIds, getRandomCollectionPathPattern
 } = require('../../../../helpers/event')
 
-const log = require('../../../../../lib/operations/log')
+const log = require('lib/operations/log')
 
 describe('Routes - show (Path as query param)', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
