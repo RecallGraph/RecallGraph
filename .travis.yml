@@ -13,7 +13,7 @@ env:
     #mmfiles
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query GREP='Path as query param'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body GREP='Path as body param'
-    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=mmfiles-integration-show
+    - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/history/show.test.js"]' NYC_OUT=mmfiles-integration-show
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js", "test/integration/lib/routes/history/filter.test.js", "test/integration/lib/routes/history/traverse.test.js"]' NYC_OUT=mmfiles-integration-rest
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-query GREP='Path as query param'
     - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-body GREP='Path as body param'
@@ -24,7 +24,7 @@ env:
     #rocksdb
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query GREP='Path as query param'
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body GREP='Path as body param'
-    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/show.test.js"]' NYC_OUT=rocksdb-integration-show
+    - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/history/show.test.js"]' NYC_OUT=rocksdb-integration-show
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js", "test/integration/lib/routes/history/filter.test.js", "test/integration/lib/routes/history/traverse.test.js"]' NYC_OUT=rocksdb-integration-rest
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-query GREP='Path as query param'
     - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-body GREP='Path as body param'
