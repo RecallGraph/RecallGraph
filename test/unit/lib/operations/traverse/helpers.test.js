@@ -9,7 +9,7 @@ const { createNodeBracepath, buildFilteredGraph, removeFreeEdges } = require(
 const { db, query } = require('@arangodb')
 const { shuffle, chain } = require('lodash')
 
-describe('Filter Helpers - traverseSkeletonGraph', () => {
+describe('Traverse Helpers - traverseSkeletonGraph', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
@@ -25,7 +25,7 @@ describe('Filter Helpers - traverseSkeletonGraph', () => {
   })
 })
 
-describe('Filter Helpers - createNodeBracepath', () => {
+describe('Traverse Helpers - createNodeBracepath', () => {
   before(init.setup)
 
   after(init.teardown)
@@ -59,7 +59,7 @@ describe('Filter Helpers - createNodeBracepath', () => {
   })
 })
 
-describe('Filter Helpers - buildFilteredGraph', () => {
+describe('Traverse Helpers - buildFilteredGraph', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
@@ -98,13 +98,12 @@ describe('Filter Helpers - buildFilteredGraph', () => {
     const expectedGraph = cursor.next()
     cursor.dispose()
 
-    // Bug causes actual and expected to be switched in error message when comparing by members.
-    expect(expectedGraph.vertices).to.have.deep.members(filteredGraph.vertices)
-    expect(expectedGraph.edges).to.have.deep.members(filteredGraph.edges)
+    expect(filteredGraph.vertices).to.have.deep.members(expectedGraph.vertices)
+    expect(filteredGraph.edges).to.have.deep.members(expectedGraph.edges)
   })
 })
 
-describe('Filter Helpers - removeFreeEdges', () => {
+describe('Traverse Helpers - removeFreeEdges', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
@@ -137,7 +136,6 @@ describe('Filter Helpers - removeFreeEdges', () => {
     const expectedEdges = cursor.next()
     cursor.dispose()
 
-    // Bug causes actual and expected to be switched in error message when comparing by members.
-    expect(expectedEdges).to.have.deep.members(edges)
+    expect(edges).to.have.deep.members(expectedEdges)
   })
 })

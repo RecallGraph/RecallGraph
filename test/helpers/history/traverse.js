@@ -7,14 +7,16 @@ const { cartesian } = require('../event')
 const {
   traverseSkeletonGraph, createNodeBracepath, removeFreeEdges, buildFilteredGraph
 } = require('../../../lib/operations/traverse/helpers')
-const traverse = require('../../../lib/operations/traverse')
 const { getCollectionType, DOC_KEY_REGEX, COLLECTION_TYPES } = require('../../../lib/helpers')
 const { getNonServiceCollections } = require('../../../lib/operations/helpers')
-const { chain, sample, memoize } = require('lodash')
+const { chain, sample, memoize, omit, isObject, pick, isEmpty } = require('lodash')
 const { generateFilters } = require('./filter')
 const show = require('../../../lib/operations/show')
 const { filter } = require('../../../lib/operations/filter/helpers')
+const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
+const request = require('@arangodb/request')
 
+const { baseUrl, collectionPrefix } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
 const generateCombos = memoize(() => {
   return cartesian({
@@ -27,7 +29,8 @@ const generateCombos = memoize(() => {
 }).bind(module, 'default')
 
 exports.generateOptionCombos = function generateOptionCombos (bfs = true) {
-  const uniqueVertices = ['none', 'path']; const uniqueEdges = ['none', 'path']
+  const uniqueVertices = ['none', 'path']
+  const uniqueEdges = ['none', 'path']
 
   if (bfs) {
     uniqueVertices.push('global')
@@ -64,7 +67,7 @@ exports.testTraverseSkeletonGraphWithParams = function testTraverseSkeletonGraph
   })
 }
 
-exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, useFilters = true) {
+exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseFn, useFilters = true) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
   const collTypes = chain(getNonServiceCollections())
     .map(collName => [collName, getCollectionType(collName)])
@@ -84,7 +87,7 @@ exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueV
         for v, e in 0..${depth}
       `,
       aql.literal(`${edgeCollections[lineageCollName]} '${svid}'`),
-      aql.literal(`graph '${module.context.collectionPrefix}test_ss_lineage'`),
+      aql.literal(`graph '${collectionPrefix}test_ss_lineage'`),
       aql`
         options {bfs: ${bfs}, uniqueVertices: ${uniqueVertices}, uniqueEdges: ${uniqueEdges}}
         
@@ -121,7 +124,7 @@ exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueV
     const vFilter = useFilters ? generateFilters(timeBoundVertices) : null
     const eFilter = useFilters && timeBoundEdges.length ? generateFilters(timeBoundEdges) : null
 
-    const filteredTraversal = traverse(timestamp, svid, depth, edgeCollections,
+    const filteredTraversal = traverseFn(timestamp, svid, depth, edgeCollections,
       { bfs, uniqueVertices, uniqueEdges, vFilter, eFilter })
 
     const params = JSON.stringify(Object.assign({ bfs, uniqueVertices, uniqueEdges, svid, vFilter, eFilter }, combo))
@@ -136,8 +139,47 @@ exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueV
     const expectedTraversal = filteredTimeBoundVertices.length ? buildFilteredGraph(svid, filteredTimeBoundVertices,
       filteredTimeBoundEdges) : { vertices: [], edges: [] }
 
-    // Bug causes actual and expected to be switched in error message when comparing by members.
-    expect(expectedTraversal.vertices, params).to.have.deep.members(filteredTraversal.vertices)
-    expect(expectedTraversal.edges, params).to.have.deep.members(filteredTraversal.edges)
+    expect(filteredTraversal.vertices, params).to.have.deep.members(expectedTraversal.vertices)
+    expect(filteredTraversal.edges, params).to.have.deep.members(expectedTraversal.edges)
   })
+}
+
+exports.traverseHandlerWrapper = function traverseHandlerWrapper (timestamp, svid, depth, edgeCollections, options) {
+  const req = { queryParams: { timestamp, svid, depth }, body: { edges: edgeCollections } }
+
+  if (isObject(options)) {
+    Object.assign(req.queryParams, omit(options, 'vFilter', 'eFilter'))
+    for (const key of ['vFilter', 'eFilter']) {
+      if (!isEmpty(options[key])) {
+        req.body[key] = options[key]
+      }
+    }
+  }
+
+  return traverseHandler(req)
+}
+
+exports.traversePostWrapper = function traversePostWrapper (timestamp, svid, depth, edgeCollections, options) {
+  const req = { json: true, timeout: 120, qs: { svid, depth }, body: { edges: edgeCollections } }
+
+  if (timestamp) {
+    req.qs.timestamp = timestamp
+  }
+
+  if (isObject(options)) {
+    Object.assign(req.qs, omit(options, 'vFilter', 'eFilter'))
+    for (const key of ['vFilter', 'eFilter']) {
+      if (!isEmpty(options[key])) {
+        req.body[key] = options[key]
+      }
+    }
+  }
+
+  const response = request.post(`${baseUrl}/history/traverse`, req)
+  expect(response).to.be.an.instanceOf(Object)
+
+  const params = JSON.stringify({ request: req, response: pick(response, 'statusCode', 'body', 'message') })
+  expect(response.statusCode, params).to.equal(200)
+
+  return JSON.parse(response.body)
 }

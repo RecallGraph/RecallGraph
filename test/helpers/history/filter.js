@@ -9,11 +9,11 @@ const minimatch = require('minimatch')
 const show = require('../../../lib/operations/show')
 const { cartesian } = require('../event')
 const { expect } = require('chai')
-const { baseUrl } = module.context
 const request = require('@arangodb/request')
 const { filter: filterHandler } = require('../../../lib/handlers/filterHandlers')
 const { jsep, OP_MAP } = require('../../../lib/operations/filter/helpers')
 
+const { baseUrl } = module.context
 const OPS = {
   primitive: [
     {
