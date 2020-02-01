@@ -63,8 +63,7 @@ CivicGraph installs like any other _Foxx Microservice_ inside a database, on an 
 
 ## Docs
 - Quick-reference API documentation is available directly in the Swagger console (accessed through ArangoDB's web UI).
-- Detailed API docs are available in the [project wiki](https://github.com/adityamukho/CivicGraph/wiki/API).
-- Detailed technical documentation is being worked on, and will be available in the project wiki soon.
+- Detailed API docs, tutorials and technical docs are being worked on, and will be available soon.
 
 ## Limitations
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
