@@ -3,12 +3,11 @@ CivicGraph is a _versioned-graph_ data store - it retains all changes that its d
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB v3.5, with support for v3.6 in the pipeline.
 
-#### Core Metrics
+---
+
 [![Build Status](https://travis-ci.org/CivicGraph/CivicGraph.svg?branch=development)](https://travis-ci.org/CivicGraph/CivicGraph)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
-
-#### Additional Metrics
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=security_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
@@ -51,10 +50,8 @@ CivicGraph's API is split into 3 top-level categories:
 
 ### History
 - **Show** - Fetch a set of documents, optionally grouped/sorted/sliced, that match a given path pattern, at a given point in time.
-- **Filter** - In addition to a path pattern like in **'Show''**, apply an expression-based, simple/compound post-filter on the retrieved documents.
+- **Filter** - In addition to a path pattern like in **'Show'**, apply an expression-based, simple/compound post-filter on the retrieved documents.
 - **Traverse** - A point-in-time traversal (walk) of a past version of the graph, with the option to apply additional post-filters to the result.
-
-Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/CivicGraph/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console (accessed through ArangoDB's web UI).
 
 ## Installation
 CivicGraph installs like any other _Foxx Microservice_ inside a database, on an ArangoDB instance.
@@ -65,7 +62,7 @@ CivicGraph installs like any other _Foxx Microservice_ inside a database, on an 
 **Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to take CivicGraph for a test ride without having to setup their own server.
 
 ## Docs
-- Some documentation is already available through the Swagger interface.
+- Quick-reference API documentation is available directly in the Swagger console (accessed through ArangoDB's web UI).
 - Detailed API docs are available in the [project wiki](https://github.com/adityamukho/CivicGraph/wiki/API).
 - Detailed technical documentation is being worked on, and will be available in the project wiki soon.
 
