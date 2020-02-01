@@ -1,14 +1,17 @@
 {
   "$schema": "http://json.schemastore.org/foxx-manifest",
   "name": "CivicGraph",
-  "version": "0.0.2",
-  "description": "Git-inspired versioned storage for time-variant graph data",
+  "version": "0.1.0",
+  "description": "A versioning data store for time-variant graph data",
   "keywords": [
     "event-store",
-    "version-control"
+    "version-control",
+    "arangodb",
+    "foxx",
+    "historical-graph"
   ],
   "engines": {
-    "arangodb": "^3.4.0"
+    "arangodb": "^3.5.0"
   },
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
