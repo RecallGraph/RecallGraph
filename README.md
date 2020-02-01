@@ -59,7 +59,7 @@ CivicGraph installs like any other _Foxx Microservice_ inside a database, on an 
 1. Download the [latest release](https://github.com/adityamukho/CivicGraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
-**Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to take CivicGraph for a test ride without having to setup their own server.
+**Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to take CivicGraph for a test ride without having to set up a server from scratch.
 
 ## Docs
 - Quick-reference API documentation is available directly in the Swagger console (accessed through ArangoDB's web UI).
