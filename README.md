@@ -1,7 +1,7 @@
 # CivicGraph - A versioning data store for time-variant graph data.
-CivicGraph is a 'versioned graph' data store - it retains all changes that its data (vertices and edges) have gone through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past state of the graph just as easily as they can query the present state.
+CivicGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past state of the graph just as easily as the present.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB 3.5, with support for v3.6 in the pipeline.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB v3.5, with support for v3.6 in the pipeline.
 
 #### Core Metrics
 [![Build Status](https://travis-ci.org/CivicGraph/CivicGraph.svg?branch=development)](https://travis-ci.org/CivicGraph/CivicGraph)
@@ -16,8 +16,10 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 ---
 
 ## Important!
-While the software has shown ample stability under test conditions, it is still under active development, and subject to potentially breaking changes from time to time. The latest tagged version may be used in lightweight, non-critical production deployments, i.e., systems which do not impact primary business functions if they face downtime or data loss/corruption. Note that there are **no battle-hardened, stable releases yet**.
+While the software has demonstrated ample stability under test conditions, it is still under active development, and subject to potentially breaking changes from time to time. The latest tagged version may be used in lightweight, non-critical production deployments, i.e., systems which do not impact primary business functions if they face downtime or data loss/corruption. Note that there are **no battle-hardened, stable releases yet**.
 
+###Disclaimer
+The authors and maintainers of CivicGraph are not liable for damages or indemnity (express or implied) for loss of any kind incurred directly or indirectly as a result of using this software.
 
 ## Do I Need a 'Versioned Graph' Database?
 To get an idea of where such a data store might be used, see:
