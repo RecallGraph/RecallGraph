@@ -4,6 +4,9 @@ node_js: node
 services: docker
 cache:
   npm: true
+branches:
+  except:
+    - documentation
 
 env:
   global:
