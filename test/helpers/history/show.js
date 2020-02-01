@@ -2,13 +2,12 @@
 
 const { range, chain, sortBy, isObject, defaults, omitBy, isNil, ary } = require('lodash')
 const request = require('@arangodb/request')
-// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { show: showHandler } = require('../../../lib/handlers/showHandlers')
 const log = require('../../../lib/operations/log')
 const { getCollTypes } = require('../../../lib/operations/show/helpers')
-const { getRandomSubRange, cartesian } = require('.')
+const { getRandomSubRange, cartesian } = require('../event')
 const jiff = require('jiff')
 
 exports.testUngroupedNodes = function testUngroupedNodes (
@@ -207,7 +206,6 @@ exports.testGroupedNodes = function testGroupedNodes (
 
 function buildNodesFromEventLog (path, timestamp) {
   const events = log(path, { until: timestamp, groupBy: 'node', groupSort: 'asc', returnCommands: true })
-  // noinspection JSUnresolvedFunction
   const diffs = events.filter(item => item.events[item.events.length - 1].event !== 'deleted')
     .map(item => item.events.map(event => event.command))
 
@@ -232,7 +230,7 @@ function showRequestWrapper (reqParams, timestamp, combo, method = 'get') {
     Object.assign(reqParams.qs, omitBy(combo, isNil))
   }
 
-  const response = request[method](`${baseUrl}/event/show`, reqParams)
+  const response = request[method](`${baseUrl}/history/show`, reqParams)
 
   expect(response).to.be.an.instanceOf(Object)
   expect(response.statusCode).to.equal(200)

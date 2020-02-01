@@ -14,7 +14,8 @@ const {
   prepInsert,
   prepRemove,
   prepReplace,
-  prepUpdate
+  prepUpdate,
+  metaize
 } = require('../../../../../lib/operations/commit/helpers')
 const {
   createSingle,
@@ -31,7 +32,7 @@ const {
   snapshotInterval
 } = require('../../../../../lib/helpers')
 
-const { omit, pick } = require('lodash')
+const { omit, pick, mapValues } = require('lodash')
 const jiff = require('jiff')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
@@ -81,7 +82,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('created')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 
@@ -103,7 +104,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('updated')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 
@@ -127,7 +128,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('updated')
-    expect(latestEvent.meta._id).to.equal(node._id)
+    expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
 })
@@ -152,7 +153,6 @@ describe('Commit Helpers - getTransientOrCreateLatestSnapshot', () => {
 
     expect(ssNode).to.be.an.instanceOf(Object)
     expect(ssData.hopsFromLast).to.equal(2)
-    // noinspection BadExpressionStatementJS
     expect(ssData.prevSSid).to.be.undefined
   })
 })
@@ -186,7 +186,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(evtNode).to.have.property('_rev')
     expect(evtNode.meta).to.be.an.instanceOf(Object)
     Object.keys(node).forEach(key =>
-      expect(evtNode.meta[key]).to.deep.equal(node[key])
+      expect(evtNode.meta[key.replace(/^_/, '')]).to.deep.equal(node[key])
     )
     expect(evtNode.event).to.equal('created')
     expect(evtNode.ctime).to.equal(time)
@@ -233,7 +233,7 @@ describe('Commit Helpers - insertEventNode', () => {
     expect(rEvtNode).to.have.property('_rev')
     expect(rEvtNode.meta).to.be.an.instanceOf(Object)
     Object.keys(node).forEach(key =>
-      expect(rEvtNode.meta[key]).to.deep.equal(node[key])
+      expect(rEvtNode.meta[key.replace(/^_/, '')]).to.deep.equal(node[key])
     )
     expect(rEvtNode.event).to.equal('updated')
     expect(rEvtNode.ctime).to.equal(mtime)
@@ -377,7 +377,6 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.new._rev).to.equal(result._rev)
     expect(result.new.k1).to.equal('v1')
     expect(result.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.old).to.be.empty
 
     expect(event).to.equal('created')
@@ -471,7 +470,6 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.new._to).to.equal(vnodes[1]._id)
     expect(result.new.k1).to.equal('v1')
     expect(result.old).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.old).to.be.empty
 
     expect(event).to.equal('created')
@@ -967,7 +965,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._key).to.equal(node._key)
     expect(result._rev).to.equal(node._rev)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1012,7 +1009,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._id).to.equal(node._id)
     expect(result._key).to.equal(node._key)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1126,7 +1122,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._key).to.equal(ecnode._key)
     expect(result._rev).to.equal(ecnode._rev)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1190,7 +1185,6 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result._id).to.equal(ecnode._id)
     expect(result._key).to.equal(ecnode._key)
     expect(result.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(result.new).to.be.empty
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old._id).to.equal(result._id)
@@ -1475,7 +1469,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.new._id).to.equal(result._id)
     expect(result.new._key).to.equal(result._key)
     expect(result.new._rev).to.equal(result._rev)
-    // noinspection BadExpressionStatementJS
     expect(result.new.k1).to.be.null
     expect(result.new.k2).to.equal('v1')
     expect(result.old).to.be.an.instanceOf(Object)
@@ -1860,5 +1853,34 @@ describe('Commit Helpers - prepUpdate', () => {
         'errorNum',
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
+  })
+})
+
+describe('Commit Helpers - metaize', () => {
+  before(init.setup)
+
+  after(init.teardown)
+
+  it('should remove leading underscores from the keys of the input object', () => {
+    const input = {
+      _abc: 1,
+      def: 'a',
+      d_e_f: {
+        _a: 1,
+        _a_b: 2,
+        ab: 3,
+        a_b: 4
+      },
+      _a_b_c: ['_a', '_a_b', 'ab', 'a_b']
+    }
+    const output = metaize(input)
+    const expectedOutput = mapValues({
+      abc: '_abc',
+      def: 'def',
+      d_e_f: 'd_e_f',
+      a_b_c: '_a_b_c'
+    }, v => input[v])
+
+    expect(output).to.deep.equal(expectedOutput)
   })
 })

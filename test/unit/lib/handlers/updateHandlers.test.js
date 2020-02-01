@@ -139,7 +139,6 @@ describe('Update Handlers', () => {
     expect(rnode).to.be.an.instanceOf(Object)
     expect(rnode._id).to.equal(cnode._id)
     expect(rnode._key).to.equal(cnode._key)
-    // noinspection BadExpressionStatementJS
     expect(rnode.k1).to.be.null
     expect(rnode.k2).to.equal('v1')
     expect(rnode._rev).to.not.equal(cnode._rev)
@@ -166,7 +165,6 @@ describe('Update Handlers', () => {
     expect(rnode).to.be.an.instanceOf(Object)
     expect(rnode._id).to.equal(cnode._id)
     expect(rnode._key).to.equal(cnode._key)
-    // noinspection BadExpressionStatementJS
     expect(rnode.k1).to.deep.equal({ b: 1 })
     expect(rnode.k2).to.equal('v1')
     expect(rnode._rev).to.not.equal(cnode._rev)
@@ -193,7 +191,6 @@ describe('Update Handlers', () => {
     expect(rnode).to.be.an.instanceOf(Object)
     expect(rnode._id).to.equal(cnode._id)
     expect(rnode._key).to.equal(cnode._key)
-    // noinspection BadExpressionStatementJS
     expect(rnode.k1).to.deep.equal({ b: 1, a: 1 })
     expect(rnode.k2).to.equal('v1')
     expect(rnode._rev).to.not.equal(cnode._rev)
@@ -417,7 +414,6 @@ describe('Update Handlers', () => {
         expect(node).to.be.an.instanceOf(Object)
         expect(node._id).to.equal(cnodes[idx]._id)
         expect(node._key).to.equal(cnodes[idx]._key)
-        // noinspection BadExpressionStatementJS
         expect(node.k1).to.be.null
         expect(node.k2).to.equal('v1')
         expect(node._rev).to.not.equal(cnodes[idx]._rev)
@@ -463,7 +459,6 @@ describe('Update Handlers', () => {
         expect(node).to.be.an.instanceOf(Object)
         expect(node._id).to.equal(cnodes[idx]._id)
         expect(node._key).to.equal(cnodes[idx]._key)
-        // noinspection BadExpressionStatementJS
         expect(node.k1).to.deep.equal({ b: 1 })
         expect(node.k2).to.equal('v1')
         expect(node._rev).to.not.equal(cnodes[idx]._rev)
@@ -509,7 +504,6 @@ describe('Update Handlers', () => {
         expect(node).to.be.an.instanceOf(Object)
         expect(node._id).to.equal(cnodes[idx]._id)
         expect(node._key).to.equal(cnodes[idx]._key)
-        // noinspection BadExpressionStatementJS
         expect(node.k1).to.deep.equal({ b: 1, a: 1 })
         expect(node.k2).to.equal('v1')
         expect(node._rev).to.not.equal(cnodes[idx]._rev)
@@ -720,7 +714,6 @@ describe('Update Handlers', () => {
     expect(ernode._key).to.equal(ecnode._key)
     expect(ernode._from).to.equal(vnodes[0]._id)
     expect(ernode._to).to.equal(vnodes[1]._id)
-    // noinspection BadExpressionStatementJS
     expect(ernode.k1).to.be.null
     expect(ernode.k2).to.equal('v1')
     expect(ernode._rev).to.not.equal(ecnode._rev)
@@ -764,7 +757,6 @@ describe('Update Handlers', () => {
     expect(ernode._key).to.equal(ecnode._key)
     expect(ernode._from).to.equal(vnodes[0]._id)
     expect(ernode._to).to.equal(vnodes[1]._id)
-    // noinspection BadExpressionStatementJS
     expect(ernode.k1).to.deep.equal({ b: 1 })
     expect(ernode.k2).to.equal('v1')
     expect(ernode._rev).to.not.equal(ecnode._rev)
@@ -808,7 +800,6 @@ describe('Update Handlers', () => {
     expect(ernode._key).to.equal(ecnode._key)
     expect(ernode._from).to.equal(vnodes[0]._id)
     expect(ernode._to).to.equal(vnodes[1]._id)
-    // noinspection BadExpressionStatementJS
     expect(ernode.k1).to.deep.equal({ b: 1, a: 1 })
     expect(ernode.k2).to.equal('v1')
     expect(ernode._rev).to.not.equal(ecnode._rev)
@@ -1120,7 +1111,6 @@ describe('Update Handlers', () => {
         expect(ernode._key).to.equal(ecnodes[idx]._key)
         expect(ernode._from).to.equal(vnodes[0]._id)
         expect(ernode._to).to.equal(vnodes[1]._id)
-        // noinspection BadExpressionStatementJS
         expect(ernode.k1).to.be.null
         expect(ernode.k2).to.equal('v1')
         expect(ernode._rev).to.not.equal(ecnodes[idx]._rev)
@@ -1184,7 +1174,6 @@ describe('Update Handlers', () => {
         expect(ernode._key).to.equal(ecnodes[idx]._key)
         expect(ernode._from).to.equal(vnodes[0]._id)
         expect(ernode._to).to.equal(vnodes[1]._id)
-        // noinspection BadExpressionStatementJS
         expect(ernode.k1).to.deep.equal({ b: 1 })
         expect(ernode.k2).to.equal('v1')
         expect(ernode._rev).to.not.equal(ecnodes[idx]._rev)
@@ -1248,7 +1237,6 @@ describe('Update Handlers', () => {
         expect(ernode._key).to.equal(ecnodes[idx]._key)
         expect(ernode._from).to.equal(vnodes[0]._id)
         expect(ernode._to).to.equal(vnodes[1]._id)
-        // noinspection BadExpressionStatementJS
         expect(ernode.k1).to.deep.equal({ b: 1, a: 1 })
         expect(ernode.k2).to.equal('v1')
         expect(ernode._rev).to.not.equal(ecnodes[idx]._rev)
@@ -1303,7 +1291,6 @@ describe('Update Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
@@ -1390,7 +1377,6 @@ describe('Update Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )

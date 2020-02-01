@@ -1,11 +1,8 @@
 'use strict'
 
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
-
 const gg = require('@arangodb/general-graph')
-
-const queues = require('@arangodb/foxx/queues')
-const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
+const { SERVICE_COLLECTIONS, SERVICE_GRAPHS, createSkeletonUpdateCron } = require('../lib/helpers')
 
 const { events, commands, snapshots, evtSSLinks, snapshotLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
 const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
@@ -41,7 +38,7 @@ eventColl.ensureIndex({
   sparse: true,
   unique: false,
   deduplicate: false,
-  fields: ['meta._id', 'event', 'ctime']
+  fields: ['meta.id', 'event', 'ctime']
 })
 eventColl.ensureIndex({
   type: 'skiplist',
@@ -64,7 +61,7 @@ commandColl.ensureIndex({
   sparse: true,
   unique: true,
   deduplicate: false,
-  fields: ['_from', 'meta._id']
+  fields: ['_from', 'meta.id']
 })
 
 const skeletonVerticesColl = db._collection(skeletonVertices)
@@ -73,7 +70,7 @@ skeletonVerticesColl.ensureIndex({
   sparse: false,
   unique: true,
   deduplicate: false,
-  fields: ['meta._id']
+  fields: ['meta.id']
 })
 
 const skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
@@ -82,11 +79,12 @@ skeletonEdgeHubsColl.ensureIndex({
   sparse: false,
   unique: true,
   deduplicate: false,
-  fields: ['meta._id']
+  fields: ['meta.id']
 })
 
 const { eventLog, skeleton } = SERVICE_GRAPHS
 let evlEdgeDefs, skelEdgeDefs
+
 try {
   const commandRel = gg._relation(commands, [events], [events])
   const ssRel = gg._relation(snapshotLinks, [snapshots], [snapshots])
@@ -94,7 +92,15 @@ try {
   evlEdgeDefs = gg._edgeDefinitions(commandRel, ssRel, evtSSRel)
 
   gg._drop(eventLog)
+} catch (e) {
+  if (e.errorNum !== ARANGO_ERRORS.ERROR_GRAPH_NOT_FOUND.code) {
+    console.error(e)
+  }
+} finally {
+  gg._create(eventLog, evlEdgeDefs)
+}
 
+try {
   const skeletonRel = gg._relation(skeletonEdgeSpokes, [skeletonVertices, skeletonEdgeHubs], [
     skeletonVertices,
     skeletonEdgeHubs
@@ -107,54 +113,10 @@ try {
     console.error(e)
   }
 } finally {
-  gg._create(eventLog, evlEdgeDefs)
   gg._create(skeleton, skelEdgeDefs)
 }
 
 // Setup crons
-const queue = queues.create('crons', 1)
-// noinspection JSUnresolvedVariable
-const mount = module.context.mount
-const cronJob = 'updateSkeletonGraph'
-
-const stored = queue.all({
-  name: cronJob,
-  mount
-})
-
-stored.forEach(jobId => {
-  const job = queue.get(jobId)
-
-  console.log('Deleting stored job: %o', job)
-  queue.delete(jobId)
-})
-
-// noinspection JSUnusedGlobalSymbols
-queue.push({
-  mount,
-  name: cronJob
-}, null, {
-  maxFailures: Infinity,
-  repeatTimes: Infinity,
-  failure: (result, jobData, job) => console.error(`Failed job: ${JSON.stringify({
-    result,
-    job: [
-      job.queue,
-      job.type,
-      job.failures,
-      job.runs,
-      job.runFailures
-    ]
-  })}`),
-  success: (result, jobData,
-    job) => {
-    if (Object.keys(result).some(key => result[key].length)) {
-      console.debug(`Passed job: ${JSON.stringify({
-        result,
-        job: [job.queue, job.type, job.runs, job.runFailures]
-      })}`)
-    }
-  }
-})
+createSkeletonUpdateCron()
 
 console.log('Finished setup.')

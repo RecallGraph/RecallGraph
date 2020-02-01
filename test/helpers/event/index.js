@@ -35,14 +35,12 @@ function getRandomKeyPattern (bracesOnly = false) {
 }
 
 function getTestDataCollectionPatterns () {
-  // noinspection JSUnresolvedVariable
   const testDataCollectionPatterns = chain(TEST_DATA_COLLECTIONS)
     .values()
     .map(coll => coll.substring(module.context.collectionPrefix.length))
     .value()
     .join(',')
 
-  // noinspection JSUnresolvedVariable
   return `${module.context.collectionPrefix}{test_does_not_exist,${testDataCollectionPatterns}}`
 }
 
@@ -56,7 +54,6 @@ function getRandomSampleCollectionPatterns (bracesOnly = false) {
     .sampleSize(sampleSize)
 
   if (bracesOnly) {
-    // noinspection JSUnresolvedFunction
     return collsWrapper.value()
   } else {
     return collsWrapper
@@ -94,17 +91,15 @@ exports.getNodeBraceSampleIds = function getNodeBraceSampleIds (
   maxLength = Number.POSITIVE_INFINITY
 ) {
   const rootPathEvents = log('/')
-  // noinspection JSUnresolvedVariable
   const length = Number.isFinite(maxLength)
     ? Math.min(rootPathEvents.length, maxLength)
     : rootPathEvents.length
   const size = random(1, length)
   const sampleIds = []
-  // noinspection JSCheckFunctionSignatures
   const pathSuffixes = chain(rootPathEvents)
     .shuffle()
     .sampleSize(size)
-    .map('meta._id')
+    .map('meta.id')
     .uniq()
     .map(id => {
       sampleIds.push(id)
@@ -152,7 +147,6 @@ exports.getRandomGraphPathPattern = function getRandomGraphPathPattern () {
     })
     .join(',')
 
-  // noinspection JSUnresolvedVariable
   return `/g/{${graphPatterns},${module.context.collectionPrefix}test_does_not_exist}`
 }
 
@@ -224,7 +218,6 @@ function getOriginKeys () {
 
 exports.getOriginKeys = getOriginKeys
 
-// noinspection JSUnusedGlobalSymbols
 const queryPartsInializers = {
   database: () => [
     aql`
@@ -245,7 +238,7 @@ const queryPartsInializers = {
       aql`
         for v in ${eventColl}
         filter v._key not in ${getOriginKeys()}
-        filter regex_split(v.meta._id, '/')[0] in ${sampleGraphCollNames}
+        filter regex_split(v.meta.id, '/')[0] in ${sampleGraphCollNames}
         for e in ${commandColl}
         filter e._to == v._id
       `

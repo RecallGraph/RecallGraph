@@ -4,7 +4,6 @@ const {
   isObject, findIndex, findLastIndex, range, cloneDeep, omit, partialRight, defaults, omitBy, isNil, ary
 } = require('lodash')
 const request = require('@arangodb/request')
-// noinspection JSUnresolvedVariable
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { log: logHandler } = require('../../../lib/handlers/logHandlers')
@@ -149,7 +148,7 @@ exports.testGroupedEvents = function testGroupedEvents (
       const queryParts = cloneDeep(qp || initQueryParts(scope))
 
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
-      timeBoundFilters.forEach(filter => queryParts.push(filter))
+      timeBoundFilters.filters.forEach(filter => queryParts.push(filter))
 
       queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co, rc))
       queryParts.push(getSortingClause(st, gb, co))
@@ -192,7 +191,7 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
     return getGroupingClause(groupBy, countsOnly, returnCommands)
   } else {
     const groupingPrefix =
-      'collect collection = regex_split(v.meta._id, "/")[0]'
+      'collect collection = regex_split(v.meta.id, "/")[0]'
 
     let groupingSuffix
     if (countsOnly) {

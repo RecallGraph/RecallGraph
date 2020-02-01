@@ -696,7 +696,6 @@ describe('Routes - replace', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(resNode.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
@@ -792,7 +791,6 @@ describe('Routes - replace', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(resNode.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )

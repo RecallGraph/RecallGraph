@@ -190,7 +190,6 @@ describe('Routes - update', () => {
     expect(resBody._id).to.equal(node._id)
     expect(resBody._key).to.equal(node._key)
     expect(resBody._rev).to.not.equal(node._rev)
-    // noinspection BadExpressionStatementJS
     expect(resBody.k1).to.be.null
     expect(resBody.k2).to.equal('v1')
   })
@@ -228,7 +227,6 @@ describe('Routes - update', () => {
     expect(resBody._id).to.equal(node._id)
     expect(resBody._key).to.equal(node._key)
     expect(resBody._rev).to.not.equal(node._rev)
-    // noinspection BadExpressionStatementJS
     expect(resBody.k1).to.deep.equal({ b: 1 })
     expect(resBody.k2).to.equal('v1')
   })
@@ -266,7 +264,6 @@ describe('Routes - update', () => {
     expect(resBody._id).to.equal(node._id)
     expect(resBody._key).to.equal(node._key)
     expect(resBody._rev).to.not.equal(node._rev)
-    // noinspection BadExpressionStatementJS
     expect(resBody.k1).to.deep.equal({ b: 1, a: 1 })
     expect(resBody.k2).to.equal('v1')
   })
@@ -513,7 +510,6 @@ describe('Routes - update', () => {
         expect(resNode._id).to.equal(nodes[idx]._id)
         expect(resNode._key).to.equal(nodes[idx]._key)
         expect(resNode._rev).to.not.equal(nodes[idx]._rev)
-        // noinspection BadExpressionStatementJS
         expect(resNode.k1).to.be.null
         expect(resNode.k2).to.equal('v1')
       })
@@ -565,7 +561,6 @@ describe('Routes - update', () => {
         expect(resNode._id).to.equal(nodes[idx]._id)
         expect(resNode._key).to.equal(nodes[idx]._key)
         expect(resNode._rev).to.not.equal(nodes[idx]._rev)
-        // noinspection BadExpressionStatementJS
         expect(resNode.k1).to.deep.equal({ b: 1 })
         expect(resNode.k2).to.equal('v1')
       })
@@ -617,7 +612,6 @@ describe('Routes - update', () => {
         expect(resNode._id).to.equal(nodes[idx]._id)
         expect(resNode._key).to.equal(nodes[idx]._key)
         expect(resNode._rev).to.not.equal(nodes[idx]._rev)
-        // noinspection BadExpressionStatementJS
         expect(resNode.k1).to.deep.equal({ b: 1, a: 1 })
         expect(resNode.k2).to.equal('v1')
       })
@@ -892,7 +886,6 @@ describe('Routes - update', () => {
     expect(resBody._id).to.equal(enode._id)
     expect(resBody._key).to.equal(enode._key)
     expect(resBody._rev).to.not.equal(enode._rev)
-    // noinspection BadExpressionStatementJS
     expect(resBody.k1).to.be.null
     expect(resBody.k2).to.equal('v1')
     expect(resBody._from).to.equal(vnodes[0]._id)
@@ -949,7 +942,6 @@ describe('Routes - update', () => {
     expect(resBody._id).to.equal(enode._id)
     expect(resBody._key).to.equal(enode._key)
     expect(resBody._rev).to.not.equal(enode._rev)
-    // noinspection BadExpressionStatementJS
     expect(resBody.k1).to.deep.equal({ b: 1 })
     expect(resBody.k2).to.equal('v1')
     expect(resBody._from).to.equal(vnodes[0]._id)
@@ -1006,7 +998,6 @@ describe('Routes - update', () => {
     expect(resBody._id).to.equal(enode._id)
     expect(resBody._key).to.equal(enode._key)
     expect(resBody._rev).to.not.equal(enode._rev)
-    // noinspection BadExpressionStatementJS
     expect(resBody.k1).to.deep.equal({ b: 1, a: 1 })
     expect(resBody.k2).to.equal('v1')
     expect(resBody._from).to.equal(vnodes[0]._id)
@@ -1356,7 +1347,6 @@ describe('Routes - update', () => {
         expect(resNode._id).to.equal(enodes[idx]._id)
         expect(resNode._key).to.equal(enodes[idx]._key)
         expect(resNode._rev).to.not.equal(enodes[idx]._rev)
-        // noinspection BadExpressionStatementJS
         expect(resNode.k1).to.be.null
         expect(resNode.k2).to.equal('v1')
         expect(resNode._from).to.equal(vnodes[0]._id)
@@ -1429,7 +1419,6 @@ describe('Routes - update', () => {
         expect(resNode._id).to.equal(enodes[idx]._id)
         expect(resNode._key).to.equal(enodes[idx]._key)
         expect(resNode._rev).to.not.equal(enodes[idx]._rev)
-        // noinspection BadExpressionStatementJS
         expect(resNode.k1).to.deep.equal({ b: 1 })
         expect(resNode.k2).to.equal('v1')
         expect(resNode._from).to.equal(vnodes[0]._id)
@@ -1502,7 +1491,6 @@ describe('Routes - update', () => {
         expect(resNode._id).to.equal(enodes[idx]._id)
         expect(resNode._key).to.equal(enodes[idx]._key)
         expect(resNode._rev).to.not.equal(enodes[idx]._rev)
-        // noinspection BadExpressionStatementJS
         expect(resNode.k1).to.deep.equal({ b: 1, a: 1 })
         expect(resNode.k2).to.equal('v1')
         expect(resNode._from).to.equal(vnodes[0]._id)
@@ -1563,7 +1551,6 @@ describe('Routes - update', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(resNode.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
@@ -1659,7 +1646,6 @@ describe('Routes - update', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(resNode.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )

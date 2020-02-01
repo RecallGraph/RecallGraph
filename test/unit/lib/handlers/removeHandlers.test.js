@@ -59,7 +59,6 @@ describe('Remove Handlers', () => {
     expect(rnode._rev).to.equal(cnode._rev)
     expect(rnode.old).to.deep.equal(cnode)
     expect(rnode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(rnode.new).to.be.empty
   })
 
@@ -88,7 +87,6 @@ describe('Remove Handlers', () => {
     expect(rnode.old._key).to.equal(cnode._key)
     expect(rnode.old.k1).to.equal(cnode.k1)
     expect(rnode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(rnode.new).to.be.empty
   })
 
@@ -166,7 +164,6 @@ describe('Remove Handlers', () => {
       expect(rnode._rev).to.equal(cnodes[idx]._rev)
       expect(rnode.old).to.deep.equal(cnodes[idx].new)
       expect(rnode.new).to.be.an.instanceOf(Object)
-      // noinspection BadExpressionStatementJS
       expect(rnode.new).to.be.empty
     })
   })
@@ -210,7 +207,6 @@ describe('Remove Handlers', () => {
       expect(rnode._rev).to.equal(cnodes[idx]._rev)
       expect(rnode.old).to.deep.equal(cnodes[idx].new)
       expect(rnode.new).to.be.an.instanceOf(Object)
-      // noinspection BadExpressionStatementJS
       expect(rnode.new).to.be.empty
     })
   })
@@ -291,7 +287,6 @@ describe('Remove Handlers', () => {
     expect(ernode._rev).to.equal(ecnode._rev)
     expect(ernode.old).to.deep.equal(ecnode)
     expect(ernode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(ernode.new).to.be.empty
   })
 
@@ -336,7 +331,6 @@ describe('Remove Handlers', () => {
     expect(ernode._key).to.equal(ecnode._key)
     expect(ernode.old).to.deep.equal(ecnode)
     expect(ernode.new).to.be.an.instanceOf(Object)
-    // noinspection BadExpressionStatementJS
     expect(ernode.new).to.be.empty
   })
 
@@ -452,7 +446,6 @@ describe('Remove Handlers', () => {
       expect(ernode._rev).to.equal(ecnodes[idx]._rev)
       expect(ernode.old).to.deep.equal(ecnodes[idx].new)
       expect(ernode.new).to.be.an.instanceOf(Object)
-      // noinspection BadExpressionStatementJS
       expect(ernode.new).to.be.empty
     })
   })
@@ -515,7 +508,6 @@ describe('Remove Handlers', () => {
       expect(ernode._rev).to.equal(ecnodes[idx]._rev)
       expect(ernode.old).to.deep.equal(ecnodes[idx].new)
       expect(ernode.new).to.be.an.instanceOf(Object)
-      // noinspection BadExpressionStatementJS
       expect(ernode.new).to.be.empty
     })
   })
@@ -568,7 +560,6 @@ describe('Remove Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
@@ -654,7 +645,6 @@ describe('Remove Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      // noinspection BadExpressionStatementJS
       expect(node.errorMessage).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )

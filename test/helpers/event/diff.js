@@ -14,7 +14,6 @@ const jiff = require('jiff')
 exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = null) {
   const allEvents = logfn(pathParam) // Ungrouped events in desc order by ctime.
 
-  // noinspection JSUnresolvedVariable
   if (allEvents.length) {
     const timeRange = getRandomSubRange(allEvents)
     const since = [0, Math.floor(allEvents[timeRange[1]].ctime)]
@@ -54,7 +53,7 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
       const queryParts = cloneDeep(qp || initQueryParts(scope))
 
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
-      timeBoundFilters.forEach(filter => queryParts.push(filter))
+      timeBoundFilters.filters.forEach(filter => queryParts.push(filter))
 
       queryParts.push(getGroupingClauseForExpectedResultsQuery('node', false, true))
       queryParts.push(getSortingClause(st, 'node', false))
@@ -69,10 +68,8 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
           step => omit(step, 'context')) : event.command)
       }))
 
-      // noinspection JSUnresolvedVariable
       expect(diffs.length).to.equal(expectedDiffs.length)
       expect(diffs[0]).to.deep.equal(expectedDiffs[0])
-      // noinspection JSUnresolvedFunction
       diffs.forEach((diff, idx) => {
         expect(diff).to.be.an.instanceOf(Object)
         expect(diff.node).to.equal(expectedDiffs[idx].node)
