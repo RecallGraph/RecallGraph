@@ -18,7 +18,7 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 ## Important!
 While the software has demonstrated ample stability under test conditions, it is still under active development, and subject to potentially breaking changes from time to time. The latest tagged version may be used in lightweight, non-critical production deployments, i.e., systems which do not impact primary business functions if they face downtime or data loss/corruption. Note that there are **no battle-hardened, stable releases yet**.
 
-###Disclaimer
+### Disclaimer
 The authors and maintainers of CivicGraph are not liable for damages or indemnity (express or implied) for loss of any kind incurred directly or indirectly as a result of using this software.
 
 ## Do I Need a 'Versioned Graph' Database?
@@ -44,40 +44,40 @@ CivicGraph's API is split into 3 top-level categories:
 - **(Planned) CQRS/ES Operation Mode** - Async implicit commits.
 
 ### Event
-- **Log** - Fetch a filtered and optionally grouped log of events (commits) for a given path pattern (path determines scope of documents to pick).
+- **Log** - Fetch a log of events (commits) for a given path pattern (path determines scope of documents to pick). The log can be optionally grouped/sorted/sliced within a specified time interval.
 - **Diff** - Fetch a list of forward or reverse commands (diffs) between commits for specified documents.
 - **(Planned) Branch/Tag** - Create parallel versions of history, branching off from a specific event point of the main timeline. Also, tag specific points in branch+time for convenient future reference.
 - **(Planned) Materialization** - Point-in-time checkouts.
 
 ### History
-- **Show** - Fetch a set of documents, optionally grouped/sorted/paginated, that match a given path pattern, at a given point in time.
-- **Filter** - In addition to a path pattern, apply an expression-based, simple/compound post-filter on the retrieved documents.
+- **Show** - Fetch a set of documents, optionally grouped/sorted/sliced, that match a given path pattern, at a given point in time.
+- **Filter** - In addition to a path pattern like in **'Show''**, apply an expression-based, simple/compound post-filter on the retrieved documents.
 - **Traverse** - A point-in-time traversal (walk) of a past version of the graph, with the option to apply additional post-filters to the result.
 
 Detailed API docs are available in the [project's wiki](https://github.com/adityamukho/CivicGraph/wiki/API). Additionally, contextual documentation is embedded in the built-in Swagger console (accessed through ArangoDB's web UI).
 
 ## Installation
-CivicGraph installs like any other _Foxx Microservice_ inside an ArangoDB database.
+CivicGraph installs like any other _Foxx Microservice_ inside a database, on an ArangoDB instance.
 
 1. Download the [latest release](https://github.com/adityamukho/CivicGraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
-**Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to give CivicGraph a try without having to setup their own server.
+**Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to take CivicGraph for a test ride without having to setup their own server.
 
 ## Docs
 - Some documentation is already available through the Swagger interface.
 - Detailed API docs are available in the [project wiki](https://github.com/adityamukho/CivicGraph/wiki/API).
-- Detailed technical documentation is actively being worked on, and will be available in the project wiki soon.
+- Detailed technical documentation is being worked on, and will be available in the project wiki soon.
 
 ## Limitations
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
 2. As of version 3.5, ArangoDB does not support ACID transactions for multi-document/collection writes in [cluster mode](https://www.arangodb.com/docs/3.5/transactions-limitations.html#in-clusters). Transactional ACIDity is not guaranteed for such deployments.
 
 ## Development Roadmap
-1. Support for absolute/relative revision-based queries on individual documents,
+1. Support for absolute/relative revision-based queries on individual documents (in addition to the timestamp-based queries supported currently),
 1. Branching/tag support,
 1. Support for the _valid time_ dimension in addition to the currently implemented _transaction time_ dimension (https://www.researchgate.net/publication/221212735_A_Taxonomy_of_Time_in_Databases),
-1. Support for ArangoDB 3.6,
+1. Support for ArangoDB v3.6,
 1. Multiple, simultaneous materialized checkouts (a la `git`) of selectable sections of the database (entire DB, named graph, named collection, document list, document pattern), with eventual branch-level specificity,
 1. CQRS/ES operation mode (async implicit commits),
 1. Explicit commits,
