@@ -35,54 +35,6 @@
       "type": "json",
       "required": true
     },
-    "event-coll-suffix": {
-      "description": "The suffix of the (vertex) collection where events are stored.",
-      "default": "_events",
-      "type": "string",
-      "required": true
-    },
-    "snapshot-coll-suffix": {
-      "description": "The suffix of the (vertex) collection where snapshots are stored.",
-      "default": "_snapshots",
-      "type": "string",
-      "required": true
-    },
-    "command-coll-suffix": {
-      "description": "The suffix of the (edge) collection where commands are stored.",
-      "default": "_commands",
-      "type": "string",
-      "required": true
-    },
-    "event-snapshot-link-coll-suffix": {
-      "description": "The suffix of the (edge) collection where event-snapshot links are stored.",
-      "default": "_event_snapshot_links",
-      "type": "string",
-      "required": true
-    },
-    "snapshot-link-coll-suffix": {
-      "description": "The suffix of the (edge) collection where snapshot links are stored.",
-      "default": "_snapshot_links",
-      "type": "string",
-      "required": true
-    },
-    "skeleton-vertex-coll-suffix": {
-      "description": "The suffix of the (vertex) collection where structural vertices are stored.",
-      "default": "_skeleton_vertices",
-      "type": "string",
-      "required": true
-    },
-    "skeleton-edge-hub-coll-suffix": {
-      "description": "The suffix of the (vertex) collection where structural edge hubs are stored.",
-      "default": "_skeleton_edge_hubs",
-      "type": "string",
-      "required": true
-    },
-    "skeleton-edge-spoke-coll-suffix": {
-      "description": "The suffix of the (edge) collection where structural edge spokes are stored.",
-      "default": "_skeleton_edge_spokes",
-      "type": "string",
-      "required": true
-    },
     "skeleton-graph-update-batch-size": {
       "description": "The maximum number of skeleton nodes to write on each job run.",
       "default": 1000,
