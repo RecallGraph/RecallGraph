@@ -11,6 +11,7 @@ branches:
 env:
   global:
     - ARANGODB_VERSION=3.5
+    - ARANGODB_VERSION=3.6
     - PATH=$HOME/.local/bin:$PATH
   matrix:
     #mmfiles
