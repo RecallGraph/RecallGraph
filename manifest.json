@@ -11,7 +11,7 @@
     "historical-graph"
   ],
   "engines": {
-    "arangodb": "^3.5.0"
+    "arangodb": ">=3.4.0"
   },
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
