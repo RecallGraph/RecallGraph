@@ -127,6 +127,70 @@ notifications:
 
 jobs:
   include:
+    - stage: preview
+
+      env:
+        matrix:
+          #mmfiles
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-query GREP='Path as query param'
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=mmfiles-integration-log-body GREP='Path as body param'
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/history/show.test.js"]' NYC_OUT=mmfiles-integration-show
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js", "test/integration/lib/routes/history/filter.test.js", "test/integration/lib/routes/history/traverse.test.js"]' NYC_OUT=mmfiles-integration-rest
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-query GREP='Path as query param'
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-body GREP='Path as body param'
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js", "test/unit/lib/handlers/showHandlers.test.js", "test/unit/lib/handlers/filterHandlers.test.js", "test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-rest
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-operations-log
+          - ARANGO_STORAGE_ENGINE=mmfiles EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/filter/*.js", "test/unit/lib/operations/traverse/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=mmfiles-unit-rest
+
+          #rocksdb
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-query GREP='Path as query param'
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/event/log.test.js"]' NYC_OUT=rocksdb-integration-log-body GREP='Path as body param'
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/history/show.test.js"]' NYC_OUT=rocksdb-integration-show
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js", "test/integration/lib/routes/history/filter.test.js", "test/integration/lib/routes/history/traverse.test.js"]' NYC_OUT=rocksdb-integration-rest
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-query GREP='Path as query param'
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-body GREP='Path as body param'
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js", "test/unit/lib/handlers/showHandlers.test.js", "test/unit/lib/handlers/filterHandlers.test.js", "test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-rest
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-operations-log
+          - ARANGO_STORAGE_ENGINE=rocksdb EVTEST_FILES='["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/filter/*.js", "test/unit/lib/operations/traverse/*.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=rocksdb-unit-rest
+
+
+      install:
+        - npm install
+        - pip install --user awscli
+
+      before_script:
+        - aws configure set aws_access_key_id "$AWS_ACCESS_KEY"
+        - aws configure set aws_secret_access_key "$AWS_SECRET_KEY"
+        - aws configure set region us-east-1
+        - rm -rf ./.nyc_output/*
+        - npx nyc instrument . ./.nyc_output/instrumented
+        - cp -r ./.nyc_output/instrumented/lib .
+        - docker pull arangodb/arangodb-preview
+        - docker run
+          -e ARANGO_RANDOM_ROOT_PASSWORD=1
+          -e ARANGO_STORAGE_ENGINE=$ARANGO_STORAGE_ENGINE
+          -e EVTEST_FILES="$EVTEST_FILES"
+          -e NYC_OUT=$NYC_OUT
+          -e GREP="$GREP"
+          -e TRAVIS_JOB_NUMBER="$TRAVIS_JOB_NUMBER"
+          -v "$PWD":/mnt/evstore
+          -d --name arangodb arangodb/arangodb-preview
+        - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
+        - sleep 60
+        - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
+        - docker exec arangodb /mnt/evstore/test/travis/install.sh
+
+      script: ./test/travis/travis-runner.sh
+
+      after_script:
+        - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
+        - echo "Copied test reports to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+
+      after_success:
+        - rm -rf ./.nyc_output/instrumented
+        - aws s3 sync ./.nyc_output/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
+        - echo "Copied coverage data to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
+
     - stage: analysis
 
       git:
