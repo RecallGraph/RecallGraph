@@ -1,3 +1,5 @@
+![Logo](assets/RecallGraph-Inline.jpeg)
+
 # RecallGraph - A versioning data store for time-variant graph data.
 RecallGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past state of the graph just as easily as the present.
 
