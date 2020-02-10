@@ -1,10 +1,10 @@
 {
-  "name": "civicgraph",
+  "name": "recallgraph",
   "version": "0.1.0",
   "description": "A versioning data store for time-variant graph data",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CivicGraph/CivicGraph"
+    "url": "https://github.com/RecallGraph/RecallGraph"
   },
   "main": "main.js",
   "directories": {
@@ -24,7 +24,7 @@
   "dependencies": {
     "brace-expansion": "^1.1.11",
     "jiff": "^0.7.3",
-    "jsep": "CivicGraph/jsep#master"
+    "jsep": "RecallGraph/jsep#master"
   },
   "devDependencies": {
     "dotenv": "^7.0.0",

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json.schemastore.org/foxx-manifest",
-  "name": "CivicGraph",
+  "name": "RecallGraph",
   "version": "0.1.0",
   "description": "A versioning data store for time-variant graph data",
   "keywords": [
