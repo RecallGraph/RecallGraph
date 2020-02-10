@@ -56,7 +56,7 @@ RecallGraph's API is split into 3 top-level categories:
 - **Traverse** - A point-in-time traversal (walk) of a past version of the graph, with the option to apply additional post-filters to the result.
 
 ## Installation
-RecallGraph installs like any other _Foxx Microservice_ inside a database on an ArangoDB instance.
+RecallGraph installs like any other _Foxx Microservice_ inside a database, on an ArangoDB instance.
 
 1. Download the [latest release](https://github.com/adityamukho/RecallGraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
