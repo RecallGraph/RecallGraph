@@ -85,4 +85,4 @@ RecallGraph installs like any other _Foxx Microservice_ inside a database, on an
 ## Get in Touch
 - Raise an issue or PR on this repo, or
 - Mail me (email link in Github profile), or
-- Join the Gitter channel - [https://gitter.im/CivicGraph/community](https://gitter.im/CivicGraph/community).
+- Join the Gitter channel - [https://gitter.im/RecallGraph/community](https://gitter.im/RecallGraph/community).
