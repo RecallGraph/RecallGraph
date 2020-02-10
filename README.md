@@ -1,11 +1,11 @@
-# CivicGraph - A versioning data store for time-variant graph data.
-CivicGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past state of the graph just as easily as the present.
+# RecallGraph - A versioning data store for time-variant graph data.
+RecallGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past state of the graph just as easily as the present.
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB v3.5, with support for v3.6 in the pipeline.
 
 ---
 
-[![Build Status](https://travis-ci.org/CivicGraph/CivicGraph.svg?branch=development)](https://travis-ci.org/CivicGraph/CivicGraph)
+[![Build Status](https://travis-ci.org/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.org/RecallGraph/RecallGraph)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
@@ -18,7 +18,7 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 While the software has demonstrated ample stability under test conditions, it is still under active development, and subject to potentially breaking changes from time to time. The latest tagged version may be used in lightweight, non-critical production deployments, i.e., systems which do not impact primary business functions if they face downtime or data loss/corruption. Note that there are **no battle-hardened, stable releases yet**.
 
 ### Disclaimer
-The authors and maintainers of CivicGraph are not liable for damages or indemnity (express or implied) for loss of any kind incurred directly or indirectly as a result of using this software.
+The authors and maintainers of RecallGraph are not liable for damages or indemnity (express or implied) for loss of any kind incurred directly or indirectly as a result of using this software.
 
 ## Do I Need a 'Versioned Graph' Database?
 To get an idea of where such a data store might be used, see:
@@ -26,13 +26,13 @@ To get an idea of where such a data store might be used, see:
 1. [The Case for Versioned Graph Databases](https://adityamukho.com/the-case-for-versioned-graph-databases/),
 1. [Illustrative Problems in Dynamic Network Analysis](https://en.wikipedia.org/wiki/Dynamic_network_analysis#Illustrative_problems_that_people_in_the_DNA_area_work_on)
 
-**TL;DR:** CivicGraph is a potential fit for scenarios where data is best represented as a network of vertices and edges (i.e., a graph) having the following characteristics:
+**TL;DR:** RecallGraph is a potential fit for scenarios where data is best represented as a network of vertices and edges (i.e., a graph) having the following characteristics:
 1. Both vertices and edges can hold properties in the form of attribute/value pairs (equivalent to JSON objects).
 1. Documents (vertices/edges) mutate within their lifespan (both in their individual attributes/values and in their relations with each other).
 1. Past states of documents are as important as their present, necessitating retention and queryability of their change history.
 
 ## Salient API Features
-CivicGraph's API is split into 3 top-level categories:
+RecallGraph's API is split into 3 top-level categories:
 
 ### Document
 - **Create** - Create single/multiple documents (vertices/edges).
@@ -54,12 +54,12 @@ CivicGraph's API is split into 3 top-level categories:
 - **Traverse** - A point-in-time traversal (walk) of a past version of the graph, with the option to apply additional post-filters to the result.
 
 ## Installation
-CivicGraph installs like any other _Foxx Microservice_ inside a database, on an ArangoDB instance.
+RecallGraph installs like any other _Foxx Microservice_ inside a database on an ArangoDB instance.
 
-1. Download the [latest release](https://github.com/adityamukho/CivicGraph/releases/).
+1. Download the [latest release](https://github.com/adityamukho/RecallGraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
-**Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to take CivicGraph for a test ride without having to set up a server from scratch.
+**Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to take RecallGraph for a test ride without having to set up a server from scratch.
 
 ## Docs
 - Quick-reference API documentation is available directly in the Swagger console (accessed through ArangoDB's web UI).
