@@ -39,6 +39,7 @@ module.exports = function (grunt) {
             expand: true,
             src: [
               'scripts/**',
+              'assets/**',
               'test/{unit,helpers,integration,resources}/**',
               'LICENSE',
               'main.js',
