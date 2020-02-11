@@ -8,6 +8,11 @@ module.exports = function (grunt) {
   grunt.initConfig({
     manifest: grunt.file.readJSON('manifest.json'),
     buildDir: './build',
+    ts: {
+      default: {
+        tsconfig: './tsconfig.json'
+      }
+    },
     eslint: {
       src: [
         'main.js',
@@ -28,7 +33,7 @@ module.exports = function (grunt) {
         files: [
           {
             expand: true,
-            src: 'lib/**',
+            src: 'lib/**/*.js',
             dest: '<%= buildDir %>'
           }
         ]
@@ -44,7 +49,6 @@ module.exports = function (grunt) {
               'LICENSE',
               'main.js',
               'manifest.json',
-              'package.json',
               'README.md'
             ],
             dest: '<%= buildDir %>'
@@ -177,6 +181,7 @@ module.exports = function (grunt) {
     }
   })
 
+  grunt.loadNpmTasks('grunt-ts')
   grunt.loadNpmTasks('gruntify-eslint')
   grunt.loadNpmTasks('grunt-exec')
   grunt.loadNpmTasks('grunt-contrib-copy')
@@ -184,7 +189,7 @@ module.exports = function (grunt) {
   grunt.loadTasks('tasks')
 
   grunt.registerTask('analyze', ['eslint', 'sonar'])
-  grunt.registerTask('build', ['copy:lib', 'copy:main', 'installSvcDeps'])
+  grunt.registerTask('build', ['ts', 'copy:lib', 'copy:main', 'installSvcDeps'])
   grunt.registerTask('initialize', ['build', 'uninstall', 'install'])
   grunt.registerTask('dist', ['build', 'mkdir:dist', 'bundle'])
   grunt.registerTask('test', ['build', 'replace', 'exec:runTests'])
