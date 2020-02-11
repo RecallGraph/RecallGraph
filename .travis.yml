@@ -115,8 +115,6 @@ after_success:
   - aws s3 sync ./.nyc_output/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
   - echo "Copied coverage data to s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER"
 
-#before_cache: rm -rf ./.nyc_output/instrumented
-
 notifications:
   webhooks:
     urls:
