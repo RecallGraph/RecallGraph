@@ -33,6 +33,8 @@ To get an idea of where such a data store might be used, see:
 1. Documents (vertices/edges) mutate within their lifespan (both in their individual attributes/values and in their relations with each other).
 1. Past states of documents are as important as their present, necessitating retention and queryability of their change history.
 
+Refer to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki) for an in-depth introduction.
+
 ## Salient API Features
 RecallGraph's API is split into 3 top-level categories:
 
@@ -61,11 +63,13 @@ RecallGraph installs like any other _Foxx Microservice_ inside a database, on an
 1. Download the [latest release](https://github.com/adityamukho/RecallGraph/releases/).
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
-**Note:** A _one-click_ cloud deployment option might be made available in the future for those who wish to take RecallGraph for a test ride without having to set up a server from scratch.
+### Installation Notes
+1. Refer to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki/Installation#from-source) if you want to install from source.
+1. A _one-click_ cloud deployment option might be made available in the future for those who wish to take RecallGraph for a test ride without having to set up a server from scratch.
 
 ## Docs
 - Quick-reference API documentation is available directly in the Swagger console (accessed through ArangoDB's web UI).
-- Detailed API docs, tutorials and technical docs are being worked on, and will be available soon.
+- Detailed API docs, tutorials and technical docs are being worked on, and are being uploaded to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki) as and when they get ready.
 
 ## Limitations
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.

@@ -16,6 +16,10 @@
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
   "main": "main.js",
+  "files": {
+    "assets": "assets"
+  },
+  "thumbnail": "assets/RecallGraph.jpeg",
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
