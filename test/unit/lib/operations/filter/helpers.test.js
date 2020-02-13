@@ -439,6 +439,11 @@ describe('Filter Helpers - filter', () => {
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
+    filterExpr = 'typeof(y) == "number" && (y >>> 1) == 1'
+    filteredNodes = filter(nodes, filterExpr)
+
+    expect(filteredNodes).to.deep.equal([nodes[0]])
+
     filterExpr = 'typeof(y) == "number" && (y + y) == 4'
     filteredNodes = filter(nodes, filterExpr)
 
