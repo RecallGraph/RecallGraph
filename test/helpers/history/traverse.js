@@ -8,11 +8,10 @@ const {
   traverseSkeletonGraph, createNodeBracepath, removeFreeEdges, buildFilteredGraph
 } = require('../../../lib/operations/traverse/helpers')
 const { getCollectionType, DOC_KEY_REGEX, COLLECTION_TYPES } = require('../../../lib/helpers')
-const { getNonServiceCollections } = require('../../../lib/operations/helpers')
+const { getNonServiceCollections, filter } = require('../../../lib/operations/helpers')
 const { chain, sample, memoize, omit, isObject, pick, isEmpty } = require('lodash')
-const { generateFilters } = require('./filter')
+const { generateFilters } = require('../filter')
 const show = require('../../../lib/operations/show')
-const { filter } = require('../../../lib/operations/filter/helpers')
 const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
 const request = require('@arangodb/request')
 

@@ -11,6 +11,7 @@ const { getLimitClause, getTimeBoundFilters } = require('../../../lib/operations
 const { aql, db } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')
+const { generateFilters } = require('../filter')
 
 exports.testUngroupedEvents = function testUngroupedEvents (
   pathParam,
@@ -35,6 +36,7 @@ exports.testUngroupedEvents = function testUngroupedEvents (
     const groupSkip = [0, 1]
     const groupLimit = [0, 2]
     const returnCommands = [false, true]
+    const postFilter = [null, generateFilters(allEvents)]
     const combos = cartesian({
       since,
       until,
@@ -46,7 +48,8 @@ exports.testUngroupedEvents = function testUngroupedEvents (
       groupSort,
       groupSkip,
       groupLimit,
-      returnCommands
+      returnCommands,
+      postFilter
     })
 
     combos.forEach(combo => {
@@ -107,7 +110,7 @@ exports.testGroupedEvents = function testGroupedEvents (
     const sort = ['asc', 'desc']
     const skip = [0, 1]
     const limit = [0, 2]
-    const groupBy = ['node', 'collection', 'event']
+    const groupBy = ['node', 'collection', 'event', 'type']
     const countsOnly = [false, true]
     const groupSort = ['asc', 'desc']
     const groupSkip = [0, 1]

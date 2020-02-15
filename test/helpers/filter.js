@@ -1,19 +1,15 @@
 'use strict'
 
 const {
-  random, sampleSize, mapValues, sample, pick, isFunction, toString, omitBy, isNil, defaults, isObject, escapeRegExp,
-  isEqual
+  random, sampleSize, mapValues, sample, pick, isFunction, toString, escapeRegExp, isEqual
 } = require('lodash')
 const { format } = require('util')
 const minimatch = require('minimatch')
-const show = require('../../../lib/operations/show')
-const { cartesian } = require('../event')
+const show = require('../../lib/operations/show')
+const { cartesian } = require('./event')
 const { expect } = require('chai')
-const request = require('@arangodb/request')
-const { filter: filterHandler } = require('../../../lib/handlers/filterHandlers')
-const { jsep, OP_MAP } = require('../../../lib/operations/filter/helpers')
+const { getAST, OP_MAP } = require('../../lib/operations/helpers')
 
-const { baseUrl } = module.context
 const OPS = {
   primitive: [
     {
@@ -205,7 +201,7 @@ exports.testNodes = function testNodes (pathParam, rawPath, timestamp, filterFn)
 
       expect(filteredNodes).to.be.an.instanceOf(Array)
 
-      const ast = jsep(filterExpr)
+      const ast = getAST(filterExpr)
       const expectedNodes = allNodes.filter(node => FILTER_MAP[ast.type](ast, node))
 
       if (!isEqual(filteredNodes, expectedNodes)) {
@@ -215,33 +211,4 @@ exports.testNodes = function testNodes (pathParam, rawPath, timestamp, filterFn)
       }
     }
   })
-}
-
-exports.filterPostWrapper = function filterPostWrapper (reqParams, timestamp, filterExpr, combo) {
-  defaults(reqParams, { qs: {}, body: {} })
-  reqParams.qs.timestamp = timestamp
-  reqParams.body.filter = filterExpr
-
-  if (isObject(combo)) {
-    Object.assign(reqParams.qs, omitBy(combo, isNil))
-  }
-
-  const response = request.post(`${baseUrl}/history/filter`, reqParams)
-
-  expect(response).to.be.an.instanceOf(Object)
-  expect(response.statusCode, response.body).to.equal(200)
-
-  return JSON.parse(response.body)
-}
-
-exports.filterHandlerWrapper = function filterHandlerWrapper (pathParam, timestamp, filterExpr, combo) {
-  defaults(pathParam, { queryParams: {}, body: {} })
-  pathParam.queryParams.timestamp = timestamp
-  pathParam.body.filter = filterExpr
-
-  if (isObject(combo)) {
-    Object.assign(pathParam.queryParams, combo)
-  }
-
-  return filterHandler(pathParam)
 }

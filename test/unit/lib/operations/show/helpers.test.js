@@ -2,9 +2,8 @@
 
 const { expect } = require('chai')
 const init = require('../../../../helpers/init')
-const { patch, getCollTypes, buildShowQuery } = require('../../../../../lib/operations/show/helpers')
-const { getCollectionType, SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-const { getNonServiceCollections } = require('../../../../../lib/operations/helpers')
+const { patch, buildShowQuery } = require('../../../../../lib/operations/show/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern, cartesian
 } = require('../../../../helpers/event')
@@ -15,25 +14,6 @@ const { db, query } = require('@arangodb')
 const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 const evtSSLinkColl = db._collection(SERVICE_COLLECTIONS.evtSSLinks)
 const snapshotLinkColl = db._collection(SERVICE_COLLECTIONS.snapshotLinks)
-
-describe('Show Helpers - getCollTypes', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true }))
-
-  after(init.teardown)
-
-  it('should return collection types for all non-service collections',
-    () => {
-      const collTypes = getCollTypes()
-      const expectedCollTypes = {}
-      const nonServiceCollections = getNonServiceCollections()
-
-      for (const coll of nonServiceCollections) {
-        expectedCollTypes[coll] = getCollectionType(coll) === 2 ? 'vertex' : 'edge'
-      }
-
-      expect(collTypes).to.deep.equal(expectedCollTypes)
-    })
-})
 
 describe('Show Helpers - buildShowQuery', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
