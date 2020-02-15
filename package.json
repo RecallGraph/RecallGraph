@@ -22,7 +22,6 @@
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
   "dependencies": {
-    "balanced-match": "^1.0.0",
     "brace-expansion": "^1.1.11",
     "jiff": "^0.7.3",
     "jsep": "RecallGraph/jsep#master"
