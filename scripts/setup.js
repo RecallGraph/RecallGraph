@@ -2,7 +2,7 @@
 
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
 const gg = require('@arangodb/general-graph')
-const { SERVICE_COLLECTIONS, SERVICE_GRAPHS, createSkeletonUpdateCron } = require('../lib/helpers')
+const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
 
 const { events, commands, snapshots, evtSSLinks, snapshotLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
 const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
@@ -64,22 +64,13 @@ commandColl.ensureIndex({
   fields: ['_from', 'meta.id']
 })
 
-const skeletonVerticesColl = db._collection(skeletonVertices)
-skeletonVerticesColl.ensureIndex({
+const skeletonEdgeSpokesColl = db._collection(skeletonEdgeSpokes)
+skeletonEdgeSpokesColl.ensureIndex({
   type: 'hash',
   sparse: false,
-  unique: true,
+  unique: false,
   deduplicate: false,
-  fields: ['meta.id']
-})
-
-const skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
-skeletonEdgeHubsColl.ensureIndex({
-  type: 'hash',
-  sparse: false,
-  unique: true,
-  deduplicate: false,
-  fields: ['meta.id']
+  fields: ['hub']
 })
 
 const { eventLog, skeleton } = SERVICE_GRAPHS
@@ -115,8 +106,5 @@ try {
 } finally {
   gg._create(skeleton, skelEdgeDefs)
 }
-
-// Setup crons
-createSkeletonUpdateCron()
 
 console.log('Finished setup.')

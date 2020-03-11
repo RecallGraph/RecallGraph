@@ -23,8 +23,7 @@
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
-    "runTests": "scripts/run-tests.js",
-    "updateSkeletonGraph": "scripts/updateSkeletonGraph.js"
+    "runTests": "scripts/run-tests.js"
   },
   "tests": [
     "test/unit/lib/**/*.js",
@@ -37,12 +36,6 @@
         "_default": 5
       },
       "type": "json",
-      "required": true
-    },
-    "skeleton-graph-update-batch-size": {
-      "description": "The maximum number of skeleton nodes to write on each job run.",
-      "default": 1000,
-      "type": "integer",
       "required": true
     }
   }
