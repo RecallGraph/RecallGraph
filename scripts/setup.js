@@ -41,6 +41,13 @@ eventColl.ensureIndex({
   fields: ['meta.id', 'event', 'ctime']
 })
 eventColl.ensureIndex({
+  type: 'hash',
+  sparse: true,
+  unique: false,
+  deduplicate: false,
+  fields: ['collection']
+})
+eventColl.ensureIndex({
   type: 'skiplist',
   sparse: true,
   unique: false,
