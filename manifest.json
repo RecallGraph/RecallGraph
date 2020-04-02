@@ -4,11 +4,11 @@
   "version": "0.1.0",
   "description": "A versioning data store for time-variant graph data",
   "keywords": [
-    "event-store",
-    "version-control",
-    "arangodb",
-    "foxx",
-    "historical-graph"
+    "temporal-graphs",
+    "dynamic-networks",
+    "variant-graph-data",
+    "data-versioning",
+    "streaming-graph-data"
   ],
   "engines": {
     "arangodb": ">=3.5.0"
@@ -37,6 +37,18 @@
       },
       "type": "json",
       "required": true
+    },
+    "trace-sampling-rate": {
+      "description": "The probability of propagating a trace sample. Can be overriden by header param.",
+      "default": 1,
+      "type": "number",
+      "required": true
+    },
+    "dd-agent-url": {
+      "description": "The Datadog agent URL where to publish finished spans",
+      "default": "http://localhost:8126/v0.4/traces",
+      "type": "string",
+      "required": false
     }
   }
 }

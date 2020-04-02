@@ -3,10 +3,11 @@
 const createRouter = require('@arangodb/foxx/router')
 const path = require('path')
 const fs = require('fs')
+const initTrace = require('./lib/middleware/tracer')
+
+module.context.use(initTrace)
 
 const router = createRouter()
-module.context.use(router)
-
 const routeBase = `${__dirname}/lib/routes`
 const routes = fs
   .list(routeBase)
@@ -16,3 +17,5 @@ routes.forEach(route => {
   const childRouter = require(`./lib/routes/${route}`)
   router.use(`/${mountPath}`, childRouter)
 })
+
+module.context.use(router)
