@@ -44,7 +44,7 @@ function setSnapshotIntervals () {
   forEach(
     TEST_DATA_COLLECTIONS,
     collName => {
-      module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
+      module.context.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
     }
   )
 }

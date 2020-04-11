@@ -13,6 +13,15 @@
   "engines": {
     "arangodb": ">=3.5.0"
   },
+  "dependencies": {
+    "traceCollector": {
+      "name": "@RecallGraph/foxx-tracer-collector",
+      "version": "^0.0.1",
+      "description": "Opentrace-compatible collector to send span records to.",
+      "required": false,
+      "multiple": false
+    }
+  },
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
   "main": "main.js",
@@ -38,17 +47,11 @@
       "type": "json",
       "required": true
     },
-    "trace-sampling-rate": {
-      "description": "The probability of propagating a trace sample. Can be overriden by header param.",
-      "default": 1,
+    "sampling-probability": {
+      "description": "The probability of initiating a trace. Can be overriden by header param.",
+      "default": 0,
       "type": "number",
       "required": true
-    },
-    "dd-agent-url": {
-      "description": "The Datadog agent URL where to publish finished spans",
-      "default": "http://localhost:8126/v0.4/traces",
-      "type": "string",
-      "required": false
     }
   }
 }

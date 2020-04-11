@@ -61,21 +61,21 @@ module.exports = function (grunt) {
       options: {
         '--server': process.env.ARANGO_SERVER
       },
-      args: [process.env.EVSTORE_MOUNT_POINT]
+      args: [process.env.MOUNT_POINT]
     },
     install: {
       command: ['build', 'foxx', 'install'],
       options: {
         '--server': process.env.ARANGO_SERVER
       },
-      args: [process.env.EVSTORE_MOUNT_POINT]
+      args: [process.env.MOUNT_POINT]
     },
     replace: {
       command: ['build', 'foxx', 'replace'],
       options: {
         '--server': process.env.ARANGO_SERVER
       },
-      args: [process.env.EVSTORE_MOUNT_POINT]
+      args: [process.env.MOUNT_POINT]
     },
     bundle: {
       command: ['build', 'foxx', 'bundle'],
@@ -145,7 +145,7 @@ module.exports = function (grunt) {
 
           const params = `'${JSON.stringify({ files, grep, reporter })}'`
 
-          return `foxx run --server ${process.env.ARANGO_SERVER} ${process.env.EVSTORE_MOUNT_POINT} runTests ${params}`
+          return `foxx run --server ${process.env.ARANGO_SERVER} ${process.env.MOUNT_POINT} runTests ${params}`
         },
         options: {
           maxBuffer: 1073741824 // 1 MiB
