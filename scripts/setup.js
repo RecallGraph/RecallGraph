@@ -92,7 +92,7 @@ try {
   gg._drop(eventLog)
 } catch (e) {
   if (e.errorNum !== ARANGO_ERRORS.ERROR_GRAPH_NOT_FOUND.code) {
-    console.error(e)
+    console.error(e.message, e.stack)
   }
 } finally {
   gg._create(eventLog, evlEdgeDefs)
@@ -108,7 +108,7 @@ try {
   gg._drop(skeleton)
 } catch (e) {
   if (e.errorNum !== ARANGO_ERRORS.ERROR_GRAPH_NOT_FOUND.code) {
-    console.error(e)
+    console.error(e.message, e.stack)
   }
 } finally {
   gg._create(skeleton, skelEdgeDefs)

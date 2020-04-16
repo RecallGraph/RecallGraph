@@ -123,7 +123,7 @@ module.exports = function loadSampleData () {
         })
       } catch (e) {
         errorCount++
-        console.error(e)
+        console.error(e.message, e.stack)
       }
     })
 
@@ -154,7 +154,7 @@ module.exports = function loadSampleData () {
         replaceCount++
       } catch (e) {
         errorCount++
-        console.error(e)
+        console.error(e.message, e.stack)
       }
     }
   }
@@ -183,7 +183,7 @@ module.exports = function loadSampleData () {
         replaceCount++
       } catch (e) {
         errorCount++
-        console.error(e)
+        console.error(e.message, e.stack)
       }
     }
   }
@@ -212,7 +212,7 @@ module.exports = function loadSampleData () {
       replaceCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -237,7 +237,7 @@ module.exports = function loadSampleData () {
       replaceCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -267,7 +267,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -311,7 +311,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -354,7 +354,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -397,7 +397,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -440,7 +440,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -492,7 +492,7 @@ module.exports = function loadSampleData () {
         insertCount++
       } catch (e) {
         errorCount++
-        console.error(e, obj)
+        console.error(e, e.stack, obj)
       }
     } else {
       warningCount++
@@ -550,7 +550,7 @@ module.exports = function loadSampleData () {
     gg._drop(ssGraph)
   } catch (e) {
     if (e.errorNum !== ARANGO_ERRORS.ERROR_GRAPH_NOT_FOUND.code) {
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   } finally {
     const g = gg._create(ssGraph, edgeDefs)

@@ -1,10 +1,11 @@
 'use strict'
 
 const { db } = require('@arangodb')
-const { merge, forEach, noop, omit } = require('lodash')
+const { merge, forEach, omit } = require('lodash')
 const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
 const loadSampleData = require('./loadSampleData')
 const cache = require('@arangodb/aql/cache')
+const { utils: { setTrace, clearTraceContext } } = require('foxx-tracing')
 
 cache.properties({ mode: 'on' })
 
@@ -73,6 +74,8 @@ exports.setup = function setup ({
   forceTruncateService = false,
   ensureSampleDataLoad = false
 } = {}) {
+  setTrace({})
+
   let testDataCollectionsTruncated = false
   let serviceCollectionsTruncated = false
   let sampleDataLoadMessages = null
@@ -114,7 +117,9 @@ exports.setup = function setup ({
   }
 }
 
-exports.teardown = noop
+exports.teardown = function teardown () {
+  clearTraceContext()
+}
 
 exports.TEST_DATA_COLLECTIONS = TEST_DATA_COLLECTIONS
 exports.TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
