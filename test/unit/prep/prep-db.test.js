@@ -7,8 +7,15 @@ const { chain } = require('lodash')
 
 describe('Prep - Clean', () => {
   before(() => init.setup({ ensureSampleDataLoad: false, forceTruncateTestData: true, forceTruncateService: true }))
-
   after(init.teardown)
+  /*
+   beforeEach(function() {
+   console.debug('beforeEach', this.currentTest.fullTitle())
+   })
+   afterEach(function(){
+   console.log('afterEach', this.currentTest.fullTitle(), this.currentTest.state)
+   });
+   */
 
   it('should have no documents in test_vertex and test_edge collections', () => {
     const { vertex: vertexCollName, edge: edgeCollName } = init.TEST_DATA_COLLECTIONS
