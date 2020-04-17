@@ -28,6 +28,9 @@ To get an idea of where such a data store might be used, see:
 1. [The Case for Versioned Graph Databases](https://adityamukho.com/the-case-for-versioned-graph-databases/),
 1. [Illustrative Problems in Dynamic Network Analysis](https://en.wikipedia.org/wiki/Dynamic_network_analysis#Illustrative_problems_that_people_in_the_DNA_area_work_on)
 
+Also check out the recording below (RecallGraph Presented @ ArangoDB Online Meetup)
+[![YouTube link for RecallGraph presentation](http://img.youtube.com/vi/UP2KDQ_kL4I/0.jpg)](http://www.youtube.com/watch?v=UP2KDQ_kL4I "RecallGraph Presented @ ArangoDB Online Meetup")
+
 **TL;DR:** RecallGraph is a potential fit for scenarios where data is best represented as a network of vertices and edges (i.e., a graph) having the following characteristics:
 1. Both vertices and edges can hold properties in the form of attribute/value pairs (equivalent to JSON objects).
 1. Documents (vertices/edges) mutate within their lifespan (both in their individual attributes/values and in their relations with each other).
@@ -60,7 +63,7 @@ RecallGraph's API is split into 3 top-level categories:
 ## Installation
 RecallGraph installs like any other _Foxx Microservice_ inside a database, on an ArangoDB instance.
 
-1. Download the [latest release](https://github.com/adityamukho/RecallGraph/releases/).
+1. Download the [latest release](https://github.com/RecallGraph/RecallGraph/releases).
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
 ### Installation Notes
