@@ -842,7 +842,7 @@ describe('Op Helpers - getEventLogQueryInitializer', () => {
       const queryParts = getEventLogQueryInitializer(combo.path, combo.since, combo.until)
 
       expect(queryParts).to.be.an.instanceOf(Array)
-      expect(queryParts.length).to.be.within(4, 6)
+      expect(queryParts.length).to.be.within(5, 7)
       queryParts.forEach(queryPart => {
         expect(queryPart).to.be.an.instanceOf(Object)
         if (queryPart.hasOwnProperty('toAQL')) {
