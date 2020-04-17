@@ -7,5 +7,5 @@ node_modules
 /test/reports/*
 !/test/reports/.gitkeep
 /.env
-/build
+build
 /dist
