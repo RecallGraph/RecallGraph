@@ -29,7 +29,7 @@ const {
 } = require('../../../helpers/event')
 const { getCollectionType } = require('../../../../lib/helpers')
 
-const { concat, values, lt, gt, lte, gte, isEqual: eq, get } = require('lodash')
+const { concat, values, lt, gt, lte, gte, eq, get } = require('lodash')
 
 describe('Operations Helpers - filter', () => {
   before(init.setup)
@@ -128,30 +128,30 @@ describe('Operations Helpers - filter', () => {
 
     expect(filteredNodes).to.deep.equal(expectedNodes)
 
-    filterExpr = 'in(x, [1, 2, 3])'
+    filterExpr = 'includes([1, 2, 3], x)'
     filteredNodes = filter(nodes, filterExpr)
     expectedNodes = nodes.filter(node => [1, 2, 3].includes(node.x))
 
     expect(filteredNodes).to.deep.equal(expectedNodes)
 
-    filterExpr = 'in(x, [y])'
+    filterExpr = 'includes([y], x.z)'
     filteredNodes = filter(nodes, filterExpr)
-    expectedNodes = [nodes[4]]
+    expectedNodes = [nodes[0]]
 
     expect(filteredNodes).to.deep.equal(expectedNodes)
 
-    filterExpr = 'in(x, 2)'
+    filterExpr = 'includes(2, x)'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.be.empty
 
-    filterExpr = 'typeof(x) === "number"'
+    filterExpr = '$RG.typeof(x) === "number"'
     filteredNodes = filter(nodes, filterExpr)
     expectedNodes = nodes.filter(node => typeof node.x === 'number')
 
     expect(filteredNodes).to.deep.equal(expectedNodes)
 
-    filterExpr = 'typeof(x) === "object"'
+    filterExpr = '$RG.typeof(x) === "object"'
     filteredNodes = filter(nodes, filterExpr)
     expectedNodes = nodes.filter(node => typeof node.x === 'object')
 
@@ -159,87 +159,77 @@ describe('Operations Helpers - filter', () => {
 
     nodes = [{ x: 'abc', y: 2 }, { x: 1 }, { y: 1 }, { x: 'aabbcc' }]
 
-    filterExpr = 'glob(x, "*bc")'
+    filterExpr = '$RG.glob(x, "*bc")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'glob(x, "ab*")'
+    filterExpr = '$RG.glob(x, "ab*")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'glob(x, "*bc*")'
+    filterExpr = '$RG.glob(x, "*bc*")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[3]])
 
-    filterExpr = 'glob(x, "*ab{c,bc*,d}")'
+    filterExpr = '$RG.glob(x, "*ab{c,bc*,d}")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[3]])
 
-    filterExpr = 'glob(y, "*bc")'
+    filterExpr = '$RG.glob(y, "*bc")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.be.empty
 
-    filterExpr = 'glob(x, 1)'
+    filterExpr = '$RG.glob(x, 1)'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.be.empty
 
-    filterExpr = 'regx(x, ".*bc$")'
+    filterExpr = '$RG.regx(x, ".*bc$")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'regx(x, "^ab.*")'
+    filterExpr = '$RG.regx(x, "^ab.*")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'regx(x, ".*bc.*")'
+    filterExpr = '$RG.regx(x, ".*bc.*")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[3]])
 
-    filterExpr = 'regx(x, "^a?ab[bcd]+")'
+    filterExpr = '$RG.regx(x, "^a?ab[bcd]+")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[3]])
 
-    filterExpr = 'regx(y, ".*bc")'
+    filterExpr = '$RG.regx(y, ".*bc")'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.be.empty
 
-    filterExpr = 'regx(x, 1)'
+    filterExpr = '$RG.regx(x, 1)'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.be.empty
 
     nodes = [{ x: [1, 2, 3], y: 1 }, { x: 1 }, { y: 1 }, { x: [4, 5, 6] }]
 
-    filterExpr = 'all("in", x, [1, 2, 3, 4])'
+    filterExpr = 'isArray(x) && x.every(partial($_.includes, [1, 2, 3, 4]))'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'all("foo", x, [1, 2, 3, 4])'
-    filteredNodes = filter(nodes, filterExpr)
-
-    expect(filteredNodes).to.be.empty
-
-    filterExpr = 'any("in", x, [1, 2, 3, 4])'
+    filterExpr = 'isArray(x) && some(x, partial($_.includes, [1, 2, 3, 4]))'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[3]])
-
-    filterExpr = 'any("foo", x, [1, 2, 3, 4])'
-    filteredNodes = filter(nodes, filterExpr)
-
-    expect(filteredNodes).to.be.empty
   })
 
   it('should filter on a single LogicalExpression', () => {
@@ -255,9 +245,9 @@ describe('Operations Helpers - filter', () => {
 
     expect(filteredNodes).to.deep.equal(nodes.slice(0, 3))
 
-    filterExpr = 'typeof(x.z) == "undefined" ^ y == 1'
+    filterExpr = '$RG.typeof(x.z) === "undefined" ^ y === 1'
     filteredNodes = filter(nodes, filterExpr)
-    let expectedNodes = nodes.filter(node => get(node, 'x.z') === undefined ^ node.y === 1)
+    let expectedNodes = nodes.filter(node => typeof get(node, 'x.z') === 'undefined' ^ node.y === 1)
 
     expect(filteredNodes).to.deep.equal(expectedNodes)
   })
@@ -275,12 +265,12 @@ describe('Operations Helpers - filter', () => {
 
     expect(filteredNodes).to.deep.equal([nodes[3]])
 
-    filterExpr = 'typeof(x) == "number" && -x == -2'
+    filterExpr = '$RG.typeof(x) === "number" && -x == -2'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[2]])
 
-    filterExpr = 'typeof(x) == "number" && ~x == -3'
+    filterExpr = '$RG.typeof(x) === "number" && ~x == -3'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[2]])
@@ -308,7 +298,7 @@ describe('Operations Helpers - filter', () => {
   it('should filter on a single ConditionalExpression', () => {
     const nodes = [{ x: { z: 1 }, y: 1 }, { x: { z: 0 }, y: 1 }, { x: 2, y: 1 }, { y: 1 }]
 
-    let filterExpr = '(typeof(x) == "object") ? (x.z == y) : (x == 2)'
+    let filterExpr = '($RG.typeof(x) === "object") ? (x.z == y) : (x == 2)'
     let filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0], nodes[2]])
@@ -327,12 +317,12 @@ describe('Operations Helpers - filter', () => {
 
     expect(filteredNodes).to.deep.equal([nodes[2]])
 
-    filterExpr = 'x.z < Math.PI'
+    filterExpr = 'x.z < $Math.PI'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal(nodes.slice(0, 2))
 
-    filterExpr = 'x.z == Math.round(Math.tan(Math.PI / 4))'
+    filterExpr = 'x.z == $Math.round($Math.tan($Math.PI / 4))'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
@@ -444,57 +434,57 @@ describe('Operations Helpers - filter', () => {
 
     expect(filteredNodes).to.be.empty
 
-    filterExpr = 'typeof(y) == "number" && (y | 1) == 3'
+    filterExpr = '$RG.typeof(y) == "number" && (y | 1) == 3'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y & 1) == 0'
+    filterExpr = '$RG.typeof(y) == "number" && (y & 1) == 0'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y << 1) == 4'
+    filterExpr = '$RG.typeof(y) == "number" && (y << 1) == 4'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y >> 1) == 1'
+    filterExpr = '$RG.typeof(y) == "number" && (y >> 1) == 1'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y >>> 1) == 1'
+    filterExpr = '$RG.typeof(y) == "number" && (y >>> 1) == 1'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y + y) == 4'
+    filterExpr = '$RG.typeof(y) == "number" && (y + y) == 4'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y - 1) == 1'
+    filterExpr = '$RG.typeof(y) == "number" && (y - 1) == 1'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y * y) == 4'
+    filterExpr = '$RG.typeof(y) == "number" && (y * y) == 4'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y / 2) == 1'
+    filterExpr = '$RG.typeof(y) == "number" && (y / 2) == 1'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y % 2) == 0'
+    filterExpr = '$RG.typeof(y) == "number" && (y % 2) == 0'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
 
-    filterExpr = 'typeof(y) == "number" && (y ** 2) == 4'
+    filterExpr = '$RG.typeof(y) == "number" && (y ** 2) == 4'
     filteredNodes = filter(nodes, filterExpr)
 
     expect(filteredNodes).to.deep.equal([nodes[0]])
