@@ -3,6 +3,7 @@
 const {
   random, sampleSize, mapValues, sample, pick, isFunction, toString, escapeRegExp, isEqual
 } = require('lodash')
+const _ = require('lodash')
 const { format } = require('util')
 const minimatch = require('minimatch')
 const show = require('../../lib/operations/show')
@@ -10,42 +11,46 @@ const { cartesian } = require('./event')
 const { expect } = require('chai')
 const { getAST, OP_MAP } = require('../../lib/operations/helpers')
 
+const CALLEE_MAP = {
+  $_: _,
+  $RG: OP_MAP
+}
 const OPS = {
   primitive: [
     {
       key: 'eq',
-      template: ['eq(%s, %j)', '%s == %j', '%s === %j']
+      template: ['$_.eq(%s, %j)', '%s == %j', '%s === %j']
     },
     {
       key: 'lt',
-      template: ['lt(%s, %j)', '%s < %j']
+      template: ['$_.lt(%s, %j)', '%s < %j']
     },
     {
       key: 'gt',
-      template: ['gt(%s, %j)', '%s > %j']
+      template: ['$_.gt(%s, %j)', '%s > %j']
     },
     {
       key: 'lte',
-      template: ['lte(%s, %j)', '%s <= %j']
+      template: ['$_.lte(%s, %j)', '%s <= %j']
     },
     {
       key: 'gte',
-      template: ['gte(%s, %j)', '%s >= %j']
+      template: ['$_.gte(%s, %j)', '%s >= %j']
     }
   ],
   collection: [
     {
       key: 'in',
-      template: ['in(%s, %j)', '%s in %j']
+      template: ['$_.rearg($_.includes, [1, 0])(%s, %j)', '%s in %j']
     },
     {
       key: 'glob',
-      template: ['glob(%s, "%s")', '%s =* "%s"'],
+      template: ['$RG.glob(%s, "%s")', '%s =* "%s"'],
       preprocess: getPrefixPattern
     },
     {
       key: 'regx',
-      template: ['regx(%s, "%s")', '%s =~ "%s"'],
+      template: ['$RG.regx(%s, "%s")', '%s =~ "%s"'],
       preprocess: (arr) => escapeRegExp(minimatch.makeRe(getPrefixPattern(arr)).source)
     }
   ]
@@ -64,7 +69,9 @@ const FILTER_MAP = {
     return ast.elements.map(el => this[el.type](el, node))
   },
   CallExpression: function (ast, node) {
-    return OP_MAP.hasOwnProperty(ast.callee.name) && OP_MAP[ast.callee.name].apply(OP_MAP,
+    const callee = CALLEE_MAP[ast.callee.object.name]
+
+    return callee.hasOwnProperty(ast.callee.property.name) && callee[ast.callee.property.name].apply(callee,
       ast.arguments.map(arg => this[arg.type](arg, node)))
   },
   /**
@@ -104,7 +111,7 @@ const FILTER_MAP = {
       case '>=':
         return this[ast.left.type](ast.left, node) >= this[ast.right.type](ast.right, node)
       case 'in':
-        return OP_MAP.in(this[ast.left.type](ast.left, node), this[ast.right.type](ast.right, node))
+        return this[ast.left.type](ast.left, node) in this[ast.right.type](ast.right, node)
       case '=~':
         return OP_MAP.regx(this[ast.left.type](ast.left, node), this[ast.right.type](ast.right, node))
       case '=*':
