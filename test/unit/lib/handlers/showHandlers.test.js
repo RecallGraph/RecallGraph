@@ -50,12 +50,13 @@ describe('Show Handlers - Path as query param', () => {
       for (let timestamp of init.getMilestones()) {
         const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log('/', { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -106,12 +107,13 @@ describe('Show Handlers - Path as query param', () => {
       for (let timestamp of init.getMilestones()) {
         const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -163,12 +165,13 @@ describe('Show Handlers - Path as query param', () => {
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
@@ -228,12 +231,13 @@ describe('Show Handlers - Path as query param', () => {
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
@@ -289,12 +293,13 @@ describe('Show Handlers - Path as query param', () => {
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
@@ -353,12 +358,13 @@ describe('Show Handlers - Path as body param', () => {
       for (let timestamp of init.getMilestones()) {
         const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log('/', { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -411,12 +417,13 @@ describe('Show Handlers - Path as body param', () => {
       for (let timestamp of init.getMilestones()) {
         const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -470,12 +477,13 @@ describe('Show Handlers - Path as body param', () => {
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
@@ -537,12 +545,13 @@ describe('Show Handlers - Path as body param', () => {
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
@@ -600,12 +609,13 @@ describe('Show Handlers - Path as body param', () => {
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
