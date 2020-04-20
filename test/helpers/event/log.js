@@ -7,11 +7,12 @@ const request = require('@arangodb/request')
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { log: logHandler } = require('../../../lib/handlers/logHandlers')
-const { getLimitClause, getTimeBoundFilters, getCollTypeInitializer } = require('../../../lib/operations/helpers')
+const { getLimitClause, getTimeBoundFilters, getCollTypeInitializer, filter } = require(
+  '../../../lib/operations/helpers')
 const { aql, db } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')
-const { generateFilters, filter } = require('../filter')
+const { generateFilters } = require('../filter')
 
 exports.testUngroupedEvents = function testUngroupedEvents (
   pathParam,

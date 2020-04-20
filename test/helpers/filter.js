@@ -3,15 +3,9 @@
 const {
   random, sampleSize, mapValues, sample, pick, isFunction, toString, escapeRegExp, isObject
 } = require('lodash')
-const _ = require('lodash')
 const { format } = require('util')
 const minimatch = require('minimatch')
-const { getAST, OP_MAP } = require('../../lib/operations/helpers')
 
-const CALLEE_MAP = {
-  $_: _,
-  $RG: OP_MAP
-}
 const OPS = {
   primitive: [
     {
@@ -51,70 +45,6 @@ const OPS = {
       preprocess: (arr) => escapeRegExp(minimatch.makeRe(getPrefixPattern(arr)).source)
     }
   ]
-}
-
-const FILTER_MAP = {
-  Identifier: (ast, node) => node[ast.name],
-  Literal: ast => ast.value,
-  MemberExpression: function (ast, node) {
-    const member = this[ast.object.type](ast.object, node) || {}
-
-    return ast.computed ? member[this[ast.property.type](ast.property, node)] : this[ast.property.type](ast.property,
-      member)
-  },
-  ArrayExpression: function (ast, node) {
-    return ast.elements.map(el => this[el.type](el, node))
-  },
-  CallExpression: function (ast, node) {
-    const callee = CALLEE_MAP[ast.callee.object.name]
-
-    return callee.hasOwnProperty(ast.callee.property.name) && callee[ast.callee.property.name].apply(callee,
-      ast.arguments.map(arg => this[arg.type](arg, node)))
-  },
-  /**
-   * @return {boolean}
-   */
-  LogicalExpression: function (ast, node) {
-    switch (ast.operator) {
-      case '&&':
-        return this[ast.left.type](ast.left, node) && this[ast.right.type](ast.right, node)
-      case '||':
-        return this[ast.left.type](ast.left, node) || this[ast.right.type](ast.right, node)
-      default:
-        return false
-    }
-  },
-  /**
-   * @return {boolean}
-   */
-  UnaryExpression: function (ast, node) {
-    return (ast.operator === '!') ? !this[ast.argument.type](ast.argument, node) : false
-  },
-  ThisExpression: (ast, node) => node,
-  /**
-   * @return {boolean}
-   */
-  BinaryExpression: function (ast, node) {
-    switch (ast.operator) {
-      case '==':
-      case '===':
-        return this[ast.left.type](ast.left, node) === this[ast.right.type](ast.right, node)
-      case '<':
-        return this[ast.left.type](ast.left, node) < this[ast.right.type](ast.right, node)
-      case '>':
-        return this[ast.left.type](ast.left, node) > this[ast.right.type](ast.right, node)
-      case '<=':
-        return this[ast.left.type](ast.left, node) <= this[ast.right.type](ast.right, node)
-      case '>=':
-        return this[ast.left.type](ast.left, node) >= this[ast.right.type](ast.right, node)
-      case 'in':
-        return this[ast.left.type](ast.left, node) in this[ast.right.type](ast.right, node)
-      case '=~':
-        return OP_MAP.regx(this[ast.left.type](ast.left, node), this[ast.right.type](ast.right, node))
-      case '=*':
-        return OP_MAP.glob(this[ast.left.type](ast.left, node), this[ast.right.type](ast.right, node))
-    }
-  }
 }
 
 function getPrefixPattern (arr1) {
@@ -232,9 +162,3 @@ function generateFilters (nodes) {
 }
 
 exports.generateFilters = generateFilters
-
-exports.filter = function filter (arr, filterExpr) {
-  const ast = getAST(filterExpr)
-
-  return arr.filter(item => FILTER_MAP[ast.type](ast, item))
-}

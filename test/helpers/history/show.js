@@ -9,6 +9,8 @@ const log = require('../../../lib/operations/log')
 const { getCollTypes } = require('../../../lib/operations/show/helpers')
 const { getRandomSubRange, cartesian } = require('../event')
 const jiff = require('jiff')
+const { generateFilters } = require('../filter')
+const { filter } = require('../../../lib/operations/helpers')
 
 exports.testUngroupedNodes = function testUngroupedNodes (
   pathParam,
@@ -29,6 +31,7 @@ exports.testUngroupedNodes = function testUngroupedNodes (
   const groupSort = ['asc', 'desc']
   const groupSkip = [0, 1]
   const groupLimit = [0, 2]
+  const postFilter = [null, generateFilters(allNodes)]
   const combos = cartesian({
     skip,
     limit,
@@ -37,7 +40,8 @@ exports.testUngroupedNodes = function testUngroupedNodes (
     countsOnly,
     groupSort,
     groupSkip,
-    groupLimit
+    groupLimit,
+    postFilter
   })
 
   combos.forEach(combo => {
@@ -58,12 +62,19 @@ exports.testUngroupedNodes = function testUngroupedNodes (
       slicedSortedNodes = sortedNodes
     }
 
-    expect(nodes.length).to.equal(slicedSortedNodes.length)
-    expect(nodes[0]).to.deep.equal(slicedSortedNodes[0])
+    let filteredSlicedSortedNodes
+    if (combo.postFilter) {
+      filteredSlicedSortedNodes = filter(slicedSortedNodes, combo.postFilter)
+    } else {
+      filteredSlicedSortedNodes = slicedSortedNodes
+    }
 
-    for (let i = 1; i < slicedSortedNodes.length; i++) {
+    expect(nodes.length).to.equal(filteredSlicedSortedNodes.length)
+    expect(nodes[0]).to.deep.equal(filteredSlicedSortedNodes[0])
+
+    for (let i = 1; i < filteredSlicedSortedNodes.length; i++) {
       const node = nodes[i]
-      const expectedNode = slicedSortedNodes[i]
+      const expectedNode = filteredSlicedSortedNodes[i]
 
       expect(node).to.be.an.instanceOf(Object)
       expect(node._id).to.equal(expectedNode._id)
@@ -86,7 +97,6 @@ exports.testGroupedNodes = function testGroupedNodes (
   const groupSort = ['asc', 'desc']
   const groupSkip = [0, 1]
   const groupLimit = [0, 2]
-
   const collTypes = getCollTypes()
   const ungroupedExpectedNodes = buildNodesFromEventLog(rawPath, timestamp)
 
