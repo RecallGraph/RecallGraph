@@ -20,7 +20,7 @@ const lineageCollName = module.context.collectionName('test_lineage')
 const generateCombos = memoize(() => {
   return cartesian({
     timestamp: [null, ...init.getMilestones()],
-    depth: [0, 1, 2],
+    depth: [1, 2],
     edgeCollections: ['inbound', 'outbound', 'any'].map(dir => ({
       [lineageCollName]: dir
     }))
