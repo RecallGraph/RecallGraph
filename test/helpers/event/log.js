@@ -7,11 +7,11 @@ const request = require('@arangodb/request')
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { log: logHandler } = require('../../../lib/handlers/logHandlers')
-const { getLimitClause, getTimeBoundFilters } = require('../../../lib/operations/helpers')
+const { getLimitClause, getTimeBoundFilters, getCollTypeInitializer } = require('../../../lib/operations/helpers')
 const { aql, db } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')
-const { generateFilters } = require('../filter')
+const { generateFilters, filter } = require('../filter')
 
 exports.testUngroupedEvents = function testUngroupedEvents (
   pathParam,
@@ -69,10 +69,17 @@ exports.testUngroupedEvents = function testUngroupedEvents (
         latestTimeBoundIndex,
         earliestTimeBoundIndex + 1
       )
-      const sortedTimeSlicedEvents =
-        combo.sort === 'asc'
-          ? timeSlicedEvents.reverse()
-          : timeSlicedEvents
+
+      let sortedTimeSlicedEvents
+      if (combo.countsOnly) {
+        sortedTimeSlicedEvents = timeSlicedEvents
+      } else {
+        sortedTimeSlicedEvents = (combo.sort === 'asc') ? timeSlicedEvents.reverse() : timeSlicedEvents
+      }
+
+      if (combo.countsOnly) {
+        sortedTimeSlicedEvents = [{ total: sortedTimeSlicedEvents.length }]
+      }
 
       let slicedSortedTimeSlicedEvents
       let start = 0
@@ -85,12 +92,23 @@ exports.testUngroupedEvents = function testUngroupedEvents (
         slicedSortedTimeSlicedEvents = sortedTimeSlicedEvents
       }
 
-      expect(events.length).to.equal(slicedSortedTimeSlicedEvents.length)
-      expect(events[0]).to.deep.equal(slicedSortedTimeSlicedEvents[0])
-      events.forEach((event, idx) => {
-        expect(event).to.be.an.instanceOf(Object)
-        expect(event._id).to.equal(slicedSortedTimeSlicedEvents[idx]._id)
-      })
+      let filteredSlicedSortedTimeSlicedEvents
+      if (combo.postFilter) {
+        filteredSlicedSortedTimeSlicedEvents = filter(slicedSortedTimeSlicedEvents, combo.postFilter)
+      } else {
+        filteredSlicedSortedTimeSlicedEvents = slicedSortedTimeSlicedEvents
+      }
+
+      const params = JSON.stringify(pathParam)
+      expect(events.length, params).to.equal(filteredSlicedSortedTimeSlicedEvents.length)
+      expect(events[0], params).to.deep.equal(filteredSlicedSortedTimeSlicedEvents[0])
+
+      if (!combo.countsOnly) {
+        events.forEach((event, idx) => {
+          expect(event, params).to.be.an.instanceOf(Object)
+          expect(event._id, params).to.equal(filteredSlicedSortedTimeSlicedEvents[idx]._id)
+        })
+      }
     })
   }
 }
@@ -116,7 +134,7 @@ exports.testGroupedEvents = function testGroupedEvents (
     const groupSkip = [0, 1]
     const groupLimit = [0, 2]
     const returnCommands = [false, true]
-
+    const postFilter = [null, generateFilters(allEvents)]
     const combos = cartesian({
       since,
       until,
@@ -128,7 +146,8 @@ exports.testGroupedEvents = function testGroupedEvents (
       groupSort,
       groupSkip,
       groupLimit,
-      returnCommands
+      returnCommands,
+      postFilter
     })
     combos.forEach(combo => {
       const eventGroups = logFn(pathParam, combo)
@@ -148,7 +167,8 @@ exports.testGroupedEvents = function testGroupedEvents (
         groupLimit: glmt,
         returnCommands: rc
       } = combo
-      const queryParts = cloneDeep(qp || initQueryParts(scope))
+      const queryParts = [getCollTypeInitializer()]
+      queryParts.push(...cloneDeep(qp || initQueryParts(scope)))
 
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
       timeBoundFilters.filters.forEach(filter => queryParts.push(filter))
@@ -159,28 +179,34 @@ exports.testGroupedEvents = function testGroupedEvents (
       queryParts.push(getReturnClause(gb, co, gst, gskp, glmt, rc))
 
       const query = aql.join(queryParts, '\n')
-      const expectedEventGroups = db._query(query).toArray()
-      const params = JSON.stringify({ pathParam, combo })
+      const queriedEventGroups = db._query(query).toArray()
+      let filteredQueriedEventGroups
+      if (combo.postFilter) {
+        filteredQueriedEventGroups = filter(queriedEventGroups, combo.postFilter)
+      } else {
+        filteredQueriedEventGroups = queriedEventGroups
+      }
+      const params = JSON.stringify(pathParam)
 
-      expect(eventGroups.length, params).to.equal(expectedEventGroups.length)
+      expect(eventGroups.length, params).to.equal(filteredQueriedEventGroups.length)
 
       const aggrField = co ? 'total' : 'events'
       eventGroups.forEach((eventGroup, idx1) => {
         expect(eventGroup, params).to.be.an.instanceOf(Object)
-        expect(eventGroup[gb], params).to.equal(expectedEventGroups[idx1][gb])
+        expect(eventGroup[gb], params).to.equal(filteredQueriedEventGroups[idx1][gb])
 
         expect(eventGroup, params).to.have.property(aggrField)
         if (co) {
-          expect(eventGroup[aggrField], params).to.equal(expectedEventGroups[idx1][aggrField])
+          expect(eventGroup[aggrField], params).to.equal(filteredQueriedEventGroups[idx1][aggrField])
         } else {
           expect(eventGroup[aggrField], params).to.be.an.instanceOf(Array)
-          expect(eventGroup[aggrField].length, params).to.equal(expectedEventGroups[idx1][aggrField].length)
+          expect(eventGroup[aggrField].length, params).to.equal(filteredQueriedEventGroups[idx1][aggrField].length)
 
           if (eventGroup[aggrField].length > 0) {
-            expect(eventGroup[aggrField][0], params).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
+            expect(eventGroup[aggrField][0], params).to.deep.equal(filteredQueriedEventGroups[idx1][aggrField][0])
             eventGroup[aggrField].forEach((event, idx2) => {
               expect(event, params).to.be.an.instanceOf(Object)
-              expect(event._id, params).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
+              expect(event._id, params).to.equal(filteredQueriedEventGroups[idx1][aggrField][idx2]._id)
             })
           }
         }
@@ -220,8 +246,9 @@ function logRequestWrapper (reqParams, combo, method = 'get') {
 
   const response = request[method](`${baseUrl}/event/log`, reqParams)
 
-  expect(response).to.be.an.instanceOf(Object)
-  expect(response.statusCode).to.equal(200)
+  const params = JSON.stringify({ reqParams, response: response.body })
+  expect(response, params).to.be.an.instanceOf(Object)
+  expect(response.statusCode, params).to.equal(200)
 
   return JSON.parse(response.body)
 }

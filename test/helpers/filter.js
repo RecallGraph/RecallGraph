@@ -1,14 +1,11 @@
 'use strict'
 
 const {
-  random, sampleSize, mapValues, sample, pick, isFunction, toString, escapeRegExp, isEqual
+  random, sampleSize, mapValues, sample, pick, isFunction, toString, escapeRegExp, isObject
 } = require('lodash')
 const _ = require('lodash')
 const { format } = require('util')
 const minimatch = require('minimatch')
-const show = require('../../lib/operations/show')
-const { cartesian } = require('./event')
-const { expect } = require('chai')
 const { getAST, OP_MAP } = require('../../lib/operations/helpers')
 
 const CALLEE_MAP = {
@@ -121,7 +118,8 @@ const FILTER_MAP = {
 }
 
 function getPrefixPattern (arr1) {
-  const arr = arr1.map(toString).sort()
+  const arr = arr1.map(toString)
+    .sort()
   let a1 = arr[0]
   let a2 = arr[arr.length - 1]
   let L = a1.length
@@ -145,23 +143,66 @@ function generateGrouping (filterArr) {
   }
 }
 
-function generateFilters (nodes) {
-  const fieldBags = nodes.reduce((acc, node) => {
-    for (const field in node) {
-      if (!acc[field]) {
-        acc[field] = new Set()
-      }
-      acc[field].add(node[field])
+function getType (input) {
+  if (isObject(input)) {
+    if (Array.isArray(input)) {
+      return 'array'
+    } else {
+      return 'object'
     }
+  } else if (input == null) {
+    return 'null'
+  } else {
+    return typeof input
+  }
+}
 
-    return acc
-  }, {})
+function mergeData (input, data, rootPath = '') {
+  const type = getType(input)
+
+  switch (type) {
+    case 'string':
+    case 'number':
+    case 'boolean':
+    case 'null':
+      if (!data[rootPath]) {
+        data[rootPath] = new Set()
+      }
+
+      data[rootPath].add(input)
+      break
+
+    case 'object':
+      for (const field in input) {
+        const currentPath = `${rootPath}['${field}']`
+        const val = input[field]
+
+        mergeData(val, data, currentPath)
+      }
+      break
+
+    case 'array':
+      for (let i = 0; i < input.length; i++) {
+        const currentPath = `${rootPath}['${i}']`
+        const val = input[i]
+
+        mergeData(val, data, currentPath)
+      }
+  }
+}
+
+function generateFilters (nodes) {
+  const fieldBags = {}
+
+  for (const node of nodes) {
+    mergeData(node, fieldBags)
+  }
 
   const fbKeys = Object.keys(fieldBags)
   const ss = random(1, fbKeys.length)
   const sampleFieldBags = pick(fieldBags, sampleSize(fbKeys, ss))
   const sampleFieldBagSubsets = mapValues(sampleFieldBags, (values) => {
-    const ss = random(1, values.size)
+    const ss = random(1, 10)
 
     return sampleSize(Array.from(values), ss)
   })
@@ -174,7 +215,7 @@ function generateFilters (nodes) {
     const filter = sample(OPS[filterSet])
     const operand2 = isFunction(filter.preprocess) ? filter.preprocess(value) : value
     const template = Array.isArray(filter.template) ? sample(filter.template) : filter.template
-    const fmtFilter = format(template, `this["${field}"]`, operand2)
+    const fmtFilter = format(template, `this${field}`, operand2)
     const invert = random()
 
     filterArr.push(invert ? `!(${fmtFilter})` : fmtFilter)
@@ -192,30 +233,8 @@ function generateFilters (nodes) {
 
 exports.generateFilters = generateFilters
 
-exports.testNodes = function testNodes (pathParam, rawPath, timestamp, filterFn) {
-  const sort = ['asc', 'desc']
-  const preSkip = [0, 1]
-  const preLimit = [0, 1]
+exports.filter = function filter (arr, filterExpr) {
+  const ast = getAST(filterExpr)
 
-  const combos = cartesian({ sort, preSkip, preLimit })
-  combos.forEach(combo => {
-    const allNodes = show(rawPath, timestamp, { sort: combo.sort, skip: combo.preSkip, limit: combo.preLimit })
-
-    if (allNodes.length) {
-      const filterExpr = generateFilters(allNodes)
-
-      const filteredNodes = filterFn(pathParam, timestamp, filterExpr, combo)
-
-      expect(filteredNodes).to.be.an.instanceOf(Array)
-
-      const ast = getAST(filterExpr)
-      const expectedNodes = allNodes.filter(node => FILTER_MAP[ast.type](ast, node))
-
-      if (!isEqual(filteredNodes, expectedNodes)) {
-        console.error({ rawPath, timestamp, filterExpr, combo, ast, filteredNodes, expectedNodes })
-
-        expect.fail(filteredNodes, expectedNodes)
-      }
-    }
-  })
+  return arr.filter(item => FILTER_MAP[ast.type](ast, item))
 }
