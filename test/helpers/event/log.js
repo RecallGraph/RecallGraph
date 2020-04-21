@@ -300,7 +300,7 @@ exports.logPostWrapper = function logPostWrapper (path, combo) {
 
 function logHandlerWrapper (req, combo) {
   if (isObject(combo)) {
-    Object.assign(req.queryParams, combo)
+    Object.assign(req.queryParams, omitBy(combo, isNil))
   }
 
   return logHandler(req)

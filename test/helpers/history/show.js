@@ -1,16 +1,15 @@
 'use strict'
 
-const { range, chain, sortBy, isObject, defaults, omitBy, isNil, ary } = require('lodash')
+const { range, chain, sortBy, isObject, omitBy, isNil } = require('lodash')
 const request = require('@arangodb/request')
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { show: showHandler } = require('../../../lib/handlers/showHandlers')
 const log = require('../../../lib/operations/log')
-const { getCollTypes } = require('../../../lib/operations/show/helpers')
 const { getRandomSubRange, cartesian } = require('../event')
 const jiff = require('jiff')
 const { generateFilters } = require('../filter')
-const { filter } = require('../../../lib/operations/helpers')
+const { filter, getCollTypes } = require('../../../lib/operations/helpers')
 
 exports.testUngroupedNodes = function testUngroupedNodes (
   pathParam,
@@ -84,8 +83,7 @@ exports.testUngroupedNodes = function testUngroupedNodes (
 }
 
 exports.testGroupedNodes = function testGroupedNodes (
-  pathParam,
-  rawPath,
+  path,
   timestamp,
   showFn
 ) {
@@ -98,7 +96,8 @@ exports.testGroupedNodes = function testGroupedNodes (
   const groupSkip = [0, 1]
   const groupLimit = [0, 2]
   const collTypes = getCollTypes()
-  const ungroupedExpectedNodes = buildNodesFromEventLog(rawPath, timestamp)
+  const ungroupedExpectedNodes = buildNodesFromEventLog(path, timestamp)
+  const postFilter = [null, generateFilters(ungroupedExpectedNodes)]
 
   const combos = cartesian({
     skip,
@@ -108,10 +107,11 @@ exports.testGroupedNodes = function testGroupedNodes (
     countsOnly,
     groupSort,
     groupSkip,
-    groupLimit
+    groupLimit,
+    postFilter
   })
   combos.forEach(combo => {
-    const nodeGroups = showFn(pathParam, timestamp, combo)
+    const nodeGroups = showFn(path, timestamp, combo)
 
     expect(nodeGroups).to.be.an.instanceOf(Array)
 
@@ -123,13 +123,14 @@ exports.testGroupedNodes = function testGroupedNodes (
       countsOnly: co,
       groupSort: gst,
       groupSkip: gskp,
-      groupLimit: glmt
+      groupLimit: glmt,
+      postFilter: pf
     } = combo
 
-    let expectedNodesWrapper = chain(ungroupedExpectedNodes)
+    let unfilteredNodesWrapper = chain(ungroupedExpectedNodes)
 
     if (co) {
-      expectedNodesWrapper = expectedNodesWrapper.groupBy(item => {
+      unfilteredNodesWrapper = unfilteredNodesWrapper.groupBy(item => {
         const collName = item._id.split('/')[0]
         return gb === 'collection' ? collName : collTypes[collName]
       })
@@ -139,7 +140,7 @@ exports.testGroupedNodes = function testGroupedNodes (
         }))
         .sortBy(group => st === 'desc' ? -group.total : group.total, gb)
     } else {
-      expectedNodesWrapper = expectedNodesWrapper.groupBy(item => {
+      unfilteredNodesWrapper = unfilteredNodesWrapper.groupBy(item => {
         const collName = item._id.split('/')[0]
         return gb === 'collection' ? collName : collTypes[collName]
       })
@@ -155,7 +156,7 @@ exports.testGroupedNodes = function testGroupedNodes (
         })
     }
 
-    expectedNodesWrapper = expectedNodesWrapper.thru(arr => {
+    unfilteredNodesWrapper = unfilteredNodesWrapper.thru(arr => {
       if (lmt) {
         const start = skp
         const end = start + lmt
@@ -167,7 +168,7 @@ exports.testGroupedNodes = function testGroupedNodes (
     })
 
     if (!co) {
-      expectedNodesWrapper = expectedNodesWrapper.map(group => {
+      unfilteredNodesWrapper = unfilteredNodesWrapper.map(group => {
         const nodes = group.nodes
         let sorted = sortBy(nodes, node => node._id)
         if (gst === 'desc') {
@@ -184,29 +185,36 @@ exports.testGroupedNodes = function testGroupedNodes (
       })
     }
 
-    const expectedNodeGroups = expectedNodesWrapper.value()
-    const params = JSON.stringify({ rawPath, timestamp, combo })
+    const unfilteredNodeGroups = unfilteredNodesWrapper.value()
+    let filteredNodeGroups
+    if (pf) {
+      filteredNodeGroups = filter(unfilteredNodeGroups, pf)
+    } else {
+      filteredNodeGroups = unfilteredNodeGroups
+    }
 
-    expect(nodeGroups.length, params).to.equal(expectedNodeGroups.length)
+    const params = JSON.stringify({ rawPath: path, timestamp, combo })
+
+    expect(nodeGroups.length, params).to.equal(filteredNodeGroups.length)
 
     const aggrField = co ? 'total' : 'nodes'
     nodeGroups.forEach((nodeGroup, idx1) => {
       expect(nodeGroup, params).to.be.an.instanceOf(Object)
-      expect(nodeGroup[gb], params).to.equal(expectedNodeGroups[idx1][gb])
+      expect(nodeGroup[gb], params).to.equal(filteredNodeGroups[idx1][gb])
 
       expect(nodeGroup, params).to.have.property(aggrField)
       if (co) {
-        expect(nodeGroup[aggrField], params).to.equal(expectedNodeGroups[idx1][aggrField])
+        expect(nodeGroup[aggrField], params).to.equal(filteredNodeGroups[idx1][aggrField])
       } else {
         expect(nodeGroup[aggrField], params).to.be.an.instanceOf(Array)
-        expect(nodeGroup[aggrField].length, params).to.equal(expectedNodeGroups[idx1][aggrField].length)
+        expect(nodeGroup[aggrField].length, params).to.equal(filteredNodeGroups[idx1][aggrField].length)
 
         if (nodeGroup[aggrField].length > 0) {
-          expect(nodeGroup[aggrField][0], params).to.deep.equal(expectedNodeGroups[idx1][aggrField][0])
+          expect(nodeGroup[aggrField][0], params).to.deep.equal(filteredNodeGroups[idx1][aggrField][0])
           nodeGroup[aggrField].forEach((node, idx2) => {
             expect(node, params).to.be.an.instanceOf(Object)
-            expect(node._id, params).to.equal(expectedNodeGroups[idx1][aggrField][idx2]._id)
-            expect(node._rev, params).to.equal(expectedNodeGroups[idx1][aggrField][idx2]._rev)
+            expect(node._id, params).to.equal(filteredNodeGroups[idx1][aggrField][idx2]._id)
+            expect(node._rev, params).to.equal(filteredNodeGroups[idx1][aggrField][idx2]._rev)
           })
         }
       }
@@ -232,10 +240,7 @@ function buildNodesFromEventLog (path, timestamp) {
 
 exports.buildNodesFromEventLog = buildNodesFromEventLog
 
-function showRequestWrapper (reqParams, timestamp, combo, method = 'get') {
-  defaults(reqParams, { qs: {} })
-  reqParams.qs.timestamp = timestamp
-
+function showRequestWrapper (reqParams, combo, method = 'get') {
   if (isObject(combo)) {
     Object.assign(reqParams.qs, omitBy(combo, isNil))
   }
@@ -248,19 +253,58 @@ function showRequestWrapper (reqParams, timestamp, combo, method = 'get') {
   return JSON.parse(response.body)
 }
 
-exports.showGetWrapper = ary(showRequestWrapper, 3)
+exports.showGetWrapper = function showGetWrapper (path, timestamp, combo) {
+  const reqParams = {
+    json: true,
+    qs: {
+      path
+    }
+  }
+  combo.timestamp = timestamp
 
-exports.showPostWrapper = function showPostWrapper (reqParams, timestamp, combo) {
-  return showRequestWrapper(reqParams, timestamp, combo, 'post')
+  return showRequestWrapper(reqParams, combo)
 }
 
-exports.showHandlerWrapper = function showHandlerWrapper (pathParam, timestamp, combo) {
-  defaults(pathParam, { queryParams: {} })
+exports.showPostWrapper = function showPostWrapper (path, timestamp, combo) {
+  const reqParams = {
+    json: true,
+    qs: {},
+    body: {
+      path
+    }
+  }
+  combo.timestamp = timestamp
 
+  return showRequestWrapper(reqParams, combo, 'post')
+}
+
+function showHandlerWrapper (req, combo) {
   if (isObject(combo)) {
-    pathParam.queryParams.timestamp = timestamp
-    Object.assign(pathParam.queryParams, combo)
+    Object.assign(req.queryParams, omitBy(combo, isNil))
   }
 
-  return showHandler(pathParam)
+  return showHandler(req)
+}
+
+exports.showHandlerQueryWrapper = function showHandlerQueryWrapper (path, timestamp, combo) {
+  const req = {
+    queryParams: {
+      path
+    }
+  }
+  combo.timestamp = timestamp
+
+  return showHandlerWrapper(req, combo)
+}
+
+exports.showHandlerBodyWrapper = function showHandlerBodyWrapper (path, timestamp, combo) {
+  const req = {
+    queryParams: {},
+    body: {
+      path
+    }
+  }
+  combo.timestamp = timestamp
+
+  return showHandlerWrapper(req, combo)
 }

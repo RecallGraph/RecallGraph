@@ -2,9 +2,8 @@
 
 const { expect } = require('chai')
 const init = require('../../../helpers/init')
-const { show } = require('../../../../lib/handlers/showHandlers')
 const {
-  testGroupedNodes, testUngroupedNodes, buildNodesFromEventLog, showHandlerWrapper
+  testGroupedNodes, testUngroupedNodes, buildNodesFromEventLog, showHandlerQueryWrapper, showHandlerBodyWrapper
 } = require('../../../helpers/history/show')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getSampleTestCollNames, getNodeBraceSampleIds
@@ -21,34 +20,22 @@ describe('Show Handlers - Path as query param', () => {
       const path = '/'
 
       for (const timestamp of init.getMilestones()) {
-        const req = {
-          queryParams: {
-            path,
-            timestamp
-          }
-        }
-
-        const allNodes = show(req)
+        const allNodes = showHandlerQueryWrapper(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
 
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-        testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+        testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerQueryWrapper)
       }
     })
 
   it('should return total node count in DB scope for the root path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = '/'
-      const req = {
-        queryParams: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+        const result = showHandlerQueryWrapper(path, timestamp, { countsOnly: true })
 
         expect(result).to.be.an.instanceOf(Array)
         expect(result).to.have.lengthOf(1)
@@ -62,14 +49,9 @@ describe('Show Handlers - Path as query param', () => {
 
   it('should return grouped nodes in DB scope for the root path, when groupBy is specified', () => {
     const path = '/'
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -78,34 +60,22 @@ describe('Show Handlers - Path as query param', () => {
     const path = getRandomGraphPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          path,
-          timestamp
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerQueryWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerQueryWrapper)
     }
   })
 
   it('should return total node count in Graph scope for a graph path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = getRandomGraphPathPattern()
-      const req = {
-        queryParams: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+        const result = showHandlerQueryWrapper(path, timestamp, { countsOnly: true })
 
         expect(result).to.be.an.instanceOf(Array)
         expect(result).to.have.lengthOf(1)
@@ -119,14 +89,9 @@ describe('Show Handlers - Path as query param', () => {
 
   it('should return grouped nodes in Graph scope for a graph path, when groupBy is specified', () => {
     const path = getRandomGraphPathPattern()
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -135,20 +100,13 @@ describe('Show Handlers - Path as query param', () => {
     const path = getRandomCollectionPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          path,
-          timestamp
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerQueryWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerQueryWrapper)
     }
   })
 
@@ -156,14 +114,9 @@ describe('Show Handlers - Path as query param', () => {
      ' is true',
   () => {
     const path = getRandomCollectionPathPattern()
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+      const result = showHandlerQueryWrapper(path, timestamp, { countsOnly: true })
 
       expect(result).to.be.an.instanceOf(Array)
       expect(result).to.have.lengthOf(1)
@@ -177,14 +130,9 @@ describe('Show Handlers - Path as query param', () => {
 
   it('should return grouped nodes in Collection scope for a collection path, when groupBy is specified', () => {
     const path = getRandomCollectionPathPattern()
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -197,20 +145,13 @@ describe('Show Handlers - Path as query param', () => {
         : `/ng/${sampleTestCollNames}/*`
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          path,
-          timestamp
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerQueryWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerQueryWrapper)
     }
   })
 
@@ -222,14 +163,9 @@ describe('Show Handlers - Path as query param', () => {
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
         : `/ng/${sampleTestCollNames}/*`
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+      const result = showHandlerQueryWrapper(path, timestamp, { countsOnly: true })
 
       expect(result).to.be.an.instanceOf(Array)
       expect(result).to.have.lengthOf(1)
@@ -247,14 +183,9 @@ describe('Show Handlers - Path as query param', () => {
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
         : `/ng/${sampleTestCollNames}/*`
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -263,20 +194,13 @@ describe('Show Handlers - Path as query param', () => {
     const { path } = getNodeBraceSampleIds(100)
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          path,
-          timestamp
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerQueryWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerQueryWrapper)
     }
   })
 
@@ -284,14 +208,9 @@ describe('Show Handlers - Path as query param', () => {
      ' is true',
   () => {
     const { path } = getNodeBraceSampleIds(100)
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+      const result = showHandlerQueryWrapper(path, timestamp, { countsOnly: true })
 
       expect(result).to.be.an.instanceOf(Array)
       expect(result).to.have.lengthOf(1)
@@ -305,14 +224,9 @@ describe('Show Handlers - Path as query param', () => {
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
     const { path } = getNodeBraceSampleIds(100)
-    const req = {
-      queryParams: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
     }
   })
 })
@@ -327,36 +241,22 @@ describe('Show Handlers - Path as body param', () => {
       const path = '/'
 
       for (const timestamp of init.getMilestones()) {
-        const req = {
-          queryParams: {
-            timestamp
-          },
-          body: {
-            path
-          }
-        }
-
-        const allNodes = show(req)
+        const allNodes = showHandlerBodyWrapper(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
 
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-        testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+        testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerBodyWrapper)
       }
     })
 
   it('should return total node count in DB scope for the root path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = '/'
-      const req = {
-        body: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+        const result = showHandlerBodyWrapper(path, timestamp, { countsOnly: true })
 
         expect(result).to.be.an.instanceOf(Array)
         expect(result).to.have.lengthOf(1)
@@ -370,14 +270,9 @@ describe('Show Handlers - Path as body param', () => {
 
   it('should return grouped nodes in DB scope for the root path, when groupBy is specified', () => {
     const path = '/'
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -386,36 +281,22 @@ describe('Show Handlers - Path as body param', () => {
     const path = getRandomGraphPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          timestamp
-        },
-        body: {
-          path
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerBodyWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerBodyWrapper)
     }
   })
 
   it('should return total node count in Graph scope for a graph path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = getRandomGraphPathPattern()
-      const req = {
-        body: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+        const result = showHandlerBodyWrapper(path, timestamp, { countsOnly: true })
 
         expect(result).to.be.an.instanceOf(Array)
         expect(result).to.have.lengthOf(1)
@@ -429,14 +310,9 @@ describe('Show Handlers - Path as body param', () => {
 
   it('should return grouped nodes in Graph scope for a graph path, when groupBy is specified', () => {
     const path = getRandomGraphPathPattern()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -445,22 +321,13 @@ describe('Show Handlers - Path as body param', () => {
     const path = getRandomCollectionPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          timestamp
-        },
-        body: {
-          path
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerBodyWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerBodyWrapper)
     }
   })
 
@@ -468,14 +335,9 @@ describe('Show Handlers - Path as body param', () => {
      ' is true',
   () => {
     const path = getRandomCollectionPathPattern()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+      const result = showHandlerBodyWrapper(path, timestamp, { countsOnly: true })
 
       expect(result).to.be.an.instanceOf(Array)
       expect(result).to.have.lengthOf(1)
@@ -489,14 +351,9 @@ describe('Show Handlers - Path as body param', () => {
 
   it('should return grouped nodes in Collection scope for a collection path, when groupBy is specified', () => {
     const path = getRandomCollectionPathPattern()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -509,22 +366,13 @@ describe('Show Handlers - Path as body param', () => {
         : `/ng/${sampleTestCollNames}/*`
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          timestamp
-        },
-        body: {
-          path
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerBodyWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerBodyWrapper)
     }
   })
 
@@ -536,14 +384,9 @@ describe('Show Handlers - Path as body param', () => {
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
         : `/ng/${sampleTestCollNames}/*`
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+      const result = showHandlerBodyWrapper(path, timestamp, { countsOnly: true })
 
       expect(result).to.be.an.instanceOf(Array)
       expect(result).to.have.lengthOf(1)
@@ -561,14 +404,9 @@ describe('Show Handlers - Path as body param', () => {
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
         : `/ng/${sampleTestCollNames}/*`
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -577,22 +415,13 @@ describe('Show Handlers - Path as body param', () => {
     const { path } = getNodeBraceSampleIds()
 
     for (const timestamp of init.getMilestones()) {
-      const req = {
-        queryParams: {
-          timestamp
-        },
-        body: {
-          path
-        }
-      }
-
-      const allNodes = show(req)
+      const allNodes = showHandlerBodyWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(req, timestamp, allNodes, expectedNodes, showHandlerWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showHandlerBodyWrapper)
     }
   })
 
@@ -600,14 +429,9 @@ describe('Show Handlers - Path as body param', () => {
      ' is true',
   () => {
     const { path } = getNodeBraceSampleIds()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showHandlerWrapper(req, timestamp, { countsOnly: true })
+      const result = showHandlerBodyWrapper(path, timestamp, { countsOnly: true })
 
       expect(result).to.be.an.instanceOf(Array)
       expect(result).to.have.lengthOf(1)
@@ -621,14 +445,9 @@ describe('Show Handlers - Path as body param', () => {
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
     const { path } = getNodeBraceSampleIds()
-    const req = {
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(req, path, timestamp, showHandlerWrapper)
+      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
     }
   })
 })
