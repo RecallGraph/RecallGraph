@@ -1,7 +1,7 @@
 'use strict'
 
 const {
-  random, sampleSize, mapValues, sample, pick, isFunction, toString, escapeRegExp, isObject
+  random, sampleSize, sample, isFunction, toString, escapeRegExp, isObject, chain, isEmpty, negate
 } = require('lodash')
 const { format } = require('util')
 const minimatch = require('minimatch')
@@ -10,29 +10,29 @@ const OPS = {
   primitive: [
     {
       key: 'eq',
-      template: ['$_.eq(%s, %j)', '%s == %j', '%s === %j']
+      template: ['eq(%s, %j)', '%s == %j', '%s === %j']
     },
     {
       key: 'lt',
-      template: ['$_.lt(%s, %j)', '%s < %j']
+      template: ['lt(%s, %j)', '%s < %j']
     },
     {
       key: 'gt',
-      template: ['$_.gt(%s, %j)', '%s > %j']
+      template: ['gt(%s, %j)', '%s > %j']
     },
     {
       key: 'lte',
-      template: ['$_.lte(%s, %j)', '%s <= %j']
+      template: ['lte(%s, %j)', '%s <= %j']
     },
     {
       key: 'gte',
-      template: ['$_.gte(%s, %j)', '%s >= %j']
+      template: ['gte(%s, %j)', '%s >= %j']
     }
   ],
   collection: [
     {
       key: 'in',
-      template: ['$_.rearg($_.includes, [1, 0])(%s, %j)', '%s in %j']
+      template: ['rearg($_.includes, [1, 0])(%s, %j)', '%s in %j']
     },
     {
       key: 'glob',
@@ -129,13 +129,16 @@ function generateFilters (nodes) {
   }
 
   const fbKeys = Object.keys(fieldBags)
-  const ss = random(1, fbKeys.length)
-  const sampleFieldBags = pick(fieldBags, sampleSize(fbKeys, ss))
-  const sampleFieldBagSubsets = mapValues(sampleFieldBags, (values) => {
-    const ss = random(1, 10)
+  const ss = random(1, Math.min(10, fbKeys.length))
+  const sampleFieldBagSubsets = chain(fieldBags)
+    .pick(sampleSize(fbKeys, ss))
+    .filter(negate(isEmpty))
+    .mapValues(values => {
+      const ss = random(1, Math.min(10, values.size))
 
-    return sampleSize(Array.from(values), ss)
-  })
+      return sampleSize(Array.from(values), ss)
+    })
+    .value()
 
   const filterArr = []
   for (const field in sampleFieldBagSubsets) {
