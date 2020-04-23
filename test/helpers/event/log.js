@@ -1,7 +1,7 @@
 'use strict'
 
 const {
-  isObject, findIndex, findLastIndex, range, cloneDeep, omit, partialRight, omitBy, isNil, differenceWith, isEqual,
+  isObject, findIndex, findLastIndex, range, cloneDeep, omitBy, isNil, differenceWith, isEqual,
   isEmpty
 } = require('lodash')
 const request = require('@arangodb/request')
@@ -16,14 +16,8 @@ const { getSortingClause, getReturnClause, getGroupingClause } = require('../../
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')
 const { generateFilters } = require('../filter')
 
-exports.testUngroupedEvents = function testUngroupedEvents (
-  pathParam,
-  allEvents,
-  expectedEvents,
-  logFn
-) {
-  const expectedEventsSansCommands = expectedEvents.map(partialRight(omit, 'command'))
-  expect(allEvents).to.deep.equal(expectedEventsSansCommands)
+exports.testUngroupedEvents = function testUngroupedEvents (pathParam, allEvents, expectedEvents, logFn) {
+  expect(allEvents).to.deep.equal(expectedEvents)
 
   if (allEvents.length) {
     const timeRange = getRandomSubRange(expectedEvents)
@@ -38,7 +32,6 @@ exports.testUngroupedEvents = function testUngroupedEvents (
     const groupSort = ['asc', 'desc']
     const groupSkip = [0, 1]
     const groupLimit = [0, 2]
-    const returnCommands = [false, true]
     const combos = cartesian({
       since,
       until,
@@ -49,23 +42,20 @@ exports.testUngroupedEvents = function testUngroupedEvents (
       countsOnly,
       groupSort,
       groupSkip,
-      groupLimit,
-      returnCommands
+      groupLimit
     })
 
     combos.forEach(combo => {
       let events = logFn(pathParam, combo)
       expect(events).to.be.an.instanceOf(Array)
 
-      const relevantExpectedEvents = combo.returnCommands ? expectedEvents : expectedEventsSansCommands
-
       const earliestTimeBoundIndex = combo.since
-        ? findLastIndex(relevantExpectedEvents, e => e.ctime >= combo.since)
-        : relevantExpectedEvents.length - 1
+        ? findLastIndex(expectedEvents, e => e.ctime >= combo.since)
+        : expectedEvents.length - 1
       const latestTimeBoundIndex =
-        combo.until && findIndex(relevantExpectedEvents, e => e.ctime <= combo.until)
+        combo.until && findIndex(expectedEvents, e => e.ctime <= combo.until)
 
-      const timeSlicedEvents = relevantExpectedEvents.slice(
+      const timeSlicedEvents = expectedEvents.slice(
         latestTimeBoundIndex,
         earliestTimeBoundIndex + 1
       )
@@ -141,7 +131,6 @@ exports.testGroupedEvents = function testGroupedEvents (scope, pathParam, logFn,
     const groupSort = ['asc', 'desc']
     const groupSkip = [0, 1]
     const groupLimit = [0, 2]
-    const returnCommands = [false, true]
     const combos = cartesian({
       since,
       until,
@@ -152,8 +141,7 @@ exports.testGroupedEvents = function testGroupedEvents (scope, pathParam, logFn,
       countsOnly,
       groupSort,
       groupSkip,
-      groupLimit,
-      returnCommands
+      groupLimit
     })
     combos.forEach(combo => {
       let eventGroups = logFn(pathParam, combo)
@@ -170,8 +158,7 @@ exports.testGroupedEvents = function testGroupedEvents (scope, pathParam, logFn,
         countsOnly: co,
         groupSort: gst,
         groupSkip: gskp,
-        groupLimit: glmt,
-        returnCommands: rc
+        groupLimit: glmt
       } = combo
       const queryParts = [getCollTypeInitializer()]
       queryParts.push(...cloneDeep(qp || initQueryParts(scope)))
@@ -179,10 +166,10 @@ exports.testGroupedEvents = function testGroupedEvents (scope, pathParam, logFn,
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
       timeBoundFilters.filters.forEach(filter => queryParts.push(filter))
 
-      queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co, rc))
+      queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co))
       queryParts.push(getSortingClause(st, gb, co))
       queryParts.push(getLimitClause(lmt, skp))
-      queryParts.push(getReturnClause(gb, co, gst, gskp, glmt, rc))
+      queryParts.push(getReturnClause(gb, co, gst, gskp, glmt))
 
       const query = aql.join(queryParts, '\n')
       const expectedEventGroups = db._query(query).toArray()
@@ -239,9 +226,9 @@ function compareEventGroups (eventGroups, expectedEventGroups, param, combo) {
   })
 }
 
-function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCommands) {
+function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly) {
   if (groupBy !== 'collection') {
-    return getGroupingClause(groupBy, countsOnly, returnCommands)
+    return getGroupingClause(groupBy, countsOnly)
   } else {
     const groupingPrefix =
       'collect collection = regex_split(v.meta.id, "/")[0]'
@@ -249,8 +236,6 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly, returnCo
     let groupingSuffix
     if (countsOnly) {
       groupingSuffix = 'with count into total'
-    } else if (returnCommands) {
-      groupingSuffix = 'into events = merge(v, {command: e.command})'
     } else {
       groupingSuffix = 'into events = v'
     }

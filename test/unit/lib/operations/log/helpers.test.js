@@ -87,13 +87,11 @@ describe('Log Helpers - getAggregationClause', () => {
 
   after(init.teardown)
 
-  it('should return a blank clause when no groupBy specified, irrespective of countsOnly and returnCommands', () => {
+  it('should return a blank clause when no groupBy specified, irrespective of countsOnly', () => {
     const groupBy = null
     const countsOnly = [false, true]
-    const returnCommands = [false, true]
-    const combos = cartesian({ countsOnly, returnCommands })
-    combos.forEach(combo => {
-      const groupingClause = getGroupingClause(groupBy, combo.countsOnly, combo.returnCommands)
+    countsOnly.forEach(co => {
+      const groupingClause = getGroupingClause(groupBy, co)
 
       expect(groupingClause).to.be.an.instanceOf(Object)
       expect(groupingClause).to.respondTo('toAQL')
@@ -101,13 +99,12 @@ describe('Log Helpers - getAggregationClause', () => {
     })
   })
 
-  it('should return a grouping clause when groupBy is specified, irrespective of countsOnly and returnCommands', () => {
+  it('should return a grouping clause when groupBy is specified, irrespective of countsOnly', () => {
     const groupBy = ['node', 'collection', 'event']
     const countsOnly = [false, true]
-    const returnCommands = [false, true]
-    const combos = cartesian({ groupBy, countsOnly, returnCommands })
+    const combos = cartesian({ groupBy, countsOnly })
     combos.forEach(combo => {
-      const groupingClause = getGroupingClause(combo.groupBy, combo.countsOnly, combo.returnCommands)
+      const groupingClause = getGroupingClause(combo.groupBy, combo.countsOnly)
 
       expect(groupingClause).to.be.an.instanceOf(Object)
       expect(groupingClause).to.respondTo('toAQL')
@@ -129,16 +126,14 @@ describe('Log Helpers - getReturnClause', () => {
     const groupSort = ['asc', 'desc']
     const groupSkip = [0, 1]
     const groupLimit = [0, 1]
-    const returnCommands = [false, true]
-    const combos = cartesian({ countsOnly, groupSort, groupSkip, groupLimit, returnCommands })
+    const combos = cartesian({ countsOnly, groupSort, groupSkip, groupLimit })
     combos.forEach(combo => {
       const returnClause = getReturnClause(
         groupBy,
         combo.countsOnly,
         combo.groupSort,
         combo.groupSkip,
-        combo.groupLimit,
-        combo.returnCommands
+        combo.groupLimit
       )
 
       expect(returnClause).to.be.an.instanceOf(Object)
@@ -155,16 +150,14 @@ describe('Log Helpers - getReturnClause', () => {
     const groupSort = ['asc', 'desc']
     const groupSkip = [0, 1]
     const groupLimit = [0, 1]
-    const returnCommands = [false, true]
-    const combos = cartesian({ groupBy, groupSort, groupSkip, groupLimit, returnCommands })
+    const combos = cartesian({ groupBy, groupSort, groupSkip, groupLimit })
     combos.forEach(combo => {
       const returnClause = getReturnClause(
         combo.groupBy,
         countsOnly,
         combo.groupSort,
         combo.groupSkip,
-        combo.groupLimit,
-        combo.returnCommands
+        combo.groupLimit
       )
 
       expect(returnClause).to.be.an.instanceOf(Object)
@@ -181,16 +174,14 @@ describe('Log Helpers - getReturnClause', () => {
       const groupSort = ['asc', 'desc']
       const groupSkip = [0, 1]
       const groupLimit = [0, 1]
-      const returnCommands = [false, true]
-      const combos = cartesian({ groupBy, groupSort, groupSkip, groupLimit, returnCommands })
+      const combos = cartesian({ groupBy, groupSort, groupSkip, groupLimit })
       combos.forEach(combo => {
         const returnClause = getReturnClause(
           combo.groupBy,
           countsOnly,
           combo.groupSort,
           combo.groupSkip,
-          combo.groupLimit,
-          combo.returnCommands
+          combo.groupLimit
         )
 
         expect(returnClause).to.be.an.instanceOf(Object)

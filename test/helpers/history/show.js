@@ -5,7 +5,7 @@ const request = require('@arangodb/request')
 const { baseUrl } = module.context
 const { expect } = require('chai')
 const { show: showHandler } = require('../../../lib/handlers/showHandlers')
-const log = require('../../../lib/operations/log')
+const diff = require('../../../lib/operations/diff')
 const { getRandomSubRange, cartesian } = require('../event')
 const jiff = require('jiff')
 const { generateFilters } = require('../filter')
@@ -249,19 +249,16 @@ function compareGroupedNodes (nodeGroups, expectedNodeGroups, param, combo) {
 }
 
 function buildNodesFromEventLog (path, timestamp) {
-  const events = log(path, { until: timestamp, groupBy: 'node', groupSort: 'asc', returnCommands: true })
-  const diffs = events.filter(item => item.events[item.events.length - 1].event !== 'deleted')
-    .map(item => item.events.map(event => event.command))
+  return diff(path, { until: timestamp, postFilter: 'last(events).event !== "deleted"' })
+    .map(item => {
+      let node = {}
 
-  return diffs.map(commands => {
-    let node = {}
+      for (let c of item.commands) {
+        node = jiff.patch(c, node, {})
+      }
 
-    for (let c of commands) {
-      node = jiff.patch(c, node, {})
-    }
-
-    return node
-  })
+      return node
+    })
 }
 
 exports.buildNodesFromEventLog = buildNodesFromEventLog

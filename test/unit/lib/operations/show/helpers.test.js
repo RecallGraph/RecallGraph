@@ -8,6 +8,7 @@ const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern, cartesian
 } = require('../../../../helpers/event')
 const log = require('../../../../../lib/operations/log')
+const diff = require('../../../../../lib/operations/diff')
 const jiff = require('jiff')
 const { db, query } = require('@arangodb')
 
@@ -60,26 +61,23 @@ describe('Show Helpers - patch', () => {
     const timestamps = init.getMilestones()
 
     for (const ts of timestamps) {
-      const eventLog = log(path, { until: ts, groupBy: 'node', groupSort: 'asc', returnCommands: true })
-      const expectedNodes = []
+      const expectedNodes = []; const nodeEvents = []
+      const diffs = diff(path, { until: ts })
 
-      for (const item of eventLog) {
+      for (const item of diffs) {
         let node = {}
-        for (let event of item.events) {
-          node = jiff.patch(event.command, node, {})
+        for (const command of item.commands) {
+          node = jiff.patch(command, node, {})
         }
-
         expectedNodes.push(node)
-      }
 
-      const nodeEvents = eventLog.map(item => {
         const lastEvent = item.events[item.events.length - 1]
-
-        return {
+        const nodeEvent = {
           eid: lastEvent._id,
           snid: lastEvent['last-snapshot']
         }
-      })
+        nodeEvents.push(nodeEvent)
+      }
 
       const paths = query`
         let nodeEvents = ${nodeEvents}
