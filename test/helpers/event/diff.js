@@ -3,10 +3,9 @@
 const { expect } = require('chai')
 const { getGroupingClauseForExpectedResultsQuery } = require('./log')
 const { getRandomSubRange, cartesian, initQueryParts } = require('.')
-const { generateFilters } = require('../filter')
 const { cloneDeep, omit } = require('lodash')
 const { aql, db } = require('@arangodb')
-const { getLimitClause, getTimeBoundFilters, filter } = require('../../../lib/operations/helpers')
+const { getLimitClause, getTimeBoundFilters } = require('../../../lib/operations/helpers')
 const { getSortingClause, getReturnClause } = require('../../../lib/operations/log/helpers')
 const jiff = require('jiff')
 
@@ -20,10 +19,7 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
     const sort = ['asc', 'desc']
     const skip = [0, 1]
     const limit = [0, 2]
-    const groupSkip = [0, 1]
-    const groupLimit = [0, 2]
     const reverse = [false, true]
-    const postFilter = [null, generateFilters(allEvents)]
 
     const combos = cartesian({
       since,
@@ -31,10 +27,7 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
       skip,
       limit,
       sort,
-      groupSkip,
-      groupLimit,
-      reverse,
-      postFilter
+      reverse
     })
     combos.forEach(combo => {
       const diffs = diffFn(pathParam, combo)
@@ -47,10 +40,7 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
         skip: skp,
         limit: lmt,
         sort: st,
-        groupSkip: gskp,
-        groupLimit: glmt,
-        reverse: rv,
-        postFilter: pf
+        reverse: rv
       } = combo
       const queryParts = cloneDeep(qp || initQueryParts(scope))
 
@@ -60,32 +50,25 @@ exports.testDiffs = function testDiffs (scope, pathParam, diffFn, logfn, qp = nu
       queryParts.push(getGroupingClauseForExpectedResultsQuery('node', false, true))
       queryParts.push(getSortingClause(st, 'node', false))
       queryParts.push(getLimitClause(lmt, skp))
-      queryParts.push(getReturnClause('node', false, rv ? 'desc' : 'asc', gskp, glmt, rv))
+      queryParts.push(getReturnClause('node', false, rv ? 'desc' : 'asc', rv))
 
       const query = aql.join(queryParts, '\n')
       const expectedEventGroups = db._query(query).toArray()
-      const unfilteredDiffs = expectedEventGroups.map(item => ({
+      const expectedDiffs = expectedEventGroups.map(item => ({
         node: item.node,
         commands: item.events.map(event => rv ? jiff.inverse(event.command).map(
           step => omit(step, 'context')) : event.command)
       }))
 
-      let filteredDiffs
-      if (pf) {
-        filteredDiffs = filter(unfilteredDiffs, pf)
-      } else {
-        filteredDiffs = unfilteredDiffs
-      }
-
-      expect(diffs.length).to.equal(filteredDiffs.length)
-      expect(diffs[0]).to.deep.equal(filteredDiffs[0])
+      expect(diffs.length).to.equal(expectedDiffs.length)
+      expect(diffs[0]).to.deep.equal(expectedDiffs[0])
       diffs.forEach((diff, idx) => {
         expect(diff).to.be.an.instanceOf(Object)
-        expect(diff.node).to.equal(filteredDiffs[idx].node)
+        expect(diff.node).to.equal(expectedDiffs[idx].node)
         expect(diff.commands).to.be.an.instanceOf(Array)
         diff.commands.forEach((command, idx2) => {
           expect(command).to.be.an.instanceOf(Array)
-          expect(command.length).to.equal(filteredDiffs[idx].commands[idx2].length)
+          expect(command.length).to.equal(expectedDiffs[idx].commands[idx2].length)
         })
       })
     })

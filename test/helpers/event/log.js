@@ -1,8 +1,7 @@
 'use strict'
 
 const {
-  isObject, findIndex, findLastIndex, range, cloneDeep, omitBy, isNil, differenceWith, isEqual,
-  isEmpty
+  isObject, findIndex, findLastIndex, range, cloneDeep, omitBy, isNil, differenceWith, isEqual, isEmpty
 } = require('lodash')
 const request = require('@arangodb/request')
 const { baseUrl } = module.context
