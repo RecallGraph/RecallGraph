@@ -7,7 +7,7 @@ const {
 } = require('../../../../helpers/history/show')
 const {
   getRandomGraphPathPattern, getRandomCollNames, getNodeBraceSampleIds, getRandomCollectionPathPattern
-} = require('../../../../helpers/event')
+} = require('../../../../helpers/document')
 
 const log = require('../../../../../lib/operations/log')
 
