@@ -1,21 +1,19 @@
 'use strict'
 
 const { expect } = require('chai')
-const { db, query, aql } = require('@arangodb')
+const { db, aql } = require('@arangodb')
 const log = require('../../../../../lib/operations/log')
 const init = require('../../../../helpers/util/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const { concat } = require('lodash')
 const {
-  testUngroupedEvents,
-  testGroupedEvents
+  testUngroupedEvents, testGroupedEvents, getUngroupedExpectedEvents, getGroupedExpectedEventsQueryParts
 } = require('../../../../helpers/event/log')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
 } = require('../../../../helpers/document')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
-const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 describe('Log - DB Scope', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -28,12 +26,7 @@ describe('Log - DB Scope', () => {
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
-    const expectedEvents = query`
-        for e in ${eventColl}
-          filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          sort e.ctime desc
-        return e
-      `.toArray()
+    const expectedEvents = getUngroupedExpectedEvents('db')
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
   })
@@ -62,13 +55,7 @@ describe('Log - Graph Scope', () => {
       sampleDataRefs.vertexCollections,
       sampleDataRefs.edgeCollections
     )
-    const expectedEvents = query`
-        for e in ${eventColl}
-          filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter e.collection in ${sampleGraphCollNames}
-          sort e.ctime desc
-        return e
-      `.toArray()
+    const expectedEvents = getUngroupedExpectedEvents('graph', { collNames: sampleGraphCollNames })
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
   })
@@ -83,33 +70,19 @@ describe('Log - Collection Scope', () => {
   after(init.teardown)
 
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
-    const { path, collNames } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
     const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
-    const expectedEvents = query`
-        for e in ${eventColl}
-          filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter e.collection in ${collNames}
-          sort e.ctime desc
-        return e
-      `.toArray()
+    const expectedEvents = getUngroupedExpectedEvents('collection', { pattern })
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
   })
 
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
-    const { path, collNames } = getRandomCollectionPathPattern(true)
-    const queryParts = [
-      aql`
-          for v in ${eventColl}
-          filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
-        `
-    ]
+    const { path, pattern } = getRandomCollectionPathPattern(true)
+    const queryParts = getGroupedExpectedEventsQueryParts('collection', { pattern })
 
     testGroupedEvents('collection', path, log, queryParts)
   })
@@ -121,33 +94,19 @@ describe('Log - Node Glob Scope', () => {
   after(init.teardown)
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
-    const { path, collNames } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
-    const expectedEvents = query`
-        for e in ${eventColl}
-          filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter e.collection in ${collNames}
-          sort e.ctime desc
-        return e
-      `.toArray()
+    const expectedEvents = getUngroupedExpectedEvents('node-glob', { pattern })
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const { path, collNames } = getRandomNodeGlobPathPattern(true)
-    const queryParts = [
-      aql`
-          for v in ${eventColl}
-          filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
-        `
-    ]
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
+    const queryParts = getGroupedExpectedEventsQueryParts('node-glob', { pattern })
 
     testGroupedEvents('nodeGlob', path, log, queryParts)
   })
@@ -164,13 +123,7 @@ describe('Log - Node Brace Scope', () => {
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
-    const expectedEvents = query`
-        for e in ${eventColl}
-          filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter e.meta.id in ${nids}
-          sort e.ctime desc
-        return e
-      `.toArray()
+    const expectedEvents = getUngroupedExpectedEvents('node-brace', { nids })
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
   })
@@ -182,8 +135,6 @@ describe('Log - Node Brace Scope', () => {
           for v in ${eventColl}
           filter !v['is-origin-node']
           filter v.meta.id in ${nids}
-          for e in ${commandColl}
-          filter e._to == v._id
         `
     ]
 

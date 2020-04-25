@@ -29,12 +29,12 @@ describe('Diff Handlers - Path as query param', () => {
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
-    const { path, collNames } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
+          filter v.collection in ${pattern}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -44,14 +44,12 @@ describe('Diff Handlers - Path as query param', () => {
   })
 
   it('should return diffs in Node Glob scope for a node-glob path', () => {
-    const { path, collNames } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
+          filter v.collection in ${pattern}
         `
     ]
 
@@ -65,8 +63,6 @@ describe('Diff Handlers - Path as query param', () => {
           for v in ${eventColl}
           filter !v['is-origin-node']
           filter v.meta.id in ${nids}
-          for e in ${commandColl}
-          filter e._to == v._id
         `
     ]
 
@@ -92,12 +88,12 @@ describe('Diff Handlers - Path as body param', () => {
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
-    const { path, collNames } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
+          filter v.collection in ${pattern}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -107,14 +103,12 @@ describe('Diff Handlers - Path as body param', () => {
   })
 
   it('should return diffs in Node Glob scope for a node-glob path', () => {
-    const { path, collNames } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
+          filter v.collection in ${pattern}
         `
     ]
 
@@ -128,8 +122,6 @@ describe('Diff Handlers - Path as body param', () => {
           for v in ${eventColl}
           filter !v['is-origin-node']
           filter v.meta.id in ${nids}
-          for e in ${commandColl}
-          filter e._to == v._id
         `
     ]
 

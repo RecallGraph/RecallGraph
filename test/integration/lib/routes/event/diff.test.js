@@ -9,7 +9,6 @@ const {
 } = require('../../../../helpers/document')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
-const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 describe('Routes - diff (Path as query param)', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -29,14 +28,12 @@ describe('Routes - diff (Path as query param)', () => {
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
-    const { path, collNames } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
+          filter v.collection in ${pattern}
         `
     ]
 
@@ -44,14 +41,12 @@ describe('Routes - diff (Path as query param)', () => {
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const { path, collNames } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
         for v in ${eventColl}
         filter !v['is-origin-node']
-        filter v.collection in ${collNames}
-        for e in ${commandColl}
-        filter e._to == v._id
+        filter v.collection in ${pattern}
       `
     ]
 
@@ -65,8 +60,6 @@ describe('Routes - diff (Path as query param)', () => {
           for v in ${eventColl}
           filter !v['is-origin-node']
           filter v.meta.id in ${nids}
-          for e in ${commandColl}
-          filter e._to == v._id
         `
     ]
 
@@ -92,14 +85,12 @@ describe('Routes - diff (Path as body param)', () => {
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
-    const { path, collNames } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
+          filter v.collection in ${pattern}
         `
     ]
 
@@ -107,14 +98,12 @@ describe('Routes - diff (Path as body param)', () => {
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const { path, collNames } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
         for v in ${eventColl}
         filter !v['is-origin-node']
-        filter v.collection in ${collNames}
-        for e in ${commandColl}
-        filter e._to == v._id
+        filter v.collection in ${pattern}
       `
     ]
 
@@ -128,8 +117,6 @@ describe('Routes - diff (Path as body param)', () => {
           for v in ${eventColl}
           filter !v['is-origin-node']
           filter v.meta.id in ${nids}
-          for e in ${commandColl}
-          filter e._to == v._id
         `
     ]
 

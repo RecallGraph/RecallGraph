@@ -1,14 +1,15 @@
 'use strict'
 
-const { random, chain, sampleSize, union } = require('lodash')
 const { db, query } = require('@arangodb')
+const minimatch = require('minimatch')
+const { random, chain, sampleSize } = require('lodash')
 const { getPrefixPattern, getRandomSubRange } = require('../util')
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('../util/init')
 const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 
-function getSampleDataCollectionPatterns (bracesOnly) {
+function getSampleDataCollectionPatterns () {
   const sampleDataRefsWrapper = chain(getSampleDataRefs())
   const sampleSize = random(1, sampleDataRefsWrapper.size())
   const collsWrapper = sampleDataRefsWrapper
@@ -16,22 +17,13 @@ function getSampleDataCollectionPatterns (bracesOnly) {
     .values()
     .flatten()
     .sampleSize(sampleSize)
-  const collNames = []
-  let pathPattern
 
-  if (bracesOnly) {
-    pathPattern = collsWrapper.value()
-  } else {
-    pathPattern = collsWrapper.map(coll => {
-      collNames.push(coll)
-      const range = getRandomSubRange(coll)
+  return collsWrapper.map(coll => {
+    const range = getRandomSubRange(coll)
 
-      return `*${coll.substring(range[0], range[1])}*`
-    })
-      .value()
-  }
-
-  return { pathPattern, collNames }
+    return `*${coll.substring(range[0], range[1])}*`
+  })
+    .value()
 }
 
 function getTestDataCollectionPatterns () {
@@ -41,10 +33,7 @@ function getTestDataCollectionPatterns () {
     .value()
     .join(',')
 
-  return {
-    pathPattern: `${module.context.collectionPrefix}{test_does_not_exist,${testDataCollectionPatterns}}`,
-    collNames: Object.values(TEST_DATA_COLLECTIONS).concat([`${module.context.collectionPrefix}test_does_not_exist`])
-  }
+  return `${module.context.collectionPrefix}{test_does_not_exist,${testDataCollectionPatterns}}`
 }
 
 function getRandomNidGroups () {
@@ -74,23 +63,23 @@ function getRandomGraphPathPattern () {
   return `/g/{${graphPatterns},${module.context.collectionPrefix}test_does_not_exist}`
 }
 
-function getRandomCollectionPathPattern (returnCollNames = false, bracesOnly = false) {
-  const { pathPattern: sampleCollectionPattern, collNames: scn } = getSampleDataCollectionPatterns(bracesOnly)
-  const { pathPattern: testDataCollectionPattern, collNames: tcn } = getTestDataCollectionPatterns()
+function getRandomCollectionPathPattern (returnPattern = false) {
+  const sampleCollectionPattern = getSampleDataCollectionPatterns()
+  const testDataCollectionPattern = getTestDataCollectionPatterns()
 
   const path = `/c/{${sampleCollectionPattern},${testDataCollectionPattern}}`
 
-  if (returnCollNames) {
+  if (returnPattern) {
     return {
       path,
-      collNames: union(scn, tcn)
+      pattern: minimatch.makeRe(path.substring(3)).source
     }
   } else {
     return path
   }
 }
 
-function getRandomNodeGlobPathPattern (returnCollNames = false) {
+function getRandomNodeGlobPathPattern (returnPattern = false) {
   const nidGroups = getRandomNidGroups()
   const patterns = nidGroups.map(group => {
     const ss = random(1, group.keys.length)
@@ -101,10 +90,11 @@ function getRandomNodeGlobPathPattern (returnCollNames = false) {
   })
   const path = patterns.length > 1 ? `/ng/{${patterns.join(',')}}` : `/ng/${patterns[0]}`
 
-  if (returnCollNames) {
-    const collNames = nidGroups.map(group => group.coll)
-
-    return { path, collNames }
+  if (returnPattern) {
+    return {
+      path,
+      pattern: minimatch.makeRe(path.substring(4)).source
+    }
   } else {
     return path
   }

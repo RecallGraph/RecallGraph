@@ -9,10 +9,13 @@ const { log: logHandler } = require('../../../lib/handlers/logHandlers')
 const {
   getLimitClause, getTimeBoundFilters, getCollTypeInitializer, filter
 } = require('../../../lib/operations/helpers')
-const { aql, db } = require('@arangodb')
+const { aql, db, query } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { initQueryParts } = require('.')
 const { getRandomSubRange, cartesian, generateFilters } = require('../util')
+const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+
+const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 
 function compareEvents (events, expectedEvents, param, combo) {
   if (events.length !== expectedEvents.length) {
@@ -247,6 +250,98 @@ function testGroupedEvents (scope, pathParam, logFn, qp = null) {
   }
 }
 
+function getUngroupedExpectedEvents (scope, { collNames, pattern, nids } = {}) {
+  let cursor
+  switch (scope.toLowerCase()) {
+    case 'db':
+      cursor = query`
+        for e in ${eventColl}
+        filter !(e['is-origin-node'] || e['is-super-origin-node'])
+        sort e.ctime desc
+        
+        return e
+      `
+      break
+
+    case 'graph':
+      cursor = query`
+        for e in ${eventColl}
+        filter !e['is-origin-node']
+        filter e.collection in ${collNames}
+        sort e.ctime desc
+        
+        return e
+      `
+      break
+
+    case 'collection':
+      cursor = query`
+        for e in ${eventColl}
+        filter !e['is-origin-node']
+        filter e.collection =~ ${pattern}
+        sort e.ctime desc
+        
+        return e
+      `
+      break
+
+    case 'node-glob':
+      cursor = query`
+        for e in ${eventColl}
+        filter e.meta.id =~ ${pattern}
+        sort e.ctime desc
+        
+        return e
+      `
+      break
+
+    case 'node-brace':
+      cursor = query`
+        for e in ${eventColl}
+        filter e.meta.id in ${nids}
+        sort e.ctime desc
+        
+        return e
+      `
+  }
+
+  return cursor.toArray()
+}
+
+function getGroupedExpectedEventsQueryParts (scope, { pattern, nids } = {}) {
+  const queryParts = []
+  switch (scope.toLowerCase()) {
+    case 'collection':
+      queryParts.push(
+        aql`
+          for v in ${eventColl}
+          filter !v['is-origin-node']
+          filter v.collection =~ ${pattern}
+        `
+      )
+      break
+
+    case 'node-glob':
+      queryParts.push(
+        aql`
+          for v in ${eventColl}
+          filter v.meta.id =~ ${pattern}
+        `
+      )
+      break
+
+    case 'node-brace':
+      queryParts.push(
+        aql`
+          for v in ${eventColl}
+          filter v.meta.id in ${nids}
+        `
+      )
+  }
+
+  return queryParts
+}
+
 function logGetWrapper (path, combo) {
   const reqParams = {
     json: true,
@@ -294,6 +389,8 @@ function logHandlerBodyWrapper (path, combo) {
 module.exports = {
   testUngroupedEvents,
   testGroupedEvents,
+  getUngroupedExpectedEvents,
+  getGroupedExpectedEventsQueryParts,
   logGetWrapper,
   logPostWrapper,
   logHandlerQueryWrapper,

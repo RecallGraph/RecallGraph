@@ -10,7 +10,6 @@ const {
 } = require('../../../../helpers/document')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
-const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 
 describe('Diff', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -23,14 +22,12 @@ describe('Diff', () => {
     () => testDiffs('graph', getRandomGraphPathPattern(), diff))
 
   it('should return diffs in Collection scope for a collection path', () => {
-    const { path, collNames } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
+          filter v.collection in ${pattern}
         `
     ]
 
@@ -38,14 +35,12 @@ describe('Diff', () => {
   })
 
   it('should return diffs in Node Glob scope for a node-glob path', () => {
-    const { path, collNames } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
           filter !v['is-origin-node']
-          filter v.collection in ${collNames}
-          for e in ${commandColl}
-          filter e._to == v._id
+          filter v.collection in ${pattern}
         `
     ]
 
@@ -59,8 +54,6 @@ describe('Diff', () => {
           for v in ${eventColl}
           filter !v['is-origin-node']
           filter v.meta.id in ${nids}
-          for e in ${commandColl}
-          filter e._to == v._id
         `
     ]
 
