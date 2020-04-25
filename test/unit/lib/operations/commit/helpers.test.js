@@ -2,7 +2,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const {
   getLatestEvent,
   getTransientOrCreateLatestSnapshot,
@@ -337,7 +337,7 @@ describe('Commit Helpers - getTransientEventOriginFor', () => {
       _id: `${SERVICE_COLLECTIONS.events}/${key}`,
       _key: key,
       'is-origin-node': true,
-      'origin-for': coll.name(),
+      'collection': coll.name(),
       'hops-from-last-snapshot': 1,
       'hops-from-origin': 0
     }

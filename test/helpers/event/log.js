@@ -4,7 +4,6 @@ const {
   isObject, findIndex, findLastIndex, range, cloneDeep, omitBy, isNil, differenceWith, isEqual, isEmpty
 } = require('lodash')
 const request = require('@arangodb/request')
-const { baseUrl } = module.context
 const { expect } = require('chai')
 const { log: logHandler } = require('../../../lib/handlers/logHandlers')
 const {
@@ -12,10 +11,90 @@ const {
 } = require('../../../lib/operations/helpers')
 const { aql, db } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
-const { getRandomSubRange, cartesian, initQueryParts } = require('.')
-const { generateFilters } = require('../filter')
+const { initQueryParts } = require('.')
+const { getRandomSubRange, cartesian, generateFilters } = require('../util')
 
-exports.testUngroupedEvents = function testUngroupedEvents (pathParam, allEvents, expectedEvents, logFn) {
+function compareEvents (events, expectedEvents, param, combo) {
+  if (events.length !== expectedEvents.length) {
+    console.debug({
+      actual: differenceWith(events, expectedEvents, isEqual),
+      expected: differenceWith(expectedEvents, events, isEqual)
+    })
+  }
+
+  expect(events.length, param).to.equal(expectedEvents.length)
+  expect(events[0], param).to.deep.equal(expectedEvents[0])
+
+  if (!combo.countsOnly) {
+    events.forEach((event, idx) => {
+      expect(event, param).to.be.an.instanceOf(Object)
+      expect(event._id, param).to.equal(expectedEvents[idx]._id)
+    })
+  }
+}
+
+function compareEventGroups (eventGroups, expectedEventGroups, param, combo) {
+  if (eventGroups.length !== expectedEventGroups.length) {
+    console.debug({
+      actual: differenceWith(eventGroups, expectedEventGroups, isEqual),
+      expected: differenceWith(expectedEventGroups, eventGroups, isEqual)
+    })
+  }
+
+  const {
+    groupBy: gb,
+    countsOnly: co
+  } = combo
+
+  expect(eventGroups.length, param).to.equal(expectedEventGroups.length)
+
+  const aggrField = co ? 'total' : 'events'
+  eventGroups.forEach((eventGroup, idx1) => {
+    expect(eventGroup, param).to.be.an.instanceOf(Object)
+    expect(eventGroup[gb], param).to.equal(expectedEventGroups[idx1][gb])
+
+    expect(eventGroup, param).to.have.property(aggrField)
+    if (co) {
+      expect(eventGroup[aggrField], param).to.equal(expectedEventGroups[idx1][aggrField])
+    } else {
+      expect(eventGroup[aggrField], param).to.be.an.instanceOf(Array)
+      expect(eventGroup[aggrField].length, param).to.equal(expectedEventGroups[idx1][aggrField].length)
+
+      if (eventGroup[aggrField].length > 0) {
+        expect(eventGroup[aggrField][0], param).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
+        eventGroup[aggrField].forEach((event, idx2) => {
+          expect(event, param).to.be.an.instanceOf(Object)
+          expect(event._id, param).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
+        })
+      }
+    }
+  })
+}
+
+function logRequestWrapper (reqParams, combo, method = 'get') {
+  if (isObject(combo)) {
+    Object.assign(reqParams.qs, omitBy(combo, isNil))
+  }
+
+  const response = request[method](`${module.context.baseUrl}/event/log`, reqParams)
+
+  const params = JSON.stringify({ reqParams, response: response.body })
+  expect(response, params).to.be.an.instanceOf(Object)
+  expect(response.statusCode, params).to.equal(200)
+
+  return JSON.parse(response.body)
+}
+
+function logHandlerWrapper (req, combo) {
+  if (isObject(combo)) {
+    Object.assign(req.queryParams, omitBy(combo, isNil))
+  }
+
+  return logHandler(req)
+}
+
+// Public
+function testUngroupedEvents (pathParam, allEvents, expectedEvents, logFn) {
   expect(allEvents).to.deep.equal(expectedEvents)
 
   if (allEvents.length) {
@@ -96,26 +175,7 @@ exports.testUngroupedEvents = function testUngroupedEvents (pathParam, allEvents
   }
 }
 
-function compareEvents (events, expectedEvents, param, combo) {
-  if (events.length !== expectedEvents.length) {
-    console.debug({
-      actual: differenceWith(events, expectedEvents, isEqual),
-      expected: differenceWith(expectedEvents, events, isEqual)
-    })
-  }
-
-  expect(events.length, param).to.equal(expectedEvents.length)
-  expect(events[0], param).to.deep.equal(expectedEvents[0])
-
-  if (!combo.countsOnly) {
-    events.forEach((event, idx) => {
-      expect(event, param).to.be.an.instanceOf(Object)
-      expect(event._id, param).to.equal(expectedEvents[idx]._id)
-    })
-  }
-}
-
-exports.testGroupedEvents = function testGroupedEvents (scope, pathParam, logFn, qp = null) {
+function testGroupedEvents (scope, pathParam, logFn, qp = null) {
   const allEvents = logFn(pathParam) // Ungrouped events in desc order by ctime.
 
   if (allEvents.length) {
@@ -187,50 +247,12 @@ exports.testGroupedEvents = function testGroupedEvents (scope, pathParam, logFn,
   }
 }
 
-function compareEventGroups (eventGroups, expectedEventGroups, param, combo) {
-  if (eventGroups.length !== expectedEventGroups.length) {
-    console.debug({
-      actual: differenceWith(eventGroups, expectedEventGroups, isEqual),
-      expected: differenceWith(expectedEventGroups, eventGroups, isEqual)
-    })
-  }
-
-  const {
-    groupBy: gb,
-    countsOnly: co
-  } = combo
-
-  expect(eventGroups.length, param).to.equal(expectedEventGroups.length)
-
-  const aggrField = co ? 'total' : 'events'
-  eventGroups.forEach((eventGroup, idx1) => {
-    expect(eventGroup, param).to.be.an.instanceOf(Object)
-    expect(eventGroup[gb], param).to.equal(expectedEventGroups[idx1][gb])
-
-    expect(eventGroup, param).to.have.property(aggrField)
-    if (co) {
-      expect(eventGroup[aggrField], param).to.equal(expectedEventGroups[idx1][aggrField])
-    } else {
-      expect(eventGroup[aggrField], param).to.be.an.instanceOf(Array)
-      expect(eventGroup[aggrField].length, param).to.equal(expectedEventGroups[idx1][aggrField].length)
-
-      if (eventGroup[aggrField].length > 0) {
-        expect(eventGroup[aggrField][0], param).to.deep.equal(expectedEventGroups[idx1][aggrField][0])
-        eventGroup[aggrField].forEach((event, idx2) => {
-          expect(event, param).to.be.an.instanceOf(Object)
-          expect(event._id, param).to.equal(expectedEventGroups[idx1][aggrField][idx2]._id)
-        })
-      }
-    }
-  })
-}
-
 function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly) {
   if (groupBy !== 'collection') {
     return getGroupingClause(groupBy, countsOnly)
   } else {
     const groupingPrefix =
-      'collect collection = regex_split(v.meta.id, "/")[0]'
+      'collect collection = parse_identifier(v.meta.id).collection'
 
     let groupingSuffix
     if (countsOnly) {
@@ -243,23 +265,7 @@ function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly) {
   }
 }
 
-exports.getGroupingClauseForExpectedResultsQuery = getGroupingClauseForExpectedResultsQuery
-
-function logRequestWrapper (reqParams, combo, method = 'get') {
-  if (isObject(combo)) {
-    Object.assign(reqParams.qs, omitBy(combo, isNil))
-  }
-
-  const response = request[method](`${baseUrl}/event/log`, reqParams)
-
-  const params = JSON.stringify({ reqParams, response: response.body })
-  expect(response, params).to.be.an.instanceOf(Object)
-  expect(response.statusCode, params).to.equal(200)
-
-  return JSON.parse(response.body)
-}
-
-exports.logGetWrapper = function (path, combo) {
+function logGetWrapper (path, combo) {
   const reqParams = {
     json: true,
     qs: {
@@ -270,7 +276,7 @@ exports.logGetWrapper = function (path, combo) {
   return logRequestWrapper(reqParams, combo)
 }
 
-exports.logPostWrapper = function logPostWrapper (path, combo) {
+function logPostWrapper (path, combo) {
   const reqParams = {
     json: true,
     qs: {},
@@ -282,15 +288,7 @@ exports.logPostWrapper = function logPostWrapper (path, combo) {
   return logRequestWrapper(reqParams, combo, 'post')
 }
 
-function logHandlerWrapper (req, combo) {
-  if (isObject(combo)) {
-    Object.assign(req.queryParams, omitBy(combo, isNil))
-  }
-
-  return logHandler(req)
-}
-
-exports.logHandlerQueryWrapper = function logHandlerQueryWrapper (path, combo) {
+function logHandlerQueryWrapper (path, combo) {
   const req = {
     queryParams: {
       path
@@ -300,7 +298,7 @@ exports.logHandlerQueryWrapper = function logHandlerQueryWrapper (path, combo) {
   return logHandlerWrapper(req, combo)
 }
 
-exports.logHandlerBodyWrapper = function logHandlerBodyWrapper (path, combo) {
+function logHandlerBodyWrapper (path, combo) {
   const req = {
     queryParams: {},
     body: {
@@ -309,4 +307,14 @@ exports.logHandlerBodyWrapper = function logHandlerBodyWrapper (path, combo) {
   }
 
   return logHandlerWrapper(req, combo)
+}
+
+module.exports = {
+  testUngroupedEvents,
+  testGroupedEvents,
+  getGroupingClauseForExpectedResultsQuery,
+  logGetWrapper,
+  logPostWrapper,
+  logHandlerQueryWrapper,
+  logHandlerBodyWrapper
 }

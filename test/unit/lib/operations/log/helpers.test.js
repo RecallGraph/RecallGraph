@@ -2,9 +2,9 @@
 'use strict'
 
 const { expect } = require('chai')
-const { getSortingClause, getGroupingClause, getReturnClause } = require('../../../../../lib/operations/log/helpers')
-const init = require('../../../../helpers/init')
 const { cartesian } = require('../../../../helpers/event')
+const { getSortingClause, getGroupingClause, getReturnClause } = require('../../../../../lib/operations/log/helpers')
+const init = require('../../../../helpers/util/init')
 
 describe('Log Helpers - getSortingClause', () => {
   before(init.setup)

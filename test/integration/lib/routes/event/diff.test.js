@@ -1,23 +1,12 @@
 'use strict'
 
-const { expect } = require('chai')
-const init = require('../../../../helpers/init')
-
-const request = require('@arangodb/request')
-const { baseUrl } = module.context
-const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-
-const { isObject, defaults, omitBy, isNil } = require('lodash')
-const { logGetWrapper, logPostWrapper } = require('../../../../helpers/event/log')
-const {
-  getOriginKeys,
-  getRandomGraphPathPattern,
-  getSampleTestCollNames,
-  getNodeBraceSampleIds
-} = require('../../../../helpers/event')
-const { testDiffs } = require('../../../../helpers/event/diff')
-
 const { db, aql } = require('@arangodb')
+const init = require('../../../../helpers/util/init')
+const { testDiffs, diffGetWrapper, diffPostWrapper } = require('../../../../helpers/event/diff')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
+const {
+  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
+} = require('../../../../helpers/document')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
@@ -28,90 +17,60 @@ describe('Routes - diff (Path as query param)', () => {
   after(init.teardown)
 
   it('should return diffs in DB scope for the root path', () => {
-    const reqParams = {
-      json: true,
-      qs: {
-        path: '/'
-      }
-    }
+    const path = '/'
 
-    testDiffs('database', reqParams, diffWrapper, logGetWrapper)
+    testDiffs('database', path, diffGetWrapper)
   })
 
   it('should return diffs in Graph scope for a graph path', () => {
-    const reqParams = {
-      json: true,
-      qs: {
-        path: getRandomGraphPathPattern()
-      }
-    }
+    const path = getRandomGraphPathPattern()
 
-    testDiffs('graph', reqParams, diffWrapper, logGetWrapper)
+    testDiffs('graph', path, diffGetWrapper)
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/c/{${sampleTestCollNames}}`
-              : `/c/${sampleTestCollNames}`
-    const reqParams = {
-      json: true,
-      qs: { path }
-    }
+    const { path, collNames } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
-          filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
+          filter !v['is-origin-node']
+          filter v.collection in ${collNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
     ]
 
-    testDiffs('collection', reqParams, diffWrapper, logGetWrapper, queryParts)
+    testDiffs('collection', path, diffGetWrapper, queryParts)
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/ng/{${sampleTestCollNames}}/*`
-              : `/ng/${sampleTestCollNames}/*`
-    const reqParams = {
-      json: true,
-      qs: { path }
-    }
+    const { path, collNames } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
         for v in ${eventColl}
-        filter v._key not in ${getOriginKeys()}
-        filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
+        filter !v['is-origin-node']
+        filter v.collection in ${collNames}
         for e in ${commandColl}
         filter e._to == v._id
       `
     ]
 
-    testDiffs('nodeGlob', reqParams, diffWrapper, logGetWrapper, queryParts)
+    testDiffs('nodeGlob', path, diffGetWrapper, queryParts)
   })
 
   it('should return grouped events in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds(100)
-    const reqParams = {
-      json: true,
-      qs: { path }
-    }
+    const { path, nids } = getRandomNodeBracePathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
-          filter v._key not in ${getOriginKeys()}
-          filter v.meta.id in ${sampleIds}
+          filter !v['is-origin-node']
+          filter v.meta.id in ${nids}
           for e in ${commandColl}
           filter e._to == v._id
         `
     ]
 
-    testDiffs('nodeBrace', reqParams, diffWrapper, logGetWrapper, queryParts)
+    testDiffs('nodeBrace', path, diffGetWrapper, queryParts)
   })
 })
 
@@ -121,108 +80,59 @@ describe('Routes - diff (Path as body param)', () => {
   after(init.teardown)
 
   it('should return diffs in DB scope for the root path', () => {
-    const reqParams = {
-      json: true,
-      qs: {
-        path: '/'
-      }
-    }
+    const path = '/'
 
-    testDiffs('database', reqParams, diffWrapperPost, logPostWrapper)
+    testDiffs('database', path, diffPostWrapper)
   })
 
   it('should return diffs in Graph scope for a graph path', () => {
-    const reqParams = {
-      json: true,
-      qs: {
-        path: getRandomGraphPathPattern()
-      }
-    }
+    const path = getRandomGraphPathPattern()
 
-    testDiffs('graph', reqParams, diffWrapperPost, logPostWrapper)
+    testDiffs('graph', path, diffPostWrapper)
   })
 
   it('should return diffs in Collection scope for a collection path', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/c/{${sampleTestCollNames}}`
-              : `/c/${sampleTestCollNames}`
-    const reqParams = {
-      json: true,
-      qs: { path }
-    }
+    const { path, collNames } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
-          filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
+          filter !v['is-origin-node']
+          filter v.collection in ${collNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
     ]
 
-    testDiffs('collection', reqParams, diffWrapperPost, logPostWrapper, queryParts)
+    testDiffs('collection', path, diffPostWrapper, queryParts)
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/ng/{${sampleTestCollNames}}/*`
-              : `/ng/${sampleTestCollNames}/*`
-    const reqParams = {
-      json: true,
-      qs: { path }
-    }
+    const { path, collNames } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
         for v in ${eventColl}
-        filter v._key not in ${getOriginKeys()}
-        filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
+        filter !v['is-origin-node']
+        filter v.collection in ${collNames}
         for e in ${commandColl}
         filter e._to == v._id
       `
     ]
 
-    testDiffs('nodeGlob', reqParams, diffWrapperPost, logPostWrapper, queryParts)
+    testDiffs('nodeGlob', path, diffPostWrapper, queryParts)
   })
 
   it('should return grouped events in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds(100)
-    const reqParams = {
-      json: true,
-      qs: { path }
-    }
+    const { path, nids } = getRandomNodeBracePathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
-          filter v._key not in ${getOriginKeys()}
-          filter v.meta.id in ${sampleIds}
+          filter !v['is-origin-node']
+          filter v.meta.id in ${nids}
           for e in ${commandColl}
           filter e._to == v._id
         `
     ]
 
-    testDiffs('nodeBrace', reqParams, diffWrapperPost, logPostWrapper, queryParts)
+    testDiffs('nodeBrace', path, diffPostWrapper, queryParts)
   })
 })
-
-function diffWrapper (reqParams, combo, method = 'get') {
-  defaults(reqParams, { qs: {} })
-
-  if (isObject(combo)) {
-    Object.assign(reqParams.qs, omitBy(combo, isNil))
-  }
-
-  const response = request[method](`${baseUrl}/event/diff`, reqParams)
-
-  expect(response).to.be.an.instanceOf(Object)
-  expect(response.statusCode).to.equal(200)
-
-  return JSON.parse(response.body)
-}
-
-function diffWrapperPost (reqParams, combo) {
-  return diffWrapper(reqParams, combo, 'post')
-}

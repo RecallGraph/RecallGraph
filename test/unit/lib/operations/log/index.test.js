@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const { db, query, aql } = require('@arangodb')
 const log = require('../../../../../lib/operations/log')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const { concat } = require('lodash')
 const {
@@ -11,8 +11,8 @@ const {
   testGroupedEvents
 } = require('../../../../helpers/event/log')
 const {
-  getRandomGraphPathPattern, getSampleTestCollNames, getOriginKeys, getNodeBraceSampleIds
-} = require('../../../../helpers/event')
+  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
+} = require('../../../../helpers/document')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
@@ -30,7 +30,7 @@ describe('Log - DB Scope', () => {
 
     const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${getOriginKeys()}
+          filter !(e['is-origin-node'] || e['is-super-origin-node'])
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -66,8 +66,8 @@ describe('Log - Graph Scope', () => {
     )
     const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta.id, '/')[0] in ${sampleGraphCollNames}
+          filter !(e['is-origin-node'] || e['is-super-origin-node'])
+          filter parse_identifier(e.meta.id).collection in ${sampleGraphCollNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -87,19 +87,15 @@ describe('Log - Collection Scope', () => {
   after(init.teardown)
 
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/c/{${sampleTestCollNames}}`
-              : `/c/${sampleTestCollNames}`
+    const { path, collNames } = getRandomCollectionPathPattern(true)
     const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
     const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta.id, '/')[0] in ${sampleTestCollNames}
+          filter !(e['is-origin-node'] || e['is-super-origin-node'])
+          filter parse_identifier(e.meta.id).collection in ${collNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -110,16 +106,12 @@ describe('Log - Collection Scope', () => {
   })
 
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/c/{${sampleTestCollNames}}`
-              : `/c/${sampleTestCollNames}`
+    const { path, collNames } = getRandomCollectionPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
-          filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
+          filter !v['is-origin-node']
+          filter v.collection in ${collNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -135,19 +127,15 @@ describe('Log - Node Glob Scope', () => {
   after(init.teardown)
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/ng/{${sampleTestCollNames}}/*`
-              : `/ng/${sampleTestCollNames}/*`
+    const { path, collNames } = getRandomNodeGlobPathPattern(true)
     const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
     const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${getOriginKeys()}
-          filter regex_split(e.meta.id, '/')[0] in ${sampleTestCollNames}
+          filter !(e['is-origin-node'] || e['is-super-origin-node'])
+          filter parse_identifier(e.meta.id).collection in ${collNames}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -158,16 +146,12 @@ describe('Log - Node Glob Scope', () => {
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-            sampleTestCollNames.length > 1
-              ? `/ng/{${sampleTestCollNames}}/*`
-              : `/ng/${sampleTestCollNames}/*`
+    const { path, collNames } = getRandomNodeGlobPathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
-          filter v._key not in ${getOriginKeys()}
-          filter regex_split(v.meta.id, '/')[0] in ${sampleTestCollNames}
+          filter !v['is-origin-node']
+          filter v.collection in ${collNames}
           for e in ${commandColl}
           filter e._to == v._id
         `
@@ -183,15 +167,15 @@ describe('Log - Node Brace Scope', () => {
   after(init.teardown)
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when no groupBy is specified', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds()
+    const { path, nids } = getRandomNodeBracePathPattern(true)
     const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
 
     const expectedEvents = query`
         for e in ${eventColl}
-          filter e._key not in ${getOriginKeys()}
-          filter e.meta.id in ${sampleIds}
+          filter !(e['is-origin-node'] || e['is-super-origin-node'])
+          filter e.meta.id in ${nids}
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
@@ -202,12 +186,12 @@ describe('Log - Node Brace Scope', () => {
   })
 
   it('should return grouped events in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path, sampleIds } = getNodeBraceSampleIds()
+    const { path, nids } = getRandomNodeBracePathPattern(true)
     const queryParts = [
       aql`
           for v in ${eventColl}
-          filter v._key not in ${getOriginKeys()}
-          filter v.meta.id in ${sampleIds}
+          filter !v['is-origin-node']
+          filter v.meta.id in ${nids}
           for e in ${commandColl}
           filter e._to == v._id
         `

@@ -1,13 +1,13 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../helpers/init')
+const init = require('../../../helpers/util/init')
 const {
   testGroupedNodes, testUngroupedNodes, buildNodesFromEventLog, showHandlerQueryWrapper, showHandlerBodyWrapper
 } = require('../../../helpers/history/show')
 const {
-  getRandomGraphPathPattern, getRandomCollectionPathPattern, getSampleTestCollNames, getNodeBraceSampleIds
-} = require('../../../helpers/event')
+  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
+} = require('../../../helpers/document')
 const log = require('../../../../lib/operations/log')
 
 describe('Show Handlers - Path as query param', () => {
@@ -138,11 +138,7 @@ describe('Show Handlers - Path as query param', () => {
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (const timestamp of init.getMilestones()) {
       const allNodes = showHandlerQueryWrapper(path, timestamp)
@@ -158,11 +154,7 @@ describe('Show Handlers - Path as query param', () => {
   it('should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerQueryWrapper(path, timestamp, { countsOnly: true })
@@ -178,11 +170,7 @@ describe('Show Handlers - Path as query param', () => {
   })
 
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
       testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
@@ -191,7 +179,7 @@ describe('Show Handlers - Path as query param', () => {
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const { path } = getNodeBraceSampleIds(100)
+    const path = getRandomNodeBracePathPattern()
 
     for (const timestamp of init.getMilestones()) {
       const allNodes = showHandlerQueryWrapper(path, timestamp)
@@ -207,7 +195,7 @@ describe('Show Handlers - Path as query param', () => {
   it('should return total node count in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const { path } = getNodeBraceSampleIds(100)
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerQueryWrapper(path, timestamp, { countsOnly: true })
@@ -223,7 +211,7 @@ describe('Show Handlers - Path as query param', () => {
   })
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path } = getNodeBraceSampleIds(100)
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
       testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
@@ -359,11 +347,7 @@ describe('Show Handlers - Path as body param', () => {
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (const timestamp of init.getMilestones()) {
       const allNodes = showHandlerBodyWrapper(path, timestamp)
@@ -379,11 +363,7 @@ describe('Show Handlers - Path as body param', () => {
   it('should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerBodyWrapper(path, timestamp, { countsOnly: true })
@@ -399,11 +379,7 @@ describe('Show Handlers - Path as body param', () => {
   })
 
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
       testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
@@ -412,7 +388,7 @@ describe('Show Handlers - Path as body param', () => {
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const { path } = getNodeBraceSampleIds()
+    const path = getRandomNodeBracePathPattern()
 
     for (const timestamp of init.getMilestones()) {
       const allNodes = showHandlerBodyWrapper(path, timestamp)
@@ -428,7 +404,7 @@ describe('Show Handlers - Path as body param', () => {
   it('should return total node count in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const { path } = getNodeBraceSampleIds()
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
       const result = showHandlerBodyWrapper(path, timestamp, { countsOnly: true })
@@ -444,7 +420,7 @@ describe('Show Handlers - Path as body param', () => {
   })
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path } = getNodeBraceSampleIds()
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
       testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)

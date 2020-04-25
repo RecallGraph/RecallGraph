@@ -1,12 +1,12 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const {
   testUngroupedNodes, testGroupedNodes, showGetWrapper, showPostWrapper, buildNodesFromEventLog
 } = require('../../../../helpers/history/show')
 const {
-  getRandomGraphPathPattern, getSampleTestCollNames, getNodeBraceSampleIds, getRandomCollectionPathPattern
+  getRandomGraphPathPattern, getRandomCollNames, getNodeBraceSampleIds, getRandomCollectionPathPattern
 } = require('../../../../helpers/event')
 
 const log = require('../../../../../lib/operations/log')
@@ -139,7 +139,7 @@ describe('Routes - show (Path as query param)', () => {
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
+    const sampleTestCollNames = getRandomCollNames()
     const path =
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
@@ -159,11 +159,11 @@ describe('Routes - show (Path as query param)', () => {
   it('should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const sampleTestCollNames = getSampleTestCollNames()
+    const sampleTestCollNames = getRandomCollNames()
     const path =
-        sampleTestCollNames.length > 1
-          ? `/ng/{${sampleTestCollNames}}/*`
-          : `/ng/${sampleTestCollNames}/*`
+      sampleTestCollNames.length > 1
+        ? `/ng/{${sampleTestCollNames}}/*`
+        : `/ng/${sampleTestCollNames}/*`
 
     for (let timestamp of init.getMilestones()) {
       const result = showGetWrapper(path, timestamp, { countsOnly: true })
@@ -179,7 +179,7 @@ describe('Routes - show (Path as query param)', () => {
   })
 
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
+    const sampleTestCollNames = getRandomCollNames()
     const path =
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
@@ -360,7 +360,7 @@ describe('Routes - show (Path as body param)', () => {
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
+    const sampleTestCollNames = getRandomCollNames()
     const path =
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`
@@ -380,11 +380,11 @@ describe('Routes - show (Path as body param)', () => {
   it('should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const sampleTestCollNames = getSampleTestCollNames()
+    const sampleTestCollNames = getRandomCollNames()
     const path =
-        sampleTestCollNames.length > 1
-          ? `/ng/{${sampleTestCollNames}}/*`
-          : `/ng/${sampleTestCollNames}/*`
+      sampleTestCollNames.length > 1
+        ? `/ng/{${sampleTestCollNames}}/*`
+        : `/ng/${sampleTestCollNames}/*`
 
     for (let timestamp of init.getMilestones()) {
       const result = showPostWrapper(path, timestamp, { countsOnly: true })
@@ -400,7 +400,7 @@ describe('Routes - show (Path as body param)', () => {
   })
 
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
+    const sampleTestCollNames = getRandomCollNames()
     const path =
       sampleTestCollNames.length > 1
         ? `/ng/{${sampleTestCollNames}}/*`

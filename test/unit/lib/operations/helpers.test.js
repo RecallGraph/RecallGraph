@@ -2,7 +2,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../helpers/init')
+const init = require('../../../helpers/util/init')
 const {
   getDBScope,
   getGraphScope,

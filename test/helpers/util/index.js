@@ -1,10 +1,10 @@
 'use strict'
 
-const {
-  random, sampleSize, sample, isFunction, toString, escapeRegExp, isObject, chain, isEmpty, negate
-} = require('lodash')
 const { format } = require('util')
 const minimatch = require('minimatch')
+const {
+  random, sampleSize, sample, isFunction, toString, escapeRegExp, isObject, chain, isEmpty, negate, pick, flatMap
+} = require('lodash')
 
 const OPS = {
   primitive: [
@@ -45,19 +45,6 @@ const OPS = {
       preprocess: (arr) => escapeRegExp(minimatch.makeRe(getPrefixPattern(arr)).source)
     }
   ]
-}
-
-function getPrefixPattern (arr1) {
-  const arr = arr1.map(toString)
-    .sort()
-  let a1 = arr[0]
-  let a2 = arr[arr.length - 1]
-  let L = a1.length
-  let i = 0
-  while (i < L && a1.charAt(i) === a2.charAt(i)) {
-    i++
-  }
-  return `${a1.substring(0, i)}*`
 }
 
 function generateGrouping (filterArr) {
@@ -121,6 +108,19 @@ function mergeData (input, data, rootPath = '') {
   }
 }
 
+// Public
+function getPrefixPattern (arr1) {
+  const arr = arr1.map(toString).sort()
+  let a1 = arr[0]
+  let a2 = arr[arr.length - 1]
+  let L = a1.length
+  let i = 0
+  while (i < L && a1.charAt(i) === a2.charAt(i)) {
+    i++
+  }
+  return `${a1.substring(0, i)}*`
+}
+
 function generateFilters (nodes) {
   const fieldBags = {}
 
@@ -164,4 +164,44 @@ function generateFilters (nodes) {
   return filterArr.join(' ')
 }
 
-exports.generateFilters = generateFilters
+function cartesian (keyedArrays = {}) {
+  const keys = Object.keys(keyedArrays)
+  if (!keys.length) {
+    return []
+  }
+
+  const headKey = keys[0]
+  if (keys.length === 1) {
+    return keyedArrays[headKey].map(val => ({ [headKey]: val }))
+  } else {
+    const head = keyedArrays[headKey]
+    const tail = pick(keyedArrays, keys.slice(1))
+    const tailCombos = cartesian(tail)
+
+    return flatMap(tailCombos, tailItem =>
+      head.map(headItem => Object.assign({ [headKey]: headItem }, tailItem))
+    )
+  }
+}
+
+function getRandomSubRange (objWithLength, maxLength = Number.POSITIVE_INFINITY) {
+  if (objWithLength.length > 0) {
+    const lower = random(0, objWithLength.length - 1)
+    const upperIndexBound =
+      (Number.isFinite(maxLength)
+        ? Math.min(objWithLength.length, lower + maxLength)
+        : objWithLength.length) - 1
+    const upper = random(lower, upperIndexBound)
+
+    return [lower, upper]
+  }
+
+  return []
+}
+
+module.exports = {
+  getPrefixPattern,
+  generateFilters,
+  cartesian,
+  getRandomSubRange
+}

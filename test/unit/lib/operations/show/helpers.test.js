@@ -1,12 +1,12 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const { patch, buildShowQuery } = require('../../../../../lib/operations/show/helpers')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern, cartesian
-} = require('../../../../helpers/event')
+} = require('../../../../helpers/document')
 const log = require('../../../../../lib/operations/log')
 const diff = require('../../../../../lib/operations/diff')
 const jiff = require('jiff')

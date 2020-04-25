@@ -1,23 +1,97 @@
 'use strict'
 
-const { range, chain, sortBy, isObject, omitBy, isNil, isEqual, differenceWith, isEmpty } = require('lodash')
-const request = require('@arangodb/request')
-const { baseUrl } = module.context
-const { expect } = require('chai')
-const { show: showHandler } = require('../../../lib/handlers/showHandlers')
-const diff = require('../../../lib/operations/diff')
-const { getRandomSubRange, cartesian } = require('../event')
 const jiff = require('jiff')
-const { generateFilters } = require('../filter')
+const { expect } = require('chai')
+const request = require('@arangodb/request')
+const { range, chain, sortBy, isObject, omitBy, isNil, isEqual, differenceWith, isEmpty } = require('lodash')
+const diff = require('../../../lib/operations/diff')
+const { getRandomSubRange, cartesian, generateFilters } = require('../util')
+const { show: showHandler } = require('../../../lib/handlers/showHandlers')
 const { filter, getCollTypes } = require('../../../lib/operations/helpers')
 
-exports.testUngroupedNodes = function testUngroupedNodes (
-  pathParam,
-  timestamp,
-  allNodes,
-  expectedNodes,
-  showFn
-) {
+function compareNodes (nodes, expectedNodes, param) {
+  if (nodes.length !== expectedNodes.length) {
+    console.debug({
+      actual: differenceWith(nodes, expectedNodes, isEqual),
+      expected: differenceWith(expectedNodes, nodes, isEqual)
+    })
+  }
+
+  expect(nodes.length, param).to.equal(expectedNodes.length)
+  expect(nodes[0], param).to.deep.equal(expectedNodes[0])
+
+  for (let i = 1; i < expectedNodes.length; i++) {
+    const node = nodes[i]
+    const expectedNode = expectedNodes[i]
+
+    expect(node, param).to.be.an.instanceOf(Object)
+    expect(node._id, param).to.equal(expectedNode._id)
+    expect(node._rev, param).to.equal(expectedNode._rev)
+  }
+}
+
+function compareGroupedNodes (nodeGroups, expectedNodeGroups, param, combo) {
+  if (nodeGroups.length !== expectedNodeGroups.length) {
+    console.debug({
+      actual: differenceWith(nodeGroups, expectedNodeGroups, isEqual),
+      expected: differenceWith(expectedNodeGroups, nodeGroups, isEqual)
+    })
+  }
+
+  const {
+    groupBy: gb,
+    countsOnly: co
+  } = combo
+
+  expect(nodeGroups.length, param).to.equal(expectedNodeGroups.length)
+
+  const aggrField = co ? 'total' : 'nodes'
+  nodeGroups.forEach((nodeGroup, idx1) => {
+    expect(nodeGroup, param).to.be.an.instanceOf(Object)
+    expect(nodeGroup[gb], param).to.equal(expectedNodeGroups[idx1][gb])
+
+    expect(nodeGroup, param).to.have.property(aggrField)
+    if (co) {
+      expect(nodeGroup[aggrField], param).to.equal(expectedNodeGroups[idx1][aggrField])
+    } else {
+      expect(nodeGroup[aggrField], param).to.be.an.instanceOf(Array)
+      expect(nodeGroup[aggrField].length, param).to.equal(expectedNodeGroups[idx1][aggrField].length)
+
+      if (nodeGroup[aggrField].length > 0) {
+        expect(nodeGroup[aggrField][0], param).to.deep.equal(expectedNodeGroups[idx1][aggrField][0])
+        nodeGroup[aggrField].forEach((node, idx2) => {
+          expect(node, param).to.be.an.instanceOf(Object)
+          expect(node._id, param).to.equal(expectedNodeGroups[idx1][aggrField][idx2]._id)
+          expect(node._rev, param).to.equal(expectedNodeGroups[idx1][aggrField][idx2]._rev)
+        })
+      }
+    }
+  })
+}
+
+function showRequestWrapper (reqParams, combo, method = 'get') {
+  if (isObject(combo)) {
+    Object.assign(reqParams.qs, omitBy(combo, isNil))
+  }
+
+  const response = request[method](`${module.context.baseUrl}/history/show`, reqParams)
+
+  expect(response).to.be.an.instanceOf(Object)
+  expect(response.statusCode).to.equal(200)
+
+  return JSON.parse(response.body)
+}
+
+function showHandlerWrapper (req, combo) {
+  if (isObject(combo)) {
+    Object.assign(req.queryParams, omitBy(combo, isNil))
+  }
+
+  return showHandler(req)
+}
+
+// Public
+function testUngroupedNodes (pathParam, timestamp, allNodes, expectedNodes, showFn) {
   expect(allNodes).to.deep.equal(expectedNodes)
 
   const absoluteSliceRange = getRandomSubRange(expectedNodes)
@@ -73,32 +147,7 @@ exports.testUngroupedNodes = function testUngroupedNodes (
   })
 }
 
-function compareNodes (nodes, expectedNodes, param) {
-  if (nodes.length !== expectedNodes.length) {
-    console.debug({
-      actual: differenceWith(nodes, expectedNodes, isEqual),
-      expected: differenceWith(expectedNodes, nodes, isEqual)
-    })
-  }
-
-  expect(nodes.length, param).to.equal(expectedNodes.length)
-  expect(nodes[0], param).to.deep.equal(expectedNodes[0])
-
-  for (let i = 1; i < expectedNodes.length; i++) {
-    const node = nodes[i]
-    const expectedNode = expectedNodes[i]
-
-    expect(node, param).to.be.an.instanceOf(Object)
-    expect(node._id, param).to.equal(expectedNode._id)
-    expect(node._rev, param).to.equal(expectedNode._rev)
-  }
-}
-
-exports.testGroupedNodes = function testGroupedNodes (
-  path,
-  timestamp,
-  showFn
-) {
+function testGroupedNodes (path, timestamp, showFn) {
   const sort = ['asc', 'desc']
   const skip = [0, 1]
   const limit = [0, 2]
@@ -209,51 +258,13 @@ exports.testGroupedNodes = function testGroupedNodes (
   })
 }
 
-function compareGroupedNodes (nodeGroups, expectedNodeGroups, param, combo) {
-  if (nodeGroups.length !== expectedNodeGroups.length) {
-    console.debug({
-      actual: differenceWith(nodeGroups, expectedNodeGroups, isEqual),
-      expected: differenceWith(expectedNodeGroups, nodeGroups, isEqual)
-    })
-  }
-
-  const {
-    groupBy: gb,
-    countsOnly: co
-  } = combo
-
-  expect(nodeGroups.length, param).to.equal(expectedNodeGroups.length)
-
-  const aggrField = co ? 'total' : 'nodes'
-  nodeGroups.forEach((nodeGroup, idx1) => {
-    expect(nodeGroup, param).to.be.an.instanceOf(Object)
-    expect(nodeGroup[gb], param).to.equal(expectedNodeGroups[idx1][gb])
-
-    expect(nodeGroup, param).to.have.property(aggrField)
-    if (co) {
-      expect(nodeGroup[aggrField], param).to.equal(expectedNodeGroups[idx1][aggrField])
-    } else {
-      expect(nodeGroup[aggrField], param).to.be.an.instanceOf(Array)
-      expect(nodeGroup[aggrField].length, param).to.equal(expectedNodeGroups[idx1][aggrField].length)
-
-      if (nodeGroup[aggrField].length > 0) {
-        expect(nodeGroup[aggrField][0], param).to.deep.equal(expectedNodeGroups[idx1][aggrField][0])
-        nodeGroup[aggrField].forEach((node, idx2) => {
-          expect(node, param).to.be.an.instanceOf(Object)
-          expect(node._id, param).to.equal(expectedNodeGroups[idx1][aggrField][idx2]._id)
-          expect(node._rev, param).to.equal(expectedNodeGroups[idx1][aggrField][idx2]._rev)
-        })
-      }
-    }
-  })
-}
-
 function buildNodesFromEventLog (path, timestamp) {
   return diff(path, { until: timestamp, postFilter: 'last(events).event !== "deleted"' })
     .map(item => {
       let node = {}
 
       for (let c of item.commands) {
+        // noinspection JSCheckFunctionSignatures
         node = jiff.patch(c, node, {})
       }
 
@@ -261,22 +272,7 @@ function buildNodesFromEventLog (path, timestamp) {
     })
 }
 
-exports.buildNodesFromEventLog = buildNodesFromEventLog
-
-function showRequestWrapper (reqParams, combo, method = 'get') {
-  if (isObject(combo)) {
-    Object.assign(reqParams.qs, omitBy(combo, isNil))
-  }
-
-  const response = request[method](`${baseUrl}/history/show`, reqParams)
-
-  expect(response).to.be.an.instanceOf(Object)
-  expect(response.statusCode).to.equal(200)
-
-  return JSON.parse(response.body)
-}
-
-exports.showGetWrapper = function showGetWrapper (path, timestamp, combo = {}) {
+function showGetWrapper (path, timestamp, combo = {}) {
   const reqParams = {
     json: true,
     qs: {
@@ -288,7 +284,7 @@ exports.showGetWrapper = function showGetWrapper (path, timestamp, combo = {}) {
   return showRequestWrapper(reqParams, combo)
 }
 
-exports.showPostWrapper = function showPostWrapper (path, timestamp, combo = {}) {
+function showPostWrapper (path, timestamp, combo = {}) {
   const reqParams = {
     json: true,
     qs: {},
@@ -301,15 +297,7 @@ exports.showPostWrapper = function showPostWrapper (path, timestamp, combo = {})
   return showRequestWrapper(reqParams, combo, 'post')
 }
 
-function showHandlerWrapper (req, combo) {
-  if (isObject(combo)) {
-    Object.assign(req.queryParams, omitBy(combo, isNil))
-  }
-
-  return showHandler(req)
-}
-
-exports.showHandlerQueryWrapper = function showHandlerQueryWrapper (path, timestamp, combo) {
+function showHandlerQueryWrapper (path, timestamp, combo) {
   const req = {
     queryParams: {
       path
@@ -320,7 +308,7 @@ exports.showHandlerQueryWrapper = function showHandlerQueryWrapper (path, timest
   return showHandlerWrapper(req, combo)
 }
 
-exports.showHandlerBodyWrapper = function showHandlerBodyWrapper (path, timestamp, combo) {
+function showHandlerBodyWrapper (path, timestamp, combo) {
   const req = {
     queryParams: {},
     body: {
@@ -330,4 +318,14 @@ exports.showHandlerBodyWrapper = function showHandlerBodyWrapper (path, timestam
   combo.timestamp = timestamp
 
   return showHandlerWrapper(req, combo)
+}
+
+module.exports = {
+  testUngroupedNodes,
+  testGroupedNodes,
+  buildNodesFromEventLog,
+  showGetWrapper,
+  showPostWrapper,
+  showHandlerQueryWrapper,
+  showHandlerBodyWrapper
 }

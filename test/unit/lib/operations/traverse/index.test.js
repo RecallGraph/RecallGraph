@@ -1,6 +1,6 @@
 'use strict'
 
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const { testTraverseWithParams, generateOptionCombos } = require('../../../../helpers/history/traverse')
 const traverse = require('../../../../../lib/operations/traverse')
 

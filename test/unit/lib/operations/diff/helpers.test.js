@@ -2,7 +2,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const { getGroupingClause, getReturnClause } = require('../../../../../lib/operations/diff/helpers')
 const { cartesian } = require('../../../../helpers/event')
 

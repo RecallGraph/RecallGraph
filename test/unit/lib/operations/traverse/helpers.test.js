@@ -2,10 +2,11 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const { testTraverseSkeletonGraphWithParams, generateOptionCombos } = require('../../../../helpers/history/traverse')
-const { createNodeBracepath, buildFilteredGraph, removeFreeEdges } = require(
-  '../../../../../lib/operations/traverse/helpers')
+const {
+  createNodeBracepath, buildFilteredGraph, removeFreeEdges
+} = require('../../../../../lib/operations/traverse/helpers')
 const { db, query } = require('@arangodb')
 const { shuffle, chain } = require('lodash')
 

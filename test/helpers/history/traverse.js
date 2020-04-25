@@ -1,19 +1,18 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../init')
 const { db, aql } = require('@arangodb')
-const { cartesian } = require('../event')
+const request = require('@arangodb/request')
+const { chain, sample, memoize, omit, isObject, pick, isEmpty } = require('lodash')
+const init = require('../util/init')
+const show = require('../../../lib/operations/show')
+const { cartesian, generateFilters } = require('../util')
+const { getNonServiceCollections, filter } = require('../../../lib/operations/helpers')
+const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
+const { getCollectionType, DOC_KEY_REGEX, COLLECTION_TYPES } = require('../../../lib/helpers')
 const {
   traverseSkeletonGraph, createNodeBracepath, removeFreeEdges, buildFilteredGraph
 } = require('../../../lib/operations/traverse/helpers')
-const { getCollectionType, DOC_KEY_REGEX, COLLECTION_TYPES } = require('../../../lib/helpers')
-const { getNonServiceCollections, filter } = require('../../../lib/operations/helpers')
-const { chain, sample, memoize, omit, isObject, pick, isEmpty } = require('lodash')
-const { generateFilters } = require('../filter')
-const show = require('../../../lib/operations/show')
-const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
-const request = require('@arangodb/request')
 
 const { baseUrl, collectionPrefix } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
@@ -27,7 +26,8 @@ const generateCombos = memoize(() => {
   })
 }).bind(module, 'default')
 
-exports.generateOptionCombos = function generateOptionCombos (bfs = true) {
+// Public
+function generateOptionCombos (bfs = true) {
   const uniqueVertices = ['none', 'path']
   const uniqueEdges = ['none', 'path']
 
@@ -38,7 +38,7 @@ exports.generateOptionCombos = function generateOptionCombos (bfs = true) {
   return cartesian({ bfs: [bfs], uniqueVertices, uniqueEdges })
 }
 
-exports.testTraverseSkeletonGraphWithParams = function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
+function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
   const collTypes = chain(getNonServiceCollections())
     .map(collName => [collName, getCollectionType(collName)])
@@ -66,7 +66,7 @@ exports.testTraverseSkeletonGraphWithParams = function testTraverseSkeletonGraph
   })
 }
 
-exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseFn, useFilters = true) {
+function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseFn, useFilters = true) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
   const collTypes = chain(getNonServiceCollections())
     .map(collName => [collName, getCollectionType(collName)])
@@ -143,7 +143,7 @@ exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueV
   })
 }
 
-exports.traverseHandlerWrapper = function traverseHandlerWrapper (timestamp, svid, depth, edgeCollections, options) {
+function traverseHandlerWrapper (timestamp, svid, depth, edgeCollections, options) {
   const req = { queryParams: { timestamp, svid, depth }, body: { edges: edgeCollections } }
 
   if (isObject(options)) {
@@ -158,7 +158,7 @@ exports.traverseHandlerWrapper = function traverseHandlerWrapper (timestamp, svi
   return traverseHandler(req)
 }
 
-exports.traversePostWrapper = function traversePostWrapper (timestamp, svid, depth, edgeCollections, options) {
+function traversePostWrapper (timestamp, svid, depth, edgeCollections, options) {
   const req = { json: true, timeout: 120, qs: { svid, depth }, body: { edges: edgeCollections } }
 
   if (timestamp) {
@@ -181,4 +181,12 @@ exports.traversePostWrapper = function traversePostWrapper (timestamp, svid, dep
   expect(response.statusCode, params).to.equal(200)
 
   return JSON.parse(response.body)
+}
+
+module.exports = {
+  generateOptionCombos,
+  testTraverseSkeletonGraphWithParams,
+  testTraverseWithParams,
+  traverseHandlerWrapper,
+  traversePostWrapper
 }

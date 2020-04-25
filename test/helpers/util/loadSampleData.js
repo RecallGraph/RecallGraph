@@ -1,13 +1,14 @@
 'use strict'
 
-const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-const gg = require('@arangodb/general-graph')
-const { forEach, get, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap } = require('lodash')
 const fs = require('fs')
-const { createSingle } = require('../../lib/handlers/createHandlers')
-const { replaceSingle } = require('../../lib/handlers/replaceHandlers')
-const { removeMultiple } = require('../../lib/handlers/removeHandlers')
+const gg = require('@arangodb/general-graph')
+const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
+const { forEach, get, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap } = require('lodash')
+const { createSingle } = require('../../../lib/handlers/createHandlers')
+const { replaceSingle } = require('../../../lib/handlers/replaceHandlers')
+const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
 
+// Public
 module.exports = function loadSampleData () {
   console.log('Starting sample data load...')
 
@@ -111,7 +112,7 @@ module.exports = function loadSampleData () {
   }
   fs.list(module.context.fileName(resourcePath))
     .filter(filename => dataPattern.test(filename))
-    .map(filename => `../../${resourcePath}/${filename}`)
+    .map(filename => `../../../${resourcePath}/${filename}`)
     .forEach(fileName => {
       try {
         const jsonArr = require(fileName)
