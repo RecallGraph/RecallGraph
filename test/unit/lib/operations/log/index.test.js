@@ -34,7 +34,7 @@ describe('Log - DB Scope', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -71,7 +71,7 @@ describe('Log - Graph Scope', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -99,7 +99,7 @@ describe('Log - Collection Scope', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -139,7 +139,7 @@ describe('Log - Node Glob Scope', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)
@@ -179,7 +179,7 @@ describe('Log - Node Brace Scope', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, log)

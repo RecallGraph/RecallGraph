@@ -31,7 +31,7 @@ describe('Log Handlers - Path as query param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerQueryWrapper)
@@ -59,7 +59,7 @@ describe('Log Handlers - Path as query param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerQueryWrapper)
@@ -84,7 +84,7 @@ describe('Log Handlers - Path as query param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerQueryWrapper)
@@ -117,7 +117,7 @@ describe('Log Handlers - Path as query param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerQueryWrapper)
@@ -151,7 +151,7 @@ describe('Log Handlers - Path as query param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerQueryWrapper)
@@ -190,7 +190,7 @@ describe('Log Handlers - Path as body param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerBodyWrapper)
@@ -217,7 +217,7 @@ describe('Log Handlers - Path as body param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerBodyWrapper)
@@ -242,7 +242,7 @@ describe('Log Handlers - Path as body param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerBodyWrapper)
@@ -275,7 +275,7 @@ describe('Log Handlers - Path as body param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerBodyWrapper)
@@ -309,7 +309,7 @@ describe('Log Handlers - Path as body param', () => {
           for c in ${commandColl}
             filter c._to == e._id
           sort e.ctime desc
-        return merge(e, keep(c, 'command'))
+        return e
       `.toArray()
 
     testUngroupedEvents(path, allEvents, expectedEvents, logHandlerBodyWrapper)
