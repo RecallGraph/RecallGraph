@@ -20,13 +20,10 @@ const {
   getCollTypes,
   filter
 } = require('../../../../lib/operations/helpers')
+const { cartesian } = require('../../../helpers/event')
 const {
-  getRandomGraphPathPattern,
-  getRandomCollectionPathPattern,
-  getRandomNodeGlobPathPattern,
-  getRandomNodeBracePathPattern,
-  cartesian
-} = require('../../../helpers/event')
+  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
+} = require('../../../helpers/document')
 const { getCollectionType } = require('../../../../lib/helpers')
 
 const { concat, values, lt, gt, lte, gte, eq, get } = require('lodash')

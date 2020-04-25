@@ -9,7 +9,7 @@ const {
 } = require('../../../helpers/event/log')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
-} = require('../../../helpers/event')
+} = require('../../../helpers/document')
 const { db, aql } = require('@arangodb')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)

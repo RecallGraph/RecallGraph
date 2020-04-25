@@ -10,7 +10,7 @@ const queryPartsInializers = {
   database: () => [
     aql`
       for v in ${eventColl}
-      filter !v['is-origin-node']
+      filter !(v['is-origin-node'] || v['is-super-origin-node'])
     `
   ],
   graph: () => {
