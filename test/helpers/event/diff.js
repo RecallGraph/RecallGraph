@@ -7,11 +7,10 @@ const request = require('@arangodb/request')
 const { isObject, omitBy, isNil, cloneDeep, omit, isEqual, differenceWith, isEmpty } = require('lodash')
 const { initQueryParts } = require('.')
 const log = require('../../../lib/operations/log')
-const { getGroupingClauseForExpectedResultsQuery } = require('./log')
 const { diff: diffHandler } = require('../../../lib/handlers/diffHandlers')
 const { getRandomSubRange, cartesian, generateFilters } = require('../util')
 const { getLimitClause, getTimeBoundFilters, filter } = require('../../../lib/operations/helpers')
-const { getSortingClause, getReturnClause } = require('../../../lib/operations/log/helpers')
+const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 
 function diffRequestWrapper (reqParams, combo, method = 'get') {
   if (isObject(combo)) {
@@ -101,7 +100,7 @@ function testDiffs (scope, path, diffFn, qp = null) {
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
       timeBoundFilters.filters.forEach(filter => queryParts.push(filter))
 
-      queryParts.push(getGroupingClauseForExpectedResultsQuery('node', false, true))
+      queryParts.push(getGroupingClause('node', false))
       queryParts.push(getSortingClause(st, 'node', false))
       queryParts.push(getLimitClause(lmt, skp))
       queryParts.push(getReturnClause('node', false, rv ? 'desc' : 'asc', rv))

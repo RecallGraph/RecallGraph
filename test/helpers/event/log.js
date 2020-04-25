@@ -225,7 +225,7 @@ function testGroupedEvents (scope, pathParam, logFn, qp = null) {
       const timeBoundFilters = getTimeBoundFilters(snc, utl)
       timeBoundFilters.filters.forEach(filter => queryParts.push(filter))
 
-      queryParts.push(getGroupingClauseForExpectedResultsQuery(gb, co))
+      queryParts.push(getGroupingClause(gb, co))
       queryParts.push(getSortingClause(st, gb, co))
       queryParts.push(getLimitClause(lmt, skp))
       queryParts.push(getReturnClause(gb, co, gst, gskp, glmt))
@@ -244,24 +244,6 @@ function testGroupedEvents (scope, pathParam, logFn, qp = null) {
         compareEventGroups(eventGroups, filteredEventGroups, param, combo)
       }
     })
-  }
-}
-
-function getGroupingClauseForExpectedResultsQuery (groupBy, countsOnly) {
-  if (groupBy !== 'collection') {
-    return getGroupingClause(groupBy, countsOnly)
-  } else {
-    const groupingPrefix =
-      'collect collection = parse_identifier(v.meta.id).collection'
-
-    let groupingSuffix
-    if (countsOnly) {
-      groupingSuffix = 'with count into total'
-    } else {
-      groupingSuffix = 'into events = v'
-    }
-
-    return aql.literal(`${groupingPrefix} ${groupingSuffix}`)
   }
 }
 
@@ -312,7 +294,6 @@ function logHandlerBodyWrapper (path, combo) {
 module.exports = {
   testUngroupedEvents,
   testGroupedEvents,
-  getGroupingClauseForExpectedResultsQuery,
   logGetWrapper,
   logPostWrapper,
   logHandlerQueryWrapper,

@@ -11,7 +11,7 @@ const {
 } = require('../../../../helpers/event/log')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
-} = require('../../../../helpers/event')
+} = require('../../../../helpers/document')
 
 const { db, query, aql } = require('@arangodb')
 
