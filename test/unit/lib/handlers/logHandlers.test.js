@@ -28,8 +28,6 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          for c in ${commandColl}
-            filter c._to == e._id
           sort e.ctime desc
         return e
       `.toArray()
@@ -55,9 +53,7 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter parse_identifier(e.meta.id).collection in ${sampleGraphCollNames}
-          for c in ${commandColl}
-            filter c._to == e._id
+          filter e.collection in ${sampleGraphCollNames}
           sort e.ctime desc
         return e
       `.toArray()
@@ -80,9 +76,7 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter parse_identifier(e.meta.id).collection in ${collNames}
-          for c in ${commandColl}
-            filter c._to == e._id
+          filter e.collection in ${collNames}
           sort e.ctime desc
         return e
       `.toArray()
@@ -113,9 +107,7 @@ describe('Log Handlers - Path as query param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter parse_identifier(e.meta.id).collection in ${collNames}
-          for c in ${commandColl}
-            filter c._to == e._id
+          filter e.collection in ${collNames}
           sort e.ctime desc
         return e
       `.toArray()
@@ -148,8 +140,6 @@ describe('Log Handlers - Path as query param', () => {
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
           filter e.meta.id in ${nids}
-          for c in ${commandColl}
-            filter c._to == e._id
           sort e.ctime desc
         return e
       `.toArray()
@@ -187,8 +177,6 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          for c in ${commandColl}
-            filter c._to == e._id
           sort e.ctime desc
         return e
       `.toArray()
@@ -213,9 +201,7 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter parse_identifier(e.meta.id).collection in ${sampleGraphCollNames}
-          for c in ${commandColl}
-            filter c._to == e._id
+          filter e.collection in ${sampleGraphCollNames}
           sort e.ctime desc
         return e
       `.toArray()
@@ -238,9 +224,7 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter parse_identifier(e.meta.id).collection in ${collNames}
-          for c in ${commandColl}
-            filter c._to == e._id
+          filter e.collection in ${collNames}
           sort e.ctime desc
         return e
       `.toArray()
@@ -271,9 +255,7 @@ describe('Log Handlers - Path as body param', () => {
     const expectedEvents = query`
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
-          filter parse_identifier(e.meta.id).collection in ${collNames}
-          for c in ${commandColl}
-            filter c._to == e._id
+          filter e.collection in ${collNames}
           sort e.ctime desc
         return e
       `.toArray()
@@ -306,8 +288,6 @@ describe('Log Handlers - Path as body param', () => {
         for e in ${eventColl}
           filter !(e['is-origin-node'] || e['is-super-origin-node'])
           filter e.meta.id in ${nids}
-          for c in ${commandColl}
-            filter c._to == e._id
           sort e.ctime desc
         return e
       `.toArray()

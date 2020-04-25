@@ -1,9 +1,12 @@
 'use strict'
 
 const { random, chain, sampleSize, union } = require('lodash')
-const { query } = require('@arangodb')
+const { db, query } = require('@arangodb')
 const { getPrefixPattern, getRandomSubRange } = require('../util')
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('../util/init')
+const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+
+const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 
 function getSampleDataCollectionPatterns (bracesOnly) {
   const sampleDataRefsWrapper = chain(getSampleDataRefs())
@@ -46,13 +49,12 @@ function getTestDataCollectionPatterns () {
 
 function getRandomNidGroups () {
   return query`
-    for e in recallgraph_events
+    for e in ${eventColl}
     filter e['hops-from-origin'] == 1
     sort rand()
     limit 100
     
-    let idParts = parse_identifier(e.meta.id)
-    collect coll = idParts.collection into keys = idParts.key
+    collect coll = e.collection into keys = e.meta.key
     
     return {coll, keys}
   `.toArray()
