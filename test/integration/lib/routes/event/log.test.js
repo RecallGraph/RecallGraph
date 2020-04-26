@@ -160,7 +160,9 @@ describe('Routes - log (Path as body param)', () => {
   })
 
   it('should return ungrouped events in Collection scope for a collection path, when no groupBy is specified', () => {
-    const { path, pattern } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
+    console.debug({ path, pattern })
+
     const allEvents = logPostWrapper(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
@@ -171,14 +173,14 @@ describe('Routes - log (Path as body param)', () => {
   })
 
   it('should return grouped events in Collection scope for a collection path, when groupBy is specified', () => {
-    const { path, pattern } = getRandomNodeGlobPathPattern(true)
+    const { path, pattern } = getRandomCollectionPathPattern(true)
     const queryParts = getGroupedExpectedEventsQueryParts('collection', { pattern })
 
     testGroupedEvents('collection', path, logPostWrapper, queryParts)
   })
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when no groupBy is specified', () => {
-    const { path, pattern } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const allEvents = logPostWrapper(path) // Ungrouped events in desc order by ctime.
 
     expect(allEvents).to.be.an.instanceOf(Array)
@@ -188,7 +190,7 @@ describe('Routes - log (Path as body param)', () => {
   })
 
   it('should return grouped events in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const { path, pattern } = getRandomCollectionPathPattern(true)
+    const { path, pattern } = getRandomNodeGlobPathPattern(true)
     const queryParts = getGroupedExpectedEventsQueryParts('node-glob', { pattern })
 
     testGroupedEvents('nodeGlob', path, logPostWrapper, queryParts)
