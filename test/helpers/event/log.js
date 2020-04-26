@@ -277,7 +277,7 @@ function getUngroupedExpectedEvents (scope, { collNames, pattern, nids } = {}) {
     case 'collection':
       cursor = query`
         for e in ${eventColl}
-        filter !e['is-origin-node']
+        filter !(e['is-origin-node'] || e['is-super-origin-node'])
         filter e.collection =~ ${pattern}
         sort e.ctime desc
         
@@ -288,6 +288,7 @@ function getUngroupedExpectedEvents (scope, { collNames, pattern, nids } = {}) {
     case 'node-glob':
       cursor = query`
         for e in ${eventColl}
+        filter !(e['is-origin-node'] || e['is-super-origin-node'])
         filter e.meta.id =~ ${pattern}
         sort e.ctime desc
         
@@ -315,7 +316,7 @@ function getGroupedExpectedEventsQueryParts (scope, { pattern, nids } = {}) {
       queryParts.push(
         aql`
           for v in ${eventColl}
-          filter !v['is-origin-node']
+          filter !(v['is-origin-node'] || v['is-super-origin-node'])
           filter v.collection =~ ${pattern}
         `
       )
@@ -325,6 +326,7 @@ function getGroupedExpectedEventsQueryParts (scope, { pattern, nids } = {}) {
       queryParts.push(
         aql`
           for v in ${eventColl}
+          filter !(v['is-origin-node'] || v['is-super-origin-node'])
           filter v.meta.id =~ ${pattern}
         `
       )
