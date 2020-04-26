@@ -102,18 +102,21 @@ function getRandomNodeGlobPathPattern (returnPattern = false) {
 
 function getRandomNodeBracePathPattern (returnIds = false) {
   const nidGroups = getRandomNidGroups()
+  const nids = []
   const patterns = nidGroups.map(group => {
     const ss = random(1, group.keys.length)
     const keys = sampleSize(group.keys, ss)
     const keyPattern = keys.length > 1 ? `{${keys.join(',')}}` : keys[0]
+
+    for (const key of keys) {
+      nids.push(`${group.coll}/${key}`)
+    }
 
     return `${group.coll}/${keyPattern}`
   })
   const path = patterns.length > 1 ? `/n/{${patterns.join(',')}}` : `/n/${patterns[0]}`
 
   if (returnIds) {
-    const nids = nidGroups.flatMap(group => group.keys.map(key => `${group.coll}/${key}`))
-
     return { path, nids }
   } else {
     return path
