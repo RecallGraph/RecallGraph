@@ -9,7 +9,7 @@ const show = require('../../../lib/operations/show')
 const { cartesian, generateFilters } = require('../util')
 const { getNonServiceCollections, filter } = require('../../../lib/operations/helpers')
 const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
-const { getCollectionType, DOC_KEY_REGEX, COLLECTION_TYPES } = require('../../../lib/helpers')
+const { getCollectionType, DOC_ID_REGEX } = require('../../../lib/helpers')
 const {
   traverseSkeletonGraph, createNodeBracepath, removeFreeEdges, buildFilteredGraph
 } = require('../../../lib/operations/traverse/helpers')
@@ -40,11 +40,6 @@ function generateOptionCombos (bfs = true) {
 
 function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
-  const collTypes = chain(getNonServiceCollections())
-    .map(collName => [collName, getCollectionType(collName)])
-    .fromPairs()
-    .value()
-
   const combos = generateCombos()
   combos.forEach(combo => {
     const { timestamp, depth, edgeCollections } = combo
@@ -55,13 +50,15 @@ function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges
       { bfs, uniqueVertices, uniqueEdges })
     const params = JSON.stringify(Object.assign({ bfs, uniqueVertices, uniqueEdges }, combo))
 
-    expect(nodeGroups, params).to.be.an.instanceOf(Array)
-    nodeGroups.forEach(nodeGroup => {
-      expect(nodeGroup, params).to.be.an.instanceOf(Object)
-      expect(nodeGroup.type, params).to.be.oneOf(Object.values(COLLECTION_TYPES))
-      expect(nodeGroup.coll, params).to.be.oneOf(Object.keys(collTypes))
-      expect(nodeGroup.keys, params).to.be.an.instanceOf(Array)
-      nodeGroup.keys.forEach(key => expect(key, params).to.match(DOC_KEY_REGEX))
+    expect(nodeGroups, params).to.be.an.instanceOf(Object)
+    expect(nodeGroups.vertices, params).to.be.an.instanceOf(Array)
+    expect(nodeGroups.edges, params).to.be.an.instanceOf(Array)
+    nodeGroups.vertices.forEach(vid => {
+      expect(vid, params).to.match(DOC_ID_REGEX)
+    })
+
+    nodeGroups.edges.forEach(eid => {
+      expect(eid, params).to.match(DOC_ID_REGEX)
     })
   })
 }
