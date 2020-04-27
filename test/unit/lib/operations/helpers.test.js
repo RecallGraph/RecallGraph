@@ -20,7 +20,7 @@ const {
   getCollTypes,
   filter
 } = require('../../../../lib/operations/helpers')
-const { cartesian } = require('../../../helpers/event')
+const { cartesian } = require('../../../helpers/util')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
 } = require('../../../helpers/document')
