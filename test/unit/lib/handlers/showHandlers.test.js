@@ -51,7 +51,7 @@ describe('Show Handlers - Path as query param', () => {
     const path = '/'
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
+      testGroupedNodes(path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -91,7 +91,7 @@ describe('Show Handlers - Path as query param', () => {
     const path = getRandomGraphPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
+      testGroupedNodes(path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -132,7 +132,7 @@ describe('Show Handlers - Path as query param', () => {
     const path = getRandomCollectionPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
+      testGroupedNodes(path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -173,7 +173,7 @@ describe('Show Handlers - Path as query param', () => {
     const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
+      testGroupedNodes(path, timestamp, showHandlerQueryWrapper)
     }
   })
 
@@ -214,7 +214,7 @@ describe('Show Handlers - Path as query param', () => {
     const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerQueryWrapper)
+      testGroupedNodes(path, timestamp, showHandlerQueryWrapper)
     }
   })
 })
@@ -260,7 +260,7 @@ describe('Show Handlers - Path as body param', () => {
     const path = '/'
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
+      testGroupedNodes(path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -300,7 +300,7 @@ describe('Show Handlers - Path as body param', () => {
     const path = getRandomGraphPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
+      testGroupedNodes(path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -341,7 +341,7 @@ describe('Show Handlers - Path as body param', () => {
     const path = getRandomCollectionPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
+      testGroupedNodes(path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -382,7 +382,7 @@ describe('Show Handlers - Path as body param', () => {
     const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
+      testGroupedNodes(path, timestamp, showHandlerBodyWrapper)
     }
   })
 
@@ -423,7 +423,7 @@ describe('Show Handlers - Path as body param', () => {
     const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, showHandlerBodyWrapper)
+      testGroupedNodes(path, timestamp, showHandlerBodyWrapper)
     }
   })
 })

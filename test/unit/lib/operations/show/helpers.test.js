@@ -2,11 +2,12 @@
 
 const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
+const { cartesian } = require('../../../../helpers/util')
 const { patch, buildShowQuery } = require('../../../../../lib/operations/show/helpers')
 const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern,
-  getRandomNodeBracePathPattern, cartesian
+  getRandomNodeBracePathPattern
 } = require('../../../../helpers/document')
 const log = require('../../../../../lib/operations/log')
 const diff = require('../../../../../lib/operations/diff')
@@ -62,7 +63,8 @@ describe('Show Helpers - patch', () => {
     const timestamps = init.getMilestones()
 
     for (const ts of timestamps) {
-      const expectedNodes = []; const nodeEvents = []
+      const expectedNodes = []
+      const nodeEvents = []
       const diffs = diff(path, { until: ts })
 
       for (const item of diffs) {

@@ -52,7 +52,7 @@ describe('Show - DB Scope', () => {
     const path = '/'
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, show)
+      testGroupedNodes(path, timestamp, show)
     }
   })
 })
@@ -98,7 +98,7 @@ describe('Show - Graph Scope', () => {
     const path = getRandomGraphPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, show)
+      testGroupedNodes(path, timestamp, show)
     }
   })
 })
@@ -146,7 +146,7 @@ describe('Show - Collection Scope', () => {
     const path = getRandomCollectionPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, show)
+      testGroupedNodes(path, timestamp, show)
     }
   })
 })
@@ -194,7 +194,7 @@ describe('Show - Node Glob Scope', () => {
     const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, show)
+      testGroupedNodes(path, timestamp, show)
     }
   })
 })
@@ -242,7 +242,7 @@ describe('Show - Node Brace Scope', () => {
     const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(path, path, timestamp, show)
+      testGroupedNodes(path, timestamp, show)
     }
   })
 })
