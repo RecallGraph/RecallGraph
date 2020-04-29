@@ -64,6 +64,48 @@ function compareDiffs (diffs, expectedDiffs, param) {
 }
 
 // Public
+function getExpectedDiffs (path, combo) {
+  const {
+    sort: st,
+    reverse: rv
+  } = combo
+  combo.groupBy = 'node'
+
+  const expectedEvents = log(path, combo).flatMap(group => map(group.events, '_id'))
+  const expectedDiffs = query`
+        for e in ${eventColl}
+        filter e._id in ${expectedEvents}
+        sort e.ctime ${rv ? 'desc' : 'asc'}
+        
+        for c in ${commandColl}
+        filter c._to == e._id
+        
+        collect node = e.meta.id aggregate events = unique(e), commands = unique(c)
+        sort node ${st}
+        
+        return {
+          node,
+          commandsAreReversed: ${rv},
+          events: events[* return merge(keep(CURRENT, '_id', '_key', 'ctime', 'event', 'last-snapshot'), {
+            meta: {
+              rev: CURRENT.meta.rev
+            }
+          })],
+          commands: commands[* return CURRENT.command]
+        }
+      `.toArray()
+
+  if (rv) {
+    for (const diff of expectedDiffs) {
+      for (let i = 0; i < diff.commands.length; i++) {
+        diff.commands[i] = jiff.inverse(diff.commands[i]).map(step => omit(step, 'context'))
+      }
+    }
+  }
+
+  return expectedDiffs
+}
+
 function testDiffs (scope, path, diffFn) {
   const allEvents = log(path) // Ungrouped events in desc order by ctime.
 
@@ -89,45 +131,7 @@ function testDiffs (scope, path, diffFn) {
 
       expect(diffs).to.be.an.instanceOf(Array)
 
-      const {
-        sort: st,
-        reverse: rv
-      } = combo
-      combo.groupBy = 'node'
-
-      const expectedEvents = log(path, combo).flatMap(group => map(group.events, '_id'))
-      const expectedDiffs = query`
-        for e in ${eventColl}
-        filter e._id in ${expectedEvents}
-        sort e.ctime ${rv ? 'desc' : 'asc'}
-        
-        for c in ${commandColl}
-        filter c._to == e._id
-        
-        collect node = e.meta.id aggregate events = unique(e), commands = unique(c)
-        sort node ${st}
-        
-        return {
-          node,
-          commandsAreReversed: ${rv},
-          events: events[* return merge(keep(CURRENT, '_id', '_key', 'ctime', 'event', 'last-snapshot'), {
-            meta: {
-              rev: CURRENT.meta.rev
-            }
-          })],
-          commands: commands[* return CURRENT.command]
-        }
-      `.toArray()
-
-      if (rv) {
-        for (const diff of expectedDiffs) {
-          for (let i = 0; i < diff.commands.length; i++) {
-            diff.commands[i] = jiff.inverse(diff.commands[i]).map(step => omit(step, 'context'))
-          }
-        }
-      }
-      // console.debug({ path, combo, expectedEvents, expectedDiffs, diffs })
-
+      const expectedDiffs = getExpectedDiffs(path, combo)
       let param = JSON.stringify({ path, combo })
       compareDiffs(diffs, expectedDiffs, param)
 
@@ -188,6 +192,7 @@ function diffHandlerBodyWrapper (path, combo) {
 }
 
 module.exports = {
+  getExpectedDiffs,
   testDiffs,
   diffGetWrapper,
   diffPostWrapper,

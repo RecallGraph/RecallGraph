@@ -297,7 +297,7 @@ function showPostWrapper (path, timestamp, combo = {}) {
   return showRequestWrapper(reqParams, combo, 'post')
 }
 
-function showHandlerQueryWrapper (path, timestamp, combo) {
+function showHandlerQueryWrapper (path, timestamp, combo = {}) {
   const req = {
     queryParams: {
       path
@@ -308,7 +308,7 @@ function showHandlerQueryWrapper (path, timestamp, combo) {
   return showHandlerWrapper(req, combo)
 }
 
-function showHandlerBodyWrapper (path, timestamp, combo) {
+function showHandlerBodyWrapper (path, timestamp, combo = {}) {
   const req = {
     queryParams: {},
     body: {

@@ -11,22 +11,31 @@ describe('Log Helpers - getSortingClause', () => {
 
   after(init.teardown)
 
-  it('should return a primary+secondary sort clause when groupBy is null, irrespective of sort and countsOnly',
+  it('should return an empty sort clause when groupBy is null and countsOnly is true, irrespective of sort',
     () => {
       const sort = ['asc', 'desc']
       const groupBy = null
-      const countsOnly = [false, true]
-      const combos = cartesian({ countsOnly, sort })
-      combos.forEach(combo => {
-        const sortingClause = getSortingClause(
-          combo.sort,
-          groupBy,
-          combo.countsOnly
-        )
+      const countsOnly = true
+      sort.forEach(st => {
+        const sortingClause = getSortingClause(st, groupBy, countsOnly)
 
-        expect(sortingClause).to.be.an.instanceOf(Object)
-        expect(sortingClause).to.respondTo('toAQL')
-        expect(sortingClause.toAQL()).to.match(/^sort \S+ (asc|desc), \S+ asc$/i)
+        expect(sortingClause, st).to.be.an.instanceOf(Object)
+        expect(sortingClause, st).to.respondTo('toAQL')
+        expect(sortingClause.toAQL(), st).to.be.empty
+      })
+    })
+
+  it('should return a primary+secondary sort clause when groupBy is null and countsOnly is false, irrespective of sort',
+    () => {
+      const sort = ['asc', 'desc']
+      const groupBy = null
+      const countsOnly = false
+      sort.forEach(st => {
+        const sortingClause = getSortingClause(st, groupBy, countsOnly)
+
+        expect(sortingClause, st).to.be.an.instanceOf(Object)
+        expect(sortingClause, st).to.respondTo('toAQL')
+        expect(sortingClause.toAQL(), st).to.be.match(/^sort \S+ (asc|desc), \S+ asc$/i)
       })
     })
 
@@ -70,7 +79,7 @@ describe('Log Helpers - getSortingClause', () => {
 
         expect(sortingClause).to.be.an.instanceOf(Object)
         expect(sortingClause).to.respondTo('toAQL')
-        expect(sortingClause.toAQL()).to.match(/^sort \S+ asc$/i)
+        expect(sortingClause.toAQL()).to.match(/^sort \S+ (desc|asc)$/i)
       })
     }
   )
@@ -81,16 +90,24 @@ describe('Log Helpers - getGroupingClause', () => {
 
   after(init.teardown)
 
-  it('should return a blank clause when no groupBy specified, irrespective of countsOnly', () => {
+  it('should return a blank clause when no groupBy specified and countsOnly is false', () => {
     const groupBy = null
-    const countsOnly = [false, true]
-    countsOnly.forEach(co => {
-      const groupingClause = getGroupingClause(groupBy, co)
+    const countsOnly = false
+    const groupingClause = getGroupingClause(groupBy, countsOnly)
 
-      expect(groupingClause).to.be.an.instanceOf(Object)
-      expect(groupingClause).to.respondTo('toAQL')
-      expect(groupingClause.toAQL()).to.be.empty
-    })
+    expect(groupingClause).to.be.an.instanceOf(Object)
+    expect(groupingClause).to.respondTo('toAQL')
+    expect(groupingClause.toAQL()).to.be.empty
+  })
+
+  it('should return a grouping clause when no groupBy specified and countsOnly is true', () => {
+    const groupBy = null
+    const countsOnly = true
+    const groupingClause = getGroupingClause(groupBy, countsOnly)
+
+    expect(groupingClause).to.be.an.instanceOf(Object)
+    expect(groupingClause).to.respondTo('toAQL')
+    expect(groupingClause.toAQL()).to.equal('collect with count into total')
   })
 
   it('should return a grouping clause when groupBy is specified, irrespective of countsOnly', () => {
