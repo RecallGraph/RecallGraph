@@ -1,34 +1,33 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../init')
 const { db, aql } = require('@arangodb')
-const { cartesian } = require('../event')
+const request = require('@arangodb/request')
+const { chain, sample, memoize, omit, isObject, pick, isEmpty } = require('lodash')
+const init = require('../util/init')
+const show = require('../../../lib/operations/show')
+const { cartesian, generateFilters } = require('../util')
+const { getNonServiceCollections, filter } = require('../../../lib/operations/helpers')
+const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
+const { getCollectionType, DOC_ID_REGEX } = require('../../../lib/helpers')
 const {
   traverseSkeletonGraph, createNodeBracepath, removeFreeEdges, buildFilteredGraph
 } = require('../../../lib/operations/traverse/helpers')
-const { getCollectionType, DOC_KEY_REGEX, COLLECTION_TYPES } = require('../../../lib/helpers')
-const { getNonServiceCollections } = require('../../../lib/operations/helpers')
-const { chain, sample, memoize, omit, isObject, pick, isEmpty } = require('lodash')
-const { generateFilters } = require('./filter')
-const show = require('../../../lib/operations/show')
-const { filter } = require('../../../lib/operations/filter/helpers')
-const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
-const request = require('@arangodb/request')
 
 const { baseUrl, collectionPrefix } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
 const generateCombos = memoize(() => {
   return cartesian({
     timestamp: [null, ...init.getMilestones()],
-    depth: [0, 1, 2],
+    depth: [1, 2],
     edgeCollections: ['inbound', 'outbound', 'any'].map(dir => ({
       [lineageCollName]: dir
     }))
   })
 }).bind(module, 'default')
 
-exports.generateOptionCombos = function generateOptionCombos (bfs = true) {
+// Public
+function generateOptionCombos (bfs = true) {
   const uniqueVertices = ['none', 'path']
   const uniqueEdges = ['none', 'path']
 
@@ -39,13 +38,8 @@ exports.generateOptionCombos = function generateOptionCombos (bfs = true) {
   return cartesian({ bfs: [bfs], uniqueVertices, uniqueEdges })
 }
 
-exports.testTraverseSkeletonGraphWithParams = function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
+function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
-  const collTypes = chain(getNonServiceCollections())
-    .map(collName => [collName, getCollectionType(collName)])
-    .fromPairs()
-    .value()
-
   const combos = generateCombos()
   combos.forEach(combo => {
     const { timestamp, depth, edgeCollections } = combo
@@ -56,18 +50,20 @@ exports.testTraverseSkeletonGraphWithParams = function testTraverseSkeletonGraph
       { bfs, uniqueVertices, uniqueEdges })
     const params = JSON.stringify(Object.assign({ bfs, uniqueVertices, uniqueEdges }, combo))
 
-    expect(nodeGroups, params).to.be.an.instanceOf(Array)
-    nodeGroups.forEach(nodeGroup => {
-      expect(nodeGroup, params).to.be.an.instanceOf(Object)
-      expect(nodeGroup.type, params).to.be.oneOf(Object.values(COLLECTION_TYPES))
-      expect(nodeGroup.coll, params).to.be.oneOf(Object.keys(collTypes))
-      expect(nodeGroup.keys, params).to.be.an.instanceOf(Array)
-      nodeGroup.keys.forEach(key => expect(key, params).to.match(DOC_KEY_REGEX))
+    expect(nodeGroups, params).to.be.an.instanceOf(Object)
+    expect(nodeGroups.vertices, params).to.be.an.instanceOf(Array)
+    expect(nodeGroups.edges, params).to.be.an.instanceOf(Array)
+    nodeGroups.vertices.forEach(vid => {
+      expect(vid, params).to.match(DOC_ID_REGEX)
+    })
+
+    nodeGroups.edges.forEach(eid => {
+      expect(eid, params).to.match(DOC_ID_REGEX)
     })
   })
 }
 
-exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseFn, useFilters = true) {
+function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseFn, useFilters = true) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
   const collTypes = chain(getNonServiceCollections())
     .map(collName => [collName, getCollectionType(collName)])
@@ -144,7 +140,7 @@ exports.testTraverseWithParams = function testTraverseWithParams ({ bfs, uniqueV
   })
 }
 
-exports.traverseHandlerWrapper = function traverseHandlerWrapper (timestamp, svid, depth, edgeCollections, options) {
+function traverseHandlerWrapper (timestamp, svid, depth, edgeCollections, options) {
   const req = { queryParams: { timestamp, svid, depth }, body: { edges: edgeCollections } }
 
   if (isObject(options)) {
@@ -159,7 +155,7 @@ exports.traverseHandlerWrapper = function traverseHandlerWrapper (timestamp, svi
   return traverseHandler(req)
 }
 
-exports.traversePostWrapper = function traversePostWrapper (timestamp, svid, depth, edgeCollections, options) {
+function traversePostWrapper (timestamp, svid, depth, edgeCollections, options) {
   const req = { json: true, timeout: 120, qs: { svid, depth }, body: { edges: edgeCollections } }
 
   if (timestamp) {
@@ -182,4 +178,12 @@ exports.traversePostWrapper = function traversePostWrapper (timestamp, svid, dep
   expect(response.statusCode, params).to.equal(200)
 
   return JSON.parse(response.body)
+}
+
+module.exports = {
+  generateOptionCombos,
+  testTraverseSkeletonGraphWithParams,
+  testTraverseWithParams,
+  traverseHandlerWrapper,
+  traversePostWrapper
 }

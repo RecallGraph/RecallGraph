@@ -1,8 +1,9 @@
 'use strict'
 
-const init = require('../../../helpers/init')
-const { testTraverseWithParams, generateOptionCombos, traverseHandlerWrapper } = require(
-  '../../../helpers/history/traverse')
+const init = require('../../../helpers/util/init')
+const {
+  testTraverseWithParams, generateOptionCombos, traverseHandlerWrapper
+} = require('../../../helpers/history/traverse')
 
 describe('Traverse Handler - With Filters', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))

@@ -1,28 +1,25 @@
 'use strict'
 
 const { db } = require('@arangodb')
-
-const { merge, forEach, noop, omit } = require('lodash')
-const { SERVICE_COLLECTIONS } = require('../../lib/helpers')
-const loadSampleData = require('./loadSampleData')
-
 const cache = require('@arangodb/aql/cache')
+const { merge, forEach, omit } = require('lodash')
+const { utils: { setTrace, clearTraceContext } } = require('foxx-tracing')
+const loadSampleData = require('./loadSampleData')
+const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
 
 cache.properties({ mode: 'on' })
 
 const TEST_DOCUMENT_COLLECTIONS = {
   vertex: module.context.collectionName('test_vertex')
 }
-
 const TEST_EDGE_COLLECTIONS = {
   edge: module.context.collectionName('test_edge')
 }
 
-const TEST_DATA_COLLECTIONS = Object.freeze(
-  merge({}, TEST_DOCUMENT_COLLECTIONS, TEST_EDGE_COLLECTIONS)
-)
-
-const TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = 2
+let sampleDataRefs = {}
+let testDataCollectionsInitialized = false
+let sampleDataLoaded = false
+let milestones
 
 function ensureTestDocumentCollections () {
   forEach(TEST_DOCUMENT_COLLECTIONS, collName => {
@@ -44,7 +41,7 @@ function setSnapshotIntervals () {
   forEach(
     TEST_DATA_COLLECTIONS,
     collName => {
-      module.context.service.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
+      module.context.configuration['snapshot-intervals'][collName] = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
     }
   )
 }
@@ -65,16 +62,19 @@ function truncateServiceCollections () {
   return true
 }
 
-let sampleDataRefs = {}
-let testDataCollectionsInitialized = false
-let sampleDataLoaded = false
-let milestones
+// Public
+const TEST_DATA_COLLECTIONS = Object.freeze(
+  merge({}, TEST_DOCUMENT_COLLECTIONS, TEST_EDGE_COLLECTIONS)
+)
+const TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = 2
 
-exports.setup = function setup ({
+function setup ({
   forceTruncateTestData = false,
   forceTruncateService = false,
   ensureSampleDataLoad = false
 } = {}) {
+  setTrace({})
+
   let testDataCollectionsTruncated = false
   let serviceCollectionsTruncated = false
   let sampleDataLoadMessages = null
@@ -116,9 +116,23 @@ exports.setup = function setup ({
   }
 }
 
-exports.teardown = noop
+function teardown () {
+  clearTraceContext()
+}
 
-exports.TEST_DATA_COLLECTIONS = TEST_DATA_COLLECTIONS
-exports.TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL
-exports.getSampleDataRefs = () => sampleDataRefs
-exports.getMilestones = () => milestones
+function getSampleDataRefs () {
+  return sampleDataRefs
+}
+
+function getMilestones () {
+  return milestones
+}
+
+module.exports = {
+  TEST_DATA_COLLECTIONS,
+  TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL,
+  setup,
+  teardown,
+  getSampleDataRefs,
+  getMilestones
+}

@@ -1,14 +1,13 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const {
   testUngroupedNodes, testGroupedNodes, showGetWrapper, showPostWrapper, buildNodesFromEventLog
 } = require('../../../../helpers/history/show')
 const {
-  getRandomGraphPathPattern, getSampleTestCollNames, getNodeBraceSampleIds, getRandomCollectionPathPattern
-} = require('../../../../helpers/event')
-
+  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
+} = require('../../../../helpers/document')
 const log = require('../../../../../lib/operations/log')
 
 describe('Routes - show (Path as query param)', () => {
@@ -21,56 +20,38 @@ describe('Routes - show (Path as query param)', () => {
       const path = '/'
 
       for (const timestamp of init.getMilestones()) {
-        const reqParams = {
-          json: true,
-          qs: {
-            path
-          }
-        }
-
-        const allNodes = showGetWrapper(reqParams, timestamp)
+        const allNodes = showGetWrapper(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
 
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-        testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showGetWrapper)
+        testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showGetWrapper)
       }
     })
 
   it('should return total node count in DB scope for the root path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = '/'
-      const reqParams = {
-        json: true,
-        qs: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showGetWrapper(reqParams, timestamp, { countsOnly: true })
+        const result = showGetWrapper(path, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log('/', { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
   it('should return grouped nodes in DB scope for the root path, when groupBy is specified', () => {
     const path = '/'
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showGetWrapper)
+      testGroupedNodes(path, timestamp, showGetWrapper)
     }
   })
 
@@ -79,56 +60,38 @@ describe('Routes - show (Path as query param)', () => {
     const path = getRandomGraphPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        qs: {
-          path
-        }
-      }
-
-      const allNodes = showGetWrapper(reqParams, timestamp)
+      const allNodes = showGetWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showGetWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showGetWrapper)
     }
   })
 
   it('should return total node count in Graph scope for a graph path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = getRandomGraphPathPattern()
-      const reqParams = {
-        json: true,
-        qs: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showGetWrapper(reqParams, timestamp, { countsOnly: true })
+        const result = showGetWrapper(path, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
   it('should return grouped nodes in Graph scope for a graph path, when groupBy is specified', () => {
     const path = getRandomGraphPathPattern()
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showGetWrapper)
+      testGroupedNodes(path, timestamp, showGetWrapper)
     }
   })
 
@@ -137,20 +100,13 @@ describe('Routes - show (Path as query param)', () => {
     const path = getRandomCollectionPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        qs: {
-          path
-        }
-      }
-
-      const allNodes = showGetWrapper(reqParams, timestamp)
+      const allNodes = showGetWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showGetWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showGetWrapper)
     }
   })
 
@@ -158,166 +114,107 @@ describe('Routes - show (Path as query param)', () => {
      ' is true',
   () => {
     const path = getRandomCollectionPathPattern()
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showGetWrapper(reqParams, timestamp, { countsOnly: true })
+      const result = showGetWrapper(path, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
   it('should return grouped nodes in Collection scope for a collection path, when groupBy is specified', () => {
     const path = getRandomCollectionPathPattern()
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showGetWrapper)
+      testGroupedNodes(path, timestamp, showGetWrapper)
     }
   })
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        qs: {
-          path
-        }
-      }
-
-      const allNodes = showGetWrapper(reqParams, timestamp)
+      const allNodes = showGetWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showGetWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showGetWrapper)
     }
   })
 
   it('should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-        sampleTestCollNames.length > 1
-          ? `/ng/{${sampleTestCollNames}}/*`
-          : `/ng/${sampleTestCollNames}/*`
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      const result = showGetWrapper(reqParams, timestamp, { countsOnly: true })
+      const result = showGetWrapper(path, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showGetWrapper)
+      testGroupedNodes(path, timestamp, showGetWrapper)
     }
   })
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const { path } = getNodeBraceSampleIds(100)
+    const path = getRandomNodeBracePathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        qs: {
-          path
-        }
-      }
-
-      const allNodes = showGetWrapper(reqParams, timestamp)
+      const allNodes = showGetWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showGetWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showGetWrapper)
     }
   })
 
   it('should return total node count in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const { path } = getNodeBraceSampleIds(100)
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      const result = showGetWrapper(reqParams, timestamp, { countsOnly: true })
+      const result = showGetWrapper(path, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path } = getNodeBraceSampleIds(100)
-    const reqParams = {
-      json: true,
-      qs: {
-        path
-      }
-    }
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showGetWrapper)
+      testGroupedNodes(path, timestamp, showGetWrapper)
     }
   })
 })
@@ -332,56 +229,38 @@ describe('Routes - show (Path as body param)', () => {
       const path = '/'
 
       for (const timestamp of init.getMilestones()) {
-        const reqParams = {
-          json: true,
-          body: {
-            path
-          }
-        }
-
-        const allNodes = showPostWrapper(reqParams, timestamp)
+        const allNodes = showPostWrapper(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
 
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-        testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showPostWrapper)
+        testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showPostWrapper)
       }
     })
 
   it('should return total node count in DB scope for the root path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = '/'
-      const reqParams = {
-        json: true,
-        body: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showPostWrapper(reqParams, timestamp, { countsOnly: true })
+        const result = showPostWrapper(path, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log('/', { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
   it('should return grouped nodes in DB scope for the root path, when groupBy is specified', () => {
     const path = '/'
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showPostWrapper)
+      testGroupedNodes(path, timestamp, showPostWrapper)
     }
   })
 
@@ -390,56 +269,38 @@ describe('Routes - show (Path as body param)', () => {
     const path = getRandomGraphPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        body: {
-          path
-        }
-      }
-
-      const allNodes = showPostWrapper(reqParams, timestamp)
+      const allNodes = showPostWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showPostWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showPostWrapper)
     }
   })
 
   it('should return total node count in Graph scope for a graph path, when groupBy  is null, and countsOnly is true',
     () => {
       const path = getRandomGraphPathPattern()
-      const reqParams = {
-        json: true,
-        body: {
-          path
-        }
-      }
 
       for (let timestamp of init.getMilestones()) {
-        const result = showPostWrapper(reqParams, timestamp, { countsOnly: true })
+        const result = showPostWrapper(path, timestamp, { countsOnly: true })
 
-        expect(result).to.be.an.instanceOf(Object)
+        expect(result).to.be.an.instanceOf(Array)
+        expect(result).to.have.lengthOf(1)
 
         const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
         const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-        expect(result.total).to.equal(expectedTotal)
+        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
   it('should return grouped nodes in Graph scope for a graph path, when groupBy is specified', () => {
     const path = getRandomGraphPathPattern()
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showPostWrapper)
+      testGroupedNodes(path, timestamp, showPostWrapper)
     }
   })
 
@@ -448,20 +309,13 @@ describe('Routes - show (Path as body param)', () => {
     const path = getRandomCollectionPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        body: {
-          path
-        }
-      }
-
-      const allNodes = showPostWrapper(reqParams, timestamp)
+      const allNodes = showPostWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showPostWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showPostWrapper)
     }
   })
 
@@ -469,166 +323,107 @@ describe('Routes - show (Path as body param)', () => {
      ' is true',
   () => {
     const path = getRandomCollectionPathPattern()
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      const result = showPostWrapper(reqParams, timestamp, { countsOnly: true })
+      const result = showPostWrapper(path, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
   it('should return grouped nodes in Collection scope for a collection path, when groupBy is specified', () => {
     const path = getRandomCollectionPathPattern()
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showPostWrapper)
+      testGroupedNodes(path, timestamp, showPostWrapper)
     }
   })
 
   it('should return ungrouped events in Node Glob scope for a node-glob path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
+    const path = getRandomNodeGlobPathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        body: {
-          path
-        }
-      }
-
-      const allNodes = showPostWrapper(reqParams, timestamp)
+      const allNodes = showPostWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showPostWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showPostWrapper)
     }
   })
 
   it('should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-        sampleTestCollNames.length > 1
-          ? `/ng/{${sampleTestCollNames}}/*`
-          : `/ng/${sampleTestCollNames}/*`
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      const result = showPostWrapper(reqParams, timestamp, { countsOnly: true })
+      const result = showPostWrapper(path, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
-    const sampleTestCollNames = getSampleTestCollNames()
-    const path =
-      sampleTestCollNames.length > 1
-        ? `/ng/{${sampleTestCollNames}}/*`
-        : `/ng/${sampleTestCollNames}/*`
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
+    const path = getRandomNodeGlobPathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showPostWrapper)
+      testGroupedNodes(path, timestamp, showPostWrapper)
     }
   })
 
   it('should return ungrouped events in Node Brace scope for a node-brace path, when groupBy  is null, and' +
      ' countsOnly is falsey', () => {
-    const { path } = getNodeBraceSampleIds()
+    const path = getRandomNodeBracePathPattern()
 
     for (const timestamp of init.getMilestones()) {
-      const reqParams = {
-        json: true,
-        body: {
-          path
-        }
-      }
-
-      const allNodes = showPostWrapper(reqParams, timestamp)
+      const allNodes = showPostWrapper(path, timestamp)
 
       expect(allNodes).to.be.an.instanceOf(Array)
 
       const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
-      testUngroupedNodes(reqParams, timestamp, allNodes, expectedNodes, showPostWrapper)
+      testUngroupedNodes(path, timestamp, allNodes, expectedNodes, showPostWrapper)
     }
   })
 
   it('should return total node count in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly' +
      ' is true',
   () => {
-    const { path } = getNodeBraceSampleIds()
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      const result = showPostWrapper(reqParams, timestamp, { countsOnly: true })
+      const result = showPostWrapper(path, timestamp, { countsOnly: true })
 
-      expect(result).to.be.an.instanceOf(Object)
+      expect(result).to.be.an.instanceOf(Array)
+      expect(result).to.have.lengthOf(1)
 
       const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
       const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
 
-      expect(result.total).to.equal(expectedTotal)
+      expect(result[0].total).to.equal(expectedTotal)
     }
   })
 
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
-    const { path } = getNodeBraceSampleIds()
-    const reqParams = {
-      json: true,
-      body: {
-        path
-      }
-    }
+    const path = getRandomNodeBracePathPattern()
 
     for (let timestamp of init.getMilestones()) {
-      testGroupedNodes(reqParams, path, timestamp, showPostWrapper)
+      testGroupedNodes(path, timestamp, showPostWrapper)
     }
   })
 })

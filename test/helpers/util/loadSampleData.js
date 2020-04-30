@@ -1,19 +1,15 @@
 'use strict'
 
-const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-const gg = require('@arangodb/general-graph')
-const { forEach, get, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap } = require('lodash')
 const fs = require('fs')
-const { createSingle } = require('../../lib/handlers/createHandlers')
-const { replaceSingle } = require('../../lib/handlers/replaceHandlers')
-const { removeMultiple } = require('../../lib/handlers/removeHandlers')
-const { createSkeletonUpdateCron, deleteSkeletonUpdateCron } = require('../../lib/helpers')
+const gg = require('@arangodb/general-graph')
+const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
+const { forEach, get, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap } = require('lodash')
+const { createSingle } = require('../../../lib/handlers/createHandlers')
+const { replaceSingle } = require('../../../lib/handlers/replaceHandlers')
+const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
 
+// Public
 module.exports = function loadSampleData () {
-  // Stop background skeleton graph update
-  console.log('Stopping skeleton update cron job...')
-  deleteSkeletonUpdateCron()
-
   console.log('Starting sample data load...')
 
   // Define collection metadata
@@ -116,7 +112,7 @@ module.exports = function loadSampleData () {
   }
   fs.list(module.context.fileName(resourcePath))
     .filter(filename => dataPattern.test(filename))
-    .map(filename => `../../${resourcePath}/${filename}`)
+    .map(filename => `../../../${resourcePath}/${filename}`)
     .forEach(fileName => {
       try {
         const jsonArr = require(fileName)
@@ -128,7 +124,7 @@ module.exports = function loadSampleData () {
         })
       } catch (e) {
         errorCount++
-        console.error(e)
+        console.error(e.message, e.stack)
       }
     })
 
@@ -159,7 +155,7 @@ module.exports = function loadSampleData () {
         replaceCount++
       } catch (e) {
         errorCount++
-        console.error(e)
+        console.error(e.message, e.stack)
       }
     }
   }
@@ -188,7 +184,7 @@ module.exports = function loadSampleData () {
         replaceCount++
       } catch (e) {
         errorCount++
-        console.error(e)
+        console.error(e.message, e.stack)
       }
     }
   }
@@ -217,7 +213,7 @@ module.exports = function loadSampleData () {
       replaceCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -242,7 +238,7 @@ module.exports = function loadSampleData () {
       replaceCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -272,7 +268,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -316,7 +312,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -359,7 +355,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -402,7 +398,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -445,7 +441,7 @@ module.exports = function loadSampleData () {
       insertCount++
     } catch (e) {
       errorCount++
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   }
 
@@ -497,7 +493,7 @@ module.exports = function loadSampleData () {
         insertCount++
       } catch (e) {
         errorCount++
-        console.error(e, obj)
+        console.error(e, e.stack, obj)
       }
     } else {
       warningCount++
@@ -555,7 +551,7 @@ module.exports = function loadSampleData () {
     gg._drop(ssGraph)
   } catch (e) {
     if (e.errorNum !== ARANGO_ERRORS.ERROR_GRAPH_NOT_FOUND.code) {
-      console.error(e)
+      console.error(e.message, e.stack)
     }
   } finally {
     const g = gg._create(ssGraph, edgeDefs)
@@ -568,15 +564,6 @@ module.exports = function loadSampleData () {
     results.vertexCollections = invokeMap(g._vertexCollections(), 'name')
     results.edgeCollections = invokeMap(g._edgeCollections(), 'name')
   }
-
-  // Generate skeleton graph manually
-  console.log('Generating skeleton graph...')
-  require('../../scripts/updateSkeletonGraph')
-  console.log('Generated skeleton graph.')
-
-  // Re-instate skeleton update cron
-  console.log('Re-instating skeleton update cron job...')
-  createSkeletonUpdateCron()
 
   return results
 }

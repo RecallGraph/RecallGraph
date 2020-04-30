@@ -1,39 +1,22 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
-const { patch, getCollTypes, buildShowQuery } = require('../../../../../lib/operations/show/helpers')
-const { getCollectionType, SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-const { getNonServiceCollections } = require('../../../../../lib/operations/helpers')
+const init = require('../../../../helpers/util/init')
+const { cartesian } = require('../../../../helpers/util')
+const { patch, buildShowQuery } = require('../../../../../lib/operations/show/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 const {
-  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern, cartesian
-} = require('../../../../helpers/event')
+  getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern,
+  getRandomNodeBracePathPattern
+} = require('../../../../helpers/document')
 const log = require('../../../../../lib/operations/log')
+const diff = require('../../../../../lib/operations/diff')
 const jiff = require('jiff')
 const { db, query } = require('@arangodb')
 
 const commandColl = db._collection(SERVICE_COLLECTIONS.commands)
 const evtSSLinkColl = db._collection(SERVICE_COLLECTIONS.evtSSLinks)
 const snapshotLinkColl = db._collection(SERVICE_COLLECTIONS.snapshotLinks)
-
-describe('Show Helpers - getCollTypes', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true }))
-
-  after(init.teardown)
-
-  it('should return collection types for all non-service collections',
-    () => {
-      const collTypes = getCollTypes()
-      const expectedCollTypes = {}
-      const nonServiceCollections = getNonServiceCollections()
-
-      for (const coll of nonServiceCollections) {
-        expectedCollTypes[coll] = getCollectionType(coll) === 2 ? 'vertex' : 'edge'
-      }
-
-      expect(collTypes).to.deep.equal(expectedCollTypes)
-    })
-})
 
 describe('Show Helpers - buildShowQuery', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -80,26 +63,24 @@ describe('Show Helpers - patch', () => {
     const timestamps = init.getMilestones()
 
     for (const ts of timestamps) {
-      const eventLog = log(path, { until: ts, groupBy: 'node', groupSort: 'asc', returnCommands: true })
       const expectedNodes = []
+      const nodeEvents = []
+      const diffs = diff(path, { until: ts })
 
-      for (const item of eventLog) {
+      for (const item of diffs) {
         let node = {}
-        for (let event of item.events) {
-          node = jiff.patch(event.command, node, {})
+        for (const command of item.commands) {
+          node = jiff.patch(command, node, {})
         }
-
         expectedNodes.push(node)
-      }
 
-      const nodeEvents = eventLog.map(item => {
         const lastEvent = item.events[item.events.length - 1]
-
-        return {
+        const nodeEvent = {
           eid: lastEvent._id,
           snid: lastEvent['last-snapshot']
         }
-      })
+        nodeEvents.push(nodeEvent)
+      }
 
       const paths = query`
         let nodeEvents = ${nodeEvents}

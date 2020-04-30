@@ -1,7 +1,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 
 const request = require('@arangodb/request')
 const { baseUrl } = module.context

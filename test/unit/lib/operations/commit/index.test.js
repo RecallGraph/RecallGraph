@@ -2,7 +2,7 @@
 'use strict'
 
 const { expect } = require('chai')
-const init = require('../../../../helpers/init')
+const init = require('../../../../helpers/util/init')
 const { DB_OPS } = require('../../../../../lib/helpers')
 const commit = require('../../../../../lib/operations/commit')
 const {
