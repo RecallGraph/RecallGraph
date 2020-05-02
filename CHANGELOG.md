@@ -1,15 +1,14 @@
 # 1.0.0
 ## Added
-1. `sphinx` doc root.
-2. Post-filter in _read_ endpoints - `log`, `diff`, `show`.
-3. _k Shortest Paths_ - Custom-weighted, point-in-time, shortest paths between endpoints.
-4. Synchronous skeleton graph updates within commit transactions.
-5. [OpenTracing](https://opentracing.io/) instrumentation, using ancilliary [collector](https://github.com/RecallGraph/foxx-tracer-collector) foxx service. **Non-intrusive and strictly optional.**
-6. **Data:**
+1. Post-filter in _read_ endpoints - `log`, `diff`, `show`.
+1. _k Shortest Paths_ - Custom-weighted, point-in-time, shortest paths between endpoints.
+1. Synchronous skeleton graph updates within commit transactions.
+1. [OpenTracing](https://opentracing.io/) instrumentation, using ancilliary [collector](https://github.com/RecallGraph/foxx-tracer-collector) foxx service. **Non-intrusive and strictly optional.**
+1. **Data:**
     1. Event objects have a `collection` field to identify the collection to which their corresponding document belongs.
-    2. Migration script to automatically upgrade event trees created using older versions.
-    3. Migration script to remove stale indices.
-7. Logs can be grouped by _type_ (vertex/edge).
+    1. Migration script to automatically upgrade event trees created using older versions.
+    1. Migration script to remove stale indices.
+1. Logs can be grouped by _type_ (vertex/edge).
 
 
 ## Removed
