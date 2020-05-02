@@ -1,6 +1,6 @@
 {
   "name": "recallgraph",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A versioning data store for time-variant graph data",
   "repository": {
     "type": "git",
