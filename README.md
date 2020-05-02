@@ -3,7 +3,7 @@
 # RecallGraph - A versioning data store for time-variant graph data.
 RecallGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past state of the graph just as easily as the present.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB v3.5, with support for v3.6 in the pipeline.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB v3.5 and v3.6, with support for v3.7 in the pipeline.
 
 ---
 
@@ -36,7 +36,7 @@ Also check out the recording below (RecallGraph presented @ ArangoDB Online Meet
 1. Documents (vertices/edges) mutate within their lifespan (both in their individual attributes/values and in their relations with each other).
 1. Past states of documents are as important as their present, necessitating retention and queryability of their change history.
 
-Refer to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki) for an in-depth introduction.
+Refer to the [docs](https://docs.recallgraph.tech/) for an in-depth introduction.
 
 ## Salient API Features
 RecallGraph's API is split into 3 top-level categories:
@@ -59,30 +59,31 @@ RecallGraph's API is split into 3 top-level categories:
 - **Show** - Fetch a set of documents, optionally grouped/sorted/sliced, that match a given path pattern, at a given point in time.
 - **Filter** - In addition to a path pattern like in **'Show'**, apply an expression-based, simple/compound post-filter on the retrieved documents.
 - **Traverse** - A point-in-time traversal (walk) of a past version of the graph, with the option to apply additional post-filters to the result.
+- **k Shortest Paths** - Point-in-time, weighted, shortest paths between two endpoints.
+- **(Planned) Purge** - Delete all history for specified nodes.
 
 ## Installation
 RecallGraph installs like any other _Foxx Microservice_ inside a database, on an ArangoDB instance.
 
 1. Download the [latest release](https://github.com/RecallGraph/RecallGraph/releases).
-2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
+2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.6/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
 ### Installation Notes
-1. Refer to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki/Installation#from-source) if you want to install from source.
-1. A _one-click_ cloud deployment option might be made available in the future for those who wish to take RecallGraph for a test ride without having to set up a server from scratch.
+Refer to the [docs](https://docs.recallgraph.tech/getting-started/installation#from-source) if you want to install from source.
 
 ## Docs
-- Quick-reference API documentation is available directly in the Swagger console (accessed through ArangoDB's web UI).
-- Detailed API docs, tutorials and technical docs are being worked on, and are being uploaded to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki) as and when they get ready.
+- API documentation is available directly in the Swagger console once the service is installed (accessed through ArangoDB's web UI).
+- Other docs (user guide, glossary, etc.) are being worked on, and are being uploaded to the [docs website](https://docs.recallgraph.tech/) as and when they get ready.
 
 ## Limitations
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
-2. As of version 3.5, ArangoDB does not support ACID transactions for multi-document/collection writes in [cluster mode](https://www.arangodb.com/docs/3.5/transactions-limitations.html#in-clusters). Transactional ACIDity is not guaranteed for such deployments.
+2. As of version 3.6, ArangoDB does not support ACID transactions for multi-document/collection writes in [cluster mode](https://www.arangodb.com/docs/3.6/transactions-limitations.html#in-clusters). Transactional ACIDity is not guaranteed for such deployments.
 
 ## Development Roadmap
 1. Support for absolute/relative revision-based queries on individual documents (in addition to the timestamp-based queries supported currently),
 1. Branching/tag support,
 1. Support for the _valid time_ dimension in addition to the currently implemented _transaction time_ dimension (https://www.researchgate.net/publication/221212735_A_Taxonomy_of_Time_in_Databases),
-1. Support for ArangoDB v3.6,
+1. Support for ArangoDB v3.7,
 1. Multiple, simultaneous materialized checkouts (a la `git`) of selectable sections of the database (entire DB, named graph, named collection, document list, document pattern), with eventual branch-level specificity,
 1. CQRS/ES operation mode (async implicit commits),
 1. Explicit commits,
