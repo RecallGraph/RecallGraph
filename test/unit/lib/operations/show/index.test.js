@@ -6,7 +6,6 @@ const init = require('../../../../helpers/util/init')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
 } = require('../../../../helpers/document')
-const log = require('../../../../../lib/operations/log')
 const {
   testUngroupedNodes, testGroupedNodes, buildNodesFromEventLog
 } = require('../../../../helpers/history/show')
@@ -16,7 +15,7 @@ describe('Show - DB Scope', () => {
 
   after(init.teardown)
 
-  it('should return ungrouped nodes in DB scope for the root path, when groupBy  is null, and countsOnly is falsey',
+  it('should return ungrouped nodes in DB scope for the root path, when groupBy  is null',
     () => {
       const path = '/'
 
@@ -28,23 +27,6 @@ describe('Show - DB Scope', () => {
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
         testUngroupedNodes(path, timestamp, allNodes, expectedNodes, show)
-      }
-    })
-
-  it('should return total node count in DB scope for the root path, when groupBy  is null, and countsOnly is true',
-    () => {
-      const path = '/'
-
-      for (let timestamp of init.getMilestones()) {
-        const result = show(path, timestamp, { countsOnly: true })
-
-        expect(result).to.be.an.instanceOf(Array)
-        expect(result).to.have.lengthOf(1)
-
-        const events = log('/', { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
-
-        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -62,7 +44,7 @@ describe('Show - Graph Scope', () => {
 
   after(init.teardown)
 
-  it('should return ungrouped nodes in Graph scope for a graph path, when groupBy  is null, and countsOnly is falsey',
+  it('should return ungrouped nodes in Graph scope for a graph path, when groupBy  is null',
     () => {
       const path = getRandomGraphPathPattern()
 
@@ -74,23 +56,6 @@ describe('Show - Graph Scope', () => {
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
         testUngroupedNodes(path, timestamp, allNodes, expectedNodes, show)
-      }
-    })
-
-  it('should return total node count in Graph scope for a graph path, when groupBy  is null, and countsOnly is true',
-    () => {
-      const path = getRandomGraphPathPattern()
-
-      for (let timestamp of init.getMilestones()) {
-        const result = show(path, timestamp, { countsOnly: true })
-
-        expect(result).to.be.an.instanceOf(Array)
-        expect(result).to.have.lengthOf(1)
-
-        const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
-
-        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -109,7 +74,7 @@ describe('Show - Collection Scope', () => {
   after(init.teardown)
 
   it(
-    'should return ungrouped nodes in Collection scope for a collection path, when groupBy  is null, and countsOnly is falsey',
+    'should return ungrouped nodes in Collection scope for a collection path, when groupBy  is null',
     () => {
       const path = getRandomCollectionPathPattern()
 
@@ -121,24 +86,6 @@ describe('Show - Collection Scope', () => {
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
         testUngroupedNodes(path, timestamp, allNodes, expectedNodes, show)
-      }
-    })
-
-  it(
-    'should return total node count in Collection scope for a collection path, when groupBy  is null, and countsOnly is true',
-    () => {
-      const path = getRandomCollectionPathPattern()
-
-      for (let timestamp of init.getMilestones()) {
-        const result = show(path, timestamp, { countsOnly: true })
-
-        expect(result).to.be.an.instanceOf(Array)
-        expect(result).to.have.lengthOf(1)
-
-        const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
-
-        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -157,7 +104,7 @@ describe('Show - Node Glob Scope', () => {
   after(init.teardown)
 
   it(
-    'should return ungrouped nodes in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly is falsey',
+    'should return ungrouped nodes in Node Glob scope for a node-glob path, when groupBy  is null',
     () => {
       const path = getRandomNodeGlobPathPattern()
 
@@ -169,24 +116,6 @@ describe('Show - Node Glob Scope', () => {
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
         testUngroupedNodes(path, timestamp, allNodes, expectedNodes, show)
-      }
-    })
-
-  it(
-    'should return total node count in Node Glob scope for a node-glob path, when groupBy  is null, and countsOnly is true',
-    () => {
-      const path = getRandomNodeGlobPathPattern()
-
-      for (let timestamp of init.getMilestones()) {
-        const result = show(path, timestamp, { countsOnly: true })
-
-        expect(result).to.be.an.instanceOf(Array)
-        expect(result).to.have.lengthOf(1)
-
-        const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
-
-        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
@@ -205,7 +134,7 @@ describe('Show - Node Brace Scope', () => {
   after(init.teardown)
 
   it(
-    'should return ungrouped nodes in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly is falsey',
+    'should return ungrouped nodes in Node Brace scope for a node-brace path, when groupBy  is null',
     () => {
       const path = getRandomNodeBracePathPattern()
 
@@ -217,24 +146,6 @@ describe('Show - Node Brace Scope', () => {
         const expectedNodes = buildNodesFromEventLog(path, timestamp)
 
         testUngroupedNodes(path, timestamp, allNodes, expectedNodes, show)
-      }
-    })
-
-  it(
-    'should return total node count in Node Brace scope for a node-brace path, when groupBy  is null, and countsOnly is true',
-    () => {
-      const path = getRandomNodeBracePathPattern()
-
-      for (let timestamp of init.getMilestones()) {
-        const result = show(path, timestamp, { countsOnly: true })
-
-        expect(result).to.be.an.instanceOf(Array)
-        expect(result).to.have.lengthOf(1)
-
-        const events = log(path, { until: timestamp, groupBy: 'node', groupLimit: 1 })
-        const expectedTotal = events.filter(item => item.events[0].event !== 'deleted').length
-
-        expect(result[0].total).to.equal(expectedTotal)
       }
     })
 
