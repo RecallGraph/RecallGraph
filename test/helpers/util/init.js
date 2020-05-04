@@ -2,38 +2,72 @@
 
 const { db } = require('@arangodb')
 const cache = require('@arangodb/aql/cache')
-const { merge, forEach, omit } = require('lodash')
+const { forEach, omit, isPlainObject, get } = require('lodash')
 const { utils: { setTrace, clearTraceContext } } = require('foxx-tracing')
 const loadSampleData = require('./loadSampleData')
+const loadFlightData = require('./loadFlightData')
 const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
 
 cache.properties({ mode: 'on' })
 
+const TEST_DATA_COLLECTIONS = {}
 const TEST_DOCUMENT_COLLECTIONS = {
-  vertex: module.context.collectionName('test_vertex')
+  rawData: {
+    name: 'raw_data',
+    indexes: [
+      {
+        type: 'fulltext',
+        fields: ['Type']
+      }
+    ]
+  },
+  stars: 'stars',
+  planets: 'planets',
+  moons: 'moons',
+  asteroids: 'asteroids',
+  comets: 'comets',
+  dwarfPlanets: 'dwarf_planets',
+  vertex: 'vertex',
+  airports: 'airports'
 }
 const TEST_EDGE_COLLECTIONS = {
-  edge: module.context.collectionName('test_edge')
+  lineage: 'lineage',
+  edge: 'edge',
+  flights: 'flights'
 }
 
+let collectionsInitialized = false
 let sampleDataRefs = {}
-let testDataCollectionsInitialized = false
 let sampleDataLoaded = false
-let milestones
+let flightDataRefs = {}
+let flightDataLoaded = false
+let milestones = []
 
-function ensureTestDocumentCollections () {
-  forEach(TEST_DOCUMENT_COLLECTIONS, collName => {
-    if (!db._collection(collName)) {
-      db._createDocumentCollection(collName)
-    }
-  })
+function ensureTestDocumentCollections (truncate = true) {
+  ensureCollections(TEST_DOCUMENT_COLLECTIONS, db._createDocumentCollection, truncate)
 }
 
-function ensureTestEdgeCollections () {
-  forEach(TEST_EDGE_COLLECTIONS, collName => {
-    if (!db._collection(collName)) {
-      db._createEdgeCollection(collName)
+function ensureTestEdgeCollections (truncate = true) {
+  ensureCollections(TEST_EDGE_COLLECTIONS, db._createEdgeCollection, truncate)
+}
+
+function ensureCollections (collections, collFn, truncate) {
+  forEach(collections, (collInfo, key) => {
+    const collIsObj = isPlainObject(collInfo)
+    const collName = module.context.collectionName(`_test_${collIsObj ? collInfo.name : collInfo}`)
+
+    TEST_DATA_COLLECTIONS[key] = collName
+
+    let coll = db._collection(collName)
+    if (!coll) {
+      coll = collFn.call(db, collName)
+      console.log(`Created ${collName}`)
+    } else if (truncate) {
+      db._truncate(coll)
+      console.log(`Truncated ${collName}`)
     }
+
+    get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index))
   })
 }
 
@@ -46,73 +80,56 @@ function setSnapshotIntervals () {
   )
 }
 
-function truncateTestDataCollections () {
-  forEach(TEST_DATA_COLLECTIONS, collName => {
-    db._truncate(collName)
-  })
-
-  return true
-}
-
 function truncateServiceCollections () {
   forEach(SERVICE_COLLECTIONS, collName => {
     db._truncate(collName)
   })
-
-  return true
 }
 
 // Public
-const TEST_DATA_COLLECTIONS = Object.freeze(
-  merge({}, TEST_DOCUMENT_COLLECTIONS, TEST_EDGE_COLLECTIONS)
-)
 const TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL = 2
 
 function setup ({
-  forceTruncateTestData = false,
-  forceTruncateService = false,
-  ensureSampleDataLoad = false
+  forceInit = false,
+  ensureSampleDataLoad = false,
+  ensureFlightDataLoad = false
 } = {}) {
   setTrace({})
 
-  let testDataCollectionsTruncated = false
-  let serviceCollectionsTruncated = false
   let sampleDataLoadMessages = null
+  let flightDataLoadMessages = null
 
-  if (!testDataCollectionsInitialized) {
+  if (forceInit || !collectionsInitialized) {
     ensureTestDocumentCollections()
     ensureTestEdgeCollections()
+    truncateServiceCollections()
     setSnapshotIntervals()
-    testDataCollectionsInitialized = true
 
-    testDataCollectionsTruncated = truncateTestDataCollections()
-    serviceCollectionsTruncated = truncateServiceCollections()
-  }
-
-  if (forceTruncateTestData && !testDataCollectionsTruncated) {
-    testDataCollectionsTruncated = truncateTestDataCollections()
-  }
-
-  if (forceTruncateService && !serviceCollectionsTruncated) {
-    serviceCollectionsTruncated = truncateServiceCollections()
+    collectionsInitialized = true
+    sampleDataLoaded = false
+    flightDataLoaded = false
   }
 
   if (ensureSampleDataLoad && !sampleDataLoaded) {
-    serviceCollectionsTruncated =
-      serviceCollectionsTruncated || truncateServiceCollections()
-
-    const results = loadSampleData()
+    const results = loadSampleData(TEST_DATA_COLLECTIONS)
     sampleDataRefs = omit(results, 'messages')
     sampleDataLoadMessages = results.messages
     sampleDataLoaded = true
     milestones = results.milestones
   }
 
+  if (ensureFlightDataLoad && !flightDataLoaded) {
+    const results = loadFlightData(TEST_DATA_COLLECTIONS)
+    flightDataRefs = omit(results, 'messages')
+    flightDataLoadMessages = results.messages
+    flightDataLoaded = true
+  }
+
   return {
-    serviceCollectionsTruncated,
-    testDataCollectionsTruncated,
     sampleDataLoaded,
-    sampleDataLoadMessages
+    sampleDataLoadMessages,
+    flightDataLoaded,
+    flightDataLoadMessages
   }
 }
 
@@ -122,6 +139,10 @@ function teardown () {
 
 function getSampleDataRefs () {
   return sampleDataRefs
+}
+
+function getFlightDataRefs () {
+  return flightDataRefs
 }
 
 function getMilestones () {
@@ -134,5 +155,6 @@ module.exports = {
   setup,
   teardown,
   getSampleDataRefs,
-  getMilestones
+  getMilestones,
+  getFlightDataRefs
 }

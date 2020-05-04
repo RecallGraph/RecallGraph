@@ -3,11 +3,14 @@
 const { expect } = require('chai')
 const init = require('../../helpers/util/init')
 const { db } = require('@arangodb')
-const { chain } = require('lodash')
+const { chain, forEach } = require('lodash')
+const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
 
-describe('Prep - Clean', () => {
-  before(() => init.setup({ ensureSampleDataLoad: false, forceTruncateTestData: true, forceTruncateService: true }))
+describe('Prep - Clean Data', () => {
+  before(() => init.setup({ forceInit: true }))
+
   after(init.teardown)
+
   /*
    beforeEach(function() {
    console.debug('beforeEach', this.currentTest.fullTitle())
@@ -17,41 +20,27 @@ describe('Prep - Clean', () => {
    });
    */
 
-  it('should have no documents in test_vertex and test_edge collections', () => {
-    const { vertex: vertexCollName, edge: edgeCollName } = init.TEST_DATA_COLLECTIONS
-    const vertexColl = db._collection(vertexCollName)
-    const edgeColl = db._collection(edgeCollName)
+  it('should have no documents in test data collections', () => {
+    forEach(init.TEST_DATA_COLLECTIONS, collName => {
+      const coll = db._collection(collName)
 
-    expect(vertexColl.count()).to.equal(0)
-    expect(edgeColl.count()).to.equal(0)
+      expect(coll.count()).to.equal(0)
+    })
   })
 
-  it('should have zero document count in sample data collections', () => {
-    chain(init.getSampleDataRefs())
-      .pick('vertexCollections', 'edgeCollections')
-      .values()
-      .flatten()
-      .forEach(collName => {
-        const coll = db._collection(collName)
+  it('should have no documents in service collections', () => {
+    forEach(SERVICE_COLLECTIONS, collName => {
+      const coll = db._collection(collName)
 
-        expect(coll.count()).to.equal(0)
-      })
+      expect(coll.count()).to.equal(0)
+    })
   })
 })
 
-describe('Prep - Load', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true, forceTruncateTestData: true, forceTruncateService: true }))
+describe('Prep - Load Sample Data', () => {
+  before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
-
-  it('should have no documents in test_vertex and test_edge collections', () => {
-    const { vertex: vertexCollName, edge: edgeCollName } = init.TEST_DATA_COLLECTIONS
-    const vertexColl = db._collection(vertexCollName)
-    const edgeColl = db._collection(edgeCollName)
-
-    expect(vertexColl.count()).to.equal(0)
-    expect(edgeColl.count()).to.equal(0)
-  })
 
   it('should have non-zero document count in sample data collections', () => {
     chain(init.getSampleDataRefs())
@@ -63,5 +52,35 @@ describe('Prep - Load', () => {
 
         expect(coll.count()).to.be.above(0)
       })
+  })
+
+  it('should have non-zero document count in service collections', () => {
+    forEach(SERVICE_COLLECTIONS, collName => {
+      const coll = db._collection(collName)
+
+      expect(coll.count()).to.above(0)
+    })
+  })
+})
+
+describe('Prep - Load Flight Data', () => {
+  before(() => init.setup({ ensureFlightDataLoad: true }))
+
+  after(init.teardown)
+
+  it('should have non-zero document count in flight data collections', () => {
+    forEach(init.getFlightDataRefs().collections, collName => {
+      const coll = db._collection(collName)
+
+      expect(coll.count()).to.above(0)
+    })
+  })
+
+  it('should have non-zero document count in service collections', () => {
+    forEach(SERVICE_COLLECTIONS, collName => {
+      const coll = db._collection(collName)
+
+      expect(coll.count()).to.above(0)
+    })
   })
 })

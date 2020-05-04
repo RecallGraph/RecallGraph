@@ -3,94 +3,20 @@
 const fs = require('fs')
 const gg = require('@arangodb/general-graph')
 const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-const { forEach, get, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap } = require('lodash')
+const { mapValues, isEqual, omitBy, isEmpty, trim, invokeMap, pick } = require('lodash')
 const { createSingle } = require('../../../lib/handlers/createHandlers')
 const { replaceSingle } = require('../../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
 
 // Public
-module.exports = function loadSampleData () {
+module.exports = function loadSampleData (testDataCollections) {
   console.log('Starting sample data load...')
 
   // Define collection metadata
-  const sampleDataCollections = {
-    rawData: {
-      type: 'document',
-      name: module.context.collectionName('test_raw_data'),
-      indexes: [
-        {
-          type: 'fulltext',
-          fields: ['Type']
-        }
-      ]
-    },
-    stars: {
-      type: 'document',
-      name: module.context.collectionName('test_stars')
-    },
-    planets: {
-      type: 'document',
-      name: module.context.collectionName('test_planets')
-    },
-    moons: {
-      type: 'document',
-      name: module.context.collectionName('test_moons')
-    },
-    asteroids: {
-      type: 'document',
-      name: module.context.collectionName('test_asteroids')
-    },
-    comets: {
-      type: 'document',
-      name: module.context.collectionName('test_comets')
-    },
-    dwarfPlanets: {
-      type: 'document',
-      name: module.context.collectionName('test_dwarf_planets')
-    },
-    lineage: {
-      type: 'edge',
-      name: module.context.collectionName('test_lineage')
-    }
-  }
-
-  // Init Collections
-  const colls = {}
-  forEach(sampleDataCollections, (collInfo, key) => {
-    let coll = db._collection(collInfo.name)
-    if (!coll) {
-      switch (collInfo.type) {
-        case 'document':
-          coll = db._createDocumentCollection(collInfo.name)
-          console.log(`Created ${collInfo.name}`)
-
-          break
-
-        case 'edge':
-          coll = db._createEdgeCollection(collInfo.name)
-          console.log(`Created ${collInfo.name}`)
-
-          break
-      }
-    } else {
-      db._truncate(coll)
-      console.log(`Truncated ${collInfo.name}`)
-    }
-
-    get(collInfo, 'indexes', []).forEach(index => coll.ensureIndex(index))
-    colls[key] = coll
-  })
-
-  const {
-    rawData,
-    stars,
-    planets,
-    moons,
-    asteroids,
-    comets,
-    dwarfPlanets,
-    lineage
-  } = colls
+  const sampleDataCollections = pick(testDataCollections, 'rawData', 'stars', 'planets', 'moons', 'asteroids', 'comets',
+    'dwarfPlanets', 'lineage')
+  const colls = mapValues(sampleDataCollections, collName => db._collection(collName))
+  const { rawData, stars, planets, moons, asteroids, comets, dwarfPlanets, lineage } = colls
 
   // Init results
   const results = {

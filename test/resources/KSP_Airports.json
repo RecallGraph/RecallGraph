@@ -1,0 +1,8178 @@
+[
+  {
+    "_key": "ABA",
+    "city_code": "ABA",
+    "code": "ABA",
+    "coordinates": {
+      "lon": 91.5,
+      "lat": 53.716667
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Abakan Airport",
+    "name_translations": {
+      "en": "Abakan Airport"
+    },
+    "time_zone": "Asia/Krasnoyarsk"
+  },
+  {
+    "_key": "ACC",
+    "city_code": "ACC",
+    "code": "ACC",
+    "coordinates": {
+      "lon": -0.171769,
+      "lat": 5.60737
+    },
+    "country_code": "GH",
+    "flightable": true,
+    "name": "Kotoka International Airport",
+    "name_translations": {
+      "en": "Kotoka International Airport"
+    },
+    "time_zone": "Africa/Accra"
+  },
+  {
+    "_key": "ADA",
+    "city_code": "ADA",
+    "code": "ADA",
+    "coordinates": {
+      "lon": 35.29736,
+      "lat": 36.98503
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Adana Airport",
+    "name_translations": {
+      "en": "Adana Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "ADL",
+    "city_code": "ADL",
+    "code": "ADL",
+    "coordinates": {
+      "lon": 138.53735,
+      "lat": -34.938175
+    },
+    "country_code": "AU",
+    "flightable": true,
+    "name": "Adelaide Airport",
+    "name_translations": {
+      "en": "Adelaide Airport"
+    },
+    "time_zone": "Australia/Adelaide"
+  },
+  {
+    "_key": "ADZ",
+    "city_code": "ADZ",
+    "code": "ADZ",
+    "coordinates": {
+      "lon": -81.70221,
+      "lat": 12.586047
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Gustavo Rojas Pinilla Airport",
+    "name_translations": {
+      "en": "Gustavo Rojas Pinilla Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "AER",
+    "city_code": "AER",
+    "code": "AER",
+    "coordinates": {
+      "lon": 39.941105,
+      "lat": 43.44884
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Sochi International Airport",
+    "name_translations": {
+      "en": "Sochi International Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "AES",
+    "city_code": "AES",
+    "code": "AES",
+    "coordinates": {
+      "lon": 6.116605,
+      "lat": 62.559643
+    },
+    "country_code": "NO",
+    "flightable": true,
+    "name": "Vigra Alesund Airport",
+    "name_translations": {
+      "en": "Vigra Alesund Airport"
+    },
+    "time_zone": "Europe/Oslo"
+  },
+  {
+    "_key": "AGP",
+    "city_code": "AGP",
+    "code": "AGP",
+    "coordinates": {
+      "lon": -4.489616,
+      "lat": 36.675182
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Malaga Airport",
+    "name_translations": {
+      "en": "Malaga Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "AIY",
+    "city_code": "AIY",
+    "code": "AIY",
+    "coordinates": {
+      "lon": -74.45722,
+      "lat": 39.36
+    },
+    "country_code": "US",
+    "flightable": false,
+    "name": "Bader Field",
+    "name_translations": {
+      "en": "Bader Field"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "AKL",
+    "city_code": "AKL",
+    "code": "AKL",
+    "coordinates": {
+      "lon": 174.78352,
+      "lat": -37.004787
+    },
+    "country_code": "NZ",
+    "flightable": true,
+    "name": "Auckland Airport",
+    "name_translations": {
+      "en": "Auckland Airport"
+    },
+    "time_zone": "Pacific/Auckland"
+  },
+  {
+    "_key": "AKX",
+    "city_code": "AKX",
+    "code": "AKX",
+    "coordinates": {
+      "lon": 57.211403,
+      "lat": 50.249336
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Aktyubinsk Airport",
+    "name_translations": {
+      "en": "Aktyubinsk Airport"
+    },
+    "time_zone": "Asia/Aqtobe"
+  },
+  {
+    "_key": "ALA",
+    "city_code": "ALA",
+    "code": "ALA",
+    "coordinates": {
+      "lon": 77.01145,
+      "lat": 43.346653
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Almaty Airport",
+    "name_translations": {
+      "en": "Almaty Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "ALC",
+    "city_code": "ALC",
+    "code": "ALC",
+    "coordinates": {
+      "lon": -0.557381,
+      "lat": 38.287098
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Alicante-Elche Airport",
+    "name_translations": {
+      "en": "Alicante-Elche Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "ALG",
+    "city_code": "ALG",
+    "code": "ALG",
+    "coordinates": {
+      "lon": 3.21167,
+      "lat": 36.70058
+    },
+    "country_code": "DZ",
+    "flightable": true,
+    "name": "Houari Boumediene Airport",
+    "name_translations": {
+      "en": "Houari Boumediene Airport"
+    },
+    "time_zone": "Africa/Algiers"
+  },
+  {
+    "_key": "AMD",
+    "city_code": "AMD",
+    "code": "AMD",
+    "coordinates": {
+      "lon": 72.62417,
+      "lat": 23.06639
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Ahmedabad Airport",
+    "name_translations": {
+      "en": "Ahmedabad Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "AMS",
+    "city_code": "AMS",
+    "code": "AMS",
+    "coordinates": {
+      "lon": 4.763385,
+      "lat": 52.30907
+    },
+    "country_code": "NL",
+    "flightable": true,
+    "name": "Amsterdam Airport Schiphol",
+    "name_translations": {
+      "en": "Amsterdam Airport Schiphol"
+    },
+    "time_zone": "Europe/Amsterdam"
+  },
+  {
+    "_key": "ANF",
+    "city_code": "ANF",
+    "code": "ANF",
+    "coordinates": {
+      "lon": -70.44079,
+      "lat": -23.449
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Cerro Moreno International Airport",
+    "name_translations": {
+      "en": "Cerro Moreno International Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "ANK",
+    "city_code": "ANK",
+    "code": "ANK",
+    "coordinates": {
+      "lon": 32.68955,
+      "lat": 39.94949
+    },
+    "country_code": "TR",
+    "flightable": false,
+    "name": "Etimesgut",
+    "name_translations": {
+      "en": "Etimesgut"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "AOR",
+    "city_code": "AOR",
+    "code": "AOR",
+    "coordinates": {
+      "lon": 100.405266,
+      "lat": 6.201171
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Sultan Abdul Halim Airport",
+    "name_translations": {
+      "en": "Sultan Abdul Halim Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "AQP",
+    "city_code": "AQP",
+    "code": "AQP",
+    "coordinates": {
+      "lon": -71.56799,
+      "lat": -16.344812
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Rodriguez Ballon International Airport",
+    "name_translations": {
+      "en": "Rodriguez Ballon International Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "ASF",
+    "city_code": "ASF",
+    "code": "ASF",
+    "coordinates": {
+      "lon": 47.999977,
+      "lat": 46.2877
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Astrakhan Airport",
+    "name_translations": {
+      "en": "Astrakhan Airport"
+    },
+    "time_zone": "Europe/Samara"
+  },
+  {
+    "_key": "ASR",
+    "city_code": "ASR",
+    "code": "ASR",
+    "coordinates": {
+      "lon": 35.490707,
+      "lat": 38.7742
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Kayseri Airport",
+    "name_translations": {
+      "en": "Kayseri Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "ATH",
+    "city_code": "ATH",
+    "code": "ATH",
+    "coordinates": {
+      "lon": 23.946486,
+      "lat": 37.93635
+    },
+    "country_code": "GR",
+    "flightable": true,
+    "name": "Eleftherios Venizelos International Airport",
+    "name_translations": {
+      "en": "Eleftherios Venizelos International Airport"
+    },
+    "time_zone": "Europe/Athens"
+  },
+  {
+    "_key": "ATL",
+    "city_code": "ATL",
+    "code": "ATL",
+    "coordinates": {
+      "lon": -84.44403,
+      "lat": 33.640068
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Hartsfield-Jackson Atlanta International Airport",
+    "name_translations": {
+      "en": "Hartsfield-Jackson Atlanta International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "ATQ",
+    "city_code": "ATQ",
+    "code": "ATQ",
+    "coordinates": {
+      "lon": 74.8073,
+      "lat": 31.706741
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Sri Guru Ram Dass Jee International Airport",
+    "name_translations": {
+      "en": "Sri Guru Ram Dass Jee International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "AUS",
+    "city_code": "AUS",
+    "code": "AUS",
+    "coordinates": {
+      "lon": -97.66706,
+      "lat": 30.202545
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Austin-Bergstrom International Airport",
+    "name_translations": {
+      "en": "Austin-Bergstrom International Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "AYT",
+    "city_code": "AYT",
+    "code": "AYT",
+    "coordinates": {
+      "lon": 30.80135,
+      "lat": 36.89928
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Antalya Airport",
+    "name_translations": {
+      "en": "Antalya Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "BAQ",
+    "city_code": "BAQ",
+    "code": "BAQ",
+    "coordinates": {
+      "lon": -74.77618,
+      "lat": 10.886398
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "E Cortissoz Airport",
+    "name_translations": {
+      "en": "E Cortissoz Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "BAX",
+    "city_code": "BAX",
+    "code": "BAX",
+    "coordinates": {
+      "lon": 83.547646,
+      "lat": 53.361088
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Barnaul Airport",
+    "name_translations": {
+      "en": "Barnaul Airport"
+    },
+    "time_zone": "Asia/Novokuznetsk"
+  },
+  {
+    "_key": "BBA",
+    "city_code": "BBA",
+    "code": "BBA",
+    "coordinates": {
+      "lon": -71.695,
+      "lat": -45.916668
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Teniente Vidal Airport",
+    "name_translations": {
+      "en": "Teniente Vidal Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "BBI",
+    "city_code": "BBI",
+    "code": "BBI",
+    "coordinates": {
+      "lon": 85.81738,
+      "lat": 20.252853
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Biju Patnaik International Airport",
+    "name_translations": {
+      "en": "Biju Patnaik International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "BCD",
+    "city_code": "BCD",
+    "code": "BCD",
+    "coordinates": {
+      "lon": 122.93359,
+      "lat": 10.644815
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Bacolod-Silay International Airport",
+    "name_translations": {
+      "en": "Bacolod-Silay International Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "BCN",
+    "city_code": "BCN",
+    "code": "BCN",
+    "coordinates": {
+      "lon": 2.07593,
+      "lat": 41.30303
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Barcelona-El Prat Airport",
+    "name_translations": {
+      "en": "Barcelona-El Prat Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "BDL",
+    "city_code": "BDL",
+    "code": "BDL",
+    "coordinates": {
+      "lon": -72.6847,
+      "lat": 41.92953
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Bradley International Airport",
+    "name_translations": {
+      "en": "Bradley International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "BDO",
+    "city_code": "BDO",
+    "code": "BDO",
+    "coordinates": {
+      "lon": 107.58178,
+      "lat": -6.904648
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Husein Sastranegara Airport",
+    "name_translations": {
+      "en": "Husein Sastranegara Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "BEG",
+    "city_code": "BEG",
+    "code": "BEG",
+    "coordinates": {
+      "lon": 20.306944,
+      "lat": 44.819443
+    },
+    "country_code": "RS",
+    "flightable": true,
+    "name": "Belgrad Nikola Tesla Airport",
+    "name_translations": {
+      "en": "Belgrad Nikola Tesla Airport"
+    },
+    "time_zone": "Europe/Belgrade"
+  },
+  {
+    "_key": "BEL",
+    "city_code": "BEL",
+    "code": "BEL",
+    "coordinates": {
+      "lon": -48.480003,
+      "lat": -1.389865
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Val De Cans International Airport",
+    "name_translations": {
+      "en": "Val De Cans International Airport"
+    },
+    "time_zone": "America/Belem"
+  },
+  {
+    "_key": "BER",
+    "city_code": "BER",
+    "code": "BER",
+    "coordinates": {
+      "lon": 13.503333,
+      "lat": 52.36667
+    },
+    "country_code": "DE",
+    "flightable": false,
+    "name": "Brandenburg",
+    "name_translations": {
+      "en": "Brandenburg"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "BFS",
+    "city_code": "BFS",
+    "code": "BFS",
+    "coordinates": {
+      "lon": -6.217616,
+      "lat": 54.662395
+    },
+    "country_code": "GB",
+    "flightable": true,
+    "name": "Belfast International Airport",
+    "name_translations": {
+      "en": "Belfast International Airport"
+    },
+    "time_zone": "Europe/London"
+  },
+  {
+    "_key": "BFV",
+    "city_code": "BFV",
+    "code": "BFV",
+    "coordinates": {
+      "lon": 103.25528,
+      "lat": 15.226944
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Buri Ram Airport",
+    "name_translations": {
+      "en": "Buri Ram Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "BGA",
+    "city_code": "BGA",
+    "code": "BGA",
+    "coordinates": {
+      "lon": -73.1814,
+      "lat": 7.128045
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Palonegro International Airport",
+    "name_translations": {
+      "en": "Palonegro International Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "BHO",
+    "city_code": "BHO",
+    "code": "BHO",
+    "coordinates": {
+      "lon": 77.34177,
+      "lat": 23.284761
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Raja Bhoj Airport",
+    "name_translations": {
+      "en": "Raja Bhoj Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "BHX",
+    "city_code": "BHX",
+    "code": "BHX",
+    "coordinates": {
+      "lon": -1.733256,
+      "lat": 52.45252
+    },
+    "country_code": "GB",
+    "flightable": true,
+    "name": "Birmingham International Airport",
+    "name_translations": {
+      "en": "Birmingham International Airport"
+    },
+    "time_zone": "Europe/London"
+  },
+  {
+    "_key": "BIO",
+    "city_code": "BIO",
+    "code": "BIO",
+    "coordinates": {
+      "lon": -2.905808,
+      "lat": 43.305534
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Bilbao Airport",
+    "name_translations": {
+      "en": "Bilbao Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "BJV",
+    "city_code": "BJV",
+    "code": "BJV",
+    "coordinates": {
+      "lon": 27.672781,
+      "lat": 37.243954
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Milas-Bodrum Airport",
+    "name_translations": {
+      "en": "Milas-Bodrum Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "BKI",
+    "city_code": "BKI",
+    "code": "BKI",
+    "coordinates": {
+      "lon": 116.05075,
+      "lat": 5.923961
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Kota Kinabalu International Airport",
+    "name_translations": {
+      "en": "Kota Kinabalu International Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "BKK",
+    "city_code": "BKK",
+    "code": "BKK",
+    "coordinates": {
+      "lon": 100.752045,
+      "lat": 13.693062
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Suvarnabhumi Airport",
+    "name_translations": {
+      "en": "Suvarnabhumi Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "BLA",
+    "city_code": "BLA",
+    "code": "BLA",
+    "coordinates": {
+      "lon": -64.68589,
+      "lat": 10.107936
+    },
+    "country_code": "VE",
+    "flightable": true,
+    "name": "General Jose Antonio Anzoategui International Airport",
+    "name_translations": {
+      "en": "General Jose Antonio Anzoategui International Airport"
+    },
+    "time_zone": "America/Caracas"
+  },
+  {
+    "_key": "BLL",
+    "city_code": "BLL",
+    "code": "BLL",
+    "coordinates": {
+      "lon": 9.147874,
+      "lat": 55.747383
+    },
+    "country_code": "DK",
+    "flightable": true,
+    "name": "Billund Airport",
+    "name_translations": {
+      "en": "Billund Airport"
+    },
+    "time_zone": "Europe/Copenhagen"
+  },
+  {
+    "_key": "BLQ",
+    "city_code": "BLQ",
+    "code": "BLQ",
+    "coordinates": {
+      "lon": 11.293289,
+      "lat": 44.529266
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Guglielmo Marconi Airport",
+    "name_translations": {
+      "en": "Guglielmo Marconi Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "BLR",
+    "city_code": "BLR",
+    "code": "BLR",
+    "coordinates": {
+      "lon": 77.70556,
+      "lat": 13.198889
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Kempegowda International Airport",
+    "name_translations": {
+      "en": "Kempegowda International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "BMV",
+    "city_code": "BMV",
+    "code": "BMV",
+    "coordinates": {
+      "lon": 108.05,
+      "lat": 12.666667
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Phung-Duc Airport",
+    "name_translations": {
+      "en": "Phung-Duc Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "BNA",
+    "city_code": "BNA",
+    "code": "BNA",
+    "coordinates": {
+      "lon": -86.668945,
+      "lat": 36.13174
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Nashville International Airport",
+    "name_translations": {
+      "en": "Nashville International Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "BOD",
+    "city_code": "BOD",
+    "code": "BOD",
+    "coordinates": {
+      "lon": -0.70217,
+      "lat": 44.83102
+    },
+    "country_code": "FR",
+    "flightable": true,
+    "name": "Bordeaux Airport",
+    "name_translations": {
+      "en": "Bordeaux Airport"
+    },
+    "time_zone": "Europe/Paris"
+  },
+  {
+    "_key": "BOG",
+    "city_code": "BOG",
+    "code": "BOG",
+    "coordinates": {
+      "lon": -74.143135,
+      "lat": 4.698602
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "El Dorado International Airport",
+    "name_translations": {
+      "en": "El Dorado International Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "BOJ",
+    "city_code": "BOJ",
+    "code": "BOJ",
+    "coordinates": {
+      "lon": 27.283333,
+      "lat": 42.416668
+    },
+    "country_code": "BG",
+    "flightable": true,
+    "name": "Bourgas Airport",
+    "name_translations": {
+      "en": "Bourgas Airport"
+    },
+    "time_zone": "Europe/Sofia"
+  },
+  {
+    "_key": "BOM",
+    "city_code": "BOM",
+    "code": "BOM",
+    "coordinates": {
+      "lon": 72.87497,
+      "lat": 19.095509
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Chhatrapati Shivaji International Airport",
+    "name_translations": {
+      "en": "Chhatrapati Shivaji International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "BOS",
+    "city_code": "BOS",
+    "code": "BOS",
+    "coordinates": {
+      "lon": -71.02018,
+      "lat": 42.36646
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Logan International Airport",
+    "name_translations": {
+      "en": "Logan International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "BPS",
+    "city_code": "BPS",
+    "code": "BPS",
+    "coordinates": {
+      "lon": -39.081097,
+      "lat": -16.441158
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Porto Seguro Airport",
+    "name_translations": {
+      "en": "Porto Seguro Airport"
+    },
+    "time_zone": "America/Bahia"
+  },
+  {
+    "_key": "BRE",
+    "city_code": "BRE",
+    "code": "BRE",
+    "coordinates": {
+      "lon": 8.785352,
+      "lat": 53.05297
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Bremen Airport",
+    "name_translations": {
+      "en": "Bremen Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "BRI",
+    "city_code": "BRI",
+    "code": "BRI",
+    "coordinates": {
+      "lon": 16.76391,
+      "lat": 41.13388
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Palese Airport",
+    "name_translations": {
+      "en": "Palese Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "BRU",
+    "city_code": "BRU",
+    "code": "BRU",
+    "coordinates": {
+      "lon": 4.483602,
+      "lat": 50.89717
+    },
+    "country_code": "BE",
+    "flightable": true,
+    "name": "Brussels Airport",
+    "name_translations": {
+      "en": "Brussels Airport"
+    },
+    "time_zone": "Europe/Brussels"
+  },
+  {
+    "_key": "BSB",
+    "city_code": "BSB",
+    "code": "BSB",
+    "coordinates": {
+      "lon": -47.921486,
+      "lat": -15.869807
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Brasilia International Airport",
+    "name_translations": {
+      "en": "Brasilia International Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "BSK",
+    "city_code": "BSK",
+    "code": "BSK",
+    "coordinates": {
+      "lon": 5.738056,
+      "lat": 34.79333
+    },
+    "country_code": "DZ",
+    "flightable": true,
+    "name": "Biskra Airport",
+    "name_translations": {
+      "en": "Biskra Airport"
+    },
+    "time_zone": "Africa/Algiers"
+  },
+  {
+    "_key": "BTH",
+    "city_code": "BTH",
+    "code": "BTH",
+    "coordinates": {
+      "lon": 104.11528,
+      "lat": 1.123627
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Hang Nadim International Airport",
+    "name_translations": {
+      "en": "Hang Nadim International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "BTJ",
+    "city_code": "BTJ",
+    "code": "BTJ",
+    "coordinates": {
+      "lon": 95.41833,
+      "lat": 5.518021
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Sultan Iskandar Muda International Airport",
+    "name_translations": {
+      "en": "Sultan Iskandar Muda International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "BTS",
+    "city_code": "BTS",
+    "code": "BTS",
+    "coordinates": {
+      "lon": 17.199799,
+      "lat": 48.170017
+    },
+    "country_code": "SK",
+    "flightable": true,
+    "name": "Bratislava Airport",
+    "name_translations": {
+      "en": "Bratislava Airport"
+    },
+    "time_zone": "Europe/Bratislava"
+  },
+  {
+    "_key": "BTU",
+    "city_code": "BTU",
+    "code": "BTU",
+    "coordinates": {
+      "lon": 113.04346,
+      "lat": 3.171772
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Bintulu Airport",
+    "name_translations": {
+      "en": "Bintulu Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "BUD",
+    "city_code": "BUD",
+    "code": "BUD",
+    "coordinates": {
+      "lon": 19.261621,
+      "lat": 47.433037
+    },
+    "country_code": "HU",
+    "flightable": true,
+    "name": "Budapest Ferenc Liszt International Airport",
+    "name_translations": {
+      "en": "Budapest Ferenc Liszt International Airport"
+    },
+    "time_zone": "Europe/Budapest"
+  },
+  {
+    "_key": "BUR",
+    "city_code": "BUR",
+    "code": "BUR",
+    "coordinates": {
+      "lon": -118.35411,
+      "lat": 34.19619
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Bob Hope Airport",
+    "name_translations": {
+      "en": "Bob Hope Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "BWI",
+    "city_code": "BWI",
+    "code": "BWI",
+    "coordinates": {
+      "lon": -76.66894,
+      "lat": 39.179527
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Baltimore/Wash International Thurgood Marshall Airport",
+    "name_translations": {
+      "en": "Baltimore/Wash International Thurgood Marshall Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "BXU",
+    "city_code": "BXU",
+    "code": "BXU",
+    "coordinates": {
+      "lon": 125.48123,
+      "lat": 8.947999
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Butuan Airport",
+    "name_translations": {
+      "en": "Butuan Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "BZG",
+    "city_code": "BZG",
+    "code": "BZG",
+    "coordinates": {
+      "lon": 17.978611,
+      "lat": 53.09667
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "Bydgoszcz Airport",
+    "name_translations": {
+      "en": "Bydgoszcz Airport"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "BZK",
+    "city_code": "BZK",
+    "code": "BZK",
+    "coordinates": {
+      "lon": 34.333332,
+      "lat": 53.266666
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Bryansk International Airport",
+    "name_translations": {
+      "en": "Bryansk International Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "CAG",
+    "city_code": "CAG",
+    "code": "CAG",
+    "coordinates": {
+      "lon": 9.060673,
+      "lat": 39.254333
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Cagliari Elmas Airport",
+    "name_translations": {
+      "en": "Cagliari Elmas Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "CAI",
+    "city_code": "CAI",
+    "code": "CAI",
+    "coordinates": {
+      "lon": 31.40647,
+      "lat": 30.120106
+    },
+    "country_code": "EG",
+    "flightable": true,
+    "name": "Cairo International Airport",
+    "name_translations": {
+      "en": "Cairo International Airport"
+    },
+    "time_zone": "Africa/Cairo"
+  },
+  {
+    "_key": "CAK",
+    "city_code": "CAK",
+    "code": "CAK",
+    "coordinates": {
+      "lon": -81.43583,
+      "lat": 40.914963
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Akron-Canton Airport",
+    "name_translations": {
+      "en": "Akron-Canton Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "CAN",
+    "city_code": "CAN",
+    "code": "CAN",
+    "coordinates": {
+      "lon": 113.29734,
+      "lat": 23.387861
+    },
+    "country_code": "CN",
+    "flightable": true,
+    "name": "Guangzhou Baiyun International Airport",
+    "name_translations": {
+      "en": "Guangzhou Baiyun International Airport"
+    },
+    "time_zone": "Asia/Shanghai"
+  },
+  {
+    "_key": "CCP",
+    "city_code": "CCP",
+    "code": "CCP",
+    "coordinates": {
+      "lon": -73.05944,
+      "lat": -36.777122
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Carriel Sur Airport",
+    "name_translations": {
+      "en": "Carriel Sur Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "CCS",
+    "city_code": "CCS",
+    "code": "CCS",
+    "coordinates": {
+      "lon": -67.00551,
+      "lat": 10.596942
+    },
+    "country_code": "VE",
+    "flightable": true,
+    "name": "Simon Bolivar International Airport",
+    "name_translations": {
+      "en": "Simon Bolivar International Airport"
+    },
+    "time_zone": "America/Caracas"
+  },
+  {
+    "_key": "CCU",
+    "city_code": "CCU",
+    "code": "CCU",
+    "coordinates": {
+      "lon": 88.43931,
+      "lat": 22.64531
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Netaji Subhas Chandra Bose Airport",
+    "name_translations": {
+      "en": "Netaji Subhas Chandra Bose Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "CEB",
+    "city_code": "CEB",
+    "code": "CEB",
+    "coordinates": {
+      "lon": 123.98278,
+      "lat": 10.313333
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Mactan-Cebu International Airport",
+    "name_translations": {
+      "en": "Mactan-Cebu International Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "CEI",
+    "city_code": "CEI",
+    "code": "CEI",
+    "coordinates": {
+      "lon": 99.878815,
+      "lat": 19.954609
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Chiang Rai International Airport",
+    "name_translations": {
+      "en": "Chiang Rai International Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "CEK",
+    "city_code": "CEK",
+    "code": "CEK",
+    "coordinates": {
+      "lon": 61.51235,
+      "lat": 55.297504
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Chelyabinsk International Airport",
+    "name_translations": {
+      "en": "Chelyabinsk International Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "CGB",
+    "city_code": "CGB",
+    "code": "CGB",
+    "coordinates": {
+      "lon": -56.120266,
+      "lat": -15.651725
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Marechal Rondon International Airport",
+    "name_translations": {
+      "en": "Marechal Rondon International Airport"
+    },
+    "time_zone": "America/Cuiaba"
+  },
+  {
+    "_key": "CGM",
+    "city_code": "CGM",
+    "code": "CGM",
+    "coordinates": {
+      "lon": 121.916664,
+      "lat": 18.9
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Mambajao",
+    "name_translations": {
+      "en": "Mambajao"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "CGN",
+    "city_code": "CGN",
+    "code": "CGN",
+    "coordinates": {
+      "lon": 7.122224,
+      "lat": 50.878365
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Cologne Bonn Airport",
+    "name_translations": {
+      "en": "Cologne Bonn Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "CGR",
+    "city_code": "CGR",
+    "code": "CGR",
+    "coordinates": {
+      "lon": -54.668873,
+      "lat": -20.456991
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Campo Grande International Airport",
+    "name_translations": {
+      "en": "Campo Grande International Airport"
+    },
+    "time_zone": "America/Campo_Grande"
+  },
+  {
+    "_key": "CGY",
+    "city_code": "CGY",
+    "code": "CGY",
+    "coordinates": {
+      "lon": 124.61157,
+      "lat": 8.407744
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Laguindingan International Airport",
+    "name_translations": {
+      "en": "Laguindingan International Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "CHI",
+    "city_code": "CHI",
+    "code": "CHI",
+    "coordinates": {
+      "lon": -87.6297982,
+      "lat": 41.8781136
+    },
+    "country_code": "US",
+    "flightable": false,
+    "name": "Chicago FSS",
+    "name_translations": {
+      "en": "Chicago FSS"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "CIT",
+    "city_code": "CIT",
+    "code": "CIT",
+    "coordinates": {
+      "lon": 69.6,
+      "lat": 42.3
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Shymkent Airport",
+    "name_translations": {
+      "en": "Shymkent Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "CIX",
+    "city_code": "CIX",
+    "code": "CIX",
+    "coordinates": {
+      "lon": -79.83222,
+      "lat": -6.789722
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Cornel Ruiz Airport",
+    "name_translations": {
+      "en": "Cornel Ruiz Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "CJB",
+    "city_code": "CJB",
+    "code": "CJB",
+    "coordinates": {
+      "lon": 77.03893,
+      "lat": 11.031026
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Coimbatore International Airport",
+    "name_translations": {
+      "en": "Coimbatore International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "CJC",
+    "city_code": "CJC",
+    "code": "CJC",
+    "coordinates": {
+      "lon": -68.90843,
+      "lat": -22.495085
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "El Loa Airport",
+    "name_translations": {
+      "en": "El Loa Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "CJJ",
+    "city_code": "CJJ",
+    "code": "CJJ",
+    "coordinates": {
+      "lon": 127.49509,
+      "lat": 36.7224
+    },
+    "country_code": "KR",
+    "flightable": true,
+    "name": "Cheongju Airport",
+    "name_translations": {
+      "en": "Cheongju Airport"
+    },
+    "time_zone": "Asia/Seoul"
+  },
+  {
+    "_key": "CJM",
+    "city_code": "CJM",
+    "code": "CJM",
+    "coordinates": {
+      "lon": 99.36389,
+      "lat": 10.709722
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Chumphon Airport",
+    "name_translations": {
+      "en": "Chumphon Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "CJU",
+    "city_code": "CJU",
+    "code": "CJU",
+    "coordinates": {
+      "lon": 126.49312,
+      "lat": 33.5067
+    },
+    "country_code": "KR",
+    "flightable": true,
+    "name": "Jeju International Airport",
+    "name_translations": {
+      "en": "Jeju International Airport"
+    },
+    "time_zone": "Asia/Seoul"
+  },
+  {
+    "_key": "CKG",
+    "city_code": "CKG",
+    "code": "CKG",
+    "coordinates": {
+      "lon": 106.63408,
+      "lat": 29.72034
+    },
+    "country_code": "CN",
+    "flightable": true,
+    "name": "Chongqing Jiangbei International Airport",
+    "name_translations": {
+      "en": "Chongqing Jiangbei International Airport"
+    },
+    "time_zone": "Asia/Shanghai"
+  },
+  {
+    "_key": "CLE",
+    "city_code": "CLE",
+    "code": "CLE",
+    "coordinates": {
+      "lon": -81.83821,
+      "lat": 41.410854
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Cleveland Hopkins International Airport",
+    "name_translations": {
+      "en": "Cleveland Hopkins International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "CLJ",
+    "city_code": "CLJ",
+    "code": "CLJ",
+    "coordinates": {
+      "lon": 23.687014,
+      "lat": 46.782063
+    },
+    "country_code": "RO",
+    "flightable": true,
+    "name": "Avram Iancu Cluj International Airport",
+    "name_translations": {
+      "en": "Avram Iancu Cluj International Airport"
+    },
+    "time_zone": "Europe/Bucharest"
+  },
+  {
+    "_key": "CLO",
+    "city_code": "CLO",
+    "code": "CLO",
+    "coordinates": {
+      "lon": -76.381386,
+      "lat": 3.543056
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Alfonso B. Aragon Airport",
+    "name_translations": {
+      "en": "Alfonso B. Aragon Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "CLT",
+    "city_code": "CLT",
+    "code": "CLT",
+    "coordinates": {
+      "lon": -80.93584,
+      "lat": 35.219166
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Charlotte Douglas International Airport",
+    "name_translations": {
+      "en": "Charlotte Douglas International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "CMH",
+    "city_code": "CMH",
+    "code": "CMH",
+    "coordinates": {
+      "lon": -82.884964,
+      "lat": 39.99818
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "John Glenn Columbus International Airport",
+    "name_translations": {
+      "en": "John Glenn Columbus International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "CNX",
+    "city_code": "CNX",
+    "code": "CNX",
+    "coordinates": {
+      "lon": 98.96841,
+      "lat": 18.769573
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Chiang Mai International Airport",
+    "name_translations": {
+      "en": "Chiang Mai International Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "COK",
+    "city_code": "COK",
+    "code": "COK",
+    "coordinates": {
+      "lon": 76.39053,
+      "lat": 10.155644
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Cochin International Airport",
+    "name_translations": {
+      "en": "Cochin International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "CPH",
+    "city_code": "CPH",
+    "code": "CPH",
+    "coordinates": {
+      "lon": 12.647601,
+      "lat": 55.62905
+    },
+    "country_code": "DK",
+    "flightable": true,
+    "name": "Copenhagen Airport",
+    "name_translations": {
+      "en": "Copenhagen Airport"
+    },
+    "time_zone": "Europe/Copenhagen"
+  },
+  {
+    "_key": "CPO",
+    "city_code": "CPO",
+    "code": "CPO",
+    "coordinates": {
+      "lon": -70.414406,
+      "lat": -27.29892
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Chamonate Airport",
+    "name_translations": {
+      "en": "Chamonate Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "CRA",
+    "city_code": "CRA",
+    "code": "CRA",
+    "coordinates": {
+      "lon": 23.886389,
+      "lat": 44.31889
+    },
+    "country_code": "RO",
+    "flightable": true,
+    "name": "Craiova Airport",
+    "name_translations": {
+      "en": "Craiova Airport"
+    },
+    "time_zone": "Europe/Bucharest"
+  },
+  {
+    "_key": "CRW",
+    "city_code": "CRW",
+    "code": "CRW",
+    "coordinates": {
+      "lon": -81.596504,
+      "lat": 38.370342
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Yeager Airport",
+    "name_translations": {
+      "en": "Yeager Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "CSY",
+    "city_code": "CSY",
+    "code": "CSY",
+    "coordinates": {
+      "lon": 47.266666,
+      "lat": 56.13333
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Cheboksary Airport",
+    "name_translations": {
+      "en": "Cheboksary Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "CTA",
+    "city_code": "CTA",
+    "code": "CTA",
+    "coordinates": {
+      "lon": 15.065877,
+      "lat": 37.47066
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Catania-Fontanarossa Airport",
+    "name_translations": {
+      "en": "Catania-Fontanarossa Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "CTG",
+    "city_code": "CTG",
+    "code": "CTG",
+    "coordinates": {
+      "lon": -75.51659,
+      "lat": 10.445704
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Rafael Nunez International Airport",
+    "name_translations": {
+      "en": "Rafael Nunez International Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "CTU",
+    "city_code": "CTU",
+    "code": "CTU",
+    "coordinates": {
+      "lon": 103.9568,
+      "lat": 30.581135
+    },
+    "country_code": "CN",
+    "flightable": true,
+    "name": "Chengdu Shuangliu International Airport",
+    "name_translations": {
+      "en": "Chengdu Shuangliu International Airport"
+    },
+    "time_zone": "Asia/Shanghai"
+  },
+  {
+    "_key": "CUC",
+    "city_code": "CUC",
+    "code": "CUC",
+    "coordinates": {
+      "lon": -72.50815,
+      "lat": 7.927108
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Camilo Daza International Airport",
+    "name_translations": {
+      "en": "Camilo Daza International Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "CUN",
+    "city_code": "CUN",
+    "code": "CUN",
+    "coordinates": {
+      "lon": -86.874435,
+      "lat": 21.040457
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Cancun International Airport",
+    "name_translations": {
+      "en": "Cancun International Airport"
+    },
+    "time_zone": "America/Cancun"
+  },
+  {
+    "_key": "CUZ",
+    "city_code": "CUZ",
+    "code": "CUZ",
+    "coordinates": {
+      "lon": -71.94371,
+      "lat": -13.538429
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Alejandro Velasco Astete International Airport",
+    "name_translations": {
+      "en": "Alejandro Velasco Astete International Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "CVG",
+    "city_code": "CVG",
+    "code": "CVG",
+    "coordinates": {
+      "lon": -84.66145,
+      "lat": 39.0555
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Cincinnati/Northern Kentucky Airport",
+    "name_translations": {
+      "en": "Cincinnati/Northern Kentucky Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "CWB",
+    "city_code": "CWB",
+    "code": "CWB",
+    "coordinates": {
+      "lon": -49.176544,
+      "lat": -25.5322
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Afonso Pena International Airport",
+    "name_translations": {
+      "en": "Afonso Pena International Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "CYP",
+    "city_code": "CYP",
+    "code": "CYP",
+    "coordinates": {
+      "lon": 124.54305,
+      "lat": 12.075833
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Calbayog Airport",
+    "name_translations": {
+      "en": "Calbayog Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "CZL",
+    "city_code": "CZL",
+    "code": "CZL",
+    "coordinates": {
+      "lon": 6.618425,
+      "lat": 36.286476
+    },
+    "country_code": "DZ",
+    "flightable": true,
+    "name": "Ain El Bey Airport",
+    "name_translations": {
+      "en": "Ain El Bey Airport"
+    },
+    "time_zone": "Africa/Algiers"
+  },
+  {
+    "_key": "DAD",
+    "city_code": "DAD",
+    "code": "DAD",
+    "coordinates": {
+      "lon": 108.20298,
+      "lat": 16.055399
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Da Nang International Airport",
+    "name_translations": {
+      "en": "Da Nang International Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "DAR",
+    "city_code": "DAR",
+    "code": "DAR",
+    "coordinates": {
+      "lon": 39.20211,
+      "lat": -6.873533
+    },
+    "country_code": "TZ",
+    "flightable": true,
+    "name": "Julius Nyerere International Airport",
+    "name_translations": {
+      "en": "Julius Nyerere International Airport"
+    },
+    "time_zone": "Africa/Dar_es_Salaam"
+  },
+  {
+    "_key": "DEB",
+    "city_code": "DEB",
+    "code": "DEB",
+    "coordinates": {
+      "lon": 21.7,
+      "lat": 47.55
+    },
+    "country_code": "HU",
+    "flightable": true,
+    "name": "Debrecen Airport",
+    "name_translations": {
+      "en": "Debrecen Airport"
+    },
+    "time_zone": "Europe/Budapest"
+  },
+  {
+    "_key": "DEL",
+    "city_code": "DEL",
+    "code": "DEL",
+    "coordinates": {
+      "lon": 77.10079,
+      "lat": 28.556555
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Indira Gandhi International Airport",
+    "name_translations": {
+      "en": "Indira Gandhi International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "DEN",
+    "city_code": "DEN",
+    "code": "DEN",
+    "coordinates": {
+      "lon": -104.672844,
+      "lat": 39.84939
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Denver International Airport",
+    "name_translations": {
+      "en": "Denver International Airport"
+    },
+    "time_zone": "America/Denver"
+  },
+  {
+    "_key": "DFW",
+    "city_code": "DFW",
+    "code": "DFW",
+    "coordinates": {
+      "lon": -97.036125,
+      "lat": 32.89746
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Dallas/Fort Worth International Airport",
+    "name_translations": {
+      "en": "Dallas/Fort Worth International Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "DGT",
+    "city_code": "DGT",
+    "code": "DGT",
+    "coordinates": {
+      "lon": 123.29601,
+      "lat": 9.332543
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Dumaguete Airport",
+    "name_translations": {
+      "en": "Dumaguete Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "DHM",
+    "city_code": "DHM",
+    "code": "DHM",
+    "coordinates": {
+      "lon": 76.26667,
+      "lat": 32.3
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Gaggal Airport",
+    "name_translations": {
+      "en": "Gaggal Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "DIY",
+    "city_code": "DIY",
+    "code": "DIY",
+    "coordinates": {
+      "lon": 40.20458,
+      "lat": 37.903873
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Diyarbakir Airport",
+    "name_translations": {
+      "en": "Diyarbakir Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "DLI",
+    "city_code": "DLI",
+    "code": "DLI",
+    "coordinates": {
+      "lon": 108.37603,
+      "lat": 11.749689
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Lien Khuong Airport",
+    "name_translations": {
+      "en": "Lien Khuong Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "DLM",
+    "city_code": "DLM",
+    "code": "DLM",
+    "coordinates": {
+      "lon": 28.783333,
+      "lat": 36.716667
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Dalaman Airport",
+    "name_translations": {
+      "en": "Dalaman Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "DMB",
+    "city_code": "DMB",
+    "code": "DMB",
+    "coordinates": {
+      "lon": 71.36667,
+      "lat": 42.9
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Jambyl Airport",
+    "name_translations": {
+      "en": "Jambyl Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "DMM",
+    "city_code": "DMM",
+    "code": "DMM",
+    "coordinates": {
+      "lon": 49.79778,
+      "lat": 26.471111
+    },
+    "country_code": "SA",
+    "flightable": true,
+    "name": "King Fahd International Airport",
+    "name_translations": {
+      "en": "King Fahd International Airport"
+    },
+    "time_zone": "Asia/Riyadh"
+  },
+  {
+    "_key": "DNZ",
+    "city_code": "DNZ",
+    "code": "DNZ",
+    "coordinates": {
+      "lon": 29.703333,
+      "lat": 37.787224
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Cardak Airport",
+    "name_translations": {
+      "en": "Cardak Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "DPS",
+    "city_code": "DPS",
+    "code": "DPS",
+    "coordinates": {
+      "lon": 115.16331,
+      "lat": -8.74446
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Ngurah Rai International Airport",
+    "name_translations": {
+      "en": "Ngurah Rai International Airport"
+    },
+    "time_zone": "Asia/Makassar"
+  },
+  {
+    "_key": "DSM",
+    "city_code": "DSM",
+    "code": "DSM",
+    "coordinates": {
+      "lon": -93.64809,
+      "lat": 41.532433
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Des Moines International Airport",
+    "name_translations": {
+      "en": "Des Moines International Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "DTM",
+    "city_code": "DTM",
+    "code": "DTM",
+    "coordinates": {
+      "lon": 7.613139,
+      "lat": 51.514828
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Dortmund Airport",
+    "name_translations": {
+      "en": "Dortmund Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "DUB",
+    "city_code": "DUB",
+    "code": "DUB",
+    "coordinates": {
+      "lon": -6.24357,
+      "lat": 53.42728
+    },
+    "country_code": "IE",
+    "flightable": true,
+    "name": "Dublin Airport",
+    "name_translations": {
+      "en": "Dublin Airport"
+    },
+    "time_zone": "Europe/Dublin"
+  },
+  {
+    "_key": "DUR",
+    "city_code": "DUR",
+    "code": "DUR",
+    "coordinates": {
+      "lon": 31.116388,
+      "lat": -29.614445
+    },
+    "country_code": "ZA",
+    "flightable": true,
+    "name": "King Shaka International Airport",
+    "name_translations": {
+      "en": "King Shaka International Airport"
+    },
+    "time_zone": "Africa/Johannesburg"
+  },
+  {
+    "_key": "DUS",
+    "city_code": "DUS",
+    "code": "DUS",
+    "coordinates": {
+      "lon": 6.76558,
+      "lat": 51.278328
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Dusseldorf International Airport",
+    "name_translations": {
+      "en": "Dusseldorf International Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "DVO",
+    "city_code": "DVO",
+    "code": "DVO",
+    "coordinates": {
+      "lon": 125.6447,
+      "lat": 7.130696
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Francisco Bangoy Intl Airport",
+    "name_translations": {
+      "en": "Francisco Bangoy Intl Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "ECN",
+    "city_code": "ECN",
+    "code": "ECN",
+    "coordinates": {
+      "lon": 33.50307,
+      "lat": 35.15812
+    },
+    "country_code": "CY",
+    "flightable": true,
+    "name": "Ercan Airport",
+    "name_translations": {
+      "en": "Ercan Airport"
+    },
+    "time_zone": "Asia/Nicosia"
+  },
+  {
+    "_key": "EDI",
+    "city_code": "EDI",
+    "code": "EDI",
+    "coordinates": {
+      "lon": -3.364177,
+      "lat": 55.948143
+    },
+    "country_code": "GB",
+    "flightable": true,
+    "name": "Edinburgh Airport",
+    "name_translations": {
+      "en": "Edinburgh Airport"
+    },
+    "time_zone": "Europe/London"
+  },
+  {
+    "_key": "EIN",
+    "city_code": "EIN",
+    "code": "EIN",
+    "coordinates": {
+      "lon": 5.391795,
+      "lat": 51.457954
+    },
+    "country_code": "NL",
+    "flightable": true,
+    "name": "Eindhoven Airport",
+    "name_translations": {
+      "en": "Eindhoven Airport"
+    },
+    "time_zone": "Europe/Amsterdam"
+  },
+  {
+    "_key": "ESL",
+    "city_code": "ESL",
+    "code": "ESL",
+    "coordinates": {
+      "lon": 44.333332,
+      "lat": 46.36667
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Elista Airport",
+    "name_translations": {
+      "en": "Elista Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "EVN",
+    "city_code": "EVN",
+    "code": "EVN",
+    "coordinates": {
+      "lon": 44.39805,
+      "lat": 40.15272
+    },
+    "country_code": "AM",
+    "flightable": true,
+    "name": "Zvartnots International Airport",
+    "name_translations": {
+      "en": "Zvartnots International Airport"
+    },
+    "time_zone": "Asia/Yerevan"
+  },
+  {
+    "_key": "EYK",
+    "city_code": "EYK",
+    "code": "EYK",
+    "coordinates": {
+      "lon": 66.70121,
+      "lat": 63.696682
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Beloyarsky Airport",
+    "name_translations": {
+      "en": "Beloyarsky Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "EZS",
+    "city_code": "EZS",
+    "code": "EZS",
+    "coordinates": {
+      "lon": 39.291668,
+      "lat": 38.608334
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Elazig Airport",
+    "name_translations": {
+      "en": "Elazig Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "FAO",
+    "city_code": "FAO",
+    "code": "FAO",
+    "coordinates": {
+      "lon": -7.968545,
+      "lat": 37.020645
+    },
+    "country_code": "PT",
+    "flightable": true,
+    "name": "Faro Airport",
+    "name_translations": {
+      "en": "Faro Airport"
+    },
+    "time_zone": "Europe/Lisbon"
+  },
+  {
+    "_key": "FKB",
+    "city_code": "FKB",
+    "code": "FKB",
+    "coordinates": {
+      "lon": 8.089752,
+      "lat": 48.781033
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Baden-Airpark",
+    "name_translations": {
+      "en": "Baden-Airpark"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "FLL",
+    "city_code": "FLL",
+    "code": "FLL",
+    "coordinates": {
+      "lon": -80.144905,
+      "lat": 26.071491
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Fort Lauderdale-Hollywood International Airport",
+    "name_translations": {
+      "en": "Fort Lauderdale-Hollywood International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "FLN",
+    "city_code": "FLN",
+    "code": "FLN",
+    "coordinates": {
+      "lon": -48.5452,
+      "lat": -27.664446
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Hercilio Luz International Airport",
+    "name_translations": {
+      "en": "Hercilio Luz International Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "FMM",
+    "city_code": "FMM",
+    "code": "FMM",
+    "coordinates": {
+      "lon": 10.239444,
+      "lat": 47.98861
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Memmingen Allgau Airport",
+    "name_translations": {
+      "en": "Memmingen Allgau Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "FMY",
+    "city_code": "FMY",
+    "code": "FMY",
+    "coordinates": {
+      "lon": -81.86667,
+      "lat": 26.583332
+    },
+    "country_code": "US",
+    "flightable": false,
+    "name": "Page Field",
+    "name_translations": {
+      "en": "Page Field"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "FOR",
+    "city_code": "FOR",
+    "code": "FOR",
+    "coordinates": {
+      "lon": -38.540836,
+      "lat": -3.779073
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Pinto Martins Airport",
+    "name_translations": {
+      "en": "Pinto Martins Airport"
+    },
+    "time_zone": "America/Fortaleza"
+  },
+  {
+    "_key": "FRA",
+    "city_code": "FRA",
+    "code": "FRA",
+    "coordinates": {
+      "lon": 8.570773,
+      "lat": 50.050735
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Frankfurt Airport",
+    "name_translations": {
+      "en": "Frankfurt Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "FRU",
+    "city_code": "FRU",
+    "code": "FRU",
+    "coordinates": {
+      "lon": 74.46945,
+      "lat": 43.05358
+    },
+    "country_code": "KG",
+    "flightable": true,
+    "name": "Manas International Airport",
+    "name_translations": {
+      "en": "Manas International Airport"
+    },
+    "time_zone": "Asia/Bishkek"
+  },
+  {
+    "_key": "FUE",
+    "city_code": "FUE",
+    "code": "FUE",
+    "coordinates": {
+      "lon": -13.869893,
+      "lat": 28.450605
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Fuerteventura Airport",
+    "name_translations": {
+      "en": "Fuerteventura Airport"
+    },
+    "time_zone": "Atlantic/Canary"
+  },
+  {
+    "_key": "GAU",
+    "city_code": "GAU",
+    "code": "GAU",
+    "coordinates": {
+      "lon": 91.58881,
+      "lat": 26.105982
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Lokpriya Gopinath Bordoloi International Airport",
+    "name_translations": {
+      "en": "Lokpriya Gopinath Bordoloi International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "GDL",
+    "city_code": "GDL",
+    "code": "GDL",
+    "coordinates": {
+      "lon": -103.29921,
+      "lat": 20.525198
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Don Miguel Hidal Y Costilla International Airport",
+    "name_translations": {
+      "en": "Don Miguel Hidal Y Costilla International Airport"
+    },
+    "time_zone": "America/Mexico_City"
+  },
+  {
+    "_key": "GDN",
+    "city_code": "GDN",
+    "code": "GDN",
+    "coordinates": {
+      "lon": 18.468655,
+      "lat": 54.380978
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "Gdansk Lech Walesa Airport",
+    "name_translations": {
+      "en": "Gdansk Lech Walesa Airport"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "GDZ",
+    "city_code": "GDZ",
+    "code": "GDZ",
+    "coordinates": {
+      "lon": 38.016666,
+      "lat": 44.566666
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Gelendzik Airport",
+    "name_translations": {
+      "en": "Gelendzik Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "GEG",
+    "city_code": "GEG",
+    "code": "GEG",
+    "coordinates": {
+      "lon": -117.537636,
+      "lat": 47.62515
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Spokane International Airport",
+    "name_translations": {
+      "en": "Spokane International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "GLA",
+    "city_code": "GLA",
+    "code": "GLA",
+    "coordinates": {
+      "lon": -4.431782,
+      "lat": 55.864212
+    },
+    "country_code": "GB",
+    "flightable": true,
+    "name": "Glasgow International Airport",
+    "name_translations": {
+      "en": "Glasgow International Airport"
+    },
+    "time_zone": "Europe/London"
+  },
+  {
+    "_key": "GOI",
+    "city_code": "GOI",
+    "code": "GOI",
+    "coordinates": {
+      "lon": 73.83983,
+      "lat": 15.384534
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Dabolim Airport",
+    "name_translations": {
+      "en": "Dabolim Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "GOJ",
+    "city_code": "GOJ",
+    "code": "GOJ",
+    "coordinates": {
+      "lon": 43.789764,
+      "lat": 56.218613
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Nizhny Novgorod International Airport",
+    "name_translations": {
+      "en": "Nizhny Novgorod International Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "GOT",
+    "city_code": "GOT",
+    "code": "GOT",
+    "coordinates": {
+      "lon": 12.294878,
+      "lat": 57.66664
+    },
+    "country_code": "SE",
+    "flightable": true,
+    "name": "Goteborg Landvetter Airport",
+    "name_translations": {
+      "en": "Goteborg Landvetter Airport"
+    },
+    "time_zone": "Europe/Stockholm"
+  },
+  {
+    "_key": "GRJ",
+    "city_code": "GRJ",
+    "code": "GRJ",
+    "coordinates": {
+      "lon": 22.382235,
+      "lat": -34.00148
+    },
+    "country_code": "ZA",
+    "flightable": true,
+    "name": "George Airport",
+    "name_translations": {
+      "en": "George Airport"
+    },
+    "time_zone": "Africa/Johannesburg"
+  },
+  {
+    "_key": "GRO",
+    "city_code": "GRO",
+    "code": "GRO",
+    "coordinates": {
+      "lon": 2.766383,
+      "lat": 41.89804
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Girona-Costa Brava Airport",
+    "name_translations": {
+      "en": "Girona-Costa Brava Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "GRV",
+    "city_code": "GRV",
+    "code": "GRV",
+    "coordinates": {
+      "lon": 45.75,
+      "lat": 43.333332
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Groznyy Airport",
+    "name_translations": {
+      "en": "Groznyy Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "GRX",
+    "city_code": "GRX",
+    "code": "GRX",
+    "coordinates": {
+      "lon": -3.776954,
+      "lat": 37.184727
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Granada Airport",
+    "name_translations": {
+      "en": "Granada Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "GVA",
+    "city_code": "GVA",
+    "code": "GVA",
+    "coordinates": {
+      "lon": 6.105774,
+      "lat": 46.229633
+    },
+    "country_code": "CH",
+    "flightable": true,
+    "name": "Geneve Airport",
+    "name_translations": {
+      "en": "Geneve Airport"
+    },
+    "time_zone": "Europe/Zurich"
+  },
+  {
+    "_key": "GYN",
+    "city_code": "GYN",
+    "code": "GYN",
+    "coordinates": {
+      "lon": -49.226624,
+      "lat": -16.632631
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Santa Genoveva Airport",
+    "name_translations": {
+      "en": "Santa Genoveva Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "GZP",
+    "city_code": "GZP",
+    "code": "GZP",
+    "coordinates": {
+      "lon": 32.3014,
+      "lat": 36.2993
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Gazipasa Airport",
+    "name_translations": {
+      "en": "Gazipasa Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "GZT",
+    "city_code": "GZT",
+    "code": "GZT",
+    "coordinates": {
+      "lon": 37.473747,
+      "lat": 36.944935
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Gaziantep Airport",
+    "name_translations": {
+      "en": "Gaziantep Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "HAJ",
+    "city_code": "HAJ",
+    "code": "HAJ",
+    "coordinates": {
+      "lon": 9.694766,
+      "lat": 52.459255
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Hannover Airport",
+    "name_translations": {
+      "en": "Hannover Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "HAN",
+    "city_code": "HAN",
+    "code": "HAN",
+    "coordinates": {
+      "lon": 105.802826,
+      "lat": 21.214184
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Noi Bai International Airport",
+    "name_translations": {
+      "en": "Noi Bai International Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "HAR",
+    "city_code": "HAR",
+    "code": "HAR",
+    "coordinates": {
+      "lon": -76.85222,
+      "lat": 40.21611
+    },
+    "country_code": "US",
+    "flightable": false,
+    "name": "Capital City",
+    "name_translations": {
+      "en": "Capital City"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "HBX",
+    "city_code": "HBX",
+    "code": "HBX",
+    "coordinates": {
+      "lon": 75.08608,
+      "lat": 15.358738
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Hubli Airport",
+    "name_translations": {
+      "en": "Hubli Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "HDY",
+    "city_code": "HDY",
+    "code": "HDY",
+    "coordinates": {
+      "lon": 100.39356,
+      "lat": 6.936764
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Hat Yai International Airport",
+    "name_translations": {
+      "en": "Hat Yai International Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "HEL",
+    "city_code": "HEL",
+    "code": "HEL",
+    "coordinates": {
+      "lon": 24.96645,
+      "lat": 60.31795
+    },
+    "country_code": "FI",
+    "flightable": true,
+    "name": "Helsinki-Vantaa Airport",
+    "name_translations": {
+      "en": "Helsinki-Vantaa Airport"
+    },
+    "time_zone": "Europe/Helsinki"
+  },
+  {
+    "_key": "HER",
+    "city_code": "HER",
+    "code": "HER",
+    "coordinates": {
+      "lon": 25.174192,
+      "lat": 35.33663
+    },
+    "country_code": "GR",
+    "flightable": true,
+    "name": "Heraklion Airport",
+    "name_translations": {
+      "en": "Heraklion Airport"
+    },
+    "time_zone": "Europe/Athens"
+  },
+  {
+    "_key": "HKT",
+    "city_code": "HKT",
+    "code": "HKT",
+    "coordinates": {
+      "lon": 98.306435,
+      "lat": 8.107619
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Phuket International Airport",
+    "name_translations": {
+      "en": "Phuket International Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "HMA",
+    "city_code": "HMA",
+    "code": "HMA",
+    "coordinates": {
+      "lon": 69.09714,
+      "lat": 61.02613
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Khanty-Mansiysk Airport",
+    "name_translations": {
+      "en": "Khanty-Mansiysk Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "HMO",
+    "city_code": "HMO",
+    "code": "HMO",
+    "coordinates": {
+      "lon": -111.051704,
+      "lat": 29.089905
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Gen Pesqueira Garcia Airport",
+    "name_translations": {
+      "en": "Gen Pesqueira Garcia Airport"
+    },
+    "time_zone": "America/Hermosillo"
+  },
+  {
+    "_key": "HOU",
+    "city_code": "HOU",
+    "code": "HOU",
+    "coordinates": {
+      "lon": -95.277016,
+      "lat": 29.654512
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "William P. Hobby Airport",
+    "name_translations": {
+      "en": "William P. Hobby Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "HPH",
+    "city_code": "HPH",
+    "code": "HPH",
+    "coordinates": {
+      "lon": 106.727325,
+      "lat": 20.823315
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Cat Bi International Airport",
+    "name_translations": {
+      "en": "Cat Bi International Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "HRK",
+    "city_code": "HRK",
+    "code": "HRK",
+    "coordinates": {
+      "lon": 36.281185,
+      "lat": 49.92078
+    },
+    "country_code": "UA",
+    "flightable": true,
+    "name": "Kharkov Airport",
+    "name_translations": {
+      "en": "Kharkov Airport"
+    },
+    "time_zone": "Europe/Kiev"
+  },
+  {
+    "_key": "HTY",
+    "city_code": "HTY",
+    "code": "HTY",
+    "coordinates": {
+      "lon": 36.28057,
+      "lat": 36.364544
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Hatay Airport",
+    "name_translations": {
+      "en": "Hatay Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "HUI",
+    "city_code": "HUI",
+    "code": "HUI",
+    "coordinates": {
+      "lon": 107.700874,
+      "lat": 16.398224
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Phu Bai International Airport",
+    "name_translations": {
+      "en": "Phu Bai International Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "HYD",
+    "city_code": "HYD",
+    "code": "HYD",
+    "coordinates": {
+      "lon": 78.428055,
+      "lat": 17.24
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Rajiv Gandhi International Airport",
+    "name_translations": {
+      "en": "Rajiv Gandhi International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IAR",
+    "city_code": "IAR",
+    "code": "IAR",
+    "coordinates": {
+      "lon": 39.88333,
+      "lat": 57.61667
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Tunoshna Airport",
+    "name_translations": {
+      "en": "Tunoshna Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "IAS",
+    "city_code": "IAS",
+    "code": "IAS",
+    "coordinates": {
+      "lon": 27.616993,
+      "lat": 47.176987
+    },
+    "country_code": "RO",
+    "flightable": true,
+    "name": "Iasi Airport",
+    "name_translations": {
+      "en": "Iasi Airport"
+    },
+    "time_zone": "Europe/Bucharest"
+  },
+  {
+    "_key": "IBZ",
+    "city_code": "IBZ",
+    "code": "IBZ",
+    "coordinates": {
+      "lon": 1.367803,
+      "lat": 38.876595
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Ibiza Airport",
+    "name_translations": {
+      "en": "Ibiza Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "IDR",
+    "city_code": "IDR",
+    "code": "IDR",
+    "coordinates": {
+      "lon": 75.80944,
+      "lat": 22.728651
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Devi Ahilya Bai Holkar Airport",
+    "name_translations": {
+      "en": "Devi Ahilya Bai Holkar Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IEV",
+    "city_code": "IEV",
+    "code": "IEV",
+    "coordinates": {
+      "lon": 30.450832,
+      "lat": 50.401943
+    },
+    "country_code": "UA",
+    "flightable": true,
+    "name": "Kyiv International Airport",
+    "name_translations": {
+      "en": "Kyiv International Airport"
+    },
+    "time_zone": "Europe/Kiev"
+  },
+  {
+    "_key": "IGT",
+    "city_code": "IGT",
+    "code": "IGT",
+    "coordinates": {
+      "lon": 45.001667,
+      "lat": 43.31778
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Magas Airport",
+    "name_translations": {
+      "en": "Magas Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "IGU",
+    "city_code": "IGU",
+    "code": "IGU",
+    "coordinates": {
+      "lon": -54.488823,
+      "lat": -25.597937
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Cataratas International Airport",
+    "name_translations": {
+      "en": "Cataratas International Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "ILO",
+    "city_code": "ILO",
+    "code": "ILO",
+    "coordinates": {
+      "lon": 122.543884,
+      "lat": 10.714312
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Mandurriao Airport",
+    "name_translations": {
+      "en": "Mandurriao Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "IMF",
+    "city_code": "IMF",
+    "code": "IMF",
+    "coordinates": {
+      "lon": 93.897064,
+      "lat": 24.76457
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Imphal Municipal Airport",
+    "name_translations": {
+      "en": "Imphal Municipal Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IMP",
+    "city_code": "IMP",
+    "code": "IMP",
+    "coordinates": {
+      "lon": -47.480556,
+      "lat": -5.531944
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Imperatriz Airport",
+    "name_translations": {
+      "en": "Imperatriz Airport"
+    },
+    "time_zone": "America/Fortaleza"
+  },
+  {
+    "_key": "IND",
+    "city_code": "IND",
+    "code": "IND",
+    "coordinates": {
+      "lon": -86.29805,
+      "lat": 39.714516
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Indianapolis International Airport",
+    "name_translations": {
+      "en": "Indianapolis International Airport"
+    },
+    "time_zone": "America/Indiana/Indianapolis"
+  },
+  {
+    "_key": "INI",
+    "city_code": "INI",
+    "code": "INI",
+    "coordinates": {
+      "lon": 21.851667,
+      "lat": 43.33389
+    },
+    "country_code": "RS",
+    "flightable": true,
+    "name": "Nis Constantine the Great Airport",
+    "name_translations": {
+      "en": "Nis Constantine the Great Airport"
+    },
+    "time_zone": "Europe/Belgrade"
+  },
+  {
+    "_key": "IPH",
+    "city_code": "IPH",
+    "code": "IPH",
+    "coordinates": {
+      "lon": 101.09583,
+      "lat": 4.566944
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Ipoh Airport",
+    "name_translations": {
+      "en": "Ipoh Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "IQQ",
+    "city_code": "IQQ",
+    "code": "IQQ",
+    "coordinates": {
+      "lon": -70.17848,
+      "lat": -20.547937
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Diego Aracena International Airport",
+    "name_translations": {
+      "en": "Diego Aracena International Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "IQT",
+    "city_code": "IQT",
+    "code": "IQT",
+    "coordinates": {
+      "lon": -73.30284,
+      "lat": -3.785098
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "C.F. Secada Vignetta International Airport",
+    "name_translations": {
+      "en": "C.F. Secada Vignetta International Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "ISE",
+    "city_code": "ISE",
+    "code": "ISE",
+    "coordinates": {
+      "lon": 30.382221,
+      "lat": 37.86611
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Isparta Suleyman Demirel Airport",
+    "name_translations": {
+      "en": "Isparta Suleyman Demirel Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "ISP",
+    "city_code": "ISP",
+    "code": "ISP",
+    "coordinates": {
+      "lon": -73.09755,
+      "lat": 40.789314
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Long Island MacArthur Airport",
+    "name_translations": {
+      "en": "Long Island MacArthur Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "IST",
+    "city_code": "IST",
+    "code": "IST",
+    "coordinates": {
+      "lon": 28.82055,
+      "lat": 40.9769
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Istanbul New Airport",
+    "name_translations": {
+      "en": "Istanbul New Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "IWA",
+    "city_code": "IWA",
+    "code": "IWA",
+    "coordinates": {
+      "lon": 40.944546,
+      "lat": 56.942955
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Ivanovo Yuzhny Airport",
+    "name_translations": {
+      "en": "Ivanovo Yuzhny Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "IXA",
+    "city_code": "IXA",
+    "code": "IXA",
+    "coordinates": {
+      "lon": 91.244514,
+      "lat": 23.8926
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Agartala Airport",
+    "name_translations": {
+      "en": "Agartala Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXB",
+    "city_code": "IXB",
+    "code": "IXB",
+    "coordinates": {
+      "lon": 88.324814,
+      "lat": 26.68488
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Bagdogra Airport",
+    "name_translations": {
+      "en": "Bagdogra Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXC",
+    "city_code": "IXC",
+    "code": "IXC",
+    "coordinates": {
+      "lon": 76.797386,
+      "lat": 30.674921
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Chandigarh Airport",
+    "name_translations": {
+      "en": "Chandigarh Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXG",
+    "city_code": "IXG",
+    "code": "IXG",
+    "coordinates": {
+      "lon": 74.61833,
+      "lat": 15.858611
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Belgaum Airport",
+    "name_translations": {
+      "en": "Belgaum Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXJ",
+    "city_code": "IXJ",
+    "code": "IXJ",
+    "coordinates": {
+      "lon": 74.84283,
+      "lat": 32.68077
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Satwari Airport",
+    "name_translations": {
+      "en": "Satwari Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXL",
+    "city_code": "IXL",
+    "code": "IXL",
+    "coordinates": {
+      "lon": 77.54746,
+      "lat": 34.14035
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Leh Airport",
+    "name_translations": {
+      "en": "Leh Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXM",
+    "city_code": "IXM",
+    "code": "IXM",
+    "coordinates": {
+      "lon": 78.09112,
+      "lat": 9.837471
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Madurai Airport",
+    "name_translations": {
+      "en": "Madurai Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXR",
+    "city_code": "IXR",
+    "code": "IXR",
+    "coordinates": {
+      "lon": 85.32285,
+      "lat": 23.318192
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Birsa Munda Airport",
+    "name_translations": {
+      "en": "Birsa Munda Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXS",
+    "city_code": "IXS",
+    "code": "IXS",
+    "coordinates": {
+      "lon": 92.979256,
+      "lat": 24.916018
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Kumbhirgram Airport",
+    "name_translations": {
+      "en": "Kumbhirgram Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "IXU",
+    "city_code": "IXU",
+    "code": "IXU",
+    "coordinates": {
+      "lon": 75.39721,
+      "lat": 19.866465
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Chikkalthana Airport",
+    "name_translations": {
+      "en": "Chikkalthana Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "JAI",
+    "city_code": "JAI",
+    "code": "JAI",
+    "coordinates": {
+      "lon": 75.80151,
+      "lat": 26.820772
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Jaipur Airport",
+    "name_translations": {
+      "en": "Jaipur Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "JAX",
+    "city_code": "JAX",
+    "code": "JAX",
+    "coordinates": {
+      "lon": -81.68306,
+      "lat": 30.491657
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Jacksonville International Airport",
+    "name_translations": {
+      "en": "Jacksonville International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "JHB",
+    "city_code": "JHB",
+    "code": "JHB",
+    "coordinates": {
+      "lon": 103.67083,
+      "lat": 1.638889
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Senai Airport",
+    "name_translations": {
+      "en": "Senai Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "JMK",
+    "city_code": "JMK",
+    "code": "JMK",
+    "coordinates": {
+      "lon": 25.344444,
+      "lat": 37.43611
+    },
+    "country_code": "GR",
+    "flightable": true,
+    "name": "Mikonos Airport",
+    "name_translations": {
+      "en": "Mikonos Airport"
+    },
+    "time_zone": "Europe/Athens"
+  },
+  {
+    "_key": "JNB",
+    "city_code": "JNB",
+    "code": "JNB",
+    "coordinates": {
+      "lon": 28.231314,
+      "lat": -26.132664
+    },
+    "country_code": "ZA",
+    "flightable": true,
+    "name": "O.R. Tambo International Airport",
+    "name_translations": {
+      "en": "O.R. Tambo International Airport"
+    },
+    "time_zone": "Africa/Johannesburg"
+  },
+  {
+    "_key": "JOG",
+    "city_code": "JOG",
+    "code": "JOG",
+    "coordinates": {
+      "lon": 110.43706,
+      "lat": -7.785572
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Adisutjipto International Airport",
+    "name_translations": {
+      "en": "Adisutjipto International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "JOI",
+    "city_code": "JOI",
+    "code": "JOI",
+    "coordinates": {
+      "lon": -48.783333,
+      "lat": -26.233334
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Joinville-Lauro Carneiro de Loyola Airport",
+    "name_translations": {
+      "en": "Joinville-Lauro Carneiro de Loyola Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "JPA",
+    "city_code": "JPA",
+    "code": "JPA",
+    "coordinates": {
+      "lon": -34.94816,
+      "lat": -7.145357
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Presidente Castro Pinto International Airport",
+    "name_translations": {
+      "en": "Presidente Castro Pinto International Airport"
+    },
+    "time_zone": "America/Fortaleza"
+  },
+  {
+    "_key": "JTR",
+    "city_code": "JTR",
+    "code": "JTR",
+    "coordinates": {
+      "lon": 25.483334,
+      "lat": 36.4
+    },
+    "country_code": "GR",
+    "flightable": true,
+    "name": "Santorini International Airport",
+    "name_translations": {
+      "en": "Santorini International Airport"
+    },
+    "time_zone": "Europe/Athens"
+  },
+  {
+    "_key": "JUL",
+    "city_code": "JUL",
+    "code": "JUL",
+    "coordinates": {
+      "lon": -70.15444,
+      "lat": -15.464167
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Juliaca Airport",
+    "name_translations": {
+      "en": "Juliaca Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "KBR",
+    "city_code": "KBR",
+    "code": "KBR",
+    "coordinates": {
+      "lon": 102.29092,
+      "lat": 6.17057
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Sultan Ismail Petra Airport",
+    "name_translations": {
+      "en": "Sultan Ismail Petra Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "KBV",
+    "city_code": "KBV",
+    "code": "KBV",
+    "coordinates": {
+      "lon": 98.98062,
+      "lat": 8.097281
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Krabi Airport",
+    "name_translations": {
+      "en": "Krabi Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "KCH",
+    "city_code": "KCH",
+    "code": "KCH",
+    "coordinates": {
+      "lon": 110.340836,
+      "lat": 1.484167
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Kuching International Airport",
+    "name_translations": {
+      "en": "Kuching International Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "KCM",
+    "city_code": "KCM",
+    "code": "KCM",
+    "coordinates": {
+      "lon": 36.950558,
+      "lat": 37.534443
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Kahramanmaras Airport",
+    "name_translations": {
+      "en": "Kahramanmaras Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "KEJ",
+    "city_code": "KEJ",
+    "code": "KEJ",
+    "coordinates": {
+      "lon": 86.11623,
+      "lat": 55.280567
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Kemerovo Airport",
+    "name_translations": {
+      "en": "Kemerovo Airport"
+    },
+    "time_zone": "Asia/Novokuznetsk"
+  },
+  {
+    "_key": "KGD",
+    "city_code": "KGD",
+    "code": "KGD",
+    "coordinates": {
+      "lon": 20.586645,
+      "lat": 54.882656
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Khrabrovo Airport",
+    "name_translations": {
+      "en": "Khrabrovo Airport"
+    },
+    "time_zone": "Europe/Kaliningrad"
+  },
+  {
+    "_key": "KGF",
+    "city_code": "KGF",
+    "code": "KGF",
+    "coordinates": {
+      "lon": 73.32836,
+      "lat": 49.67526
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Karaganda Airport",
+    "name_translations": {
+      "en": "Karaganda Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "KHE",
+    "city_code": "KHE",
+    "code": "KHE",
+    "coordinates": {
+      "lon": 32.627777,
+      "lat": 46.675278
+    },
+    "country_code": "UA",
+    "flightable": true,
+    "name": "Kherson International Airport",
+    "name_translations": {
+      "en": "Kherson International Airport"
+    },
+    "time_zone": "Europe/Kiev"
+  },
+  {
+    "_key": "KIV",
+    "city_code": "KIV",
+    "code": "KIV",
+    "coordinates": {
+      "lon": 28.934967,
+      "lat": 46.935444
+    },
+    "country_code": "MD",
+    "flightable": true,
+    "name": "Chisinau International Airport",
+    "name_translations": {
+      "en": "Chisinau International Airport"
+    },
+    "time_zone": "Europe/Chisinau"
+  },
+  {
+    "_key": "KKC",
+    "city_code": "KKC",
+    "code": "KKC",
+    "coordinates": {
+      "lon": 102.78749,
+      "lat": 16.46467
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Khon Kaen Airport",
+    "name_translations": {
+      "en": "Khon Kaen Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "KLF",
+    "city_code": "KLF",
+    "code": "KLF",
+    "coordinates": {
+      "lon": 36.368889,
+      "lat": 54.546667
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Grabtsevo Airport",
+    "name_translations": {
+      "en": "Grabtsevo Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "KLO",
+    "city_code": "KLO",
+    "code": "KLO",
+    "coordinates": {
+      "lon": 122.38183,
+      "lat": 11.687152
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Kalibo International Airport",
+    "name_translations": {
+      "en": "Kalibo International Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "KMG",
+    "city_code": "KMG",
+    "code": "KMG",
+    "coordinates": {
+      "lon": 102.92917,
+      "lat": 25.101944
+    },
+    "country_code": "CN",
+    "flightable": true,
+    "name": "Kunming Changshui International Airport",
+    "name_translations": {
+      "en": "Kunming Changshui International Airport"
+    },
+    "time_zone": "Asia/Shanghai"
+  },
+  {
+    "_key": "KMS",
+    "city_code": "KMS",
+    "code": "KMS",
+    "coordinates": {
+      "lon": -1.591111,
+      "lat": 6.7125
+    },
+    "country_code": "GH",
+    "flightable": true,
+    "name": "Kumasi Airport",
+    "name_translations": {
+      "en": "Kumasi Airport"
+    },
+    "time_zone": "Africa/Accra"
+  },
+  {
+    "_key": "KOP",
+    "city_code": "KOP",
+    "code": "KOP",
+    "coordinates": {
+      "lon": 104.75,
+      "lat": 17.4
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Nakhon Phanom Airport",
+    "name_translations": {
+      "en": "Nakhon Phanom Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "KOV",
+    "city_code": "KOV",
+    "code": "KOV",
+    "coordinates": {
+      "lon": 69.4,
+      "lat": 53.316666
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Kokshetau Airport",
+    "name_translations": {
+      "en": "Kokshetau Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "KRK",
+    "city_code": "KRK",
+    "code": "KRK",
+    "coordinates": {
+      "lon": 19.793743,
+      "lat": 50.075493
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "J. Paul II International Airport Krakow-Balice",
+    "name_translations": {
+      "en": "J. Paul II International Airport Krakow-Balice"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "KRO",
+    "city_code": "KRO",
+    "code": "KRO",
+    "coordinates": {
+      "lon": 65.3,
+      "lat": 55.433334
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Kurgan Airport",
+    "name_translations": {
+      "en": "Kurgan Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "KRR",
+    "city_code": "KRR",
+    "code": "KRR",
+    "coordinates": {
+      "lon": 39.139004,
+      "lat": 45.034138
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Krasnodar International Airport",
+    "name_translations": {
+      "en": "Krasnodar International Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "KSC",
+    "city_code": "KSC",
+    "code": "KSC",
+    "coordinates": {
+      "lon": 21.25,
+      "lat": 48.666668
+    },
+    "country_code": "SK",
+    "flightable": true,
+    "name": "Barca Airport",
+    "name_translations": {
+      "en": "Barca Airport"
+    },
+    "time_zone": "Europe/Bratislava"
+  },
+  {
+    "_key": "KSN",
+    "city_code": "KSN",
+    "code": "KSN",
+    "coordinates": {
+      "lon": 63.55,
+      "lat": 53.2
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Kostanay Airport",
+    "name_translations": {
+      "en": "Kostanay Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "KTW",
+    "city_code": "KTW",
+    "code": "KTW",
+    "coordinates": {
+      "lon": 19.07403,
+      "lat": 50.470833
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "Katowice International Airport",
+    "name_translations": {
+      "en": "Katowice International Airport"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "KUA",
+    "city_code": "KUA",
+    "code": "KUA",
+    "coordinates": {
+      "lon": 103.21518,
+      "lat": 3.780765
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Sultan Haji Ahmad Shah Airport",
+    "name_translations": {
+      "en": "Sultan Haji Ahmad Shah Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "KUF",
+    "city_code": "KUF",
+    "code": "KUF",
+    "coordinates": {
+      "lon": 50.14742,
+      "lat": 53.50782
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Kurumoch International Airport",
+    "name_translations": {
+      "en": "Kurumoch International Airport"
+    },
+    "time_zone": "Europe/Samara"
+  },
+  {
+    "_key": "KUL",
+    "city_code": "KUL",
+    "code": "KUL",
+    "coordinates": {
+      "lon": 101.70539,
+      "lat": 2.755672
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Kuala Lumpur International Airport",
+    "name_translations": {
+      "en": "Kuala Lumpur International Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "KUN",
+    "city_code": "KUN",
+    "code": "KUN",
+    "coordinates": {
+      "lon": 23.916668,
+      "lat": 54.9
+    },
+    "country_code": "LT",
+    "flightable": true,
+    "name": "Kaunas Airport",
+    "name_translations": {
+      "en": "Kaunas Airport"
+    },
+    "time_zone": "Europe/Vilnius"
+  },
+  {
+    "_key": "KUT",
+    "city_code": "KUT",
+    "code": "KUT",
+    "coordinates": {
+      "lon": 42.7,
+      "lat": 42.25
+    },
+    "country_code": "GE",
+    "flightable": true,
+    "name": "Kutaisi International Airport",
+    "name_translations": {
+      "en": "Kutaisi International Airport"
+    },
+    "time_zone": "Asia/Tbilisi"
+  },
+  {
+    "_key": "KVD",
+    "city_code": "KVD",
+    "code": "KVD",
+    "coordinates": {
+      "lon": 46.316666,
+      "lat": 40.733334
+    },
+    "country_code": "AZ",
+    "flightable": true,
+    "name": "Gyandzha Airport",
+    "name_translations": {
+      "en": "Gyandzha Airport"
+    },
+    "time_zone": "Asia/Baku"
+  },
+  {
+    "_key": "KWJ",
+    "city_code": "KWJ",
+    "code": "KWJ",
+    "coordinates": {
+      "lon": 126.81021,
+      "lat": 35.140175
+    },
+    "country_code": "KR",
+    "flightable": true,
+    "name": "Gwangju Airport",
+    "name_translations": {
+      "en": "Gwangju Airport"
+    },
+    "time_zone": "Asia/Seoul"
+  },
+  {
+    "_key": "KYA",
+    "city_code": "KYA",
+    "code": "KYA",
+    "coordinates": {
+      "lon": 32.56222,
+      "lat": 37.979168
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Konya Airport",
+    "name_translations": {
+      "en": "Konya Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "KYZ",
+    "city_code": "KYZ",
+    "code": "KYZ",
+    "coordinates": {
+      "lon": 94.46667,
+      "lat": 51.7
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Kyzyl Airport",
+    "name_translations": {
+      "en": "Kyzyl Airport"
+    },
+    "time_zone": "Asia/Krasnoyarsk"
+  },
+  {
+    "_key": "KZN",
+    "city_code": "KZN",
+    "code": "KZN",
+    "coordinates": {
+      "lon": 49.29824,
+      "lat": 55.60844
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Kazan International Airport",
+    "name_translations": {
+      "en": "Kazan International Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "KZO",
+    "city_code": "KZO",
+    "code": "KZO",
+    "coordinates": {
+      "lon": 65.59288,
+      "lat": 44.712223
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Kzyl-Orda Airport",
+    "name_translations": {
+      "en": "Kzyl-Orda Airport"
+    },
+    "time_zone": "Asia/Qyzylorda"
+  },
+  {
+    "_key": "LAS",
+    "city_code": "LAS",
+    "code": "LAS",
+    "coordinates": {
+      "lon": -115.1486,
+      "lat": 36.086945
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "McCarran International Airport",
+    "name_translations": {
+      "en": "McCarran International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "LAX",
+    "city_code": "LAX",
+    "code": "LAX",
+    "coordinates": {
+      "lon": -118.40828,
+      "lat": 33.943398
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Los Angeles International Airport",
+    "name_translations": {
+      "en": "Los Angeles International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "LBE",
+    "city_code": "LBE",
+    "code": "LBE",
+    "coordinates": {
+      "lon": -79.40278,
+      "lat": 40.27639
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Westmoreland County Airport",
+    "name_translations": {
+      "en": "Westmoreland County Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "LBU",
+    "city_code": "LBU",
+    "code": "LBU",
+    "coordinates": {
+      "lon": 115.24916,
+      "lat": 5.294355
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Labuan Airport",
+    "name_translations": {
+      "en": "Labuan Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "LCA",
+    "city_code": "LCA",
+    "code": "LCA",
+    "coordinates": {
+      "lon": 33.62599,
+      "lat": 34.880867
+    },
+    "country_code": "CY",
+    "flightable": true,
+    "name": "Larnaca International Airport",
+    "name_translations": {
+      "en": "Larnaca International Airport"
+    },
+    "time_zone": "Asia/Nicosia"
+  },
+  {
+    "_key": "LCG",
+    "city_code": "LCG",
+    "code": "LCG",
+    "coordinates": {
+      "lon": -8.381923,
+      "lat": 43.30236
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "A Coruna Airport",
+    "name_translations": {
+      "en": "A Coruna Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "LDB",
+    "city_code": "LDB",
+    "code": "LDB",
+    "coordinates": {
+      "lon": -51.137714,
+      "lat": -23.328457
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Londrina Airport",
+    "name_translations": {
+      "en": "Londrina Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "LED",
+    "city_code": "LED",
+    "code": "LED",
+    "coordinates": {
+      "lon": 30.3083,
+      "lat": 59.806084
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Pulkovo Airport",
+    "name_translations": {
+      "en": "Pulkovo Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "LEJ",
+    "city_code": "LEJ",
+    "code": "LEJ",
+    "coordinates": {
+      "lon": 12.221202,
+      "lat": 51.42026
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Leipzig/Halle Airport",
+    "name_translations": {
+      "en": "Leipzig/Halle Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "LGK",
+    "city_code": "LGK",
+    "code": "LGK",
+    "coordinates": {
+      "lon": 99.7314,
+      "lat": 6.342174
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Langkawi International Airport",
+    "name_translations": {
+      "en": "Langkawi International Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "LGP",
+    "city_code": "LGP",
+    "code": "LGP",
+    "coordinates": {
+      "lon": 123.7302,
+      "lat": 13.15213
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Legaspi Airport",
+    "name_translations": {
+      "en": "Legaspi Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "LIM",
+    "city_code": "LIM",
+    "code": "LIM",
+    "coordinates": {
+      "lon": -77.107666,
+      "lat": -12.019421
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Jorge Chavez International Airport",
+    "name_translations": {
+      "en": "Jorge Chavez International Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "LIS",
+    "city_code": "LIS",
+    "code": "LIS",
+    "coordinates": {
+      "lon": -9.128165,
+      "lat": 38.770042
+    },
+    "country_code": "PT",
+    "flightable": true,
+    "name": "Lisbon Portela Airport",
+    "name_translations": {
+      "en": "Lisbon Portela Airport"
+    },
+    "time_zone": "Europe/Lisbon"
+  },
+  {
+    "_key": "LJU",
+    "city_code": "LJU",
+    "code": "LJU",
+    "coordinates": {
+      "lon": 14.454972,
+      "lat": 46.23102
+    },
+    "country_code": "SI",
+    "flightable": true,
+    "name": "Ljubljana Joze Pucnik Airport",
+    "name_translations": {
+      "en": "Ljubljana Joze Pucnik Airport"
+    },
+    "time_zone": "Europe/Ljubljana"
+  },
+  {
+    "_key": "LKO",
+    "city_code": "LKO",
+    "code": "LKO",
+    "coordinates": {
+      "lon": 80.884186,
+      "lat": 26.764257
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Chaudhary Charan Singh International Airport",
+    "name_translations": {
+      "en": "Chaudhary Charan Singh International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "LOE",
+    "city_code": "LOE",
+    "code": "LOE",
+    "coordinates": {
+      "lon": 101.73333,
+      "lat": 17.45
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Loei Airport",
+    "name_translations": {
+      "en": "Loei Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "LOP",
+    "city_code": "LOP",
+    "code": "LOP",
+    "coordinates": {
+      "lon": 116.27667,
+      "lat": -8.757322
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Lombok International Airport",
+    "name_translations": {
+      "en": "Lombok International Airport"
+    },
+    "time_zone": "Asia/Makassar"
+  },
+  {
+    "_key": "LPA",
+    "city_code": "LPA",
+    "code": "LPA",
+    "coordinates": {
+      "lon": -15.389351,
+      "lat": 27.938944
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Gran Canaria Airport",
+    "name_translations": {
+      "en": "Gran Canaria Airport"
+    },
+    "time_zone": "Atlantic/Canary"
+  },
+  {
+    "_key": "LPP",
+    "city_code": "LPP",
+    "code": "LPP",
+    "coordinates": {
+      "lon": 28.156668,
+      "lat": 61.046112
+    },
+    "country_code": "FI",
+    "flightable": true,
+    "name": "Lappeenranta",
+    "name_translations": {
+      "en": "Lappeenranta"
+    },
+    "time_zone": "Europe/Helsinki"
+  },
+  {
+    "_key": "LPX",
+    "city_code": "LPX",
+    "code": "LPX",
+    "coordinates": {
+      "lon": 21.1,
+      "lat": 56.516666
+    },
+    "country_code": "LV",
+    "flightable": true,
+    "name": "Liepaya Airport",
+    "name_translations": {
+      "en": "Liepaya Airport"
+    },
+    "time_zone": "Europe/Riga"
+  },
+  {
+    "_key": "LSC",
+    "city_code": "LSC",
+    "code": "LSC",
+    "coordinates": {
+      "lon": -71.20369,
+      "lat": -29.917297
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "La Florida Airport",
+    "name_translations": {
+      "en": "La Florida Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "LUX",
+    "city_code": "LUX",
+    "code": "LUX",
+    "coordinates": {
+      "lon": 6.209539,
+      "lat": 49.63111
+    },
+    "country_code": "LU",
+    "flightable": true,
+    "name": "Luxembourg Airport",
+    "name_translations": {
+      "en": "Luxembourg Airport"
+    },
+    "time_zone": "Europe/Luxembourg"
+  },
+  {
+    "_key": "LUZ",
+    "city_code": "LUZ",
+    "code": "LUZ",
+    "coordinates": {
+      "lon": 22.690277,
+      "lat": 51.231945
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "Lublin Airport",
+    "name_translations": {
+      "en": "Lublin Airport"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "LWN",
+    "city_code": "LWN",
+    "code": "LWN",
+    "coordinates": {
+      "lon": 43.833332,
+      "lat": 40.716667
+    },
+    "country_code": "AM",
+    "flightable": true,
+    "name": "Leninakan Airport",
+    "name_translations": {
+      "en": "Leninakan Airport"
+    },
+    "time_zone": "Asia/Yerevan"
+  },
+  {
+    "_key": "LWO",
+    "city_code": "LWO",
+    "code": "LWO",
+    "coordinates": {
+      "lon": 23.955318,
+      "lat": 49.816418
+    },
+    "country_code": "UA",
+    "flightable": true,
+    "name": "Lviv International Airport",
+    "name_translations": {
+      "en": "Lviv International Airport"
+    },
+    "time_zone": "Europe/Kiev"
+  },
+  {
+    "_key": "MAA",
+    "city_code": "MAA",
+    "code": "MAA",
+    "coordinates": {
+      "lon": 80.16378,
+      "lat": 12.982267
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Chennai Airport",
+    "name_translations": {
+      "en": "Chennai Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "MAB",
+    "city_code": "MAB",
+    "code": "MAB",
+    "coordinates": {
+      "lon": -49.166668,
+      "lat": -5.366667
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Maraba Airport",
+    "name_translations": {
+      "en": "Maraba Airport"
+    },
+    "time_zone": "America/Belem"
+  },
+  {
+    "_key": "MAD",
+    "city_code": "MAD",
+    "code": "MAD",
+    "coordinates": {
+      "lon": -3.570209,
+      "lat": 40.46515
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Adolfo Suarez Madrid-Barajas Airport",
+    "name_translations": {
+      "en": "Adolfo Suarez Madrid-Barajas Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "MAH",
+    "city_code": "MAH",
+    "code": "MAH",
+    "coordinates": {
+      "lon": 4.226256,
+      "lat": 39.864746
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Menorca Airport",
+    "name_translations": {
+      "en": "Menorca Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "MAN",
+    "city_code": "MAN",
+    "code": "MAN",
+    "coordinates": {
+      "lon": -2.273354,
+      "lat": 53.362907
+    },
+    "country_code": "GB",
+    "flightable": true,
+    "name": "Manchester Airport",
+    "name_translations": {
+      "en": "Manchester Airport"
+    },
+    "time_zone": "Europe/London"
+  },
+  {
+    "_key": "MCP",
+    "city_code": "MCP",
+    "code": "MCP",
+    "coordinates": {
+      "lon": -51.068382,
+      "lat": 0.049895
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Macapa International Airport",
+    "name_translations": {
+      "en": "Macapa International Airport"
+    },
+    "time_zone": "America/Belem"
+  },
+  {
+    "_key": "MCX",
+    "city_code": "MCX",
+    "code": "MCX",
+    "coordinates": {
+      "lon": 47.65611,
+      "lat": 42.82095
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Makhachkala Airport",
+    "name_translations": {
+      "en": "Makhachkala Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "MDE",
+    "city_code": "MDE",
+    "code": "MDE",
+    "coordinates": {
+      "lon": -75.42821,
+      "lat": 6.171382
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Jose Maria Cordova International Airport",
+    "name_translations": {
+      "en": "Jose Maria Cordova International Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "MEL",
+    "city_code": "MEL",
+    "code": "MEL",
+    "coordinates": {
+      "lon": 144.84978,
+      "lat": -37.669613
+    },
+    "country_code": "AU",
+    "flightable": true,
+    "name": "Tullamarine Airport",
+    "name_translations": {
+      "en": "Tullamarine Airport"
+    },
+    "time_zone": "Australia/Melbourne"
+  },
+  {
+    "_key": "MES",
+    "city_code": "MES",
+    "code": "MES",
+    "coordinates": {
+      "lon": 98.672775,
+      "lat": 3.561111
+    },
+    "country_code": "ID",
+    "flightable": false,
+    "name": "Polonia",
+    "name_translations": {
+      "en": "Polonia"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "MEX",
+    "city_code": "MEX",
+    "code": "MEX",
+    "coordinates": {
+      "lon": -99.07278,
+      "lat": 19.435278
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Benito Juarez International Airport",
+    "name_translations": {
+      "en": "Benito Juarez International Airport"
+    },
+    "time_zone": "America/Mexico_City"
+  },
+  {
+    "_key": "MGF",
+    "city_code": "MGF",
+    "code": "MGF",
+    "coordinates": {
+      "lon": -51.933334,
+      "lat": -23.383612
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Regional De Maringa",
+    "name_translations": {
+      "en": "Regional De Maringa"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "MIA",
+    "city_code": "MIA",
+    "code": "MIA",
+    "coordinates": {
+      "lon": -80.27824,
+      "lat": 25.796
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Miami International Airport",
+    "name_translations": {
+      "en": "Miami International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "MKC",
+    "city_code": "MKC",
+    "code": "MKC",
+    "coordinates": {
+      "lon": -94.59194,
+      "lat": 39.12417
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Charles B. Wheeler Downtown Airport",
+    "name_translations": {
+      "en": "Charles B. Wheeler Downtown Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "MKE",
+    "city_code": "MKE",
+    "code": "MKE",
+    "coordinates": {
+      "lon": -87.90267,
+      "lat": 42.948093
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "General Mitchell International Airport",
+    "name_translations": {
+      "en": "General Mitchell International Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "MLA",
+    "city_code": "MLA",
+    "code": "MLA",
+    "coordinates": {
+      "lon": 14.4775,
+      "lat": 35.8575
+    },
+    "country_code": "MT",
+    "flightable": true,
+    "name": "Malta International Airport",
+    "name_translations": {
+      "en": "Malta International Airport"
+    },
+    "time_zone": "Europe/Malta"
+  },
+  {
+    "_key": "MLX",
+    "city_code": "MLX",
+    "code": "MLX",
+    "coordinates": {
+      "lon": 38.253613,
+      "lat": 38.354443
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Malatya Airport",
+    "name_translations": {
+      "en": "Malatya Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "MMK",
+    "city_code": "MMK",
+    "code": "MMK",
+    "coordinates": {
+      "lon": 32.759155,
+      "lat": 68.785095
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Murmansk Airport",
+    "name_translations": {
+      "en": "Murmansk Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "MNL",
+    "city_code": "MNL",
+    "code": "MNL",
+    "coordinates": {
+      "lon": 121.01251,
+      "lat": 14.509602
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Ninoy Aquino International Airport",
+    "name_translations": {
+      "en": "Ninoy Aquino International Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "MPH",
+    "city_code": "MPH",
+    "code": "MPH",
+    "coordinates": {
+      "lon": 121.9521,
+      "lat": 11.925263
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Boracay Airport",
+    "name_translations": {
+      "en": "Boracay Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "MRS",
+    "city_code": "MRS",
+    "code": "MRS",
+    "coordinates": {
+      "lon": 5.222137,
+      "lat": 43.44178
+    },
+    "country_code": "FR",
+    "flightable": true,
+    "name": "Marseille Provence Airport",
+    "name_translations": {
+      "en": "Marseille Provence Airport"
+    },
+    "time_zone": "Europe/Paris"
+  },
+  {
+    "_key": "MRV",
+    "city_code": "MRV",
+    "code": "MRV",
+    "coordinates": {
+      "lon": 43.085815,
+      "lat": 44.218105
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Mineralnye Vody Airport",
+    "name_translations": {
+      "en": "Mineralnye Vody Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "MSP",
+    "city_code": "MSP",
+    "code": "MSP",
+    "coordinates": {
+      "lon": -93.21092,
+      "lat": 44.883015
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Minneapolis-St. Paul International Airport",
+    "name_translations": {
+      "en": "Minneapolis-St. Paul International Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "MSY",
+    "city_code": "MSY",
+    "code": "MSY",
+    "coordinates": {
+      "lon": -90.25639,
+      "lat": 29.984564
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Louis Armstrong New Orleans International Airport",
+    "name_translations": {
+      "en": "Louis Armstrong New Orleans International Airport"
+    },
+    "time_zone": "America/Chicago"
+  },
+  {
+    "_key": "MTR",
+    "city_code": "MTR",
+    "code": "MTR",
+    "coordinates": {
+      "lon": -75.82392,
+      "lat": 8.825035
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Los Garzones Airport",
+    "name_translations": {
+      "en": "Los Garzones Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "MTY",
+    "city_code": "MTY",
+    "code": "MTY",
+    "coordinates": {
+      "lon": -100.114395,
+      "lat": 25.77657
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Gen Mariano Escobedo Airport",
+    "name_translations": {
+      "en": "Gen Mariano Escobedo Airport"
+    },
+    "time_zone": "America/Monterrey"
+  },
+  {
+    "_key": "MUC",
+    "city_code": "MUC",
+    "code": "MUC",
+    "coordinates": {
+      "lon": 11.790143,
+      "lat": 48.353004
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Franz Josef Strauss Airport",
+    "name_translations": {
+      "en": "Franz Josef Strauss Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "MYR",
+    "city_code": "MYR",
+    "code": "MYR",
+    "coordinates": {
+      "lon": -78.92294,
+      "lat": 33.682674
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Myrtle Beach International Airport",
+    "name_translations": {
+      "en": "Myrtle Beach International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "MYY",
+    "city_code": "MYY",
+    "code": "MYY",
+    "coordinates": {
+      "lon": 113.983116,
+      "lat": 4.325261
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Miri Airport",
+    "name_translations": {
+      "en": "Miri Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "NAG",
+    "city_code": "NAG",
+    "code": "NAG",
+    "coordinates": {
+      "lon": 79.05636,
+      "lat": 21.090036
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Dr. Babasaheb Ambedkar International Airport",
+    "name_translations": {
+      "en": "Dr. Babasaheb Ambedkar International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "NAN",
+    "city_code": "NAN",
+    "code": "NAN",
+    "coordinates": {
+      "lon": 177.45161,
+      "lat": -17.75327
+    },
+    "country_code": "FJ",
+    "flightable": true,
+    "name": "Nadi International Airport",
+    "name_translations": {
+      "en": "Nadi International Airport"
+    },
+    "time_zone": "Pacific/Fiji"
+  },
+  {
+    "_key": "NAP",
+    "city_code": "NAP",
+    "code": "NAP",
+    "coordinates": {
+      "lon": 14.291667,
+      "lat": 40.886112
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Naples International Airport",
+    "name_translations": {
+      "en": "Naples International Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "NAT",
+    "city_code": "NAT",
+    "code": "NAT",
+    "coordinates": {
+      "lon": -35.250244,
+      "lat": -5.916787
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Sao Goncalo do Amarante-Governador Aluizio Alves Intl Airport",
+    "name_translations": {
+      "en": "Sao Goncalo do Amarante-Governador Aluizio Alves Intl Airport"
+    },
+    "time_zone": "America/Fortaleza"
+  },
+  {
+    "_key": "NAV",
+    "city_code": "NAV",
+    "code": "NAV",
+    "coordinates": {
+      "lon": 34.716667,
+      "lat": 38.63333
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Nevsehir",
+    "name_translations": {
+      "en": "Nevsehir"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "NBC",
+    "city_code": "NBC",
+    "code": "NBC",
+    "coordinates": {
+      "lon": 52.10341,
+      "lat": 55.564125
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Begishevo Airport",
+    "name_translations": {
+      "en": "Begishevo Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "NCE",
+    "city_code": "NCE",
+    "code": "NCE",
+    "coordinates": {
+      "lon": 7.205232,
+      "lat": 43.66049
+    },
+    "country_code": "FR",
+    "flightable": true,
+    "name": "Cote D'Azur Airport",
+    "name_translations": {
+      "en": "Cote D'Azur Airport"
+    },
+    "time_zone": "Europe/Paris"
+  },
+  {
+    "_key": "NDR",
+    "city_code": "NDR",
+    "code": "NDR",
+    "coordinates": {
+      "lon": -3.028333,
+      "lat": 34.988888
+    },
+    "country_code": "MA",
+    "flightable": true,
+    "name": "Nador International Airport",
+    "name_translations": {
+      "en": "Nador International Airport"
+    },
+    "time_zone": "Africa/Casablanca"
+  },
+  {
+    "_key": "NHA",
+    "city_code": "NHA",
+    "code": "NHA",
+    "coordinates": {
+      "lon": 109.19666,
+      "lat": 12.227912
+    },
+    "country_code": "VN",
+    "flightable": false,
+    "name": "Nha Trang",
+    "name_translations": {
+      "en": "Nha Trang"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "NNM",
+    "city_code": "NNM",
+    "code": "NNM",
+    "coordinates": {
+      "lon": 53.15,
+      "lat": 67.61667
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Naryan-Mar Airport",
+    "name_translations": {
+      "en": "Naryan-Mar Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "NOP",
+    "city_code": "NOP",
+    "code": "NOP",
+    "coordinates": {
+      "lon": 35.06889,
+      "lat": 42.0175
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Sinop Airport - Turkey",
+    "name_translations": {
+      "en": "Sinop Airport - Turkey"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "NOZ",
+    "city_code": "NOZ",
+    "code": "NOZ",
+    "coordinates": {
+      "lon": 87.166664,
+      "lat": 53.75
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Novokuznetsk Airport",
+    "name_translations": {
+      "en": "Novokuznetsk Airport"
+    },
+    "time_zone": "Asia/Novokuznetsk"
+  },
+  {
+    "_key": "NST",
+    "city_code": "NST",
+    "code": "NST",
+    "coordinates": {
+      "lon": 99.95,
+      "lat": 8.466667
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Nakhon Si Thammarat Airport",
+    "name_translations": {
+      "en": "Nakhon Si Thammarat Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "NVT",
+    "city_code": "NVT",
+    "code": "NVT",
+    "coordinates": {
+      "lon": -48.63333,
+      "lat": -26.866667
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Navegantes Airport",
+    "name_translations": {
+      "en": "Navegantes Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "NYA",
+    "city_code": "NYA",
+    "code": "NYA",
+    "coordinates": {
+      "lon": 65.60563,
+      "lat": 62.101074
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Nyagan Airport",
+    "name_translations": {
+      "en": "Nyagan Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "OAK",
+    "city_code": "OAK",
+    "code": "OAK",
+    "coordinates": {
+      "lon": -122.21201,
+      "lat": 37.71188
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Metropolitan Oakland International Airport",
+    "name_translations": {
+      "en": "Metropolitan Oakland International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "ODS",
+    "city_code": "ODS",
+    "code": "ODS",
+    "coordinates": {
+      "lon": 30.676718,
+      "lat": 46.44101
+    },
+    "country_code": "UA",
+    "flightable": true,
+    "name": "Odessa International Airport",
+    "name_translations": {
+      "en": "Odessa International Airport"
+    },
+    "time_zone": "Europe/Kiev"
+  },
+  {
+    "_key": "OGZ",
+    "city_code": "OGZ",
+    "code": "OGZ",
+    "coordinates": {
+      "lon": 44.6,
+      "lat": 43.2
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Vladikavkaz Airport",
+    "name_translations": {
+      "en": "Vladikavkaz Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "OLB",
+    "city_code": "OLB",
+    "code": "OLB",
+    "coordinates": {
+      "lon": 9.514823,
+      "lat": 40.903145
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Olbia Costa Smeralda Airport",
+    "name_translations": {
+      "en": "Olbia Costa Smeralda Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "OMS",
+    "city_code": "OMS",
+    "code": "OMS",
+    "coordinates": {
+      "lon": 73.3167,
+      "lat": 54.957455
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Omsk Airport",
+    "name_translations": {
+      "en": "Omsk Airport"
+    },
+    "time_zone": "Asia/Omsk"
+  },
+  {
+    "_key": "ONT",
+    "city_code": "ONT",
+    "code": "ONT",
+    "coordinates": {
+      "lon": -117.59765,
+      "lat": 34.06068
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Ontario International Airport",
+    "name_translations": {
+      "en": "Ontario International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "OPO",
+    "city_code": "OPO",
+    "code": "OPO",
+    "coordinates": {
+      "lon": -8.670272,
+      "lat": 41.237774
+    },
+    "country_code": "PT",
+    "flightable": true,
+    "name": "Porto Airport",
+    "name_translations": {
+      "en": "Porto Airport"
+    },
+    "time_zone": "Europe/Lisbon"
+  },
+  {
+    "_key": "ORL",
+    "city_code": "ORL",
+    "code": "ORL",
+    "coordinates": {
+      "lon": -81.335556,
+      "lat": 28.544167
+    },
+    "country_code": "US",
+    "flightable": false,
+    "name": "Orlando Executive",
+    "name_translations": {
+      "en": "Orlando Executive"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "OSL",
+    "city_code": "OSL",
+    "code": "OSL",
+    "coordinates": {
+      "lon": 11.100411,
+      "lat": 60.19419
+    },
+    "country_code": "NO",
+    "flightable": true,
+    "name": "Oslo Airport Gardermoen",
+    "name_translations": {
+      "en": "Oslo Airport Gardermoen"
+    },
+    "time_zone": "Europe/Oslo"
+  },
+  {
+    "_key": "OSS",
+    "city_code": "OSS",
+    "code": "OSS",
+    "coordinates": {
+      "lon": 72.78648,
+      "lat": 40.60769
+    },
+    "country_code": "KG",
+    "flightable": true,
+    "name": "Osh Airport",
+    "name_translations": {
+      "en": "Osh Airport"
+    },
+    "time_zone": "Asia/Bishkek"
+  },
+  {
+    "_key": "OVB",
+    "city_code": "OVB",
+    "code": "OVB",
+    "coordinates": {
+      "lon": 82.667,
+      "lat": 55.00901
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Novosibirsk Tolmachevo Airport",
+    "name_translations": {
+      "en": "Novosibirsk Tolmachevo Airport"
+    },
+    "time_zone": "Asia/Phnom_Penh"
+  },
+  {
+    "_key": "OZC",
+    "city_code": "OZC",
+    "code": "OZC",
+    "coordinates": {
+      "lon": 123.84541,
+      "lat": 8.181967
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Labo Airport",
+    "name_translations": {
+      "en": "Labo Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "OZH",
+    "city_code": "OZH",
+    "code": "OZH",
+    "coordinates": {
+      "lon": 35.315834,
+      "lat": 47.8675
+    },
+    "country_code": "UA",
+    "flightable": true,
+    "name": "Zaporozhye Airport",
+    "name_translations": {
+      "en": "Zaporozhye Airport"
+    },
+    "time_zone": "Europe/Zaporozhye"
+  },
+  {
+    "_key": "PAE",
+    "city_code": "PAE",
+    "code": "PAE",
+    "coordinates": {
+      "lon": -122.28445,
+      "lat": 47.90972
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Snohomish County - Paine Field",
+    "name_translations": {
+      "en": "Snohomish County - Paine Field"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "PAT",
+    "city_code": "PAT",
+    "code": "PAT",
+    "coordinates": {
+      "lon": 85.09067,
+      "lat": 25.59489
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Jay Prakash Narayan International Airport",
+    "name_translations": {
+      "en": "Jay Prakash Narayan International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "PBC",
+    "city_code": "PBC",
+    "code": "PBC",
+    "coordinates": {
+      "lon": -98.3675,
+      "lat": 19.135
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Huejotsingo Airport",
+    "name_translations": {
+      "en": "Huejotsingo Airport"
+    },
+    "time_zone": "America/Mexico_City"
+  },
+  {
+    "_key": "PBG",
+    "city_code": "PBG",
+    "code": "PBG",
+    "coordinates": {
+      "lon": -73.48333,
+      "lat": 44.7
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Plattsburgh International Airport",
+    "name_translations": {
+      "en": "Plattsburgh International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "PBI",
+    "city_code": "PBI",
+    "code": "PBI",
+    "coordinates": {
+      "lon": -80.09044,
+      "lat": 26.688885
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Palm Beach International Airport",
+    "name_translations": {
+      "en": "Palm Beach International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "PCL",
+    "city_code": "PCL",
+    "code": "PCL",
+    "coordinates": {
+      "lon": -74.63333,
+      "lat": -8.333333
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Capitan Rolden Airport",
+    "name_translations": {
+      "en": "Capitan Rolden Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "PDG",
+    "city_code": "PDG",
+    "code": "PDG",
+    "coordinates": {
+      "lon": 100.280556,
+      "lat": -0.786667
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Minangkabau International Airport",
+    "name_translations": {
+      "en": "Minangkabau International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "PDX",
+    "city_code": "PDX",
+    "code": "PDX",
+    "coordinates": {
+      "lon": -122.5929,
+      "lat": 45.588997
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Portland International Airport",
+    "name_translations": {
+      "en": "Portland International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "PEE",
+    "city_code": "PEE",
+    "code": "PEE",
+    "coordinates": {
+      "lon": 56.01918,
+      "lat": 57.920025
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Perm International Airport",
+    "name_translations": {
+      "en": "Perm International Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "PEI",
+    "city_code": "PEI",
+    "code": "PEI",
+    "coordinates": {
+      "lon": -75.736534,
+      "lat": 4.815945
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Matecana International Airport",
+    "name_translations": {
+      "en": "Matecana International Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "PEN",
+    "city_code": "PEN",
+    "code": "PEN",
+    "coordinates": {
+      "lon": 100.265175,
+      "lat": 5.292961
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Penang International Airport",
+    "name_translations": {
+      "en": "Penang International Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "PES",
+    "city_code": "PES",
+    "code": "PES",
+    "coordinates": {
+      "lon": 34.333332,
+      "lat": 61.683334
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Petrozavodsk Airport",
+    "name_translations": {
+      "en": "Petrozavodsk Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "PFB",
+    "city_code": "PFB",
+    "code": "PFB",
+    "coordinates": {
+      "lon": -52.333332,
+      "lat": -28.25
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Passo Fundo Airport",
+    "name_translations": {
+      "en": "Passo Fundo Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "PFO",
+    "city_code": "PFO",
+    "code": "PFO",
+    "coordinates": {
+      "lon": 32.489105,
+      "lat": 34.71155
+    },
+    "country_code": "CY",
+    "flightable": true,
+    "name": "Paphos International Airport",
+    "name_translations": {
+      "en": "Paphos International Airport"
+    },
+    "time_zone": "Asia/Nicosia"
+  },
+  {
+    "_key": "PGK",
+    "city_code": "PGK",
+    "code": "PGK",
+    "coordinates": {
+      "lon": 106.13707,
+      "lat": -2.164017
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Depati Amir Airport",
+    "name_translations": {
+      "en": "Depati Amir Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "PHL",
+    "city_code": "PHL",
+    "code": "PHL",
+    "coordinates": {
+      "lon": -75.2433,
+      "lat": 39.87641
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Philadelphia International Airport",
+    "name_translations": {
+      "en": "Philadelphia International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "PHS",
+    "city_code": "PHS",
+    "code": "PHS",
+    "coordinates": {
+      "lon": 100.2812,
+      "lat": 16.771307
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Phitsanulok Airport",
+    "name_translations": {
+      "en": "Phitsanulok Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "PHX",
+    "city_code": "PHX",
+    "code": "PHX",
+    "coordinates": {
+      "lon": -112.00016,
+      "lat": 33.435036
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Phoenix Sky Harbor International Airport",
+    "name_translations": {
+      "en": "Phoenix Sky Harbor International Airport"
+    },
+    "time_zone": "America/Phoenix"
+  },
+  {
+    "_key": "PIT",
+    "city_code": "PIT",
+    "code": "PIT",
+    "coordinates": {
+      "lon": -80.25657,
+      "lat": 40.49585
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Pittsburgh International Airport",
+    "name_translations": {
+      "en": "Pittsburgh International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "PKU",
+    "city_code": "PKU",
+    "code": "PKU",
+    "coordinates": {
+      "lon": 101.446884,
+      "lat": 0.464563
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Sultan Syarif Kasim II International Airport",
+    "name_translations": {
+      "en": "Sultan Syarif Kasim II International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "PKV",
+    "city_code": "PKV",
+    "code": "PKV",
+    "coordinates": {
+      "lon": 28.3,
+      "lat": 57.816666
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Pskov Airport",
+    "name_translations": {
+      "en": "Pskov Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "PLM",
+    "city_code": "PLM",
+    "code": "PLM",
+    "coordinates": {
+      "lon": 104.69861,
+      "lat": -2.900146
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Sultan Mahmud Badaruddin II Airport",
+    "name_translations": {
+      "en": "Sultan Mahmud Badaruddin II Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "PLQ",
+    "city_code": "PLQ",
+    "code": "PLQ",
+    "coordinates": {
+      "lon": 21.083332,
+      "lat": 55.95
+    },
+    "country_code": "LT",
+    "flightable": true,
+    "name": "Palanga International Airport",
+    "name_translations": {
+      "en": "Palanga International Airport"
+    },
+    "time_zone": "Europe/Vilnius"
+  },
+  {
+    "_key": "PLX",
+    "city_code": "PLX",
+    "code": "PLX",
+    "coordinates": {
+      "lon": 80.25,
+      "lat": 50.333332
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Semipalatinsk Airport",
+    "name_translations": {
+      "en": "Semipalatinsk Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "PMC",
+    "city_code": "PMC",
+    "code": "PMC",
+    "coordinates": {
+      "lon": -73.09831,
+      "lat": -41.433727
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "El Tepual Airport",
+    "name_translations": {
+      "en": "El Tepual Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "PMI",
+    "city_code": "PMI",
+    "code": "PMI",
+    "coordinates": {
+      "lon": 2.730388,
+      "lat": 39.547653
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Palma de Mallorca Airport",
+    "name_translations": {
+      "en": "Palma de Mallorca Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "PMO",
+    "city_code": "PMO",
+    "code": "PMO",
+    "coordinates": {
+      "lon": 13.104779,
+      "lat": 38.186523
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Falcone-Borsellino Airport",
+    "name_translations": {
+      "en": "Falcone-Borsellino Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "PNH",
+    "city_code": "PNH",
+    "code": "PNH",
+    "coordinates": {
+      "lon": 104.84778,
+      "lat": 11.546111
+    },
+    "country_code": "KH",
+    "flightable": true,
+    "name": "Phnom Penh International Airport",
+    "name_translations": {
+      "en": "Phnom Penh International Airport"
+    },
+    "time_zone": "Asia/Phnom_Penh"
+  },
+  {
+    "_key": "PNQ",
+    "city_code": "PNQ",
+    "code": "PNQ",
+    "coordinates": {
+      "lon": 73.920555,
+      "lat": 18.581388
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Pune Airport",
+    "name_translations": {
+      "en": "Pune Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "POA",
+    "city_code": "POA",
+    "code": "POA",
+    "coordinates": {
+      "lon": -51.17709,
+      "lat": -29.98961
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Salgado Filho International Airport",
+    "name_translations": {
+      "en": "Salgado Filho International Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "POZ",
+    "city_code": "POZ",
+    "code": "POZ",
+    "coordinates": {
+      "lon": 16.828844,
+      "lat": 52.414326
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "Poznan Airport",
+    "name_translations": {
+      "en": "Poznan Airport"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "PPK",
+    "city_code": "PPK",
+    "code": "PPK",
+    "coordinates": {
+      "lon": 69.183334,
+      "lat": 54.783333
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Petropavlovsk Airport",
+    "name_translations": {
+      "en": "Petropavlovsk Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "PPS",
+    "city_code": "PPS",
+    "code": "PPS",
+    "coordinates": {
+      "lon": 118.75674,
+      "lat": 9.740198
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Puerto Princesa International Airport",
+    "name_translations": {
+      "en": "Puerto Princesa International Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "PPW",
+    "city_code": "PPW",
+    "code": "PPW",
+    "coordinates": {
+      "lon": -2.898974,
+      "lat": 59.351265
+    },
+    "country_code": "GB",
+    "flightable": true,
+    "name": "Papa Westray Airport",
+    "name_translations": {
+      "en": "Papa Westray Airport"
+    },
+    "time_zone": "Europe/London"
+  },
+  {
+    "_key": "PQC",
+    "city_code": "PQC",
+    "code": "PQC",
+    "coordinates": {
+      "lon": 103.96324,
+      "lat": 10.223722
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Phu Quoc Airport",
+    "name_translations": {
+      "en": "Phu Quoc Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "PRG",
+    "city_code": "PRG",
+    "code": "PRG",
+    "coordinates": {
+      "lon": 14.266638,
+      "lat": 50.10619
+    },
+    "country_code": "CZ",
+    "flightable": true,
+    "name": "Vaclav Havel Airport Prague",
+    "name_translations": {
+      "en": "Vaclav Havel Airport Prague"
+    },
+    "time_zone": "Europe/Prague"
+  },
+  {
+    "_key": "PRN",
+    "city_code": "PRN",
+    "code": "PRN",
+    "coordinates": {
+      "lon": 21.035557,
+      "lat": 42.573612
+    },
+    "country_code": "XK",
+    "flightable": true,
+    "name": "Pristina International Airport",
+    "name_translations": {
+      "en": "Pristina International Airport"
+    },
+    "time_zone": "Europe/Belgrade"
+  },
+  {
+    "_key": "PSA",
+    "city_code": "PSA",
+    "code": "PSA",
+    "coordinates": {
+      "lon": 10.399915,
+      "lat": 43.69871
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Pisa International Airport",
+    "name_translations": {
+      "en": "Pisa International Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "PUQ",
+    "city_code": "PUQ",
+    "code": "PUQ",
+    "coordinates": {
+      "lon": -70.84307,
+      "lat": -53.005356
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Pres Ibanez Airport",
+    "name_translations": {
+      "en": "Pres Ibanez Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "PUS",
+    "city_code": "PUS",
+    "code": "PUS",
+    "coordinates": {
+      "lon": 128.94873,
+      "lat": 35.179317
+    },
+    "country_code": "KR",
+    "flightable": true,
+    "name": "Gimhae International Airport",
+    "name_translations": {
+      "en": "Gimhae International Airport"
+    },
+    "time_zone": "Asia/Seoul"
+  },
+  {
+    "_key": "PVD",
+    "city_code": "PVD",
+    "code": "PVD",
+    "coordinates": {
+      "lon": -71.43632,
+      "lat": 41.72631
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Theodore Francis Green Memorial State Airport",
+    "name_translations": {
+      "en": "Theodore Francis Green Memorial State Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "PVR",
+    "city_code": "PVR",
+    "code": "PVR",
+    "coordinates": {
+      "lon": -105.24898,
+      "lat": 20.678297
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Gustavo Diaz Ordaz International Airport",
+    "name_translations": {
+      "en": "Gustavo Diaz Ordaz International Airport"
+    },
+    "time_zone": "America/Mexico_City"
+  },
+  {
+    "_key": "PWQ",
+    "city_code": "PWQ",
+    "code": "PWQ",
+    "coordinates": {
+      "lon": 77.066666,
+      "lat": 52.183334
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Pavlodar Airport",
+    "name_translations": {
+      "en": "Pavlodar Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "PXU",
+    "city_code": "PXU",
+    "code": "PXU",
+    "coordinates": {
+      "lon": 108.00896,
+      "lat": 14.006346
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Pleiku Airport",
+    "name_translations": {
+      "en": "Pleiku Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "RAK",
+    "city_code": "RAK",
+    "code": "RAK",
+    "coordinates": {
+      "lon": -8.026902,
+      "lat": 31.601875
+    },
+    "country_code": "MA",
+    "flightable": true,
+    "name": "Menara Airport",
+    "name_translations": {
+      "en": "Menara Airport"
+    },
+    "time_zone": "Africa/Casablanca"
+  },
+  {
+    "_key": "RAO",
+    "city_code": "RAO",
+    "code": "RAO",
+    "coordinates": {
+      "lon": -47.773335,
+      "lat": -21.135834
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Dr. Leite Lopes State Airport",
+    "name_translations": {
+      "en": "Dr. Leite Lopes State Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "RDU",
+    "city_code": "RDU",
+    "code": "RDU",
+    "coordinates": {
+      "lon": -78.79086,
+      "lat": 35.873592
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Raleigh-Durham International Airport",
+    "name_translations": {
+      "en": "Raleigh-Durham International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "REC",
+    "city_code": "REC",
+    "code": "REC",
+    "coordinates": {
+      "lon": -34.91792,
+      "lat": -8.131507
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Guararapes-Gilberto Freyre International Airport",
+    "name_translations": {
+      "en": "Guararapes-Gilberto Freyre International Airport"
+    },
+    "time_zone": "America/Recife"
+  },
+  {
+    "_key": "REP",
+    "city_code": "REP",
+    "code": "REP",
+    "coordinates": {
+      "lon": 103.815926,
+      "lat": 13.408436
+    },
+    "country_code": "KH",
+    "flightable": true,
+    "name": "Siem Reap International Airport",
+    "name_translations": {
+      "en": "Siem Reap International Airport"
+    },
+    "time_zone": "Asia/Phnom_Penh"
+  },
+  {
+    "_key": "RGK",
+    "city_code": "RGK",
+    "code": "RGK",
+    "coordinates": {
+      "lon": 85.83639,
+      "lat": 51.969166
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Gorno-Altaysk Airport",
+    "name_translations": {
+      "en": "Gorno-Altaysk Airport"
+    },
+    "time_zone": "Asia/Novokuznetsk"
+  },
+  {
+    "_key": "RGN",
+    "city_code": "RGN",
+    "code": "RGN",
+    "coordinates": {
+      "lon": 96.134155,
+      "lat": 16.900068
+    },
+    "country_code": "MM",
+    "flightable": true,
+    "name": "Yangon International Airport",
+    "name_translations": {
+      "en": "Yangon International Airport"
+    },
+    "time_zone": "Asia/Rangoon"
+  },
+  {
+    "_key": "RHO",
+    "city_code": "RHO",
+    "code": "RHO",
+    "coordinates": {
+      "lon": 28.090677,
+      "lat": 36.401867
+    },
+    "country_code": "GR",
+    "flightable": true,
+    "name": "Rhodes Airport",
+    "name_translations": {
+      "en": "Rhodes Airport"
+    },
+    "time_zone": "Europe/Athens"
+  },
+  {
+    "_key": "RIC",
+    "city_code": "RIC",
+    "code": "RIC",
+    "coordinates": {
+      "lon": -77.3225,
+      "lat": 37.50611
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Richmond International Airport (Byrd Field)",
+    "name_translations": {
+      "en": "Richmond International Airport (Byrd Field)"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "RIX",
+    "city_code": "RIX",
+    "code": "RIX",
+    "coordinates": {
+      "lon": 23.979807,
+      "lat": 56.92208
+    },
+    "country_code": "LV",
+    "flightable": true,
+    "name": "Riga International Airport",
+    "name_translations": {
+      "en": "Riga International Airport"
+    },
+    "time_zone": "Europe/Riga"
+  },
+  {
+    "_key": "ROI",
+    "city_code": "ROI",
+    "code": "ROI",
+    "coordinates": {
+      "lon": 103.77695,
+      "lat": 16.115278
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Roi Et Airport",
+    "name_translations": {
+      "en": "Roi Et Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "ROV",
+    "city_code": "ROV",
+    "code": "ROV",
+    "coordinates": {
+      "lon": 39.92472,
+      "lat": 47.49417
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Platov International Airport",
+    "name_translations": {
+      "en": "Platov International Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "RPR",
+    "city_code": "RPR",
+    "code": "RPR",
+    "coordinates": {
+      "lon": 81.73975,
+      "lat": 21.18456
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Swami Vivekananda Airport",
+    "name_translations": {
+      "en": "Swami Vivekananda Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "RUH",
+    "city_code": "RUH",
+    "code": "RUH",
+    "coordinates": {
+      "lon": 46.702877,
+      "lat": 24.95929
+    },
+    "country_code": "SA",
+    "flightable": true,
+    "name": "King Khaled International Airport",
+    "name_translations": {
+      "en": "King Khaled International Airport"
+    },
+    "time_zone": "Asia/Riyadh"
+  },
+  {
+    "_key": "RXS",
+    "city_code": "RXS",
+    "code": "RXS",
+    "coordinates": {
+      "lon": 122.74882,
+      "lat": 11.60066
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Roxas City Airport",
+    "name_translations": {
+      "en": "Roxas City Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "SAC",
+    "city_code": "SAC",
+    "code": "SAC",
+    "coordinates": {
+      "lon": -121.933334,
+      "lat": 38.05
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Sacramento Executive Airport",
+    "name_translations": {
+      "en": "Sacramento Executive Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "SAN",
+    "city_code": "SAN",
+    "code": "SAN",
+    "coordinates": {
+      "lon": -117.19731,
+      "lat": 32.731937
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "San Diego International Airport",
+    "name_translations": {
+      "en": "San Diego International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "SBW",
+    "city_code": "SBW",
+    "code": "SBW",
+    "coordinates": {
+      "lon": 111.98657,
+      "lat": 2.254997
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Sibu Airport",
+    "name_translations": {
+      "en": "Sibu Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "SCL",
+    "city_code": "SCL",
+    "code": "SCL",
+    "coordinates": {
+      "lon": -70.79382,
+      "lat": -33.397175
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Arturo Merino Benitez Airport",
+    "name_translations": {
+      "en": "Arturo Merino Benitez Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "SCQ",
+    "city_code": "SCQ",
+    "code": "SCQ",
+    "coordinates": {
+      "lon": -8.420327,
+      "lat": 42.897316
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Santiago De Compostela Airport",
+    "name_translations": {
+      "en": "Santiago De Compostela Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "SCV",
+    "city_code": "SCV",
+    "code": "SCV",
+    "coordinates": {
+      "lon": 26.356112,
+      "lat": 47.689445
+    },
+    "country_code": "RO",
+    "flightable": true,
+    "name": "Suceava Airport",
+    "name_translations": {
+      "en": "Suceava Airport"
+    },
+    "time_zone": "Europe/Bucharest"
+  },
+  {
+    "_key": "SDK",
+    "city_code": "SDK",
+    "code": "SDK",
+    "coordinates": {
+      "lon": 118.06184,
+      "lat": 5.896877
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Sandakan Airport",
+    "name_translations": {
+      "en": "Sandakan Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "SEA",
+    "city_code": "SEA",
+    "code": "SEA",
+    "coordinates": {
+      "lon": -122.301735,
+      "lat": 47.44384
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Seattle-Tacoma International Airport",
+    "name_translations": {
+      "en": "Seattle-Tacoma International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "SFO",
+    "city_code": "SFO",
+    "code": "SFO",
+    "coordinates": {
+      "lon": -122.38988,
+      "lat": 37.615215
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "San Francisco International Airport",
+    "name_translations": {
+      "en": "San Francisco International Airport"
+    },
+    "time_zone": "America/Los_Angeles"
+  },
+  {
+    "_key": "SGN",
+    "city_code": "SGN",
+    "code": "SGN",
+    "coordinates": {
+      "lon": 106.662476,
+      "lat": 10.813045
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Tan Son Nhat International Airport",
+    "name_translations": {
+      "en": "Tan Son Nhat International Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "SHA",
+    "city_code": "SHA",
+    "code": "SHA",
+    "coordinates": {
+      "lon": 121.34197,
+      "lat": 31.196815
+    },
+    "country_code": "CN",
+    "flightable": true,
+    "name": "Shanghai Hongqiao International Airport",
+    "name_translations": {
+      "en": "Shanghai Hongqiao International Airport"
+    },
+    "time_zone": "Asia/Shanghai"
+  },
+  {
+    "_key": "SIN",
+    "city_code": "SIN",
+    "code": "SIN",
+    "coordinates": {
+      "lon": 103.990204,
+      "lat": 1.361173
+    },
+    "country_code": "SG",
+    "flightable": true,
+    "name": "Changi International Airport",
+    "name_translations": {
+      "en": "Changi International Airport"
+    },
+    "time_zone": "Asia/Singapore"
+  },
+  {
+    "_key": "SIP",
+    "city_code": "SIP",
+    "code": "SIP",
+    "coordinates": {
+      "lon": 33.99819,
+      "lat": 45.020657
+    },
+    "country_code": "KX",
+    "flightable": true,
+    "name": "Simferopol International Airport",
+    "name_translations": {
+      "en": "Simferopol International Airport"
+    },
+    "time_zone": "Europe/Simferopol"
+  },
+  {
+    "_key": "SJP",
+    "city_code": "SJP",
+    "code": "SJP",
+    "coordinates": {
+      "lon": -49.416668,
+      "lat": -20.816668
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Sao Jose do Rio Preto Airport",
+    "name_translations": {
+      "en": "Sao Jose do Rio Preto Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "SKG",
+    "city_code": "SKG",
+    "code": "SKG",
+    "coordinates": {
+      "lon": 22.972221,
+      "lat": 40.520832
+    },
+    "country_code": "GR",
+    "flightable": true,
+    "name": "Thessaloniki International Airport",
+    "name_translations": {
+      "en": "Thessaloniki International Airport"
+    },
+    "time_zone": "Europe/Athens"
+  },
+  {
+    "_key": "SKP",
+    "city_code": "SKP",
+    "code": "SKP",
+    "coordinates": {
+      "lon": 21.62872,
+      "lat": 41.95649
+    },
+    "country_code": "MK",
+    "flightable": true,
+    "name": "Skopje Alexander the Great Airport",
+    "name_translations": {
+      "en": "Skopje Alexander the Great Airport"
+    },
+    "time_zone": "Europe/Skopje"
+  },
+  {
+    "_key": "SLZ",
+    "city_code": "SLZ",
+    "code": "SLZ",
+    "coordinates": {
+      "lon": -44.236683,
+      "lat": -2.583316
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Marechal Cunha Machado International Airport",
+    "name_translations": {
+      "en": "Marechal Cunha Machado International Airport"
+    },
+    "time_zone": "America/Fortaleza"
+  },
+  {
+    "_key": "SNO",
+    "city_code": "SNO",
+    "code": "SNO",
+    "coordinates": {
+      "lon": 104.1,
+      "lat": 17.283333
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Sakon Nakhon Airport",
+    "name_translations": {
+      "en": "Sakon Nakhon Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "SOC",
+    "city_code": "SOC",
+    "code": "SOC",
+    "coordinates": {
+      "lon": 110.75667,
+      "lat": -7.51583
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Adi Sumarmo International Airport",
+    "name_translations": {
+      "en": "Adi Sumarmo International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "SOF",
+    "city_code": "SOF",
+    "code": "SOF",
+    "coordinates": {
+      "lon": 23.41443,
+      "lat": 42.688343
+    },
+    "country_code": "BG",
+    "flightable": true,
+    "name": "Sofia Airport",
+    "name_translations": {
+      "en": "Sofia Airport"
+    },
+    "time_zone": "Europe/Sofia"
+  },
+  {
+    "_key": "SPU",
+    "city_code": "SPU",
+    "code": "SPU",
+    "coordinates": {
+      "lon": 16.29946,
+      "lat": 43.536526
+    },
+    "country_code": "HR",
+    "flightable": true,
+    "name": "Split Airport",
+    "name_translations": {
+      "en": "Split Airport"
+    },
+    "time_zone": "Europe/Zagreb"
+  },
+  {
+    "_key": "SRG",
+    "city_code": "SRG",
+    "code": "SRG",
+    "coordinates": {
+      "lon": 110.37855,
+      "lat": -6.979155
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Achmad Yani International Airport",
+    "name_translations": {
+      "en": "Achmad Yani International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "SSA",
+    "city_code": "SSA",
+    "code": "SSA",
+    "coordinates": {
+      "lon": -38.335197,
+      "lat": -12.913988
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Deputado Luis Eduardo Magalhaes International Airport",
+    "name_translations": {
+      "en": "Deputado Luis Eduardo Magalhaes International Airport"
+    },
+    "time_zone": "America/Bahia"
+  },
+  {
+    "_key": "STM",
+    "city_code": "STM",
+    "code": "STM",
+    "coordinates": {
+      "lon": -54.78639,
+      "lat": -2.424886
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Santarem-Maestro Wilson Fonseca Airport",
+    "name_translations": {
+      "en": "Santarem-Maestro Wilson Fonseca Airport"
+    },
+    "time_zone": "America/Santarem"
+  },
+  {
+    "_key": "STR",
+    "city_code": "STR",
+    "code": "STR",
+    "coordinates": {
+      "lon": 9.193624,
+      "lat": 48.69073
+    },
+    "country_code": "DE",
+    "flightable": true,
+    "name": "Stuttgart Airport",
+    "name_translations": {
+      "en": "Stuttgart Airport"
+    },
+    "time_zone": "Europe/Berlin"
+  },
+  {
+    "_key": "STW",
+    "city_code": "STW",
+    "code": "STW",
+    "coordinates": {
+      "lon": 42.00833,
+      "lat": 45.333332
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Stavropol Airport",
+    "name_translations": {
+      "en": "Stavropol Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "SUB",
+    "city_code": "SUB",
+    "code": "SUB",
+    "coordinates": {
+      "lon": 112.77724,
+      "lat": -7.38387
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Juanda International Airport",
+    "name_translations": {
+      "en": "Juanda International Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "SUF",
+    "city_code": "SUF",
+    "code": "SUF",
+    "coordinates": {
+      "lon": 16.244972,
+      "lat": 38.910015
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Lamezia Terme International Airport",
+    "name_translations": {
+      "en": "Lamezia Terme International Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "SUG",
+    "city_code": "SUG",
+    "code": "SUG",
+    "coordinates": {
+      "lon": 125.479164,
+      "lat": 9.758889
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Surigao Airport",
+    "name_translations": {
+      "en": "Surigao Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "SUV",
+    "city_code": "SUV",
+    "code": "SUV",
+    "coordinates": {
+      "lon": 178.55981,
+      "lat": -18.045885
+    },
+    "country_code": "FJ",
+    "flightable": true,
+    "name": "Nausori Airport",
+    "name_translations": {
+      "en": "Nausori Airport"
+    },
+    "time_zone": "Pacific/Fiji"
+  },
+  {
+    "_key": "SVG",
+    "city_code": "SVG",
+    "code": "SVG",
+    "coordinates": {
+      "lon": 5.629197,
+      "lat": 58.88215
+    },
+    "country_code": "NO",
+    "flightable": true,
+    "name": "Stavanger Airport Sola",
+    "name_translations": {
+      "en": "Stavanger Airport Sola"
+    },
+    "time_zone": "Europe/Oslo"
+  },
+  {
+    "_key": "SVQ",
+    "city_code": "SVQ",
+    "code": "SVQ",
+    "coordinates": {
+      "lon": -5.900136,
+      "lat": 37.423477
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Seville Airport",
+    "name_translations": {
+      "en": "Seville Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "SVX",
+    "city_code": "SVX",
+    "code": "SVX",
+    "coordinates": {
+      "lon": 60.804314,
+      "lat": 56.750336
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Koltsovo International Airport",
+    "name_translations": {
+      "en": "Koltsovo International Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "SXR",
+    "city_code": "SXR",
+    "code": "SXR",
+    "coordinates": {
+      "lon": 74.762634,
+      "lat": 34.002308
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Srinagar International Airport",
+    "name_translations": {
+      "en": "Srinagar International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "SYR",
+    "city_code": "SYR",
+    "code": "SYR",
+    "coordinates": {
+      "lon": -76.11223,
+      "lat": 43.113983
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Hancock International Airport",
+    "name_translations": {
+      "en": "Hancock International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "SYX",
+    "city_code": "SYX",
+    "code": "SYX",
+    "coordinates": {
+      "lon": 109.409706,
+      "lat": 18.31063
+    },
+    "country_code": "CN",
+    "flightable": true,
+    "name": "Sanya Phoenix International Airport",
+    "name_translations": {
+      "en": "Sanya Phoenix International Airport"
+    },
+    "time_zone": "Asia/Shanghai"
+  },
+  {
+    "_key": "SZF",
+    "city_code": "SZF",
+    "code": "SZF",
+    "coordinates": {
+      "lon": 36.555058,
+      "lat": 41.25738
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Samsun-Carsamba Airport",
+    "name_translations": {
+      "en": "Samsun-Carsamba Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "SZX",
+    "city_code": "SZX",
+    "code": "SZX",
+    "coordinates": {
+      "lon": 113.81084,
+      "lat": 22.639444
+    },
+    "country_code": "CN",
+    "flightable": true,
+    "name": "Shenzhen Bao'an International Airport",
+    "name_translations": {
+      "en": "Shenzhen Bao'an International Airport"
+    },
+    "time_zone": "Asia/Shanghai"
+  },
+  {
+    "_key": "TAC",
+    "city_code": "TAC",
+    "code": "TAC",
+    "coordinates": {
+      "lon": 125.02592,
+      "lat": 11.22684
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "D. Z. Romualdez Airport",
+    "name_translations": {
+      "en": "D. Z. Romualdez Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "TAE",
+    "city_code": "TAE",
+    "code": "TAE",
+    "coordinates": {
+      "lon": 128.63788,
+      "lat": 35.899254
+    },
+    "country_code": "KR",
+    "flightable": true,
+    "name": "Daegu International Airport",
+    "name_translations": {
+      "en": "Daegu International Airport"
+    },
+    "time_zone": "Asia/Seoul"
+  },
+  {
+    "_key": "TAG",
+    "city_code": "TAG",
+    "code": "TAG",
+    "coordinates": {
+      "lon": 123.853615,
+      "lat": 9.657587
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Bohol-Panglao",
+    "name_translations": {
+      "en": "Bohol-Panglao"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "TBB",
+    "city_code": "TBB",
+    "code": "TBB",
+    "coordinates": {
+      "lon": 109.33972,
+      "lat": 13.044167
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Tuy Hoa Airport",
+    "name_translations": {
+      "en": "Tuy Hoa Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "TGG",
+    "city_code": "TGG",
+    "code": "TGG",
+    "coordinates": {
+      "lon": 103.10642,
+      "lat": 5.380504
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Sultan Mahmud Airport",
+    "name_translations": {
+      "en": "Sultan Mahmud Airport"
+    },
+    "time_zone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "_key": "TGM",
+    "city_code": "TGM",
+    "code": "TGM",
+    "coordinates": {
+      "lon": 24.533333,
+      "lat": 46.533333
+    },
+    "country_code": "RO",
+    "flightable": true,
+    "name": "Transilvania",
+    "name_translations": {
+      "en": "Transilvania"
+    },
+    "time_zone": "Europe/Bucharest"
+  },
+  {
+    "_key": "TGZ",
+    "city_code": "TGZ",
+    "code": "TGZ",
+    "coordinates": {
+      "lon": -93.0225,
+      "lat": 16.56361
+    },
+    "country_code": "MX",
+    "flightable": true,
+    "name": "Angel Albino Corzo International Airport",
+    "name_translations": {
+      "en": "Angel Albino Corzo International Airport"
+    },
+    "time_zone": "America/Mexico_City"
+  },
+  {
+    "_key": "THE",
+    "city_code": "THE",
+    "code": "THE",
+    "coordinates": {
+      "lon": -42.821087,
+      "lat": -5.06335
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Teresina Airport",
+    "name_translations": {
+      "en": "Teresina Airport"
+    },
+    "time_zone": "America/Fortaleza"
+  },
+  {
+    "_key": "TIA",
+    "city_code": "TIA",
+    "code": "TIA",
+    "coordinates": {
+      "lon": 19.71328,
+      "lat": 41.419132
+    },
+    "country_code": "AL",
+    "flightable": true,
+    "name": "Tirana International Airport",
+    "name_translations": {
+      "en": "Tirana International Airport"
+    },
+    "time_zone": "Europe/Tirane"
+  },
+  {
+    "_key": "TIR",
+    "city_code": "TIR",
+    "code": "TIR",
+    "coordinates": {
+      "lon": 79.54293,
+      "lat": 13.635721
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Tirupati Airport",
+    "name_translations": {
+      "en": "Tirupati Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "TJM",
+    "city_code": "TJM",
+    "code": "TJM",
+    "coordinates": {
+      "lon": 65.35024,
+      "lat": 57.181828
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Roshchino International Airport",
+    "name_translations": {
+      "en": "Roshchino International Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "TJQ",
+    "city_code": "TJQ",
+    "code": "TJQ",
+    "coordinates": {
+      "lon": 107.65,
+      "lat": -2.75
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Bulutumbang Airport",
+    "name_translations": {
+      "en": "Bulutumbang Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "TKG",
+    "city_code": "TKG",
+    "code": "TKG",
+    "coordinates": {
+      "lon": 105.1758,
+      "lat": -5.242783
+    },
+    "country_code": "ID",
+    "flightable": true,
+    "name": "Radin Inten II Airport",
+    "name_translations": {
+      "en": "Radin Inten II Airport"
+    },
+    "time_zone": "Asia/Jakarta"
+  },
+  {
+    "_key": "TKU",
+    "city_code": "TKU",
+    "code": "TKU",
+    "coordinates": {
+      "lon": 22.28098,
+      "lat": 60.512794
+    },
+    "country_code": "FI",
+    "flightable": true,
+    "name": "Turku Airport",
+    "name_translations": {
+      "en": "Turku Airport"
+    },
+    "time_zone": "Europe/Helsinki"
+  },
+  {
+    "_key": "TLL",
+    "city_code": "TLL",
+    "code": "TLL",
+    "coordinates": {
+      "lon": 24.798702,
+      "lat": 59.416622
+    },
+    "country_code": "EE",
+    "flightable": true,
+    "name": "Tallinn Airport",
+    "name_translations": {
+      "en": "Tallinn Airport"
+    },
+    "time_zone": "Europe/Tallinn"
+  },
+  {
+    "_key": "TLV",
+    "city_code": "TLV",
+    "code": "TLV",
+    "coordinates": {
+      "lon": 34.870743,
+      "lat": 32.000454
+    },
+    "country_code": "IL",
+    "flightable": true,
+    "name": "Ben Gurion International Airport",
+    "name_translations": {
+      "en": "Ben Gurion International Airport"
+    },
+    "time_zone": "Asia/Jerusalem"
+  },
+  {
+    "_key": "TOF",
+    "city_code": "TOF",
+    "code": "TOF",
+    "coordinates": {
+      "lon": 84.96667,
+      "lat": 56.5
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Tomsk Airport",
+    "name_translations": {
+      "en": "Tomsk Airport"
+    },
+    "time_zone": "Asia/Novokuznetsk"
+  },
+  {
+    "_key": "TPA",
+    "city_code": "TPA",
+    "code": "TPA",
+    "coordinates": {
+      "lon": -82.535416,
+      "lat": 27.97987
+    },
+    "country_code": "US",
+    "flightable": true,
+    "name": "Tampa International Airport",
+    "name_translations": {
+      "en": "Tampa International Airport"
+    },
+    "time_zone": "America/New_York"
+  },
+  {
+    "_key": "TPE",
+    "city_code": "TPE",
+    "code": "TPE",
+    "coordinates": {
+      "lon": 121.22389,
+      "lat": 25.07639
+    },
+    "country_code": "TW",
+    "flightable": true,
+    "name": "Taiwan Taoyuan International Airport",
+    "name_translations": {
+      "en": "Taiwan Taoyuan International Airport"
+    },
+    "time_zone": "Asia/Taipei"
+  },
+  {
+    "_key": "TPP",
+    "city_code": "TPP",
+    "code": "TPP",
+    "coordinates": {
+      "lon": -76.39861,
+      "lat": -6.511111
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Cad. FAP Guillermo del Castillo Paredes Airport",
+    "name_translations": {
+      "en": "Cad. FAP Guillermo del Castillo Paredes Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "TRD",
+    "city_code": "TRD",
+    "code": "TRD",
+    "coordinates": {
+      "lon": 10.917863,
+      "lat": 63.454285
+    },
+    "country_code": "NO",
+    "flightable": true,
+    "name": "Trondheim Airport Vaernes",
+    "name_translations": {
+      "en": "Trondheim Airport Vaernes"
+    },
+    "time_zone": "Europe/Oslo"
+  },
+  {
+    "_key": "TRU",
+    "city_code": "TRU",
+    "code": "TRU",
+    "coordinates": {
+      "lon": -79.115,
+      "lat": -8.09
+    },
+    "country_code": "PE",
+    "flightable": true,
+    "name": "Trujillo Airport",
+    "name_translations": {
+      "en": "Trujillo Airport"
+    },
+    "time_zone": "America/Lima"
+  },
+  {
+    "_key": "TRV",
+    "city_code": "TRV",
+    "code": "TRV",
+    "coordinates": {
+      "lon": 76.91907,
+      "lat": 8.476126
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Trivandrum International Airport",
+    "name_translations": {
+      "en": "Trivandrum International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "TSE",
+    "city_code": "TSE",
+    "code": "TSE",
+    "coordinates": {
+      "lon": 71.4612,
+      "lat": 51.02781
+    },
+    "country_code": "KZ",
+    "flightable": true,
+    "name": "Astana (Nursultan) International Airport",
+    "name_translations": {
+      "en": "Astana (Nursultan) International Airport"
+    },
+    "time_zone": "Asia/Almaty"
+  },
+  {
+    "_key": "TSR",
+    "city_code": "TSR",
+    "code": "TSR",
+    "coordinates": {
+      "lon": 21.32012,
+      "lat": 45.809925
+    },
+    "country_code": "RO",
+    "flightable": true,
+    "name": "Timisoara Traian Vuia International Airport",
+    "name_translations": {
+      "en": "Timisoara Traian Vuia International Airport"
+    },
+    "time_zone": "Europe/Bucharest"
+  },
+  {
+    "_key": "TST",
+    "city_code": "TST",
+    "code": "TST",
+    "coordinates": {
+      "lon": 99.61667,
+      "lat": 7.5
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Trang Airport",
+    "name_translations": {
+      "en": "Trang Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "TWU",
+    "city_code": "TWU",
+    "code": "TWU",
+    "coordinates": {
+      "lon": 117.884865,
+      "lat": 4.26275
+    },
+    "country_code": "MY",
+    "flightable": true,
+    "name": "Tawau Airport",
+    "name_translations": {
+      "en": "Tawau Airport"
+    },
+    "time_zone": "Asia/Kuching"
+  },
+  {
+    "_key": "TZL",
+    "city_code": "TZL",
+    "code": "TZL",
+    "coordinates": {
+      "lon": 18.709167,
+      "lat": 44.40972
+    },
+    "country_code": "BA",
+    "flightable": true,
+    "name": "Tuzla International Airport",
+    "name_translations": {
+      "en": "Tuzla International Airport"
+    },
+    "time_zone": "Europe/Sarajevo"
+  },
+  {
+    "_key": "TZX",
+    "city_code": "TZX",
+    "code": "TZX",
+    "coordinates": {
+      "lon": 39.78168,
+      "lat": 40.99419
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Trabzon Airport",
+    "name_translations": {
+      "en": "Trabzon Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "UBP",
+    "city_code": "UBP",
+    "code": "UBP",
+    "coordinates": {
+      "lon": 104.87068,
+      "lat": 15.246491
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Ubon Ratchathani International Airport",
+    "name_translations": {
+      "en": "Ubon Ratchathani International Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "UFA",
+    "city_code": "UFA",
+    "code": "UFA",
+    "coordinates": {
+      "lon": 55.884544,
+      "lat": 54.565403
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Ufa International Airport",
+    "name_translations": {
+      "en": "Ufa International Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "UIH",
+    "city_code": "UIH",
+    "code": "UIH",
+    "coordinates": {
+      "lon": 109.22639,
+      "lat": 13.766111
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Phu Cat Airport",
+    "name_translations": {
+      "en": "Phu Cat Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "UNN",
+    "city_code": "UNN",
+    "code": "UNN",
+    "coordinates": {
+      "lon": 98.629166,
+      "lat": 9.852778
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Ranong Airport",
+    "name_translations": {
+      "en": "Ranong Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "URJ",
+    "city_code": "URJ",
+    "code": "URJ",
+    "coordinates": {
+      "lon": 64.833336,
+      "lat": 60.11667
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Uraj Airport",
+    "name_translations": {
+      "en": "Uraj Airport"
+    },
+    "time_zone": "Asia/Yekaterinburg"
+  },
+  {
+    "_key": "URT",
+    "city_code": "URT",
+    "code": "URT",
+    "coordinates": {
+      "lon": 99.143196,
+      "lat": 9.133865
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Surat Thani Airport",
+    "name_translations": {
+      "en": "Surat Thani Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "USU",
+    "city_code": "USU",
+    "code": "USU",
+    "coordinates": {
+      "lon": 120.166664,
+      "lat": 12.1
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Busuanga Airport",
+    "name_translations": {
+      "en": "Busuanga Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "UTH",
+    "city_code": "UTH",
+    "code": "UTH",
+    "coordinates": {
+      "lon": 102.774506,
+      "lat": 17.38661
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Udon Thani International Airport",
+    "name_translations": {
+      "en": "Udon Thani International Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "UTP",
+    "city_code": "UTP",
+    "code": "UTP",
+    "coordinates": {
+      "lon": 101.01667,
+      "lat": 12.683333
+    },
+    "country_code": "TH",
+    "flightable": true,
+    "name": "Utapao Airport",
+    "name_translations": {
+      "en": "Utapao Airport"
+    },
+    "time_zone": "Asia/Bangkok"
+  },
+  {
+    "_key": "VAN",
+    "city_code": "VAN",
+    "code": "VAN",
+    "coordinates": {
+      "lon": 43.332222,
+      "lat": 38.45861
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Van Ferit Melen Airport",
+    "name_translations": {
+      "en": "Van Ferit Melen Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "VAR",
+    "city_code": "VAR",
+    "code": "VAR",
+    "coordinates": {
+      "lon": 27.829096,
+      "lat": 43.23726
+    },
+    "country_code": "BG",
+    "flightable": true,
+    "name": "Varna Airport",
+    "name_translations": {
+      "en": "Varna Airport"
+    },
+    "time_zone": "Europe/Sofia"
+  },
+  {
+    "_key": "VAS",
+    "city_code": "VAS",
+    "code": "VAS",
+    "coordinates": {
+      "lon": 36.904167,
+      "lat": 39.81389
+    },
+    "country_code": "TR",
+    "flightable": true,
+    "name": "Sivas Airport",
+    "name_translations": {
+      "en": "Sivas Airport"
+    },
+    "time_zone": "Europe/Istanbul"
+  },
+  {
+    "_key": "VCA",
+    "city_code": "VCA",
+    "code": "VCA",
+    "coordinates": {
+      "lon": 105.76639,
+      "lat": 10.047222
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Can Tho Airport",
+    "name_translations": {
+      "en": "Can Tho Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "VCE",
+    "city_code": "VCE",
+    "code": "VCE",
+    "coordinates": {
+      "lon": 12.337947,
+      "lat": 45.502285
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Venice Marco Polo Airport",
+    "name_translations": {
+      "en": "Venice Marco Polo Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "VCL",
+    "city_code": "VCL",
+    "code": "VCL",
+    "coordinates": {
+      "lon": 108.70389,
+      "lat": 15.422222
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Chu Lai International Airport",
+    "name_translations": {
+      "en": "Chu Lai International Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "VDH",
+    "city_code": "VDH",
+    "code": "VDH",
+    "coordinates": {
+      "lon": 106.59055,
+      "lat": 17.515
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Dong Hoi Airport",
+    "name_translations": {
+      "en": "Dong Hoi Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "VGA",
+    "city_code": "VGA",
+    "code": "VGA",
+    "coordinates": {
+      "lon": 80.79722,
+      "lat": 16.529444
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Vijayawada Airport",
+    "name_translations": {
+      "en": "Vijayawada Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "VGO",
+    "city_code": "VGO",
+    "code": "VGO",
+    "coordinates": {
+      "lon": -8.634025,
+      "lat": 42.224552
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Vigo Airport",
+    "name_translations": {
+      "en": "Vigo Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "VIE",
+    "city_code": "VIE",
+    "code": "VIE",
+    "coordinates": {
+      "lon": 16.563583,
+      "lat": 48.11972
+    },
+    "country_code": "AT",
+    "flightable": true,
+    "name": "Vienna International Airport",
+    "name_translations": {
+      "en": "Vienna International Airport"
+    },
+    "time_zone": "Europe/Vienna"
+  },
+  {
+    "_key": "VII",
+    "city_code": "VII",
+    "code": "VII",
+    "coordinates": {
+      "lon": 105.63333,
+      "lat": 18.7
+    },
+    "country_code": "VN",
+    "flightable": true,
+    "name": "Vinh Airport",
+    "name_translations": {
+      "en": "Vinh Airport"
+    },
+    "time_zone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "_key": "VIX",
+    "city_code": "VIX",
+    "code": "VIX",
+    "coordinates": {
+      "lon": -40.289566,
+      "lat": -20.25681
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Eurico de Aguiar Salles Airport",
+    "name_translations": {
+      "en": "Eurico de Aguiar Salles Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "VLC",
+    "city_code": "VLC",
+    "code": "VLC",
+    "coordinates": {
+      "lon": -0.473475,
+      "lat": 39.49179
+    },
+    "country_code": "ES",
+    "flightable": true,
+    "name": "Valencia Airport",
+    "name_translations": {
+      "en": "Valencia Airport"
+    },
+    "time_zone": "Europe/Madrid"
+  },
+  {
+    "_key": "VNO",
+    "city_code": "VNO",
+    "code": "VNO",
+    "coordinates": {
+      "lon": 25.279606,
+      "lat": 54.643078
+    },
+    "country_code": "LT",
+    "flightable": true,
+    "name": "Vilnius International Airport",
+    "name_translations": {
+      "en": "Vilnius International Airport"
+    },
+    "time_zone": "Europe/Vilnius"
+  },
+  {
+    "_key": "VNS",
+    "city_code": "VNS",
+    "code": "VNS",
+    "coordinates": {
+      "lon": 82.85373,
+      "lat": 25.449697
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Lal Bahadur Shastri International Airport",
+    "name_translations": {
+      "en": "Lal Bahadur Shastri International Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "VOG",
+    "city_code": "VOG",
+    "code": "VOG",
+    "coordinates": {
+      "lon": 44.354805,
+      "lat": 48.792
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Volgograd International Airport",
+    "name_translations": {
+      "en": "Volgograd International Airport"
+    },
+    "time_zone": "Europe/Volgograd"
+  },
+  {
+    "_key": "VOZ",
+    "city_code": "VOZ",
+    "code": "VOZ",
+    "coordinates": {
+      "lon": 39.226997,
+      "lat": 51.812355
+    },
+    "country_code": "RU",
+    "flightable": true,
+    "name": "Voronezh Airport",
+    "name_translations": {
+      "en": "Voronezh Airport"
+    },
+    "time_zone": "Europe/Moscow"
+  },
+  {
+    "_key": "VRN",
+    "city_code": "VRN",
+    "code": "VRN",
+    "coordinates": {
+      "lon": 10.906796,
+      "lat": 45.40233
+    },
+    "country_code": "IT",
+    "flightable": true,
+    "name": "Verona Villafranca Airport",
+    "name_translations": {
+      "en": "Verona Villafranca Airport"
+    },
+    "time_zone": "Europe/Rome"
+  },
+  {
+    "_key": "VTZ",
+    "city_code": "VTZ",
+    "code": "VTZ",
+    "coordinates": {
+      "lon": 83.22675,
+      "lat": 17.728151
+    },
+    "country_code": "IN",
+    "flightable": true,
+    "name": "Vishakhapatnam Airport",
+    "name_translations": {
+      "en": "Vishakhapatnam Airport"
+    },
+    "time_zone": "Asia/Kolkata"
+  },
+  {
+    "_key": "VUP",
+    "city_code": "VUP",
+    "code": "VUP",
+    "coordinates": {
+      "lon": -73.25278,
+      "lat": 10.436667
+    },
+    "country_code": "CO",
+    "flightable": true,
+    "name": "Valledupar Airport",
+    "name_translations": {
+      "en": "Valledupar Airport"
+    },
+    "time_zone": "America/Bogota"
+  },
+  {
+    "_key": "WAW",
+    "city_code": "WAW",
+    "code": "WAW",
+    "coordinates": {
+      "lon": 20.97329,
+      "lat": 52.170906
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "Frederic Chopin Airport",
+    "name_translations": {
+      "en": "Frederic Chopin Airport"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "WLG",
+    "city_code": "WLG",
+    "code": "WLG",
+    "coordinates": {
+      "lon": 174.81216,
+      "lat": -41.329037
+    },
+    "country_code": "NZ",
+    "flightable": true,
+    "name": "Wellington International Airport",
+    "name_translations": {
+      "en": "Wellington International Airport"
+    },
+    "time_zone": "Pacific/Auckland"
+  },
+  {
+    "_key": "WRO",
+    "city_code": "WRO",
+    "code": "WRO",
+    "coordinates": {
+      "lon": 16.899403,
+      "lat": 51.10482
+    },
+    "country_code": "PL",
+    "flightable": true,
+    "name": "Wroclaw Airport",
+    "name_translations": {
+      "en": "Wroclaw Airport"
+    },
+    "time_zone": "Europe/Warsaw"
+  },
+  {
+    "_key": "WRY",
+    "city_code": "WRY",
+    "code": "WRY",
+    "coordinates": {
+      "lon": -2.95,
+      "lat": 59.35
+    },
+    "country_code": "GB",
+    "flightable": true,
+    "name": "Westray Airport",
+    "name_translations": {
+      "en": "Westray Airport"
+    },
+    "time_zone": "Europe/London"
+  },
+  {
+    "_key": "XAP",
+    "city_code": "XAP",
+    "code": "XAP",
+    "coordinates": {
+      "lon": -52.629723,
+      "lat": -27.088612
+    },
+    "country_code": "BR",
+    "flightable": true,
+    "name": "Chapeco Airport",
+    "name_translations": {
+      "en": "Chapeco Airport"
+    },
+    "time_zone": "America/Sao_Paulo"
+  },
+  {
+    "_key": "YNB",
+    "city_code": "YNB",
+    "code": "YNB",
+    "coordinates": {
+      "lon": 38.06302,
+      "lat": 24.140734
+    },
+    "country_code": "SA",
+    "flightable": true,
+    "name": "Yanbu Airport",
+    "name_translations": {
+      "en": "Yanbu Airport"
+    },
+    "time_zone": "Asia/Riyadh"
+  },
+  {
+    "_key": "YXU",
+    "city_code": "YXU",
+    "code": "YXU",
+    "coordinates": {
+      "lon": -81.14965,
+      "lat": 43.02802
+    },
+    "country_code": "CA",
+    "flightable": true,
+    "name": "London International Airport",
+    "name_translations": {
+      "en": "London International Airport"
+    },
+    "time_zone": "America/Toronto"
+  },
+  {
+    "_key": "ZAL",
+    "city_code": "ZAL",
+    "code": "ZAL",
+    "coordinates": {
+      "lon": -73.23944,
+      "lat": -39.791668
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Pichoy Airport",
+    "name_translations": {
+      "en": "Pichoy Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "ZAM",
+    "city_code": "ZAM",
+    "code": "ZAM",
+    "coordinates": {
+      "lon": 122.062256,
+      "lat": 6.919294
+    },
+    "country_code": "PH",
+    "flightable": true,
+    "name": "Zamboanga International Airport",
+    "name_translations": {
+      "en": "Zamboanga International Airport"
+    },
+    "time_zone": "Asia/Manila"
+  },
+  {
+    "_key": "ZCO",
+    "city_code": "ZCO",
+    "code": "ZCO",
+    "coordinates": {
+      "lon": -72.63845,
+      "lat": -38.770355
+    },
+    "country_code": "CL",
+    "flightable": true,
+    "name": "Temuco Airport",
+    "name_translations": {
+      "en": "Temuco Airport"
+    },
+    "time_zone": "America/Santiago"
+  },
+  {
+    "_key": "ZNZ",
+    "city_code": "ZNZ",
+    "code": "ZNZ",
+    "coordinates": {
+      "lon": 39.221184,
+      "lat": -6.218466
+    },
+    "country_code": "TZ",
+    "flightable": true,
+    "name": "Zanzibar International Airport",
+    "name_translations": {
+      "en": "Zanzibar International Airport"
+    },
+    "time_zone": "Africa/Dar_es_Salaam"
+  }
+]
