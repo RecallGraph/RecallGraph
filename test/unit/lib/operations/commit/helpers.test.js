@@ -108,7 +108,7 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.have.property('ctime')
   })
 
-  it('should return an \'update\' event node for a non-committed node replaced through service', () => {
+  it('should return a \'created\' event node for a non-committed node replaced through service', () => {
     const collName = init.TEST_DATA_COLLECTIONS.vertex
     const coll = db._collection(collName)
     const pathParams = {
@@ -127,7 +127,7 @@ describe('Commit Helpers - getLatestEvent', () => {
 
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
-    expect(latestEvent.event).to.equal('updated')
+    expect(latestEvent.event).to.equal('created')
     expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
