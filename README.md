@@ -67,12 +67,12 @@ RecallGraph installs like any other _Foxx Microservice_ inside a database, on an
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.5/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
 ### Installation Notes
-1. Refer to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki/Installation#from-source) if you want to install from source.
+1. Refer to the [docs](https://docs.recallgraph.tech/working-with-recallgraph/installation#from-source) if you want to install from source.
 1. A _one-click_ cloud deployment option might be made available in the future for those who wish to take RecallGraph for a test ride without having to set up a server from scratch.
 
 ## Docs
 - Quick-reference API documentation is available directly in the Swagger console (accessed through ArangoDB's web UI).
-- Detailed API docs, tutorials and technical docs are being worked on, and are being uploaded to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki) as and when they get ready.
+- Detailed API docs, tutorials and technical docs are being worked on, and are being uploaded to the [docs website](https://docs.recallgraph.tech/) as and when they get ready.
 
 ## Limitations
 1. Although the test cases are quite extensive and have good coverage, this service has only been tested on single-instance DB deployments, and **not on clusters**.
