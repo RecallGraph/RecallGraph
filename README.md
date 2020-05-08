@@ -36,7 +36,7 @@ Also check out the recording below (RecallGraph presented @ ArangoDB Online Meet
 1. Documents (vertices/edges) mutate within their lifespan (both in their individual attributes/values and in their relations with each other).
 1. Past states of documents are as important as their present, necessitating retention and queryability of their change history.
 
-Refer to the [wiki](https://github.com/RecallGraph/RecallGraph/wiki) for an in-depth introduction.
+Refer to the [documentation](https://docs.recallgraph.tech/understanding-recallgraph/concepts) for an in-depth introduction.
 
 ## Salient API Features
 RecallGraph's API is split into 3 top-level categories:
