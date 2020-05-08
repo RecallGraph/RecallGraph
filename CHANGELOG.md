@@ -27,6 +27,7 @@
 1. **Data:**
     1. Collection origin events have their `origin-for` field renamed to `collection` to remain consistent with field naming convention followed for regular events.
     2. Certain indices have changed.
+    3. When replacing/updating an existing document with no event log record, a `created` event is recorded instead of an `updated` event.
 2. **Breaking:**
     1. Diffs are enhanced to return some event metadata along with command lists. This is to reduce overloading the `log` function with event+command-related queries.
     2. The `countsOnly` parameter now has an effect even when `groupBy` is `null` for `log ` endpoints. It returns the overall total number of events based on the filters provided.
