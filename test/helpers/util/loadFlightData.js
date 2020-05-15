@@ -64,8 +64,8 @@ module.exports = function loadFlightData (testDataCollections) {
   flightCommands.forEach(item => {
     docCount++
 
-    const from = find(item, { path: '/_from' })
-    const to = find(item, { path: '/_to' })
+    const from = find(item.command, { path: '/_from' })
+    const to = find(item.command, { path: '/_to' })
     if (from) {
       from.value = `${airports.name()}/${from.value}`
     }
