@@ -71,6 +71,24 @@ commandColl.ensureIndex({
   fields: ['_from', 'meta.id']
 })
 
+const skeletonVerticesColl = db._collection(skeletonVertices)
+skeletonVerticesColl.ensureIndex({
+  type: 'hash',
+  sparse: false,
+  unique: false,
+  deduplicate: false,
+  fields: ['collection']
+})
+
+const skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
+skeletonEdgeHubsColl.ensureIndex({
+  type: 'hash',
+  sparse: false,
+  unique: false,
+  deduplicate: false,
+  fields: ['collection']
+})
+
 const skeletonEdgeSpokesColl = db._collection(skeletonEdgeSpokes)
 skeletonEdgeSpokesColl.ensureIndex({
   type: 'hash',
