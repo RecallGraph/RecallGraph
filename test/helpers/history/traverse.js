@@ -14,15 +14,19 @@ const {
   traverseSkeletonGraph, createNodeBracepath, removeFreeEdges, buildFilteredGraph
 } = require('../../../lib/operations/traverse/helpers')
 
-const { baseUrl, collectionPrefix } = module.context
+const { baseUrl } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
 const generateCombos = memoize(() => {
   return cartesian({
     timestamp: [null, ...init.getMilestones()],
-    depth: [1, 2],
+    minDepth: [0, 1],
+    relDepth: [0, 1],
     edgeCollections: ['inbound', 'outbound', 'any'].map(dir => ({
       [lineageCollName]: dir
-    }))
+    })),
+    returnVertices: [false, true],
+    returnEdges: [false, true],
+    returnPaths: [false, true]
   })
 }).bind(module, 'default')
 
@@ -65,6 +69,7 @@ function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges
 
 function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseFn, useFilters = true) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
+  const ssGraph = init.getSampleDataRefs().graphs[0]
   const collTypes = chain(getNonServiceCollections())
     .map(collName => [collName, getCollectionType(collName)])
     .fromPairs()
@@ -72,18 +77,19 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
 
   const combos = generateCombos()
   combos.forEach(combo => {
-    const { timestamp, depth, edgeCollections } = combo
+    const { timestamp, minDepth, relDepth, edgeCollections, returnVertices, returnEdges, returnPaths } = combo
     const svColl = db._collection(sample(vertexCollNames))
     const svid = svColl.any()._id
+    const maxDepth = minDepth + relDepth
 
     const queryParts = [
       aql`
         let collTypes = ${collTypes}
         
-        for v, e in 0..${depth}
+        for v, e in 0..${maxDepth}
       `,
       aql.literal(`${edgeCollections[lineageCollName]} '${svid}'`),
-      aql.literal(`graph '${collectionPrefix}test_ss_lineage'`),
+      aql.literal(`graph '${ssGraph}'`),
       aql`
         options {bfs: ${bfs}, uniqueVertices: ${uniqueVertices}, uniqueEdges: ${uniqueEdges}}
         
@@ -116,27 +122,57 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     const vPath = createNodeBracepath(unfilteredNodes.vertices)
     const ePath = unfilteredNodes.edges.length ? createNodeBracepath(unfilteredNodes.edges) : null
     const timeBoundVertices = show(vPath, timestamp)
+    console.debug(timeBoundVertices)
     const timeBoundEdges = ePath ? show(ePath, timestamp) : []
     const vFilter = useFilters ? generateFilters(timeBoundVertices) : null
     const eFilter = useFilters && timeBoundEdges.length ? generateFilters(timeBoundEdges) : null
 
-    const filteredTraversal = traverseFn(timestamp, svid, depth, edgeCollections,
-      { bfs, uniqueVertices, uniqueEdges, vFilter, eFilter })
+    const filteredTraversal = traverseFn(timestamp, svid, minDepth, maxDepth, edgeCollections,
+      { bfs, uniqueVertices, uniqueEdges, vFilter, eFilter, returnVertices, returnEdges, returnPaths })
 
     const params = JSON.stringify(Object.assign({ bfs, uniqueVertices, uniqueEdges, svid, vFilter, eFilter }, combo))
     expect(filteredTraversal, params).to.be.an.instanceOf(Object)
-    expect(filteredTraversal.vertices, params).to.be.an.instanceOf(Array)
-    expect(filteredTraversal.edges, params).to.be.an.instanceOf(Array)
+    if (returnVertices) {
+      expect(filteredTraversal.vertices, params).to.be.an.instanceOf(Array)
+    }
+    if (returnEdges) {
+      expect(filteredTraversal.edges, params).to.be.an.instanceOf(Array)
+    }
+    if (returnPaths) {
+      expect(filteredTraversal.paths, params).to.be.an.instanceOf(Array)
+    }
 
     const filteredTimeBoundVertices = vFilter ? filter(timeBoundVertices, vFilter) : timeBoundVertices
     const filteredTimeBoundEdges = eFilter ? filter(timeBoundEdges, eFilter) : timeBoundEdges
     removeFreeEdges(filteredTimeBoundVertices, filteredTimeBoundEdges)
 
-    const expectedTraversal = filteredTimeBoundVertices.length ? buildFilteredGraph(svid, filteredTimeBoundVertices,
-      filteredTimeBoundEdges) : { vertices: [], edges: [] }
+    let expectedTraversal
+    if (filteredTimeBoundVertices.find(v => v._id === svid)) {
+      expectedTraversal = buildFilteredGraph(svid, filteredTimeBoundVertices, filteredTimeBoundEdges, minDepth,
+        maxDepth,
+        bfs, uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter)
+    } else {
+      expectedTraversal = {
+        vertices: [],
+        edges: [],
+        paths: []
+      }
+    }
 
-    expect(filteredTraversal.vertices, params).to.have.deep.members(expectedTraversal.vertices)
-    expect(filteredTraversal.edges, params).to.have.deep.members(expectedTraversal.edges)
+    if (!returnVertices) {
+      delete expectedTraversal.vertices
+    }
+    if (!returnEdges) {
+      delete expectedTraversal.edges
+    }
+    if (!returnPaths) {
+      delete expectedTraversal.paths
+    }
+
+    expect(Object.keys(filteredTraversal)).to.have.members(Object.keys(expectedTraversal))
+    for (const key in filteredTraversal) {
+      expect(filteredTraversal[key], params).to.have.deep.members(expectedTraversal[key])
+    }
   })
 }
 
@@ -155,8 +191,8 @@ function traverseHandlerWrapper (timestamp, svid, depth, edgeCollections, option
   return traverseHandler(req)
 }
 
-function traversePostWrapper (timestamp, svid, depth, edgeCollections, options) {
-  const req = { json: true, timeout: 120, qs: { svid, depth }, body: { edges: edgeCollections } }
+function traversePostWrapper (timestamp, svid, minDepth, maxDepth, edgeCollections, options) {
+  const req = { json: true, timeout: 120, qs: { svid, minDepth, maxDepth }, body: { edges: edgeCollections } }
 
   if (timestamp) {
     req.qs.timestamp = timestamp
