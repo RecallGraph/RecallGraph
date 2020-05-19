@@ -38,7 +38,7 @@ describe('Prep - Clean Data', () => {
 })
 
 describe('Prep - Load Sample Data', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true }))
+  before(() => init.setup({ forceInit: true, ensureSampleDataLoad: true }))
 
   after(init.teardown)
 
@@ -64,7 +64,7 @@ describe('Prep - Load Sample Data', () => {
 })
 
 describe('Prep - Load Flight Data', () => {
-  before(() => init.setup({ ensureFlightDataLoad: true }))
+  before(() => init.setup({ forceInit: true, ensureFlightDataLoad: true }))
 
   after(init.teardown)
 
