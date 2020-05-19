@@ -122,7 +122,6 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     const vPath = createNodeBracepath(unfilteredNodes.vertices)
     const ePath = unfilteredNodes.edges.length ? createNodeBracepath(unfilteredNodes.edges) : null
     const timeBoundVertices = show(vPath, timestamp)
-    console.debug(timeBoundVertices)
     const timeBoundEdges = ePath ? show(ePath, timestamp) : []
     const vFilter = useFilters ? generateFilters(timeBoundVertices) : null
     const eFilter = useFilters && timeBoundEdges.length ? generateFilters(timeBoundEdges) : null
