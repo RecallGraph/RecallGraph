@@ -4,9 +4,10 @@ const { join } = require('path')
 const { createMultiple, createSingle } = require('../../../lib/handlers/createHandlers')
 const { replaceSingle } = require('../../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
+const restore = require('../../../lib/operations/restore')
 const { getCRUDErrors } = require('../../../lib/routes/helpers')
 const { patch } = require('jiff')
-const { find, pick, mapValues, random } = require('lodash')
+const { find, pick, mapValues, random, cloneDeep } = require('lodash')
 const dd = require('dedent')
 const { db, query } = require('@arangodb')
 
@@ -39,7 +40,7 @@ module.exports = function loadFlightData (testDataCollections) {
   }
 
   // Load airports
-  const airportData = require(join(resourcePath, filename))
+  const airportData = cloneDeep(require(join(resourcePath, filename)))
   docCount = airportData.length
 
   let result = createMultiple({ pathParams, body: airportData })
@@ -60,7 +61,7 @@ module.exports = function loadFlightData (testDataCollections) {
   docCount = insertCount = errorCount = 0
 
   let replaceCount = 0
-  const flightCommands = require(join(resourcePath, filename))
+  const flightCommands = cloneDeep(require(join(resourcePath, filename)))
   flightCommands.forEach(item => {
     docCount++
 
@@ -98,7 +99,7 @@ module.exports = function loadFlightData (testDataCollections) {
   results.messages.push(message)
 
   // Delete some flights
-  let dCount = random(flights.count())
+  let dCount = random(1000)
   let dKeys = query`
     for f in ${flights}
     sort rand()
@@ -118,7 +119,7 @@ module.exports = function loadFlightData (testDataCollections) {
   results.messages.push(message)
 
   // Delete some airports
-  dCount = random(airports.count())
+  dCount = random(100)
   dKeys = query`
     for a in ${airports}
     sort rand()
@@ -137,6 +138,17 @@ module.exports = function loadFlightData (testDataCollections) {
   removeCount = docCount - errorCount
 
   message = `Removed ${removeCount} documents from ${airports.name()} with ${errorCount} errors`
+  console.log(message)
+  results.messages.push(message)
+
+  // Restore all flights and airports
+  result = restore(`/c/{${airports.name()},${flights.name()}}`)
+  docCount = result.length
+  errors = getCRUDErrors(result)
+  errorCount = errors.length
+  let restoreCount = docCount - errorCount
+
+  message = `Restored ${restoreCount} out of ${docCount} documents with ${errorCount} errors`
   console.log(message)
   results.messages.push(message)
 

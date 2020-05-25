@@ -3,7 +3,7 @@
 const fs = require('fs')
 const gg = require('@arangodb/general-graph')
 const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-const { mapValues, isEqual, omitBy, isEmpty, trim, invokeMap, pick } = require('lodash')
+const { mapValues, isEqual, omitBy, isEmpty, trim, invokeMap, pick, cloneDeep } = require('lodash')
 const { createSingle } = require('../../../lib/handlers/createHandlers')
 const { replaceSingle } = require('../../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
@@ -41,7 +41,7 @@ module.exports = function loadSampleData (testDataCollections) {
     .map(filename => `../../../${resourcePath}/${filename}`)
     .forEach(fileName => {
       try {
-        const jsonArr = require(fileName)
+        const jsonArr = cloneDeep(require(fileName))
         jsonArr.forEach(jsonObj => {
           docCount++
           jsonObj._source = fileName

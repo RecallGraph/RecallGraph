@@ -34,29 +34,29 @@ for (const localName of edgeCollections) {
 
 const eventColl = db._collection(events)
 eventColl.ensureIndex({
-  type: 'hash',
-  sparse: true,
+  type: 'persistent',
+  sparse: false,
   unique: false,
   deduplicate: false,
   fields: ['meta.id', 'event', 'ctime']
 })
 eventColl.ensureIndex({
-  type: 'hash',
-  sparse: true,
+  type: 'persistent',
+  sparse: false,
   unique: false,
   deduplicate: false,
   fields: ['collection']
 })
 eventColl.ensureIndex({
-  type: 'skiplist',
-  sparse: true,
+  type: 'persistent',
+  sparse: false,
   unique: false,
   deduplicate: false,
   fields: ['ctime']
 })
 eventColl.ensureIndex({
-  type: 'skiplist',
-  sparse: true,
+  type: 'persistent',
+  sparse: false,
   unique: false,
   deduplicate: false,
   fields: ['hops-from-origin']
@@ -64,7 +64,7 @@ eventColl.ensureIndex({
 
 const commandColl = db._collection(commands)
 commandColl.ensureIndex({
-  type: 'hash',
+  type: 'persistent',
   sparse: true,
   unique: true,
   deduplicate: false,
@@ -73,7 +73,7 @@ commandColl.ensureIndex({
 
 const skeletonVerticesColl = db._collection(skeletonVertices)
 skeletonVerticesColl.ensureIndex({
-  type: 'hash',
+  type: 'persistent',
   sparse: false,
   unique: false,
   deduplicate: false,
@@ -82,7 +82,7 @@ skeletonVerticesColl.ensureIndex({
 
 const skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
 skeletonEdgeHubsColl.ensureIndex({
-  type: 'hash',
+  type: 'persistent',
   sparse: false,
   unique: false,
   deduplicate: false,
@@ -91,7 +91,7 @@ skeletonEdgeHubsColl.ensureIndex({
 
 const skeletonEdgeSpokesColl = db._collection(skeletonEdgeSpokes)
 skeletonEdgeSpokesColl.ensureIndex({
-  type: 'hash',
+  type: 'persistent',
   sparse: false,
   unique: false,
   deduplicate: false,
