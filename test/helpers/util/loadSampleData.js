@@ -3,10 +3,12 @@
 const fs = require('fs')
 const gg = require('@arangodb/general-graph')
 const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-const { mapValues, isEqual, omitBy, isEmpty, trim, invokeMap, pick, cloneDeep } = require('lodash')
+const { mapValues, isEqual, omitBy, isEmpty, trim, invokeMap, pick, cloneDeep, map } = require('lodash')
 const { createSingle } = require('../../../lib/handlers/createHandlers')
 const { replaceSingle } = require('../../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
+const purge = require('../../../lib/operations/purge')
+const restore = require('../../../lib/operations/restore')
 
 // Public
 module.exports = function loadSampleData (testDataCollections) {
@@ -461,7 +463,27 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
-  console.log('Milestones: %o', results.milestones)
+
+  // Purge unmapped raw data
+  const unmappedKeys = map(rawData.all().toArray(), '_key').join(',')
+  let path = `/n/${rawData.name()}/{${unmappedKeys}}`
+  const purged = purge(path, { deleteUserObjects: true })
+  removeCount = purged.user[rawData.name()]
+
+  message = `Purged ${removeCount} documents from ${rawData.name()}`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
+
+  // Restore deleted raw data
+  path = `/c/${rawData.name()}`
+  const restored = restore(path)
+  docCount = restored.length
+
+  message = `Restored ${docCount} documents in ${rawData.name()}`
+  console.log(message)
+  results.messages.push(message)
+  results.milestones.push(Date.now() / 1000)
 
   // (Re-)Create Solar System Objects Graph
   const ssGraph = `${module.context.collectionPrefix}test_ss_lineage`
@@ -490,6 +512,8 @@ module.exports = function loadSampleData (testDataCollections) {
     results.vertexCollections = invokeMap(g._vertexCollections(), 'name')
     results.edgeCollections = invokeMap(g._edgeCollections(), 'name')
   }
+
+  console.log('Milestones: %o', results.milestones)
 
   return results
 }
