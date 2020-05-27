@@ -9,7 +9,8 @@ const show = require('../../../lib/operations/show')
 const { cartesian, generateFilters } = require('../util')
 const { getNonServiceCollections } = require('../../../lib/operations/helpers')
 const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
-const { getCollectionType, DOC_ID_REGEX } = require('../../../lib/helpers')
+const { getCollectionType } = require('../../../lib/helpers')
+const { DOC_ID_REGEX } = require('../../../lib/constants')
 const {
   traverseSkeletonGraph, createNodeBracepath, removeFreeEdges, buildFilteredGraph
 } = require('../../../lib/operations/traverse/helpers')
