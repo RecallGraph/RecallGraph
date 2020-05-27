@@ -124,9 +124,6 @@ describe('Remove Handlers', () => {
     rnodes.forEach(node => {
       expect(node).to.be.an.instanceOf(Object)
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.message
-      )
     })
   })
 
@@ -387,9 +384,6 @@ describe('Remove Handlers', () => {
     ernodes.forEach(node => {
       expect(node).to.be.an.instanceOf(Object)
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.message
-      )
     })
   })
 
@@ -560,9 +554,6 @@ describe('Remove Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
-      )
     })
   })
 
@@ -644,9 +635,6 @@ describe('Remove Handlers', () => {
       expect(node).to.be.an.instanceOf(Object)
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
-      )
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
     })
   })

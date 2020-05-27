@@ -27,10 +27,7 @@ const {
 const { removeSingle } = require('../../../../../lib/handlers/removeHandlers')
 
 const { db, errors: ARANGO_ERRORS, time: dbtime } = require('@arangodb')
-const {
-  SERVICE_COLLECTIONS,
-  snapshotInterval
-} = require('../../../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
 
 const { omit, pick, mapValues } = require('lodash')
 const jiff = require('jiff')
@@ -104,30 +101,6 @@ describe('Commit Helpers - getLatestEvent', () => {
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
     expect(latestEvent.event).to.equal('updated')
-    expect(latestEvent.meta.id).to.equal(node._id)
-    expect(latestEvent).to.have.property('ctime')
-  })
-
-  it('should return a \'created\' event node for a non-committed node replaced through service', () => {
-    const collName = init.TEST_DATA_COLLECTIONS.vertex
-    const coll = db._collection(collName)
-    const pathParams = {
-      collection: collName
-    }
-    let node = coll.insert(
-      {
-        src: `${__filename}:should return an 'update' event node for a non-committed node replaced through service`
-      },
-      { returnNew: true }
-    ).new
-    node.k1 = 'v1'
-    node = replaceSingle({ pathParams, body: node })
-
-    const latestEvent = getLatestEvent(node, coll)
-
-    expect(latestEvent).to.be.an.instanceOf(Object)
-    expect(latestEvent.meta).to.be.an.instanceOf(Object)
-    expect(latestEvent.event).to.equal('created')
     expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
@@ -627,9 +600,6 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should return a meta node after replacing a vertex, when ignoreRevs is true, irrespective of _rev match', () => {
@@ -679,9 +649,6 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should fail when trying to replace a non-existent vertex', () => {
@@ -807,9 +774,6 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(pathParams.collection)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should return a meta node after replacing an edge, when ignoreRevs is true, irrespective of _rev match', () => {
@@ -881,9 +845,6 @@ describe('Commit Helpers - prepReplace', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(pathParams.collection)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should fail when trying to replace a non-existent edge', () => {
@@ -1321,9 +1282,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should return a meta node after updating a vertex, when ignoreRevs is true, irrespective of _rev match', () => {
@@ -1378,9 +1336,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should remove null values when keepNull is false', () => {
@@ -1435,9 +1390,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should preserve null values when keepNull is true', () => {
@@ -1491,9 +1443,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should replace objects when mergeObjects is false', () => {
@@ -1548,9 +1497,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should merge objects when mergeObjects is true', () => {
@@ -1604,9 +1550,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(collName)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should fail when trying to update a non-existent vertex', () => {
@@ -1739,9 +1682,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(pathParams.collection)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should return a meta node after updating an edge, when ignoreRevs is true, irrespective of _rev match', () => {
@@ -1818,9 +1758,6 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(ssData.ssNode.ctime).to.equal(time)
     expect(ssData.ssNode.data).to.deep.equal(result.new)
     expect(ssData.hopsFromLast).to.equal(1)
-
-    const ssInterval = snapshotInterval(pathParams.collection)
-    expect(ssData.hopsTillNext).to.equal(ssInterval + 2 - ssData.hopsFromLast)
   })
 
   it('should fail when trying to update a non-existent edge', () => {

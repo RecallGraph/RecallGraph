@@ -233,9 +233,6 @@ describe('Update Handlers', () => {
     rnodes.forEach(node => {
       expect(node).to.be.an.instanceOf(Object)
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.message
-      )
     })
   })
 
@@ -858,9 +855,6 @@ describe('Update Handlers', () => {
     ernodes.forEach(node => {
       expect(node).to.be.an.instanceOf(Object)
       expect(node.errorNum).to.equal(ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.message
-      )
     })
   })
 
@@ -1291,9 +1285,6 @@ describe('Update Handlers', () => {
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
-      )
     })
   })
 
@@ -1376,9 +1367,6 @@ describe('Update Handlers', () => {
       expect(node).to.be.an.instanceOf(Object)
       expect(node.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
-      )
-      expect(node.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
     })
   })

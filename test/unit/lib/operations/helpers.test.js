@@ -790,7 +790,7 @@ describe('Op Helpers - getTimeBoundFilters', () => {
       expect(timeBoundFilters.filters).to.be.an.instanceOf(Array)
       expect(timeBoundFilters.filters).to.have.lengthOf(1)
       expect(timeBoundFilters.filters[0]).to.be.an.instanceOf(Object)
-      expect(timeBoundFilters.filters[0].query).to.match(/filter v\.ctime [<>]= @\w+/)
+      expect(timeBoundFilters.filters[0].query).to.match(/filter v\.ctime (<|>=) @\w+/)
     })
   })
 
@@ -806,7 +806,7 @@ describe('Op Helpers - getTimeBoundFilters', () => {
     expect(timeBoundFilters.filters).to.have.lengthOf(2)
     timeBoundFilters.filters.forEach(tbf => {
       expect(tbf).to.be.an.instanceOf(Object)
-      expect(tbf.query).to.match(/filter v\.ctime [<>]= @\w+/)
+      expect(tbf.query).to.match(/filter v\.ctime (<|>=) @\w+/)
     })
   })
 })
