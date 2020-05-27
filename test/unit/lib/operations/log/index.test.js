@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const { db, aql } = require('@arangodb')
 const log = require('../../../../../lib/operations/log')
 const init = require('../../../../helpers/util/init')
-const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/constants')
 const { concat } = require('lodash')
 const {
   testUngroupedEvents, testGroupedEvents, getUngroupedExpectedEvents, getGroupedExpectedEventsQueryParts

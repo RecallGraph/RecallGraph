@@ -4,31 +4,15 @@
 const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
 const {
-  getLatestEvent,
-  getTransientOrCreateLatestSnapshot,
-  getTransientEventOriginFor,
-  insertEventNode,
-  insertCommandEdge,
-  insertEvtSSLink,
-  ensureEventOriginNode,
-  prepInsert,
-  prepRemove,
-  prepReplace,
-  prepUpdate,
+  getLatestEvent, getTransientOrCreateLatestSnapshot, getTransientEventOriginFor, insertEventNode,
+  insertCommandEdge, insertEvtSSLink, ensureEventOriginNode, prepInsert, prepRemove, prepReplace, prepUpdate,
   metaize
 } = require('../../../../../lib/operations/commit/helpers')
-const {
-  createSingle,
-  createMultiple
-} = require('../../../../../lib/handlers/createHandlers')
-const {
-  replaceSingle
-} = require('../../../../../lib/handlers/replaceHandlers')
+const { createSingle, createMultiple } = require('../../../../../lib/handlers/createHandlers')
+const { replaceSingle } = require('../../../../../lib/handlers/replaceHandlers')
 const { removeSingle } = require('../../../../../lib/handlers/removeHandlers')
-
 const { db, errors: ARANGO_ERRORS, time: dbtime } = require('@arangodb')
-const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
-
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/constants')
 const { omit, pick, mapValues } = require('lodash')
 const jiff = require('jiff')
 

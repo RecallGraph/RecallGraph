@@ -2,7 +2,7 @@
 
 const { expect } = require('chai')
 const init = require('../../../helpers/util/init')
-const { SERVICE_COLLECTIONS } = require('../../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../lib/constants')
 const {
   testUngroupedEvents, testGroupedEvents, logHandlerQueryWrapper, logHandlerBodyWrapper, getUngroupedExpectedEvents,
   getGroupedExpectedEventsQueryParts

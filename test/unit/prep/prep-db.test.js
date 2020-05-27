@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const init = require('../../helpers/util/init')
 const { db } = require('@arangodb')
 const { chain, forEach } = require('lodash')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../lib/constants')
 
 describe('Prep - Clean Data', () => {
   before(() => init.setup({ forceInit: true }))

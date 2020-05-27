@@ -13,7 +13,7 @@ const { aql, db, query } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { initQueryParts } = require('.')
 const { getRandomSubRange, cartesian, generateFilters } = require('../util')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../lib/constants')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 

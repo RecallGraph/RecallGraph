@@ -2,7 +2,7 @@
 
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
 const gg = require('@arangodb/general-graph')
-const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
+const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/constants')
 
 const { events, commands, snapshots, evtSSLinks, snapshotLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
 const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]

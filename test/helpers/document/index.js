@@ -5,7 +5,7 @@ const minimatch = require('minimatch')
 const { random, chain, sampleSize } = require('lodash')
 const { getPrefixPattern, getRandomSubRange } = require('../util')
 const { getSampleDataRefs, TEST_DATA_COLLECTIONS } = require('../util/init')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../lib/constants')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 

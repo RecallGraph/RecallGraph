@@ -2,7 +2,7 @@
 
 const { db, aql } = require('@arangodb')
 const init = require('../../../helpers/util/init')
-const { SERVICE_COLLECTIONS } = require('../../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../lib/constants')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
 } = require('../../../helpers/document')

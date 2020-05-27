@@ -3,7 +3,7 @@
 
 const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
-const { DB_OPS } = require('../../../../../lib/helpers')
+const { DB_OPS: { INSERT, UPDATE, REPLACE, REMOVE } } = require('../../../../../lib/constants')
 const commit = require('../../../../../lib/operations/commit')
 const {
   createMultiple
@@ -25,7 +25,7 @@ describe('Commit', () => {
       src: `${__filename}:should create a vertex`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, {
+    const cnode = commit(collName, node, INSERT, {
       returnNew: true,
       returnOld: true
     })
@@ -52,9 +52,9 @@ describe('Commit', () => {
       src: `${__filename}:should fail when creating a vertex with an existing key`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
-    expect(() => commit(collName, cnode, DB_OPS.INSERT))
+    expect(() => commit(collName, cnode, INSERT))
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code)
   })
@@ -66,10 +66,10 @@ describe('Commit', () => {
       src: `${__filename}:should fail when creating a vertex with the same key as a deleted vertex`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
-    commit(collName, cnode, DB_OPS.REMOVE)
+    const cnode = commit(collName, node, INSERT)
+    commit(collName, cnode, REMOVE)
 
-    expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw(
+    expect(() => commit(collName, cnode, INSERT)).to.throw(
       `Event log found for node with _id: ${cnode._id}`
     )
   })
@@ -98,7 +98,7 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, {
+    const cnode = commit(collName, node, INSERT, {
       returnNew: true,
       returnOld: true
     })
@@ -142,10 +142,10 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
 
-    expect(() => commit(collName, cnode, DB_OPS.INSERT))
+    expect(() => commit(collName, cnode, INSERT))
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED.code)
   })
@@ -174,11 +174,11 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
-    commit(collName, cnode, DB_OPS.REMOVE)
+    commit(collName, cnode, REMOVE)
 
-    expect(() => commit(collName, cnode, DB_OPS.INSERT)).to.throw(
+    expect(() => commit(collName, cnode, INSERT)).to.throw(
       `Event log found for node with _id: ${cnode._id}`
     )
   })
@@ -190,13 +190,13 @@ describe('Commit', () => {
       src: `${__filename}:should fail when replacing a vertex where ignoreRevs is false and _rev match fails`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
     cnode.k1 = 'v2'
     cnode._rev = 'mismatched_rev'
 
     expect(() =>
-      commit(collName, cnode, DB_OPS.REPLACE, {}, { ignoreRevs: false })
+      commit(collName, cnode, REPLACE, {}, { ignoreRevs: false })
     )
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
@@ -209,14 +209,14 @@ describe('Commit', () => {
       src: `${__filename}:should replace a vertex where ignoreRevs is false and _rev matches`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
     cnode.k1 = 'v2'
 
     const rnode = commit(
       collName,
       cnode,
-      DB_OPS.REPLACE,
+      REPLACE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: false }
     )
@@ -244,14 +244,14 @@ describe('Commit', () => {
       src: `${__filename}:should replace a vertex where ignoreRevs is true, irrespective of _rev`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
     cnode.k1 = 'v2'
     cnode._rev = 'mismatched_rev'
 
     const rnode = commit(
       collName,
       cnode,
-      DB_OPS.REPLACE,
+      REPLACE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: true }
     )
@@ -279,7 +279,7 @@ describe('Commit', () => {
       src: `${__filename}:should fail when replacing a vertex with a non-existent key`
     }
 
-    expect(() => commit(collName, node, DB_OPS.REPLACE))
+    expect(() => commit(collName, node, REPLACE))
       .to.throw()
       .with.property(
         'errorNum',
@@ -311,13 +311,13 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
     cnode.k1 = 'v2'
     cnode._rev = 'mismatched_rev'
 
     expect(() =>
-      commit(collName, cnode, DB_OPS.REPLACE, {}, { ignoreRevs: false })
+      commit(collName, cnode, REPLACE, {}, { ignoreRevs: false })
     )
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
@@ -347,14 +347,14 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
     cnode.k1 = 'v2'
 
     const rnode = commit(
       collName,
       cnode,
-      DB_OPS.REPLACE,
+      REPLACE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: false }
     )
@@ -399,14 +399,14 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
     cnode.k1 = 'v2'
 
     const rnode = commit(
       collName,
       cnode,
-      DB_OPS.REPLACE,
+      REPLACE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: true }
     )
@@ -456,7 +456,7 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    expect(() => commit(collName, node, DB_OPS.REPLACE))
+    expect(() => commit(collName, node, REPLACE))
       .to.throw()
       .with.property(
         'errorNum',
@@ -471,11 +471,11 @@ describe('Commit', () => {
       src: `${__filename}:should fail when deleting a vertex where ignoreRevs is false and _rev match fails`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
     cnode._rev = 'mismatched_rev'
 
     expect(() =>
-      commit(collName, cnode, DB_OPS.REMOVE, {}, { ignoreRevs: false })
+      commit(collName, cnode, REMOVE, {}, { ignoreRevs: false })
     )
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
@@ -488,13 +488,13 @@ describe('Commit', () => {
       src: `${__filename}:should delete a vertex where ignoreRevs is false and _rev matches`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
 
     const dnode = commit(
       collName,
       cnode,
-      DB_OPS.REMOVE,
+      REMOVE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: false }
     )
@@ -514,10 +514,10 @@ describe('Commit', () => {
       k1: 'v1',
       src: `${__filename}:should delete a vertex where ignoreRevs is true, irrespective of _rev`
     }
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
 
-    const dnode = commit(collName, cnode, DB_OPS.REMOVE, {
+    const dnode = commit(collName, cnode, REMOVE, {
       returnNew: true,
       returnOld: true
     })
@@ -539,7 +539,7 @@ describe('Commit', () => {
       src: `${__filename}:should fail when deleting a vertex with a non-existent key`
     }
 
-    expect(() => commit(collName, node, DB_OPS.REMOVE))
+    expect(() => commit(collName, node, REMOVE))
       .to.throw()
       .with.property(
         'errorNum',
@@ -571,12 +571,12 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
     cnode._rev = 'mismatched_rev'
 
     expect(() =>
-      commit(collName, cnode, DB_OPS.REMOVE, {}, { ignoreRevs: false })
+      commit(collName, cnode, REMOVE, {}, { ignoreRevs: false })
     )
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
@@ -606,13 +606,13 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
 
     const dnode = commit(
       collName,
       cnode,
-      DB_OPS.REMOVE,
+      REMOVE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: false }
     )
@@ -650,13 +650,13 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
 
     const dnode = commit(
       collName,
       cnode,
-      DB_OPS.REMOVE,
+      REMOVE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: true }
     )
@@ -695,7 +695,7 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    expect(() => commit(collName, node, DB_OPS.REPLACE))
+    expect(() => commit(collName, node, REPLACE))
       .to.throw()
       .with.property(
         'errorNum',
@@ -711,7 +711,7 @@ describe('Commit', () => {
       src: `${__filename}:should fail when updating a vertex where ignoreRevs is false and _rev match fails`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT, { returnNew: true })
+    const cnode = commit(collName, node, INSERT, { returnNew: true })
       .new
 
     const unode = pick(cnode, '_key', 'k1')
@@ -719,7 +719,7 @@ describe('Commit', () => {
     unode._rev = 'mismatched_rev'
 
     expect(() =>
-      commit(collName, unode, DB_OPS.UPDATE, {}, { ignoreRevs: false })
+      commit(collName, unode, UPDATE, {}, { ignoreRevs: false })
     )
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
@@ -733,7 +733,7 @@ describe('Commit', () => {
       src: `${__filename}:should replace a vertex where ignoreRevs is false and _rev matches`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key', '_rev')
     unode.k1 = 'v2'
@@ -741,7 +741,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: false }
     )
@@ -771,7 +771,7 @@ describe('Commit', () => {
       src: `${__filename}:should update a vertex where ignoreRevs is true, irrespective of _rev`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key')
     unode.k1 = 'v2'
@@ -780,7 +780,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: true }
     )
@@ -810,7 +810,7 @@ describe('Commit', () => {
       src: `${__filename}:should remove null values from a vertex when keepNull is false`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key')
     unode.k1 = null
@@ -819,7 +819,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { keepNull: false }
     )
@@ -849,7 +849,7 @@ describe('Commit', () => {
       src: `${__filename}:should preserve null values in a vertex when keepNull is true`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key')
     unode.k1 = null
@@ -858,7 +858,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { keepNull: true }
     )
@@ -888,7 +888,7 @@ describe('Commit', () => {
       src: `${__filename}:should replace objects in a vertex when mergeObjects is false`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key')
     unode.k1 = { b: 1 }
@@ -896,7 +896,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { mergeObjects: false }
     )
@@ -926,7 +926,7 @@ describe('Commit', () => {
       src: `${__filename}:should merge objects in a vertex when mergeObjects is true`
     }
 
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key')
     unode.k1 = { b: 1 }
@@ -934,7 +934,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { mergeObjects: true }
     )
@@ -964,7 +964,7 @@ describe('Commit', () => {
       src: `${__filename}:should fail when updating a vertex with a non-existent key`
     }
 
-    expect(() => commit(collName, node, DB_OPS.UPDATE))
+    expect(() => commit(collName, node, UPDATE))
       .to.throw()
       .with.property(
         'errorNum',
@@ -996,14 +996,14 @@ describe('Commit', () => {
       src: `${__filename}:should fail when updating an edge where ignoreRevs is false and _rev match fails`
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key')
     unode.k1 = 'v2'
     unode._rev = 'mismatched_rev'
 
     expect(() =>
-      commit(collName, unode, DB_OPS.UPDATE, {}, { ignoreRevs: false })
+      commit(collName, unode, UPDATE, {}, { ignoreRevs: false })
     )
       .to.throw()
       .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_CONFLICT.code)
@@ -1033,7 +1033,7 @@ describe('Commit', () => {
       src: `${__filename}:should update an edge where ignoreRevs is false and _rev matches`
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key', '_rev')
     unode.k1 = 'v2'
@@ -1041,7 +1041,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: false }
     )
@@ -1092,7 +1092,7 @@ describe('Commit', () => {
       src: `${__filename}:should update an edge node where ignoreRevs is true, irrespective of _rev`
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key', '_rev')
     unode.k1 = 'v2'
@@ -1100,7 +1100,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { ignoreRevs: true }
     )
@@ -1151,7 +1151,7 @@ describe('Commit', () => {
       src: `${__filename}:should remove null values from an edge when keepNull is false`
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key', '_rev')
     unode.k1 = null
@@ -1159,7 +1159,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { keepNull: false }
     )
@@ -1210,7 +1210,7 @@ describe('Commit', () => {
       src: `${__filename}:should preserve null values in an edge when keepNull is true`
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key', '_rev')
     unode.k1 = null
@@ -1218,7 +1218,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { keepNull: true }
     )
@@ -1269,7 +1269,7 @@ describe('Commit', () => {
       src: `${__filename}:should replace objects in an edge when mergeObjects is false`
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key', '_rev')
     unode.k1 = { b: 1 }
@@ -1277,7 +1277,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { mergeObjects: false }
     )
@@ -1328,7 +1328,7 @@ describe('Commit', () => {
       src: `${__filename}:should merge objects in an edge when mergeObjects is true`
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
-    const cnode = commit(collName, node, DB_OPS.INSERT)
+    const cnode = commit(collName, node, INSERT)
 
     const unode = pick(cnode, '_key', '_rev')
     unode.k1 = { b: 1 }
@@ -1336,7 +1336,7 @@ describe('Commit', () => {
     const uunode = commit(
       collName,
       unode,
-      DB_OPS.UPDATE,
+      UPDATE,
       { returnNew: true, returnOld: true },
       { mergeObjects: true }
     )
@@ -1389,7 +1389,7 @@ describe('Commit', () => {
     }
     const collName = init.TEST_DATA_COLLECTIONS.edge
 
-    expect(() => commit(collName, node, DB_OPS.UPDATE))
+    expect(() => commit(collName, node, UPDATE))
       .to.throw()
       .with.property(
         'errorNum',

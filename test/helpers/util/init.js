@@ -6,7 +6,7 @@ const { forEach, omit, isPlainObject, get } = require('lodash')
 const { utils: { setTrace, clearTraceContext } } = require('foxx-tracing')
 const loadSampleData = require('./loadSampleData')
 const loadFlightData = require('./loadFlightData')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../lib/constants')
 
 cache.properties({ mode: 'on' })
 
