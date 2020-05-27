@@ -7,7 +7,7 @@ const { chain, sample, memoize, omit, isObject, pick, isEmpty } = require('lodas
 const init = require('../util/init')
 const show = require('../../../lib/operations/show')
 const { cartesian, generateFilters } = require('../util')
-const { getNonServiceCollections, filter } = require('../../../lib/operations/helpers')
+const { getNonServiceCollections } = require('../../../lib/operations/helpers')
 const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
 const { getCollectionType, DOC_ID_REGEX } = require('../../../lib/helpers')
 const {
@@ -16,8 +16,8 @@ const {
 
 const { baseUrl } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
-const generateCombos = memoize(() => {
-  return cartesian({
+const generateCombos = memoize(() =>
+  cartesian({
     timestamp: [null, ...init.getMilestones()],
     minDepth: [0, 1],
     relDepth: [0, 1],
@@ -27,8 +27,7 @@ const generateCombos = memoize(() => {
     returnVertices: [false, true],
     returnEdges: [false, true],
     returnPaths: [false, true]
-  })
-}).bind(module, 'default')
+  })).bind(module, 'default')
 
 // Public
 function generateOptionCombos (bfs = true) {
@@ -121,8 +120,11 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
 
     const vPath = createNodeBracepath(unfilteredNodes.vertices)
     const ePath = unfilteredNodes.edges.length ? createNodeBracepath(unfilteredNodes.edges) : null
+
     const timeBoundVertices = show(vPath, timestamp)
     const timeBoundEdges = ePath ? show(ePath, timestamp) : []
+    removeFreeEdges(timeBoundVertices, timeBoundEdges)
+
     const vFilter = useFilters ? generateFilters(timeBoundVertices) : null
     const eFilter = useFilters && timeBoundEdges.length ? generateFilters(timeBoundEdges) : null
 
@@ -141,15 +143,10 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
       expect(filteredTraversal.paths, params).to.be.an.instanceOf(Array)
     }
 
-    const filteredTimeBoundVertices = vFilter ? filter(timeBoundVertices, vFilter) : timeBoundVertices
-    const filteredTimeBoundEdges = eFilter ? filter(timeBoundEdges, eFilter) : timeBoundEdges
-    removeFreeEdges(filteredTimeBoundVertices, filteredTimeBoundEdges)
-
     let expectedTraversal
-    if (filteredTimeBoundVertices.find(v => v._id === svid)) {
-      expectedTraversal = buildFilteredGraph(svid, filteredTimeBoundVertices, filteredTimeBoundEdges, minDepth,
-        maxDepth,
-        bfs, uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter)
+    if (timeBoundVertices.find(v => v._id === svid)) {
+      expectedTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth, bfs,
+        uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter)
     } else {
       expectedTraversal = {
         vertices: [],
@@ -167,6 +164,7 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     if (!returnPaths) {
       delete expectedTraversal.paths
     }
+    console.debug({ timeBoundVertices, timeBoundEdges, expectedTraversal })
 
     expect(Object.keys(filteredTraversal)).to.have.members(Object.keys(expectedTraversal))
     for (const key in filteredTraversal) {
