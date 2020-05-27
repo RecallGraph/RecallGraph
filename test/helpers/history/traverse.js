@@ -164,7 +164,6 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     if (!returnPaths) {
       delete expectedTraversal.paths
     }
-    console.debug({ timeBoundVertices, timeBoundEdges, expectedTraversal })
 
     expect(Object.keys(filteredTraversal)).to.have.members(Object.keys(expectedTraversal))
     for (const key in filteredTraversal) {
