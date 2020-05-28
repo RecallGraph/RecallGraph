@@ -17,32 +17,56 @@ const {
 
 const { baseUrl } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
-const generateCombos = memoize(() =>
-  cartesian({
-    timestamp: [null, ...init.getMilestones()],
-    minDepth: [0, 1],
-    relDepth: [0, 1],
-    edgeCollections: ['inbound', 'outbound', 'any'].map(dir => ({
-      [lineageCollName]: dir
-    })),
-    returnVertices: [false, true],
-    returnEdges: [false, true],
-    returnPaths: [false, true]
-  })).bind(module, 'default')
+const generateCombos = memoize((keys = [], include = true, {
+  bfs = [false, true],
+  uniqueVertices = ['none', 'path', 'global'],
+  uniqueEdges = ['none', 'path'],
+  timestamp = [null, ...init.getMilestones()],
+  minDepth = [0, 1],
+  relDepth = [0, 1],
+  edgeCollections = ['inbound', 'outbound', 'any'].map(dir => ({
+    [lineageCollName]: dir
+  })),
+  returnVertices = [false, true],
+  returnEdges = [false, true],
+  returnPaths = [false, true]
+} = {}) => {
+  const kv = {
+    bfs,
+    uniqueVertices,
+    uniqueEdges,
+    timestamp,
+    minDepth,
+    relDepth,
+    edgeCollections,
+    returnVertices,
+    returnEdges,
+    returnPaths
+  }
+
+  return cartesian(isEmpty(keys) ? kv : include ? pick(kv, keys) : omit(kv, keys))
+}, (keys, include) => {
+  let cacheKey = 'default'
+
+  if (!isEmpty(keys)) {
+    const prefix = (include ? 'include' : 'exclude') + ':'
+    cacheKey = prefix + keys.sort().join(':')
+  }
+
+  return cacheKey
+})
 
 // Public
 function generateOptionCombos (bfs = true) {
-  const uniqueVertices = ['none', 'path', 'global']
-  const uniqueEdges = ['none', 'path']
-
-  return cartesian({ bfs: [bfs], uniqueVertices, uniqueEdges })
+  return generateCombos(['bfs', 'uniqueVertices', 'uniqueEdges'], true, { bfs: [bfs] })
 }
 
 function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices }) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
-  const combos = generateCombos()
+  const combos = generateCombos(['bfs', 'uniqueVertices', 'uniqueEdges'], false)
   combos.forEach(combo => {
-    const { timestamp, maxDepth, edgeCollections } = combo
+    const { timestamp, minDepth, relDepth, edgeCollections } = combo
+    const maxDepth = minDepth + relDepth
     const svColl = db._collection(sample(vertexCollNames))
     const svid = svColl.any()._id
 
@@ -70,7 +94,7 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     .fromPairs()
     .value()
 
-  const combos = generateCombos()
+  const combos = generateCombos(['bfs', 'uniqueVertices', 'uniqueEdges'], false)
   combos.forEach(combo => {
     const { timestamp, minDepth, relDepth, edgeCollections, returnVertices, returnEdges, returnPaths } = combo
     const svColl = db._collection(sample(vertexCollNames))
