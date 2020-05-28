@@ -32,27 +32,22 @@ const generateCombos = memoize(() =>
 
 // Public
 function generateOptionCombos (bfs = true) {
-  const uniqueVertices = ['none', 'path']
+  const uniqueVertices = ['none', 'path', 'global']
   const uniqueEdges = ['none', 'path']
-
-  if (bfs) {
-    uniqueVertices.push('global')
-  }
 
   return cartesian({ bfs: [bfs], uniqueVertices, uniqueEdges })
 }
 
-function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
+function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices }) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
   const combos = generateCombos()
   combos.forEach(combo => {
-    const { timestamp, depth, edgeCollections } = combo
+    const { timestamp, maxDepth, edgeCollections } = combo
     const svColl = db._collection(sample(vertexCollNames))
     const svid = svColl.any()._id
 
-    const nodeGroups = traverseSkeletonGraph(timestamp, svid, depth, edgeCollections,
-      { bfs, uniqueVertices, uniqueEdges })
-    const params = JSON.stringify(Object.assign({ bfs, uniqueVertices, uniqueEdges }, combo))
+    const nodeGroups = traverseSkeletonGraph(timestamp, svid, maxDepth, edgeCollections, bfs, uniqueVertices)
+    const params = JSON.stringify(Object.assign({ bfs, uniqueVertices }, combo))
 
     expect(nodeGroups, params).to.be.an.instanceOf(Object)
     expect(nodeGroups.vertices, params).to.be.an.instanceOf(Array)
@@ -81,6 +76,7 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     const svColl = db._collection(sample(vertexCollNames))
     const svid = svColl.any()._id
     const maxDepth = minDepth + relDepth
+    const forcedBfs = uniqueVertices === 'global' || bfs
 
     const queryParts = [
       aql`
@@ -91,7 +87,7 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
       aql.literal(`${edgeCollections[lineageCollName]} '${svid}'`),
       aql.literal(`graph '${ssGraph}'`),
       aql`
-        options {bfs: ${bfs}, uniqueVertices: ${uniqueVertices}, uniqueEdges: ${uniqueEdges}}
+        options {bfs: ${forcedBfs}, uniqueVertices: ${uniqueVertices}, uniqueEdges: ${uniqueEdges}}
         
         collect aggregate vertices = unique(v._id), edges = unique(e._id)
         
@@ -132,7 +128,8 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     const filteredTraversal = traverseFn(timestamp, svid, minDepth, maxDepth, edgeCollections,
       { bfs, uniqueVertices, uniqueEdges, vFilter, eFilter, returnVertices, returnEdges, returnPaths })
 
-    const params = JSON.stringify(Object.assign({ bfs, uniqueVertices, uniqueEdges, svid, vFilter, eFilter }, combo))
+    const params = JSON.stringify(
+      Object.assign({ bfs, forcedBfs, uniqueVertices, uniqueEdges, svid, vFilter, eFilter }, combo))
     expect(filteredTraversal, params).to.be.an.instanceOf(Object)
     if (returnVertices) {
       expect(filteredTraversal.vertices, params).to.be.an.instanceOf(Array)
@@ -146,7 +143,7 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
 
     let expectedTraversal
     if (timeBoundVertices.find(v => v._id === svid)) {
-      expectedTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth, bfs,
+      expectedTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth, forcedBfs,
         uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter)
     } else {
       expectedTraversal = {
@@ -166,19 +163,19 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
       delete expectedTraversal.paths
     }
 
-    expect(Object.keys(filteredTraversal)).to.have.members(Object.keys(expectedTraversal))
+    expect(Object.keys(filteredTraversal), params).to.have.members(Object.keys(expectedTraversal))
     for (const key in filteredTraversal) {
       expect(filteredTraversal[key], params).to.have.deep.members(expectedTraversal[key])
     }
   })
 }
 
-function traverseHandlerWrapper (timestamp, svid, depth, edgeCollections, options) {
-  const req = { queryParams: { timestamp, svid, depth }, body: { edges: edgeCollections } }
+function traverseHandlerWrapper (timestamp, svid, minDepth, maxDepth, edgeCollections, options) {
+  const req = { queryParams: { timestamp, svid, minDepth, maxDepth }, body: { edges: edgeCollections } }
 
   if (isObject(options)) {
-    Object.assign(req.queryParams, omit(options, 'vFilter', 'eFilter'))
-    for (const key of ['vFilter', 'eFilter']) {
+    Object.assign(req.queryParams, omit(options, 'vFilter', 'eFilter', 'pFilter'))
+    for (const key of ['vFilter', 'eFilter', 'pFilter']) {
       if (!isEmpty(options[key])) {
         req.body[key] = options[key]
       }
@@ -196,8 +193,8 @@ function traversePostWrapper (timestamp, svid, minDepth, maxDepth, edgeCollectio
   }
 
   if (isObject(options)) {
-    Object.assign(req.qs, omit(options, 'vFilter', 'eFilter'))
-    for (const key of ['vFilter', 'eFilter']) {
+    Object.assign(req.qs, omit(options, 'vFilter', 'eFilter', 'pFilter'))
+    for (const key of ['vFilter', 'eFilter', 'pFilter']) {
       if (!isEmpty(options[key])) {
         req.body[key] = options[key]
       }

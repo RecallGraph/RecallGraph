@@ -5,10 +5,36 @@ const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
 const { testTraverseSkeletonGraphWithParams, generateOptionCombos } = require('../../../../helpers/history/traverse')
 const {
-  createNodeBracepath, buildFilteredGraph, removeFreeEdges
+  createNodeBracepath, buildFilteredGraph, removeFreeEdges, getEnds
 } = require('../../../../../lib/operations/traverse/helpers')
 const { db, query } = require('@arangodb')
 const { shuffle, chain } = require('lodash')
+const { cartesian } = require('../../../../helpers/util')
+
+describe('Traverse Helpers - getEnds', () => {
+  before(init.setup)
+
+  after(init.teardown)
+
+  it('should return _from when direction=inbound', () => {
+    const ends = getEnds('inbound')
+
+    expect(ends).to.deep.equal(['_from'])
+  })
+
+  it('should return _to when direction=outbound', () => {
+    const ends = getEnds('outbound')
+
+    expect(ends).to.deep.equal(['_to'])
+  })
+
+  it('should return _from,_to when direction=any', () => {
+    const ends = getEnds('any')
+
+    expect(ends).to.be.an.instanceOf(Array)
+    expect(ends).to.deep.have.deep.members(['_from', '_to'])
+  })
+})
 
 describe('Traverse Helpers - traverseSkeletonGraph', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
@@ -16,7 +42,10 @@ describe('Traverse Helpers - traverseSkeletonGraph', () => {
   after(init.teardown)
 
   it('should return collected vertex+edge sets when bfs=true', () => {
-    const combos = generateOptionCombos()
+    const bfs = [true]
+    const uniqueVertices = ['none', 'path', 'global']
+
+    const combos = cartesian({ bfs, uniqueVertices })
     combos.forEach(combo => testTraverseSkeletonGraphWithParams(combo))
   })
 
