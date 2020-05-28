@@ -10,6 +10,7 @@ const { patch } = require('jiff')
 const { find, pick, mapValues, random, cloneDeep } = require('lodash')
 const dd = require('dedent')
 const { db, query } = require('@arangodb')
+const { EVENTS: { CREATED, UPDATED } } = require('../../../lib/constants')
 
 // Public
 module.exports = function loadFlightData (testDataCollections) {
@@ -74,11 +75,11 @@ module.exports = function loadFlightData (testDataCollections) {
       to.value = `${airports.name()}/${to.value}`
     }
 
-    let flight = (item.event === 'updated') ? flights.document(item.key) : {}
+    let flight = (item.event === UPDATED) ? flights.document(item.key) : {}
     flight = patch(item.command, flight, {})
 
     try {
-      if (item.event === 'created') {
+      if (item.event === CREATED) {
         createSingle({ pathParams, body: flight }, { silent: true })
         insertCount++
       } else {

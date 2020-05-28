@@ -12,7 +12,8 @@ const { createSingle, createMultiple } = require('../../../../../lib/handlers/cr
 const { replaceSingle } = require('../../../../../lib/handlers/replaceHandlers')
 const { removeSingle } = require('../../../../../lib/handlers/removeHandlers')
 const { db, errors: ARANGO_ERRORS, time: dbtime } = require('@arangodb')
-const { SERVICE_COLLECTIONS } = require('../../../../../lib/constants')
+const { SERVICE_COLLECTIONS, EVENTS: { CREATED, DELETED, UPDATED } } = require(
+  '../../../../../lib/constants')
 const { omit, pick, mapValues } = require('lodash')
 const jiff = require('jiff')
 
@@ -62,7 +63,7 @@ describe('Commit Helpers - getLatestEvent', () => {
 
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
-    expect(latestEvent.event).to.equal('created')
+    expect(latestEvent.event).to.equal(CREATED)
     expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
@@ -84,7 +85,7 @@ describe('Commit Helpers - getLatestEvent', () => {
 
     expect(latestEvent).to.be.an.instanceOf(Object)
     expect(latestEvent.meta).to.be.an.instanceOf(Object)
-    expect(latestEvent.event).to.equal('updated')
+    expect(latestEvent.event).to.equal(UPDATED)
     expect(latestEvent.meta.id).to.equal(node._id)
     expect(latestEvent).to.have.property('ctime')
   })
@@ -119,10 +120,10 @@ describe('Commit Helpers - insertEventNode', () => {
 
   after(init.teardown)
 
-  it('should return an event node for \'created\' event', () => {
+  it(`should return an event node for '${CREATED}' event`, () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
     const node = coll.insert({
-      src: `${__filename}:should return an event node for 'created' event`
+      src: `${__filename}:should return an event node for '${CREATED}' event`
     })
     const time = dbtime()
     const latestEvent = getLatestEvent(node, coll)
@@ -132,7 +133,7 @@ describe('Commit Helpers - insertEventNode', () => {
       node,
       time
     )
-    const evtNode = insertEventNode(node, time, 'created', ssData, latestEvent)
+    const evtNode = insertEventNode(node, time, CREATED, ssData, latestEvent)
 
     // Cleanup: Orphaned event nodes should not exist
     eventColl.remove(evtNode)
@@ -145,18 +146,18 @@ describe('Commit Helpers - insertEventNode', () => {
     Object.keys(node).forEach(key =>
       expect(evtNode.meta[key.replace(/^_/, '')]).to.deep.equal(node[key])
     )
-    expect(evtNode.event).to.equal('created')
+    expect(evtNode.event).to.equal(CREATED)
     expect(evtNode.ctime).to.equal(time)
     expect(evtNode['last-snapshot']).to.equal(ssData.ssNode._id)
     expect(evtNode['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast)
     expect(evtNode['hops-from-origin']).to.equal(latestEvent['hops-from-origin'] + 1)
   })
 
-  it('should return an event node for \'updated\' event', () => {
+  it(`should return an event node for '${UPDATED}' event`, () => {
     const coll = db._collection(init.TEST_DATA_COLLECTIONS.vertex)
     let node = coll.insert(
       {
-        src: `${__filename}:should return an event node for 'updated' event`
+        src: `${__filename}:should return an event node for '${UPDATED}' event`
       },
       { returnNew: true }
     ).new
@@ -168,7 +169,7 @@ describe('Commit Helpers - insertEventNode', () => {
       node,
       ctime
     )
-    const cEvtNode = insertEventNode(node, ctime, 'created', ssData, latestEvent)
+    const cEvtNode = insertEventNode(node, ctime, CREATED, ssData, latestEvent)
 
     node.k1 = 'v1'
     node = coll.replace(node._id, node)
@@ -179,7 +180,7 @@ describe('Commit Helpers - insertEventNode', () => {
       node,
       ctime
     )
-    const rEvtNode = insertEventNode(node, mtime, 'updated', ssData, cEvtNode)
+    const rEvtNode = insertEventNode(node, mtime, UPDATED, ssData, cEvtNode)
 
     // Cleanup: Orphaned event nodes should not exist
     eventColl.remove([cEvtNode, rEvtNode])
@@ -192,7 +193,7 @@ describe('Commit Helpers - insertEventNode', () => {
     Object.keys(node).forEach(key =>
       expect(rEvtNode.meta[key.replace(/^_/, '')]).to.deep.equal(node[key])
     )
-    expect(rEvtNode.event).to.equal('updated')
+    expect(rEvtNode.event).to.equal(UPDATED)
     expect(rEvtNode.ctime).to.equal(mtime)
     expect(rEvtNode['last-snapshot']).to.equal(ssData.ssNode._id)
     expect(rEvtNode['hops-from-last-snapshot']).to.equal(ssData.hopsFromLast)
@@ -216,20 +217,8 @@ describe('Commit Helpers - insertCommandEdge', () => {
     node.old = {}
     const ctime = new Date()
     const latestEvent = getLatestEvent(node, coll)
-    const ssData = getTransientOrCreateLatestSnapshot(
-      coll.name(),
-      latestEvent,
-      node.new,
-      ctime
-    )
-    const evtNode = insertEventNode(
-      omit(node, 'new'),
-      ctime,
-      'created',
-      ssData,
-      latestEvent
-    )
-
+    const ssData = getTransientOrCreateLatestSnapshot(coll.name(), latestEvent, node.new, ctime)
+    const evtNode = insertEventNode(omit(node, 'new'), ctime, CREATED, ssData, latestEvent)
     const enode = insertCommandEdge(latestEvent, evtNode, node.old, node.new)
 
     expect(enode).to.be.an.instanceOf(Object)
@@ -336,7 +325,7 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old).to.be.empty
 
-    expect(event).to.equal('created')
+    expect(event).to.equal(CREATED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(collName)
@@ -429,7 +418,7 @@ describe('Commit Helpers - prepInsert', () => {
     expect(result.old).to.be.an.instanceOf(Object)
     expect(result.old).to.be.empty
 
-    expect(event).to.equal('created')
+    expect(event).to.equal(CREATED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(collName)
@@ -570,7 +559,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(result.old._rev).to.equal(node._rev)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -619,7 +608,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(result.old._key).to.equal(result._key)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -743,7 +732,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(result.old._to).to.equal(ecnode._to)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(pathParams.collection)
@@ -814,7 +803,7 @@ describe('Commit Helpers - prepReplace', () => {
     expect(result.old._to).to.equal(ecnode._to)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(pathParams.collection)
@@ -917,7 +906,7 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result.old._rev).to.equal(result._rev)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('deleted')
+    expect(event).to.equal(DELETED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -961,7 +950,7 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result.old._rev).to.equal(result._rev)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('deleted')
+    expect(event).to.equal(DELETED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -1076,7 +1065,7 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result.old._to).to.equal(ecnode._to)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('deleted')
+    expect(event).to.equal(DELETED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(pathParams.collection)
@@ -1139,7 +1128,7 @@ describe('Commit Helpers - prepRemove', () => {
     expect(result.old._to).to.equal(ecnode._to)
     expect(result.old.k1).to.equal('v1')
 
-    expect(event).to.equal('deleted')
+    expect(event).to.equal(DELETED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(pathParams.collection)
@@ -1252,7 +1241,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.equal('v1')
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -1306,7 +1295,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.equal('v1')
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -1360,7 +1349,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.equal('v1')
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -1413,7 +1402,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.equal('v1')
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -1467,7 +1456,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.deep.equal({ a: 1 })
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -1520,7 +1509,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.deep.equal({ a: 1 })
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const lastEvent = getLatestEvent(result, coll)
@@ -1651,7 +1640,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.equal('v1')
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(pathParams.collection)
@@ -1727,7 +1716,7 @@ describe('Commit Helpers - prepUpdate', () => {
     expect(result.old.k1).to.equal('v1')
     expect(result.old.k2).to.equal('v1')
 
-    expect(event).to.equal('updated')
+    expect(event).to.equal(UPDATED)
     expect(typeof time).to.equal('number')
 
     const coll = db._collection(pathParams.collection)
