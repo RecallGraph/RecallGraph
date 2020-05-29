@@ -17,13 +17,15 @@ const {
 
 const { baseUrl } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
+
+// Public
 const generateCombos = memoize((keys = [], include = true, {
   bfs = [false, true],
   uniqueVertices = ['none', 'path', 'global'],
   uniqueEdges = ['none', 'path'],
   timestamp = [null, ...init.getMilestones()],
   minDepth = [0, 1],
-  relDepth = [0, 1],
+  relDepth = [0, 1, 2],
   edgeCollections = ['inbound', 'outbound', 'any'].map(dir => ({
     [lineageCollName]: dir
   })),
@@ -56,7 +58,6 @@ const generateCombos = memoize((keys = [], include = true, {
   return cacheKey
 })
 
-// Public
 function generateOptionCombos (bfs = true) {
   return generateCombos(['bfs', 'uniqueVertices', 'uniqueEdges'], true, { bfs: [bfs] })
 }
@@ -146,14 +147,21 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     const timeBoundEdges = ePath ? show(ePath, timestamp) : []
     removeFreeEdges(timeBoundVertices, timeBoundEdges)
 
-    const vFilter = useFilters ? generateFilters(timeBoundVertices) : null
-    const eFilter = useFilters && timeBoundEdges.length ? generateFilters(timeBoundEdges) : null
+    let vFilter = null; let eFilter = null; let pFilter = null
+    if (useFilters && timeBoundVertices.find(v => v._id === svid)) {
+      const unfilteredTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth,
+        forcedBfs, uniqueVertices, uniqueEdges, edgeCollections)
+
+      vFilter = generateFilters(unfilteredTraversal.vertices)
+      eFilter = generateFilters(unfilteredTraversal.edges)
+      pFilter = generateFilters(unfilteredTraversal.paths)
+    }
 
     const filteredTraversal = traverseFn(timestamp, svid, minDepth, maxDepth, edgeCollections,
-      { bfs, uniqueVertices, uniqueEdges, vFilter, eFilter, returnVertices, returnEdges, returnPaths })
+      { bfs, uniqueVertices, uniqueEdges, vFilter, eFilter, pFilter, returnVertices, returnEdges, returnPaths })
 
     const params = JSON.stringify(
-      Object.assign({ bfs, forcedBfs, uniqueVertices, uniqueEdges, svid, vFilter, eFilter }, combo))
+      Object.assign({ bfs, forcedBfs, uniqueVertices, uniqueEdges, svid, vFilter, eFilter, pFilter }, combo))
     expect(filteredTraversal, params).to.be.an.instanceOf(Object)
     if (returnVertices) {
       expect(filteredTraversal.vertices, params).to.be.an.instanceOf(Array)
@@ -168,7 +176,7 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     let expectedTraversal
     if (timeBoundVertices.find(v => v._id === svid)) {
       expectedTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth, forcedBfs,
-        uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter)
+        uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter, pFilter)
     } else {
       expectedTraversal = {
         vertices: [],
@@ -235,6 +243,7 @@ function traversePostWrapper (timestamp, svid, minDepth, maxDepth, edgeCollectio
 }
 
 module.exports = {
+  generateCombos,
   generateOptionCombos,
   testTraverseSkeletonGraphWithParams,
   testTraverseWithParams,
