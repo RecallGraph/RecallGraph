@@ -25,7 +25,7 @@ const generateCombos = memoize((keys = [], include = true, {
   uniqueEdges = ['none', 'path'],
   timestamp = [null, ...init.getMilestones()],
   minDepth = [0, 1],
-  relDepth = [0, 1, 2],
+  relDepth = [0, 1],
   edgeCollections = ['inbound', 'outbound', 'any'].map(dir => ({
     [lineageCollName]: dir
   })),
