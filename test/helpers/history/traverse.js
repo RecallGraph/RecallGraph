@@ -77,6 +77,7 @@ function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices }) {
     expect(nodeGroups, params).to.be.an.instanceOf(Object)
     expect(nodeGroups.vertices, params).to.be.an.instanceOf(Array)
     expect(nodeGroups.edges, params).to.be.an.instanceOf(Array)
+
     nodeGroups.vertices.forEach(vid => {
       expect(vid, params).to.match(DOC_ID_REGEX)
     })

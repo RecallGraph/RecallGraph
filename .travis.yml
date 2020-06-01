@@ -30,6 +30,7 @@ env:
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-operations-log-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=mmfiles-unit-operations-traverse-filters-35 GREP='With Filters'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=mmfiles-unit-operations-traverse-nofilters-35 GREP='Without Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/k_shortest_paths/index.test.js"]' NYC_OUT=mmfiles-unit-operations-ksp-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/traverse/helpers.test.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=mmfiles-unit-rest-35
 
     #rocksdb v3.5
@@ -50,6 +51,7 @@ env:
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-operations-log-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=rocksdb-unit-operations-traverse-filters-35 GREP='With Filters'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=rocksdb-unit-operations-traverse-nofilters-35 GREP='Without Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/k_shortest_paths/index.test.js"]' NYC_OUT=rocksdb-unit-operations-ksp-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/traverse/helpers.test.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=rocksdb-unit-rest-35
 
     #mmfiles v3.6
@@ -70,6 +72,7 @@ env:
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-operations-log-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=mmfiles-unit-operations-traverse-filters-36 GREP='With Filters'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=mmfiles-unit-operations-traverse-nofilters-36 GREP='Without Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/k_shortest_paths/index.test.js"]' NYC_OUT=mmfiles-unit-operations-ksp-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/traverse/helpers.test.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=mmfiles-unit-rest-36
 
     #rocksdb v3.6
@@ -90,6 +93,7 @@ env:
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-operations-log-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=rocksdb-unit-operations-traverse-filters-36 GREP='With Filters'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/traverse/index.test.js"]' NYC_OUT=rocksdb-unit-operations-traverse-nofilters-36 GREP='Without Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/k_shortest_paths/index.test.js"]' NYC_OUT=rocksdb-unit-operations-ksp-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/traverse/helpers.test.js", "test/unit/lib/operations/log/helpers.test.js"]' NYC_OUT=rocksdb-unit-rest-36
 
 install:
