@@ -145,24 +145,24 @@ function testKShortestPaths (kspFn) {
       const evid = path.nodes().last().id()
       const depth = path.edges().size()
 
-      console.debug({
-        path: path.map(el => {
-          const key = el.data('_key')
-
-          if (el.isNode()) {
-            return `[${key}]`
-          } else {
-            const dir = el.id().split('-', 1)[0]
-            const [prefix, suffix] = dir === 'inbound' ? ['<', ''] : ['', '>']
-
-            return `${prefix}--(${key})--${suffix}`
-          }
-        }).join(''),
-        depth,
-        direction,
-        svid,
-        evid
-      })
+      // console.debug({
+      //   path: path.map(el => {
+      //     const key = el.data('_key')
+      //
+      //     if (el.isNode()) {
+      //       return `[${key}]`
+      //     } else {
+      //       const dir = el.id().split('-', 1)[0]
+      //       const [prefix, suffix] = dir === 'inbound' ? ['<', ''] : ['', '>']
+      //
+      //       return `${prefix}--(${key})--${suffix}`
+      //     }
+      //   }).join(''),
+      //   depth,
+      //   direction,
+      //   svid,
+      //   evid
+      // })
 
       const params = JSON.stringify({
         timestamp, svid, evid, depth, skip, limit, edgeCollections, vFilter, eFilter
