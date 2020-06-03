@@ -13,6 +13,9 @@
   "engines": {
     "arangodb": ">=3.5.0"
   },
+  "provides": {
+    "@recallgraph/core": "1.0.0"
+  },
   "dependencies": {
     "traceCollector": {
       "name": "@RecallGraph/foxx-tracer-collector",

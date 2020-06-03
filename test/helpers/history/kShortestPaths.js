@@ -171,7 +171,7 @@ function testKShortestPaths (kspFn) {
         timestamp, svid, evid, depth, skip, limit, edgeCollections, vFilter, eFilter
       })
 
-      const ksp = kspFn(timestamp, svid, evid, depth, skip, limit, edgeCollections,
+      const ksp = kspFn(timestamp, svid, evid, depth, edgeCollections, skip, limit,
         { vFilter, eFilter, weightExpr: 'price' })
 
       expect(ksp, params).to.be.an.instanceOf(Array)
@@ -228,7 +228,7 @@ function testKShortestPaths (kspFn) {
   })
 }
 
-function kspHandlerWrapper (timestamp, svid, evid, depth, skip, limit, edgeCollections, options) {
+function kspHandlerWrapper (timestamp, svid, evid, depth, edgeCollections, skip, limit, options) {
   const req = {
     queryParams: { timestamp, svid, evid, depth, skip, limit },
     body: { edges: edgeCollections }
@@ -245,7 +245,7 @@ function kspHandlerWrapper (timestamp, svid, evid, depth, skip, limit, edgeColle
   return kShortestPathsHandler(req)
 }
 
-function kspPostWrapper (timestamp, svid, evid, depth, skip, limit, edgeCollections, options) {
+function kspPostWrapper (timestamp, svid, evid, depth, edgeCollections, skip, limit, options) {
   const req = { json: true, timeout: 120, qs: { svid, evid, depth, skip, limit }, body: { edges: edgeCollections } }
 
   if (timestamp) {
