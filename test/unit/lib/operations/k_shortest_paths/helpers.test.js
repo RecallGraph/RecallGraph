@@ -10,7 +10,7 @@ const {
 const { shuffle, chain } = require('lodash')
 
 describe('k Shortest Paths Helpers - buildPaths', () => {
-  before(() => init.setup({ ensureFlightDataLoad: true }))
+  before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
 

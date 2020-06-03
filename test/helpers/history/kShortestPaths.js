@@ -3,15 +3,18 @@
 const { expect } = require('chai')
 const { db, query } = require('@arangodb')
 const init = require('../util/init')
-const { random, sampleSize, stubTrue, map, isEqual, last } = require('lodash')
+const { random, sampleSize, stubTrue, map, isEqual, last, isEmpty, isObject, pick } = require('lodash')
 const show = require('../../../lib/operations/show')
 const traverse = require('../../../lib/operations/traverse')
 const { kShortestPaths } = require('../../../lib/operations/k_shortest_paths/helpers')
+const { kShortestPaths: kShortestPathsHandler } = require('../../../lib/handlers/kShortestPathsHandlers')
 const { SERVICE_COLLECTIONS, EVENTS: { CREATED } } = require('../../../lib/constants')
 const cytoscape = require('cytoscape')
 const { cartesian, generateFilters } = require('../util')
 const { parseExpr } = require('../../../lib/operations/helpers')
+const request = require('@arangodb/request')
 
+const { baseUrl } = module.context
 const eventsColl = db._collection(SERVICE_COLLECTIONS.events)
 
 function getRandomTimestamp () {
@@ -225,6 +228,49 @@ function testKShortestPaths (kspFn) {
   })
 }
 
+function kspHandlerWrapper (timestamp, svid, evid, depth, skip, limit, edgeCollections, options) {
+  const req = {
+    queryParams: { timestamp, svid, evid, depth, skip, limit },
+    body: { edges: edgeCollections }
+  }
+
+  if (isObject(options)) {
+    for (const key of ['vFilter', 'eFilter', 'weightExpr']) {
+      if (!isEmpty(options[key])) {
+        req.body[key] = options[key]
+      }
+    }
+  }
+
+  return kShortestPathsHandler(req)
+}
+
+function kspPostWrapper (timestamp, svid, evid, depth, skip, limit, edgeCollections, options) {
+  const req = { json: true, timeout: 120, qs: { svid, evid, depth, skip, limit }, body: { edges: edgeCollections } }
+
+  if (timestamp) {
+    req.qs.timestamp = timestamp
+  }
+
+  if (isObject(options)) {
+    for (const key of ['vFilter', 'eFilter', 'weightExpr']) {
+      if (!isEmpty(options[key])) {
+        req.body[key] = options[key]
+      }
+    }
+  }
+
+  const response = request.post(`${baseUrl}/history/kShortestPaths`, req)
+  expect(response).to.be.an.instanceOf(Object)
+
+  const params = JSON.stringify({ request: req, response: pick(response, 'statusCode', 'body', 'message') })
+  expect(response.statusCode, params).to.equal(200)
+
+  return JSON.parse(response.body)
+}
+
 module.exports = {
-  testKShortestPaths
+  testKShortestPaths,
+  kspHandlerWrapper,
+  kspPostWrapper
 }
