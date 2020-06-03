@@ -23,10 +23,14 @@ env:
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=mmfiles-integration-rest-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-query-35 GREP='Path as query param'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-body-35 GREP='Path as body param'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-provider-35 GREP='Provider'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-show-query-35 GREP='Path as query param'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-show-body-35 GREP='Path as body param'
-    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-filters-35 GREP='With Filters'
-    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-nofilters-35 GREP='Without Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-show-provider-35 GREP='Provider'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-filters-35 GREP='Handlers.*With Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-nofilters-35 GREP='Handlers.*Without Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-provider-filters-35 GREP='Provider.*With Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-provider-nofilters-35 GREP='Provider.*Without Filters'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/kShortestPathsHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-ksp-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-rest-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-operations-log-35
@@ -46,10 +50,14 @@ env:
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=rocksdb-integration-rest-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-query-35 GREP='Path as query param'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-body-35 GREP='Path as body param'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-provider-35 GREP='Provider'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-show-query-35 GREP='Path as query param'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-show-body-35 GREP='Path as body param'
-    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-filters-35 GREP='With Filters'
-    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-nofilters-35 GREP='Without Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-show-provider-35 GREP='Provider'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-filters-35 GREP='Handlers.*With Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-nofilters-35 GREP='Handlers.*Without Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-provider-filters-35 GREP='Provider.*With Filters'
+    - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-provider-nofilters-35 GREP='Provider.*Without Filters'
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/kShortestPathsHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-ksp-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-rest-35
     - ARANGODB_VERSION=3.5-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-operations-log-35
@@ -69,10 +77,14 @@ env:
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=mmfiles-integration-rest-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-query-36 GREP='Path as query param'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-body-36 GREP='Path as body param'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-log-provider-36 GREP='Provider'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-show-query-36 GREP='Path as query param'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-show-body-36 GREP='Path as body param'
-    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-filters-36 GREP='With Filters'
-    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-nofilters-36 GREP='Without Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-show-provider-36 GREP='Provider'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-filters-36 GREP='Handlers.*With Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-nofilters-36 GREP='Handlers.*Without Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-provider-filters-36 GREP='Provider.*With Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-traverse-provider-nofilters-36 GREP='Provider.*Without Filters'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/kShortestPathsHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-ksp-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js"]' NYC_OUT=mmfiles-unit-handlers-rest-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=mmfiles FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=mmfiles-unit-operations-log-36
@@ -92,10 +104,14 @@ env:
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js"]' NYC_OUT=rocksdb-integration-rest-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-query-36 GREP='Path as query param'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-body-36 GREP='Path as body param'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/logHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-log-provider-36 GREP='Provider'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-show-query-36 GREP='Path as query param'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-show-body-36 GREP='Path as body param'
-    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-filters-36 GREP='With Filters'
-    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-nofilters-36 GREP='Without Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/showHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-show-provider-36 GREP='Provider'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-filters-36 GREP='Handlers.*With Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-nofilters-36 GREP='Handlers.*Without Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-provider-filters-36 GREP='Provider.*With Filters'
+    - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/traverseHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-traverse-provider-nofilters-36 GREP='Provider.*Without Filters'
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/kShortestPathsHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-ksp-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js"]' NYC_OUT=rocksdb-unit-handlers-rest-36
     - ARANGODB_VERSION=3.6-nightly ARANGO_STORAGE_ENGINE=rocksdb FILES='["test/unit/lib/operations/log/index.test.js"]' NYC_OUT=rocksdb-unit-operations-log-36
