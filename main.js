@@ -6,7 +6,7 @@ const fs = require('fs')
 const {
   utils: { setEndpointTraceHeaders, initTracer }, middleware
 } = require('foxx-tracing')
-const providers = require('lib/handlers/providers')
+const providers = require('./lib/handlers/providers')
 
 initTracer()
 module.context.use(middleware)
