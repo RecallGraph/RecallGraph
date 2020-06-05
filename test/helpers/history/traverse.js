@@ -23,7 +23,7 @@ const generateCombos = memoize((keys = [], include = true, {
   bfs = [false, true],
   uniqueVertices = ['none', 'path', 'global'],
   uniqueEdges = ['none', 'path'],
-  timestamp = [null, ...init.getMilestones()],
+  timestamp = [undefined, ...init.getMilestones()],
   minDepth = [0, 1],
   relDepth = [0, 1],
   edgeCollections = ['inbound', 'outbound', 'any'].map(dir => ({
@@ -148,7 +148,9 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
     const timeBoundEdges = ePath ? show(ePath, timestamp) : []
     removeFreeEdges(timeBoundVertices, timeBoundEdges)
 
-    let vFilter = null; let eFilter = null; let pFilter = null
+    let vFilter
+    let eFilter
+    let pFilter
     if (useFilters && timeBoundVertices.find(v => v._id === svid)) {
       const unfilteredTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth,
         forcedBfs, uniqueVertices, uniqueEdges, edgeCollections)

@@ -102,7 +102,7 @@ function testUngroupedNodes (pathParam, timestamp, allNodes, expectedNodes, show
   const skip = [0, relativeSliceRange[0]]
   const limit = [0, relativeSliceRange[1]]
   const sort = ['asc', 'desc']
-  const groupBy = [null]
+  const groupBy = [undefined]
   const countsOnly = [true, false]
   const groupSort = ['asc', 'desc']
   const groupSkip = [0, 1]
