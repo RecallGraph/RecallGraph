@@ -1953,7 +1953,7 @@ describe('Update Provider', () => {
     const ecnode = createSingle({ pathParams, body: ebody })
     ecnode.k1 = null
 
-    const ernode = updateSingle(init.TEST_DATA_COLLECTIONS.edge, ecnode,
+    const ernode = updateProvider(init.TEST_DATA_COLLECTIONS.edge, ecnode,
       { returnNew: true, keepNull: false }).new
 
     expect(ernode).to.be.an.instanceOf(Object)
@@ -1994,7 +1994,7 @@ describe('Update Provider', () => {
     const ecnode = createSingle({ pathParams, body: ebody })
     ecnode.k1 = null
 
-    const ernode = updateSingle(init.TEST_DATA_COLLECTIONS.edge, ecnode,
+    const ernode = updateProvider(init.TEST_DATA_COLLECTIONS.edge, ecnode,
       { returnNew: true, keepNull: true }).new
 
     expect(ernode).to.be.an.instanceOf(Object)
@@ -2544,9 +2544,7 @@ describe('Update Provider', () => {
     }
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge
 
-    expect(() => updateSingle(init.TEST_DATA_COLLECTIONS.edge, ebody))
-      .to.throw()
-      .with.property('errorNum', ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code)
+    expect(() => updateSingle(init.TEST_DATA_COLLECTIONS.edge, ebody)).to.throw()
   })
 
   it('should fail when updating two edges with non-existing keys', () => {
