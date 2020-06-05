@@ -103,8 +103,8 @@ function testKShortestPaths (kspFn) {
   const edgeCollections = ['inbound', 'outbound', 'any'].map(dir => ({
     [flights]: dir
   }))
-  const vFilter = [null, generateFilters(cy.nodes().map(el => el.data()))]
-  const eFilter = [null, generateFilters(cy.edges().map(el => el.data()))]
+  const vFilter = [undefined, generateFilters(cy.nodes().map(el => el.data()))]
+  const eFilter = [undefined, generateFilters(cy.edges().map(el => el.data()))]
 
   const combos = cartesian({ skip, limit, edgeCollections, vFilter, eFilter })
   combos.forEach(combo => {

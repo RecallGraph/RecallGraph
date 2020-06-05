@@ -27,7 +27,7 @@ describe('Create Handlers', () => {
 
     const node = createSingle(
       { pathParams, body },
-      { returnNew: true, returnOld: true }
+      { returnNew: true }
     )
 
     expect(node).to.be.an.instanceOf(Object)
@@ -39,7 +39,6 @@ describe('Create Handlers', () => {
     expect(node.new._key).to.equal(node._key)
     expect(node.new._rev).to.equal(node._rev)
     expect(node.new.k1).to.equal('v1')
-    expect(node.old).to.be.an.instanceOf(Object)
     expect(node.old).to.be.empty
   })
 
@@ -60,7 +59,7 @@ describe('Create Handlers', () => {
 
     const nodes = createMultiple(
       { pathParams, body },
-      { returnNew: true, returnOld: true }
+      { returnNew: true }
     )
 
     expect(nodes).to.be.an.instanceOf(Array)
@@ -75,7 +74,6 @@ describe('Create Handlers', () => {
       expect(node.new._key).to.equal(node._key)
       expect(node.new._rev).to.equal(node._rev)
       expect(node.new.k1).to.equal('v1')
-      expect(node.old).to.be.an.instanceOf(Object)
       expect(node.old).to.be.empty
     })
   })
@@ -105,7 +103,7 @@ describe('Create Handlers', () => {
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge
     const enode = createSingle(
       { pathParams, body: ebody },
-      { returnNew: true, returnOld: true }
+      { returnNew: true }
     )
 
     expect(enode).to.be.an.instanceOf(Object)
@@ -119,7 +117,6 @@ describe('Create Handlers', () => {
     expect(enode.new._from).to.equal(vnodes[0]._id)
     expect(enode.new._to).to.equal(vnodes[1]._id)
     expect(enode.new.k1).to.equal('v1')
-    expect(enode.old).to.be.an.instanceOf(Object)
     expect(enode.old).to.be.empty
   })
 
@@ -156,7 +153,7 @@ describe('Create Handlers', () => {
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge
     const enodes = createMultiple(
       { pathParams, body: ebody },
-      { returnNew: true, returnOld: true }
+      { returnNew: true }
     )
 
     expect(enodes).to.be.an.instanceOf(Array)
@@ -173,7 +170,6 @@ describe('Create Handlers', () => {
       expect(enode.new._from).to.equal(vnodes[0]._id)
       expect(enode.new._to).to.equal(vnodes[1]._id)
       expect(enode.new.k1).to.equal('v1')
-      expect(enode.old).to.be.an.instanceOf(Object)
       expect(enode.old).to.be.empty
     })
   })
@@ -459,7 +455,7 @@ describe('Create Provider', () => {
       src: `${__filename}:should create a single vertex`
     }
 
-    const node = createProvider(init.TEST_DATA_COLLECTIONS.vertex, body, { returnNew: true, returnOld: true })
+    const node = createProvider(init.TEST_DATA_COLLECTIONS.vertex, body, { returnNew: true })
 
     expect(node).to.be.an.instanceOf(Object)
     expect(node).to.have.property('_id')
@@ -470,7 +466,6 @@ describe('Create Provider', () => {
     expect(node.new._key).to.equal(node._key)
     expect(node.new._rev).to.equal(node._rev)
     expect(node.new.k1).to.equal('v1')
-    expect(node.old).to.be.an.instanceOf(Object)
     expect(node.old).to.be.empty
   })
 
@@ -486,7 +481,7 @@ describe('Create Provider', () => {
       }
     ]
 
-    const nodes = createProvider(init.TEST_DATA_COLLECTIONS.vertex, body, { returnNew: true, returnOld: true })
+    const nodes = createProvider(init.TEST_DATA_COLLECTIONS.vertex, body, { returnNew: true })
 
     expect(nodes).to.be.an.instanceOf(Array)
     expect(nodes).to.have.lengthOf(2)
@@ -500,7 +495,6 @@ describe('Create Provider', () => {
       expect(node.new._key).to.equal(node._key)
       expect(node.new._rev).to.equal(node._rev)
       expect(node.new.k1).to.equal('v1')
-      expect(node.old).to.be.an.instanceOf(Object)
       expect(node.old).to.be.empty
     })
   })
@@ -528,7 +522,7 @@ describe('Create Provider', () => {
       src: `${__filename}:should create a single edge`
     }
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge
-    const enode = createProvider(init.TEST_DATA_COLLECTIONS.edge, ebody, { returnNew: true, returnOld: true })
+    const enode = createProvider(init.TEST_DATA_COLLECTIONS.edge, ebody, { returnNew: true })
 
     expect(enode).to.be.an.instanceOf(Object)
     expect(enode).to.have.property('_id')
@@ -541,7 +535,6 @@ describe('Create Provider', () => {
     expect(enode.new._from).to.equal(vnodes[0]._id)
     expect(enode.new._to).to.equal(vnodes[1]._id)
     expect(enode.new.k1).to.equal('v1')
-    expect(enode.old).to.be.an.instanceOf(Object)
     expect(enode.old).to.be.empty
   })
 
@@ -576,7 +569,7 @@ describe('Create Provider', () => {
       }
     ]
     pathParams.collection = init.TEST_DATA_COLLECTIONS.edge
-    const enodes = createProvider(init.TEST_DATA_COLLECTIONS.edge, ebody, { returnNew: true, returnOld: true })
+    const enodes = createProvider(init.TEST_DATA_COLLECTIONS.edge, ebody, { returnNew: true })
 
     expect(enodes).to.be.an.instanceOf(Array)
     expect(enodes).to.have.lengthOf(2)
@@ -592,7 +585,6 @@ describe('Create Provider', () => {
       expect(enode.new._from).to.equal(vnodes[0]._id)
       expect(enode.new._to).to.equal(vnodes[1]._id)
       expect(enode.new.k1).to.equal('v1')
-      expect(enode.old).to.be.an.instanceOf(Object)
       expect(enode.old).to.be.empty
     })
   })

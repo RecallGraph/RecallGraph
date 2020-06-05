@@ -108,7 +108,7 @@ function testUngroupedEvents (pathParam, allEvents, expectedEvents, logFn) {
     const skip = [0, sliceRange[0]]
     const limit = [0, sliceRange[1]]
     const sort = ['asc', 'desc']
-    const groupBy = [null]
+    const groupBy = [undefined]
     const countsOnly = [false, true]
     const groupSort = ['asc', 'desc']
     const groupSkip = [0, 1]
