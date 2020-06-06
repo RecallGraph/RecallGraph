@@ -22,7 +22,7 @@ To get an idea of where such a data store might be used, see:
 1. [The Case for Versioned Graph Databases](https://adityamukho.com/the-case-for-versioned-graph-databases/),
 1. [Illustrative Problems in Dynamic Network Analysis](https://en.wikipedia.org/wiki/Dynamic_network_analysis#Illustrative_problems_that_people_in_the_DNA_area_work_on)
 
-Also check out the recording below (RecallGraph presented @ ArangoDB Online Meetup)
+Also, check out the recording below (RecallGraph presented @ ArangoDB Online Meetup)
 
 [![YouTube link for RecallGraph presentation](http://img.youtube.com/vi/UP2KDQ_kL4I/0.jpg)](http://www.youtube.com/watch?v=UP2KDQ_kL4I "RecallGraph Presented @ ArangoDB Online Meetup")
 
@@ -41,21 +41,22 @@ RecallGraph's API is split into 3 top-level categories:
 - **Replace** - Replace entire single/multiple documents with new content.
 - **Delete** - Delete single/multiple documents.
 - **Update** - Add/Update specific fields in single/multiple documents.
-- **(Planned) Explicit Commits** - Commit a document's changes separately, after it has been written to DB via other means (AQL / Core REST API / Client).
+- **Restore** - Restore deleted nodes back to their last known undeleted state.
+- **(Planned) Materialization** - Point-in-time checkouts.
 - **(Planned) CQRS/ES Operation Mode** - Async implicit commits.
 
 ### Event
 - **Log** - Fetch a log of events (commits) for a given path pattern (path determines scope of documents to pick). The log can be optionally grouped/sorted/sliced within a specified time interval.
 - **Diff** - Fetch a list of forward or reverse commands (diffs) between commits for specified documents.
+- **Explicit Commits** - Commit a document's changes separately, after it has been written to DB via other means (AQL / Core REST API / Client).
 - **(Planned) Branch/Tag** - Create parallel versions of history, branching off from a specific event point of the main timeline. Also, tag specific points in branch+time for convenient future reference.
-- **(Planned) Materialization** - Point-in-time checkouts.
 
 ### History
 - **Show** - Fetch a set of documents, optionally grouped/sorted/sliced, that match a given path pattern, at a given point in time.
 - **Filter** - In addition to a path pattern like in **'Show'**, apply an expression-based, simple/compound post-filter on the retrieved documents.
 - **Traverse** - A point-in-time traversal (walk) of a past version of the graph, with the option to apply additional post-filters to the result.
 - **k Shortest Paths** - Point-in-time, weighted, shortest paths between two endpoints.
-- **(Planned) Purge** - Delete all history for specified nodes.
+- **Purge** - Delete all history for specified nodes.
 
 ## Installation
 RecallGraph installs like any other _Foxx Microservice_ inside a database, on an ArangoDB instance.
@@ -86,7 +87,6 @@ User guides, glossary and technical docs are available at the [main documentatio
 1. Support for ArangoDB v3.7,
 1. Multiple, simultaneous materialized checkouts (a la `git`) of selectable sections of the database (entire DB, named graph, named collection, document list, document pattern), with eventual branch-level specificity,
 1. CQRS/ES operation mode (async implicit commits),
-1. Explicit commits,
 1. Support for ArangoDB clusters (limited at present by lack of support for multi-document ACID transactions in clusters).
 1. Multiple authentication and authorization mechanisms.
 
