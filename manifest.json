@@ -35,7 +35,8 @@
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
-    "runTests": "scripts/run-tests.js"
+    "runTests": "scripts/run-tests.js",
+    "migrate-001:-0.1.0-to-1.0.0": "scripts/migration_001_010-100.js"
   },
   "tests": [
     "test/unit/lib/**/*.js",
