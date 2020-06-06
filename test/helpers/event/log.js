@@ -134,7 +134,7 @@ function testUngroupedEvents (pathParam, allEvents, expectedEvents, logFn) {
         ? findLastIndex(expectedEvents, e => e.ctime >= combo.since)
         : expectedEvents.length - 1
       const latestTimeBoundIndex =
-        combo.until && findIndex(expectedEvents, e => e.ctime <= combo.until)
+        combo.until && findIndex(expectedEvents, e => e.ctime < combo.until)
 
       const timeSlicedEvents = expectedEvents.slice(
         latestTimeBoundIndex,
