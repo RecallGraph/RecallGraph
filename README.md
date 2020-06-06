@@ -7,7 +7,7 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 
 ---
 
-[![Build Status](https://travis-ci.org/RecallGraph/RecallGraph.svg?branch=master)](https://travis-ci.org/github/RecallGraph/RecallGraph/branches)
+[![Build Status](https://travis-ci.org/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.org/github/RecallGraph/RecallGraph/branches)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
@@ -92,7 +92,7 @@ User guides, glossary and technical docs are available at the [main documentatio
 
 ## Get in Touch
 - Raise an issue or PR on this repo, or
-- Mail me (email link in Github profile), or
+- Mail me (![Email Link](http://safemail.justlikeed.net/e/aa7232bbfc22c7580ae7a4b561562e0b.png)), or
 - Join the Gitter channel - [https://gitter.im/RecallGraph/community](https://gitter.im/RecallGraph/community).
 
 ## Disclaimer
