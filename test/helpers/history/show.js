@@ -267,6 +267,8 @@ function testGroupedNodes (path, timestamp, showFn) {
 }
 
 function buildNodesFromEventLog (path, timestamp) {
+  timestamp = timestamp + Number.EPSILON
+
   return diff(path, { until: timestamp, postFilter: 'last(events).event !== "deleted"' })
     .map(item => {
       let node = {}
