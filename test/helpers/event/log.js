@@ -13,7 +13,7 @@ const { aql, db, query } = require('@arangodb')
 const { getSortingClause, getReturnClause, getGroupingClause } = require('../../../lib/operations/log/helpers')
 const { initQueryParts } = require('.')
 const { getRandomSubRange, cartesian, generateFilters } = require('../util')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../lib/constants')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 
@@ -108,7 +108,7 @@ function testUngroupedEvents (pathParam, allEvents, expectedEvents, logFn) {
     const skip = [0, sliceRange[0]]
     const limit = [0, sliceRange[1]]
     const sort = ['asc', 'desc']
-    const groupBy = [null]
+    const groupBy = [undefined]
     const countsOnly = [false, true]
     const groupSort = ['asc', 'desc']
     const groupSkip = [0, 1]
@@ -134,7 +134,7 @@ function testUngroupedEvents (pathParam, allEvents, expectedEvents, logFn) {
         ? findLastIndex(expectedEvents, e => e.ctime >= combo.since)
         : expectedEvents.length - 1
       const latestTimeBoundIndex =
-        combo.until && findIndex(expectedEvents, e => e.ctime <= combo.until)
+        combo.until && findIndex(expectedEvents, e => e.ctime < combo.until)
 
       const timeSlicedEvents = expectedEvents.slice(
         latestTimeBoundIndex,

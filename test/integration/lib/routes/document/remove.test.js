@@ -532,7 +532,7 @@ describe('Routes - remove', () => {
     })
 
     expect(response).to.be.an.instanceOf(Object)
-    expect(response.statusCode).to.equal(200)
+    expect(response.statusCode, response.body).to.equal(200)
 
     const resBody = JSON.parse(response.body)
     expect(resBody).to.be.an.instanceOf(Array)
@@ -673,9 +673,6 @@ describe('Routes - remove', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      expect(resNode.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
-      )
     })
   })
 
@@ -767,9 +764,6 @@ describe('Routes - remove', () => {
       expect(resNode).to.be.an.instanceOf(Object)
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
-      )
-      expect(resNode.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
     })
   })

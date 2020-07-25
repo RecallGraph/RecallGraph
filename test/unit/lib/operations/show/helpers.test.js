@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
 const { cartesian } = require('../../../../helpers/util')
 const { patch, buildShowQuery } = require('../../../../../lib/operations/show/helpers')
-const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/constants')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern,
   getRandomNodeBracePathPattern

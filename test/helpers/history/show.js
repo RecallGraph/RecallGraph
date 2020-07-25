@@ -18,15 +18,18 @@ function compareNodes (nodes, expectedNodes, param) {
   }
 
   expect(nodes.length, param).to.equal(expectedNodes.length)
-  expect(nodes[0], param).to.deep.equal(expectedNodes[0])
 
-  for (let i = 1; i < expectedNodes.length; i++) {
-    const node = nodes[i]
-    const expectedNode = expectedNodes[i]
+  if (nodes.length) {
+    expect(nodes[0], param).to.deep.equal(expectedNodes[0])
 
-    expect(node, param).to.be.an.instanceOf(Object)
-    expect(node._id, param).to.equal(expectedNode._id)
-    expect(node._rev, param).to.equal(expectedNode._rev)
+    for (let i = 1; i < expectedNodes.length; i++) {
+      const node = nodes[i]
+      const expectedNode = expectedNodes[i]
+
+      expect(node, param).to.be.an.instanceOf(Object)
+      expect(node._id, param).to.equal(expectedNode._id)
+      expect(node._rev, param).to.equal(expectedNode._rev)
+    }
   }
 }
 
@@ -99,8 +102,8 @@ function testUngroupedNodes (pathParam, timestamp, allNodes, expectedNodes, show
   const skip = [0, relativeSliceRange[0]]
   const limit = [0, relativeSliceRange[1]]
   const sort = ['asc', 'desc']
-  const groupBy = [null]
-  const countsOnly = [false]
+  const groupBy = [undefined]
+  const countsOnly = [true, false]
   const groupSort = ['asc', 'desc']
   const groupSkip = [0, 1]
   const groupLimit = [0, 2]
@@ -120,7 +123,12 @@ function testUngroupedNodes (pathParam, timestamp, allNodes, expectedNodes, show
 
     expect(nodes).to.be.an.instanceOf(Array)
 
-    const sortedNodes = (combo.sort === 'desc') ? expectedNodes.slice().reverse() : expectedNodes
+    let sortedNodes
+    if (combo.countsOnly) {
+      sortedNodes = [{ total: expectedNodes.length }]
+    } else {
+      sortedNodes = (combo.sort === 'desc') ? expectedNodes.slice().reverse() : expectedNodes
+    }
 
     let slicedSortedNodes
     let start = 0
@@ -259,6 +267,8 @@ function testGroupedNodes (path, timestamp, showFn) {
 }
 
 function buildNodesFromEventLog (path, timestamp) {
+  timestamp += 10 ** Math.floor(Math.log10(timestamp)) * Number.EPSILON // Incr LSD
+
   return diff(path, { until: timestamp, postFilter: 'last(events).event !== "deleted"' })
     .map(item => {
       let node = {}

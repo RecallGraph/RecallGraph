@@ -1,1 +1,5 @@
-All sample data in this folder are derived from public data available on Wikipedia: https://en.wikipedia.org/wiki/List_of_Solar_System_objects_by_size
+Data Sources:
+~~~~~~~~~~~~~
+
+SS_Objects_*: https://en.wikipedia.org/wiki/List_of_Solar_System_objects_by_size
+KSP_*: https://www.travelpayouts.com/

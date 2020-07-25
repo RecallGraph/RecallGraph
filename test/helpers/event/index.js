@@ -3,7 +3,7 @@
 const { aql, db } = require('@arangodb')
 const { memoize, concat } = require('lodash')
 const { getSampleDataRefs } = require('../util/init')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../lib/constants')
 
 const eventColl = db._collection(SERVICE_COLLECTIONS.events)
 const queryPartsInializers = {

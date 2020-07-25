@@ -4,7 +4,7 @@ const { aql, db } = require('@arangodb')
 const init = require('../../../../helpers/util/init')
 const diff = require('../../../../../lib/operations/diff')
 const { testDiffs } = require('../../../../helpers/event/diff')
-const { SERVICE_COLLECTIONS } = require('../../../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../../../lib/constants')
 const {
   getRandomGraphPathPattern, getRandomCollectionPathPattern, getRandomNodeGlobPathPattern, getRandomNodeBracePathPattern
 } = require('../../../../helpers/document')

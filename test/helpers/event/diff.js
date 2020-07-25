@@ -4,10 +4,10 @@ const jiff = require('jiff')
 const { expect } = require('chai')
 const { db, query } = require('@arangodb')
 const request = require('@arangodb/request')
-const { isObject, omitBy, isNil, isEqual, differenceWith, isEmpty, omit, map } = require('lodash')
+const { isObject, omitBy, isNil, isEqual, differenceWith, isEmpty, omit, map, cloneDeep } = require('lodash')
 const log = require('../../../lib/operations/log')
 const { diff: diffHandler } = require('../../../lib/handlers/diffHandlers')
-const { SERVICE_COLLECTIONS } = require('../../../lib/helpers')
+const { SERVICE_COLLECTIONS } = require('../../../lib/constants')
 const { getRandomSubRange, cartesian, generateFilters } = require('../util')
 const { filter } = require('../../../lib/operations/helpers')
 
@@ -65,6 +65,8 @@ function compareDiffs (diffs, expectedDiffs, param) {
 
 // Public
 function getExpectedDiffs (path, combo) {
+  combo = cloneDeep(combo)
+
   const {
     sort: st,
     reverse: rv

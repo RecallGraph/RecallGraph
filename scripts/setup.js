@@ -2,7 +2,8 @@
 
 const { db, errors: ARANGO_ERRORS } = require('@arangodb')
 const gg = require('@arangodb/general-graph')
-const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/helpers')
+const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/constants')
+const { ensureIndexes } = require('../lib/helpers')
 
 const { events, commands, snapshots, evtSSLinks, snapshotLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
 const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
@@ -11,74 +12,20 @@ const edgeCollections = [commands, evtSSLinks, snapshotLinks, skeletonEdgeSpokes
 for (const localName of documentCollections) {
   if (!db._collection(localName)) {
     db._createDocumentCollection(localName)
-  } else { // noinspection JSUnresolvedVariable
-    if (module.context.isProduction) {
-      console.debug(
-        `collection ${localName} already exists. Leaving it untouched.`
-      )
-    }
+  } else if (module.context.isProduction) {
+    console.debug(`collection ${localName} already exists. Leaving it untouched.`)
   }
 }
 
 for (const localName of edgeCollections) {
   if (!db._collection(localName)) {
     db._createEdgeCollection(localName)
-  } else { // noinspection JSUnresolvedVariable
-    if (module.context.isProduction) {
-      console.debug(
-        `collection ${localName} already exists. Leaving it untouched.`
-      )
-    }
+  } else if (module.context.isProduction) {
+    console.debug(`collection ${localName} already exists. Leaving it untouched.`)
   }
 }
 
-const eventColl = db._collection(events)
-eventColl.ensureIndex({
-  type: 'hash',
-  sparse: true,
-  unique: false,
-  deduplicate: false,
-  fields: ['meta.id', 'event', 'ctime']
-})
-eventColl.ensureIndex({
-  type: 'hash',
-  sparse: true,
-  unique: false,
-  deduplicate: false,
-  fields: ['collection']
-})
-eventColl.ensureIndex({
-  type: 'skiplist',
-  sparse: true,
-  unique: false,
-  deduplicate: false,
-  fields: ['ctime']
-})
-eventColl.ensureIndex({
-  type: 'skiplist',
-  sparse: true,
-  unique: false,
-  deduplicate: false,
-  fields: ['hops-from-origin']
-})
-
-const commandColl = db._collection(commands)
-commandColl.ensureIndex({
-  type: 'hash',
-  sparse: true,
-  unique: true,
-  deduplicate: false,
-  fields: ['_from', 'meta.id']
-})
-
-const skeletonEdgeSpokesColl = db._collection(skeletonEdgeSpokes)
-skeletonEdgeSpokesColl.ensureIndex({
-  type: 'hash',
-  sparse: false,
-  unique: false,
-  deduplicate: false,
-  fields: ['hub']
-})
+ensureIndexes()
 
 const { eventLog, skeleton } = SERVICE_GRAPHS
 let evlEdgeDefs, skelEdgeDefs

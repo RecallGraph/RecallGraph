@@ -3,7 +3,7 @@
 const { format } = require('util')
 const minimatch = require('minimatch')
 const {
-  random, sampleSize, sample, isFunction, toString, escapeRegExp, isObject, chain, isEmpty, negate, pick, flatMap
+  random, sampleSize, sample, isFunction, toString, escapeRegExp, isObject, chain, isEmpty, pick, flatMap
 } = require('lodash')
 
 const OPS = {
@@ -132,7 +132,9 @@ function generateFilters (nodes) {
   const ss = random(1, Math.min(10, fbKeys.length))
   const sampleFieldBagSubsets = chain(fieldBags)
     .pick(sampleSize(fbKeys, ss))
-    .filter(negate(isEmpty))
+    .toPairs()
+    .filter(pair => !isEmpty(pair[1]))
+    .fromPairs()
     .mapValues(values => {
       const ss = random(1, Math.min(10, values.size))
 

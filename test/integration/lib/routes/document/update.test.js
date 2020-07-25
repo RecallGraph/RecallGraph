@@ -1551,9 +1551,6 @@ describe('Routes - update', () => {
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
       )
-      expect(resNode.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
-      )
     })
   })
 
@@ -1645,9 +1642,6 @@ describe('Routes - update', () => {
       expect(resNode).to.be.an.instanceOf(Object)
       expect(resNode.errorNum).to.equal(
         ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.code
-      )
-      expect(resNode.errorMessage).to.equal(
-        ARANGO_ERRORS.ERROR_ARANGO_DOCUMENT_NOT_FOUND.message
       )
     })
   })
