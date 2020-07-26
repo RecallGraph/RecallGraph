@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="main.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/main.js">main.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> createRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@arangodb/foxx/router'</span>)
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
+<span class="hljs-keyword">const</span> {
+  utils: { setEndpointTraceHeaders, initTracer }, middleware
+} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'foxx-tracing'</span>)
+<span class="hljs-keyword">const</span> providers = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./lib/handlers/providers'</span>)
+
+initTracer()
+<span class="hljs-built_in">module</span>.context.use(middleware)
+
+<span class="hljs-keyword">const</span> router = createRouter()
+<span class="hljs-keyword">const</span> routeBase = <span class="hljs-string">`<span class="hljs-subst">${__dirname}</span>/lib/routes`</span>
+<span class="hljs-keyword">const</span> routes = fs
+  .list(routeBase)
+  .filter(route =&gt; fs.isDirectory(<span class="hljs-string">`<span class="hljs-subst">${routeBase}</span>/<span class="hljs-subst">${route}</span>`</span>))
+routes.forEach(route =&gt; {
+  <span class="hljs-keyword">const</span> mountPath = path.basename(route, <span class="hljs-string">'.js'</span>)
+  <span class="hljs-keyword">const</span> childRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">`./lib/routes/<span class="hljs-subst">${route}</span>`</span>)
+
+  <span class="hljs-keyword">const</span> endpoint = router.use(<span class="hljs-string">`/<span class="hljs-subst">${mountPath}</span>`</span>, childRouter)
+  setEndpointTraceHeaders(endpoint)
+})
+
+<span class="hljs-built_in">module</span>.context.use(router)
+
+<span class="hljs-built_in">module</span>.exports = providers</div></div></div></div></body></html>

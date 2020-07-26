@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/handlers/removeHandlers</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="lib/handlers/removeHandlers"><meta name="groc-project-path" content="lib/handlers/removeHandlers.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/handlers/removeHandlers.js">lib/handlers/removeHandlers.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> commit = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../operations/commit'</span>)
+<span class="hljs-keyword">const</span> { DB_OPS: { REMOVE } } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../constants'</span>)
+<span class="hljs-keyword">const</span> { pick, omit, isObject } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)
+<span class="hljs-keyword">const</span> { JoiRG, validate, checkValidation } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/helpers'</span>)
+<span class="hljs-keyword">const</span> { REMOVE_BODY_SCHEMA } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/schemas'</span>)
+
+<span class="hljs-keyword">const</span> shallowOptKeys = [<span class="hljs-string">'returnNew'</span>, <span class="hljs-string">'returnOld'</span>, <span class="hljs-string">'silent'</span>]
+<span class="hljs-keyword">const</span> optionsSchema = JoiRG.object().keys({
+  returnOld: JoiRG.boolean(),
+  silent: JoiRG.boolean(),
+  ignoreRevs: JoiRG.boolean()
+})
+<span class="hljs-keyword">const</span> providerSchemas = [JoiRG.string().collection().required(), REMOVE_BODY_SCHEMA, optionsSchema]
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeSingle</span> (<span class="hljs-params">{ pathParams, body }, options, deepOpts</span>) </span>{
+  <span class="hljs-keyword">let</span> shallowOpts
+  <span class="hljs-keyword">if</span> (!isObject(deepOpts)) {
+    shallowOpts = pick(options, shallowOptKeys)
+    deepOpts = omit(options, shallowOptKeys)
+  } <span class="hljs-keyword">else</span> {
+    shallowOpts = options
+  }
+
+  <span class="hljs-keyword">return</span> commit(
+    pathParams.collection,
+    body,
+    REMOVE,
+    shallowOpts,
+    deepOpts
+  )
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeMultiple</span> (<span class="hljs-params">{ pathParams, body }, options</span>) </span>{
+  <span class="hljs-keyword">const</span> shallowOpts = pick(options, shallowOptKeys)
+  <span class="hljs-keyword">const</span> deepOpts = omit(options, shallowOptKeys)
+  <span class="hljs-keyword">const</span> nodes = []
+
+  body.forEach(node =&gt; {
+    <span class="hljs-keyword">try</span> {
+      nodes.push(
+        removeSingle({ pathParams, body: node }, shallowOpts, deepOpts)
+      )
+    } <span class="hljs-keyword">catch</span> (e) {
+      <span class="hljs-built_in">console</span>.error(e.stack)
+      nodes.push(e)
+    }
+  })
+
+  <span class="hljs-keyword">return</span> nodes
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeProvider</span> (<span class="hljs-params">collection, data, options = {}</span>) </span>{
+  <span class="hljs-keyword">const</span> result = validate([collection, data, options], providerSchemas)
+  checkValidation(result)
+
+  <span class="hljs-keyword">const</span> args = result.values
+  collection = args[<span class="hljs-number">0</span>]
+  data = args[<span class="hljs-number">1</span>]
+  options = args[<span class="hljs-number">2</span>]
+
+  <span class="hljs-keyword">const</span> req = {
+    pathParams: { collection },
+    body: data
+  }
+
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(data)) {
+    <span class="hljs-keyword">return</span> removeMultiple(req, options)
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">const</span> shallowOpts = pick(options, shallowOptKeys)
+    <span class="hljs-keyword">const</span> deepOpts = omit(options, shallowOptKeys)
+
+    <span class="hljs-keyword">return</span> removeSingle(req, shallowOpts, deepOpts)
+  }
+}
+
+<span class="hljs-built_in">module</span>.exports = {
+  removeSingle,
+  removeMultiple,
+  removeProvider
+}</div></div></div></div></body></html>

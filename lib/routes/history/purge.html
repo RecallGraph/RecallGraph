@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/routes/history/purge</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="lib/routes/history/purge"><meta name="groc-project-path" content="lib/routes/history/purge.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/routes/history/purge.js">lib/routes/history/purge.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> Joi = <span class="hljs-built_in">require</span>(<span class="hljs-string">'joi'</span>)
+<span class="hljs-keyword">const</span> { purge } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../lib/handlers/purgeHandlers'</span>)
+<span class="hljs-keyword">const</span> { PATH_SCHEMA } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../schemas'</span>)
+<span class="hljs-keyword">const</span> dd = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dedent'</span>)
+
+<span class="hljs-built_in">module</span>.exports = router =&gt; {
+  <span class="hljs-keyword">const</span> reqBodySchema = Joi.object().keys({
+    path: PATH_SCHEMA
+  })
+
+  buildEndpoint(router.delete(<span class="hljs-string">'/purge'</span>, processPurgeRequest, <span class="hljs-string">'purge'</span>))
+    .body(reqBodySchema, <span class="hljs-string">'The path pattern to pick nodes whose history should be purged.'</span>)
+
+    .summary(<span class="hljs-string">'Purge node history.'</span>)
+
+  <span class="hljs-built_in">console</span>.debug(<span class="hljs-string">'Loaded "purge" routes'</span>)
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">processPurgeRequest</span> (<span class="hljs-params">req, res</span>) </span>{
+  res.status(<span class="hljs-number">200</span>).json(purge(req))
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildEndpoint</span> (<span class="hljs-params">endpoint</span>) </span>{
+  <span class="hljs-keyword">return</span> endpoint
+    .queryParam(<span class="hljs-string">'deleteUserObjects'</span>, Joi.boolean(),
+      <span class="hljs-string">'Determines whether to delete the corresponding user-defined objects. Default: `false`.'</span>)
+
+    .queryParam(<span class="hljs-string">'silent'</span>, Joi.boolean(),
+      <span class="hljs-string">'Whether to return anything in the response body. Default `false`.'</span>)
+
+    .response(<span class="hljs-number">200</span>, [<span class="hljs-string">'application/json'</span>], <span class="hljs-string">'History of the specified path was successfully purged.'</span>)
+    .error(<span class="hljs-number">400</span>, <span class="hljs-string">'Invalid request body/params. Response body contains the error details.'</span>)
+    .error(<span class="hljs-number">500</span>, <span class="hljs-string">'The operation failed.'</span>)
+
+    .description(dd<span class="hljs-string">`
+      Purges all history for nodes matching the given path pattern. All event logs, snapshots and structural history
+      is purged from the service collections for the selected nodes. Optionally, the actual objects whose event records
+      are being purged can also be deleted.
+      
+      It should be noted that the service collection entries are all cleared in a single transaction. This is fine
+      when the number of nodes selected is small (which is how 'purge' is intended to be used). For a large number of
+      nodes, the database might hit a transaction memory limit, throwing an error. This will cause it to rollback the
+      entire transaction giving the user a chance to retry with a smaller selection.
+      
+      However, depending on the DB engine in use, and certain engine-specific configurations, the transaction may be
+      internally broken into smaller sub-transactions which are independently committed. If there is a system crash
+      between two such sub-transactions, the service collections may end up in a overall inconsistent state. To avoid
+      such an eventuality, take careful note of these configuration parameters and the expected size of nodes to be 
+      purged in a single call. **See the documentation linked below.**
+      
+      _If target objects (the user-defined objects for which the event logs were purged) are also marked for deletion,
+      they are deleted outside the transaction boundary._
+
+      Also see:
+      
+      1. https://docs.recallgraph.tech/getting-started/terminology#path
+      2. https://www.arangodb.com/docs/stable/transactions-limitations.html
+    `</span>)
+
+    .tag(<span class="hljs-string">'History'</span>)
+}</div></div></div></div></body></html>

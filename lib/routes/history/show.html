@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/routes/history/show</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="lib/routes/history/show"><meta name="groc-project-path" content="lib/routes/history/show.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/routes/history/show.js">lib/routes/history/show.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> { JoiRG } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../helpers'</span>)
+<span class="hljs-keyword">const</span> { show } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../lib/handlers/showHandlers'</span>)
+<span class="hljs-keyword">const</span> { PATH_SCHEMA } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../schemas'</span>)
+<span class="hljs-keyword">const</span> dd = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dedent'</span>)
+
+<span class="hljs-built_in">module</span>.exports = router =&gt; {
+  <span class="hljs-keyword">const</span> filterSchema = JoiRG.string().filter().empty(<span class="hljs-string">''</span>)
+  <span class="hljs-keyword">const</span> reqBodySchema = JoiRG.object().keys({
+    path: PATH_SCHEMA,
+    postFilter: filterSchema
+  })
+
+  buildEndpoint(router.get(<span class="hljs-string">'/show'</span>, processShowRequest, <span class="hljs-string">'showGet'</span>))
+    .queryParam(<span class="hljs-string">'path'</span>, PATH_SCHEMA, <span class="hljs-string">'The path pattern to pick nodes whose states should be returned.'</span>)
+    .queryParam(<span class="hljs-string">'postFilter'</span>, filterSchema, <span class="hljs-string">'The optional post-filter expression to apply on the nodes.'</span>)
+
+    .summary(<span class="hljs-string">'Show node states (path &amp; postFilter param in query).'</span>)
+
+  buildEndpoint(router.post(<span class="hljs-string">'/show'</span>, processShowRequest, <span class="hljs-string">'showPost'</span>))
+    .body(reqBodySchema, dd<span class="hljs-string">`
+      The path pattern to pick nodes whose states should be returned, and the optional post-filter expression to apply
+      on them. (e.g. \`{"path": "/c/*raw_data*", "postFilter": "x == 2 &amp;&amp; y &lt; 1"}\`)
+    `</span>)
+
+    .summary(<span class="hljs-string">'Show node states (path &amp; postFilter param in body).'</span>)
+
+  <span class="hljs-built_in">console</span>.debug(<span class="hljs-string">'Loaded "show" routes'</span>)
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">processShowRequest</span> (<span class="hljs-params">req, res</span>) </span>{
+  res.status(<span class="hljs-number">200</span>).json(show(req))
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildEndpoint</span> (<span class="hljs-params">endpoint</span>) </span>{
+  <span class="hljs-keyword">return</span> endpoint
+    .queryParam(<span class="hljs-string">'timestamp'</span>, JoiRG.number(), dd<span class="hljs-string">`
+      The unix timestamp (sec) for which to show node states. Precision: 0.1μs. Example: since=1581583228.2800217.
+      Default: Current Time
+    `</span>)
+
+    .queryParam(<span class="hljs-string">'sort'</span>, JoiRG.string().valid(<span class="hljs-string">'asc'</span>, <span class="hljs-string">'desc'</span>), dd<span class="hljs-string">`
+      The outer/primary sort order of records in the result set. When \`groupBy\` is not \`null\` and \`countsOnly\` is
+      true, it is sorted first by the aggregated total in the given sort direction, then by the group key (\`asc"\`).
+      When \`countsOnly\` is false, it sorts by group key (\`groupBy\` != \`null\`) or node ID (\`groupBy\` == \`null\`)
+      in the given the sort direction. Default: \`desc\` when countsOnly is true, \`asc\` otherwise.
+    `</span>)
+
+    .queryParam(<span class="hljs-string">'skip'</span>, JoiRG.number().integer().min(<span class="hljs-number">0</span>),
+      <span class="hljs-string">'The number records to skip/omit from the result set, starting from the first. Falsey implies none.'</span>)
+
+    .queryParam(<span class="hljs-string">'limit'</span>, JoiRG.number().integer().min(<span class="hljs-number">0</span>),
+      <span class="hljs-string">'The number records to keep in the result set, starting from `skip` or `0`. Falsey implies all.'</span>)
+
+    .queryParam(<span class="hljs-string">'groupBy'</span>, JoiRG.string().valid(<span class="hljs-string">'collection'</span>, <span class="hljs-string">'type'</span>),
+      <span class="hljs-string">'The parameter on which to group records in the result set. One of `collection` or `type`.'</span>)
+
+    .queryParam(<span class="hljs-string">'countsOnly'</span>, JoiRG.boolean(), dd<span class="hljs-string">`
+      Determines whether to return aggregated event totals (grouped or overall depending on \`groupBy\`), or entire
+      event lists.
+    `</span>)
+
+    .queryParam(<span class="hljs-string">'groupSort'</span>, JoiRG.string().valid(<span class="hljs-string">'asc'</span>, <span class="hljs-string">'desc'</span>), dd<span class="hljs-string">`
+      The inner/secondary sort order of records in a group (if \`groupBy\` is specified and \`countsOnly\` is falsey),
+      sorted by \`_id\`. Default: \`asc\`.
+    `</span>)
+
+    .queryParam(<span class="hljs-string">'groupSkip'</span>, JoiRG.number().integer().min(<span class="hljs-number">0</span>), dd<span class="hljs-string">`
+      The number records to skip/omit from each group of the result set (if \`groupBy\` is specified and \`countsOnly\`
+      is falsey), starting from the first. Falsey implies none.
+    `</span>)
+
+    .queryParam(<span class="hljs-string">'groupLimit'</span>, JoiRG.number().integer().min(<span class="hljs-number">0</span>), dd<span class="hljs-string">`
+      The number records to keep in each group of the result set (if \`groupBy\` is specified and \`countsOnly\` is
+      falsey), starting from \`groupSkip\` or \`0\`. Falsey implies all.
+    `</span>)
+
+    .response(<span class="hljs-number">200</span>, [<span class="hljs-string">'application/json'</span>], <span class="hljs-string">'The states were successfully generated.'</span>)
+    .error(<span class="hljs-number">400</span>, <span class="hljs-string">'Invalid request body/params. Response body contains the error details.'</span>)
+    .error(<span class="hljs-number">500</span>, <span class="hljs-string">'The operation failed.'</span>)
+
+    .description(dd<span class="hljs-string">`
+      Returns past states for nodes matching the given path pattern and the aggregating/sorting/slicing/post-filter
+      constraints.
+
+      Also see:
+
+      1. https://docs.recallgraph.tech/getting-started/terminology#event
+
+      2. https://docs.recallgraph.tech/getting-started/terminology#path
+
+      3. https://docs.recallgraph.tech/getting-started/terminology/grouping
+
+      4. https://docs.recallgraph.tech/getting-started/terminology/sorting
+
+      5. https://docs.recallgraph.tech/getting-started/terminology/slicing
+
+      6. https://docs.recallgraph.tech/getting-started/terminology/post-filters
+    `</span>)
+
+    .tag(<span class="hljs-string">'History'</span>)
+}</div></div></div></div></body></html>

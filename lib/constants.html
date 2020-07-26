@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/constants</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="lib/constants"><meta name="groc-project-path" content="lib/constants.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/constants.js">lib/constants.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> { chain } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Private</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> docKeyPattern = <span class="hljs-string">'[a-zA-Z0-9-_:.@()+,=;$!*\'%]+'</span>
+<span class="hljs-keyword">const</span> collnamePattern = <span class="hljs-string">'[a-zA-Z0-9-_]+'</span></div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Public</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> DOC_KEY_REGEX = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">'^'</span> + docKeyPattern + <span class="hljs-string">'$'</span>)
+<span class="hljs-keyword">const</span> DOC_ID_REGEX = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">'^'</span> + collnamePattern + <span class="hljs-string">'\\/'</span> + docKeyPattern + <span class="hljs-string">'$'</span>)
+<span class="hljs-keyword">const</span> COLL_NAME_REGEX = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">'^'</span> + collnamePattern + <span class="hljs-string">'$'</span>)
+
+<span class="hljs-keyword">const</span> SERVICE_COLLECTIONS = <span class="hljs-built_in">Object</span>.freeze({
+  events: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_events'</span>),
+  commands: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_commands'</span>),
+  snapshots: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_snapshots'</span>),
+  evtSSLinks: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_event_snapshot_links'</span>),
+  snapshotLinks: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_snapshot_links'</span>),
+  skeletonVertices: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_skeleton_vertices'</span>),
+  skeletonEdgeHubs: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_skeleton_edge_hubs'</span>),
+  skeletonEdgeSpokes: <span class="hljs-built_in">module</span>.context.collectionName(<span class="hljs-string">'_skeleton_edge_spokes'</span>)
+})
+
+<span class="hljs-keyword">const</span> SERVICE_GRAPHS = <span class="hljs-built_in">Object</span>.freeze({
+  eventLog: <span class="hljs-string">`<span class="hljs-subst">${module.context.collectionPrefix}</span>event_log`</span>,
+  skeleton: <span class="hljs-string">`<span class="hljs-subst">${module.context.collectionPrefix}</span>skeleton`</span>
+})
+
+<span class="hljs-keyword">const</span> DB_OPS = <span class="hljs-built_in">Object</span>.freeze({
+  INSERT: <span class="hljs-string">'insert'</span>,
+  REPLACE: <span class="hljs-string">'replace'</span>,
+  REMOVE: <span class="hljs-string">'remove'</span>,
+  UPDATE: <span class="hljs-string">'update'</span>,
+  RESTORE: <span class="hljs-string">'restore'</span>
+})
+
+<span class="hljs-keyword">const</span> EVENTS = <span class="hljs-built_in">Object</span>.freeze({
+  INIT: <span class="hljs-string">'init'</span>,
+  COLL_INIT: <span class="hljs-string">'collInit'</span>,
+  CREATED: <span class="hljs-string">'created'</span>,
+  UPDATED: <span class="hljs-string">'updated'</span>,
+  DELETED: <span class="hljs-string">'deleted'</span>,
+  RESTORED: <span class="hljs-string">'restored'</span>
+})
+
+<span class="hljs-keyword">const</span> TRANSIENT_EVENT_SUPERNODE = <span class="hljs-built_in">Object</span>.freeze({
+  _id: <span class="hljs-string">`<span class="hljs-subst">${SERVICE_COLLECTIONS.events}</span>/origin`</span>,
+  _key: <span class="hljs-string">'origin'</span>,
+  <span class="hljs-string">'is-super-origin-node'</span>: <span class="hljs-literal">true</span>,
+  event: EVENTS.INIT,
+  collection: SERVICE_COLLECTIONS.events,
+  meta: {
+    id: <span class="hljs-string">`<span class="hljs-subst">${SERVICE_COLLECTIONS.events}</span>/origin`</span>
+  },
+  <span class="hljs-string">'hops-from-origin'</span>: -<span class="hljs-number">1</span>
+})
+
+<span class="hljs-keyword">const</span> COLLECTION_TYPES = <span class="hljs-built_in">Object</span>.freeze({
+  VERTEX: <span class="hljs-number">2</span>,
+  EDGE: <span class="hljs-number">3</span>
+})
+
+<span class="hljs-keyword">const</span> COLL_TYPES_REF = <span class="hljs-built_in">Object</span>.freeze(chain(COLLECTION_TYPES)
+  .map((idx, label) =&gt; [idx, label.toLowerCase()])
+  .fromPairs()
+  .value())
+
+<span class="hljs-keyword">const</span> SORT_TYPES = <span class="hljs-built_in">Object</span>.freeze({
+  ASC: <span class="hljs-string">'asc'</span>,
+  DESC: <span class="hljs-string">'desc'</span>
+})
+
+<span class="hljs-keyword">const</span> SYNC_TYPES = <span class="hljs-built_in">Object</span>.freeze({
+  EXISTING: <span class="hljs-string">'existing'</span>,
+  DELETED: <span class="hljs-string">'deleted'</span>
+})
+
+<span class="hljs-keyword">const</span> VERBOSITY = {
+  SILENT: <span class="hljs-number">0</span>,
+  STATS: <span class="hljs-number">1</span>,
+  META: <span class="hljs-number">2</span>,
+  DATA: <span class="hljs-number">3</span>
+}
+
+<span class="hljs-built_in">module</span>.exports = {
+  SERVICE_COLLECTIONS,
+  COLL_NAME_REGEX,
+  DOC_KEY_REGEX,
+  DOC_ID_REGEX,
+  SERVICE_GRAPHS,
+  DB_OPS,
+  EVENTS,
+  TRANSIENT_EVENT_SUPERNODE,
+  COLLECTION_TYPES,
+  COLL_TYPES_REF,
+  SORT_TYPES,
+  SYNC_TYPES,
+  VERBOSITY
+}</div></div></div></div></body></html>

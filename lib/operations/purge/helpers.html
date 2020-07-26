@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/operations/purge/helpers</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="lib/operations/purge/helpers"><meta name="groc-project-path" content="lib/operations/purge/helpers.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/operations/purge/helpers.js">lib/operations/purge/helpers.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> { db, aql } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@arangodb'</span>)
+<span class="hljs-keyword">const</span> { getComponentTagOption } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../helpers'</span>)
+<span class="hljs-keyword">const</span> { SERVICE_COLLECTIONS } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../constants'</span>)
+<span class="hljs-keyword">const</span> { utils: { attachSpan, instrumentedQuery } } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'foxx-tracing'</span>)
+
+<span class="hljs-keyword">const</span> cto = getComponentTagOption(__filename)
+<span class="hljs-keyword">const</span> {
+  events, commands, snapshots, snapshotLinks, evtSSLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes
+} = SERVICE_COLLECTIONS
+<span class="hljs-keyword">const</span> skeletonVerticesColl = db._collection(skeletonVertices)
+<span class="hljs-keyword">const</span> skeletonEdgeHubsColl = db._collection(skeletonEdgeHubs)
+<span class="hljs-keyword">const</span> skeletonEdgeSpokesColl = db._collection(skeletonEdgeSpokes)
+<span class="hljs-keyword">const</span> snapshotsColl = db._collection(snapshots)
+<span class="hljs-keyword">const</span> snapshotLinksColl = db._collection(snapshotLinks)
+<span class="hljs-keyword">const</span> evtSSLinksColl = db._collection(evtSSLinks)
+<span class="hljs-keyword">const</span> commandsColl = db._collection(commands)
+<span class="hljs-keyword">const</span> eventsColl = db._collection(events)</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><p>Public</p></div></div><div class="code"><div class="wrapper"><span class="hljs-keyword">const</span> removeSkeletonVertices = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeSkeletonVertices</span> (<span class="hljs-params">vids</span>) </span>{
+  <span class="hljs-keyword">const</span> query = aql<span class="hljs-string">`
+    for v in <span class="hljs-subst">${skeletonVerticesColl}</span>
+    filter v.meta.id in <span class="hljs-subst">${vids}</span>
+    
+    remove v in <span class="hljs-subst">${skeletonVerticesColl}</span>
+    
+    return OLD._id
+  `</span>
+
+  <span class="hljs-keyword">return</span> instrumentedQuery(query, <span class="hljs-string">'removeSvQuery'</span>, cto).toArray()
+}, <span class="hljs-string">'removeSkeletonVertices'</span>, cto)
+
+<span class="hljs-keyword">const</span> removeSkeletonEdgeHubs = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeSkeletonEdgeHubs</span> (<span class="hljs-params">eids</span>) </span>{
+  <span class="hljs-keyword">const</span> query = aql<span class="hljs-string">`
+    for v in <span class="hljs-subst">${skeletonEdgeHubsColl}</span>
+    filter v.meta.id in <span class="hljs-subst">${eids}</span>
+    
+    remove v in <span class="hljs-subst">${skeletonEdgeHubsColl}</span>
+    
+    return OLD._id
+  `</span>
+
+  <span class="hljs-keyword">return</span> instrumentedQuery(query, <span class="hljs-string">'removeSehQuery'</span>, cto).toArray()
+}, <span class="hljs-string">'removeSkeletonEdgeHubs'</span>, cto)
+
+<span class="hljs-keyword">const</span> removeSkeletonEdgeSpokes = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeSkeletonEdgeSpokes</span> (<span class="hljs-params">sehIds</span>) </span>{
+  <span class="hljs-keyword">const</span> query = aql<span class="hljs-string">`
+    for e in <span class="hljs-subst">${skeletonEdgeSpokesColl}</span>
+    filter e.hub in <span class="hljs-subst">${sehIds}</span>
+    
+    remove e in <span class="hljs-subst">${skeletonEdgeSpokesColl}</span>
+    
+    return OLD._id
+  `</span>
+
+  <span class="hljs-keyword">return</span> instrumentedQuery(query, <span class="hljs-string">'removeSeSQuery'</span>, cto).toArray()
+}, <span class="hljs-string">'removeSkeletonEdgeSpokes'</span>, cto)
+
+<span class="hljs-keyword">const</span> removeSnapshots = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeSnapshots</span> (<span class="hljs-params">nids</span>) </span>{
+  <span class="hljs-keyword">const</span> query = aql<span class="hljs-string">`
+    for v in <span class="hljs-subst">${snapshotsColl}</span>
+    filter v.data._id in <span class="hljs-subst">${nids}</span>
+    
+    remove v in <span class="hljs-subst">${snapshotsColl}</span>
+    
+    return OLD._id
+  `</span>
+
+  <span class="hljs-keyword">return</span> instrumentedQuery(query, <span class="hljs-string">'removeSsQuery'</span>, cto).toArray()
+}, <span class="hljs-string">'removeSnapshots'</span>, cto)
+
+<span class="hljs-keyword">const</span> removeSnapshotLinks = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeSnapshotLinks</span> (<span class="hljs-params">sids</span>) </span>{
+  <span class="hljs-keyword">const</span> query = aql<span class="hljs-string">`
+    for e in <span class="hljs-subst">${snapshotLinksColl}</span>
+    filter [e._from, e._to] any in <span class="hljs-subst">${sids}</span>
+    
+    remove e in <span class="hljs-subst">${snapshotLinksColl}</span>
+    
+    return OLD._id
+  `</span>
+
+  <span class="hljs-keyword">return</span> instrumentedQuery(query, <span class="hljs-string">'removeSlQuery'</span>, cto).toArray()
+}, <span class="hljs-string">'removeSnapshotLinks'</span>, cto)
+
+<span class="hljs-keyword">const</span> removeEventSnapshotLinks = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeEventSnapshotLinks</span> (<span class="hljs-params">sids</span>) </span>{
+  <span class="hljs-keyword">const</span> query = aql<span class="hljs-string">`
+    for e in <span class="hljs-subst">${evtSSLinksColl}</span>
+    filter e._to in <span class="hljs-subst">${sids}</span>
+    
+    remove e in <span class="hljs-subst">${evtSSLinksColl}</span>
+    
+    return OLD._id
+  `</span>
+
+  <span class="hljs-keyword">return</span> instrumentedQuery(query, <span class="hljs-string">'removeEslQuery'</span>, cto).toArray()
+}, <span class="hljs-string">'removeEventSnapshotLinks'</span>, cto)
+
+<span class="hljs-keyword">const</span> removeCommands = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeCommands</span> (<span class="hljs-params">eids</span>) </span>{
+  <span class="hljs-keyword">const</span> query = aql<span class="hljs-string">`
+    for e in <span class="hljs-subst">${commandsColl}</span>
+    filter [e._from, e._to] any in <span class="hljs-subst">${eids}</span>
+    
+    remove e in <span class="hljs-subst">${commandsColl}</span>
+    
+    return OLD._id
+  `</span>
+
+  <span class="hljs-keyword">return</span> instrumentedQuery(query, <span class="hljs-string">'removeCommandsQuery'</span>, cto).toArray()
+}, <span class="hljs-string">'removeCommands'</span>, cto)
+
+<span class="hljs-keyword">const</span> removeEvents = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeEvents</span> (<span class="hljs-params">eids</span>) </span>{
+  <span class="hljs-keyword">return</span> eventsColl.remove(eids)
+}, <span class="hljs-string">'removeEvents'</span>, cto)
+
+<span class="hljs-built_in">module</span>.exports = {
+  removeSkeletonVertices,
+  removeSkeletonEdgeHubs,
+  removeSkeletonEdgeSpokes,
+  removeSnapshots,
+  removeSnapshotLinks,
+  removeEventSnapshotLinks,
+  removeCommands,
+  removeEvents
+}</div></div></div></div></body></html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/operations/traverse/index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="lib/operations/traverse/index"><meta name="groc-project-path" content="lib/operations/traverse/index.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/operations/traverse/index.js">lib/operations/traverse/index.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> {
+  traverseSkeletonGraph, buildFilteredGraph, buildNodeIdGroupsByType, buildNodeGroupsByType
+} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./helpers'</span>)
+<span class="hljs-keyword">const</span> { time: dbtime } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@arangodb'</span>)
+<span class="hljs-keyword">const</span> { utils: { attachSpan } } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'foxx-tracing'</span>)
+<span class="hljs-keyword">const</span> { getComponentTagOption } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../helpers'</span>)
+<span class="hljs-keyword">const</span> { pickBy } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)
+
+<span class="hljs-keyword">const</span> cto = getComponentTagOption(__filename)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">traverse</span> (<span class="hljs-params">timestamp, svid, minDepth = 0, maxDepth = minDepth,
+  edgeCollections = {}, {
+    uniqueVertices = 'none', uniqueEdges = 'path', bfs = (uniqueVertices === 'global'</span>), <span class="hljs-title">vFilter</span>,
+    <span class="hljs-title">eFilter</span>, <span class="hljs-title">pFilter</span>, <span class="hljs-title">returnVertices</span> = <span class="hljs-title">true</span>, <span class="hljs-title">returnEdges</span> = <span class="hljs-title">true</span>, <span class="hljs-title">returnPaths</span> = <span class="hljs-title">true</span>
+  } = </span>{}) {
+  timestamp = timestamp || dbtime()
+
+  <span class="hljs-keyword">let</span> traversal
+
+  <span class="hljs-keyword">const</span> typeGroups = traverseSkeletonGraph(timestamp, svid, maxDepth, edgeCollections, bfs, uniqueVertices)
+  <span class="hljs-keyword">const</span> types = buildNodeIdGroupsByType(typeGroups)
+
+  <span class="hljs-keyword">if</span> (types.vertices.length) {
+    <span class="hljs-keyword">const</span> built = buildNodeGroupsByType(timestamp, types)
+    traversal = buildFilteredGraph(svid, built.vertices, built.edges, minDepth, maxDepth, bfs, uniqueVertices,
+      uniqueEdges, edgeCollections, vFilter, eFilter, pFilter)
+  } <span class="hljs-keyword">else</span> {
+    traversal = {
+      vertices: [],
+      edges: [],
+      paths: []
+    }
+  }
+
+  <span class="hljs-keyword">const</span> fieldSwitches = {
+    vertices: returnVertices,
+    edges: returnEdges,
+    paths: returnPaths
+  }
+
+  <span class="hljs-keyword">return</span> pickBy(traversal, (v, k) =&gt; fieldSwitches[k])
+}
+
+<span class="hljs-built_in">module</span>.exports = attachSpan(traverse, <span class="hljs-string">'traverse'</span>, cto)</div></div></div></div></body></html>

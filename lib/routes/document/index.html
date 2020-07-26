@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><title>lib/routes/document/index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../../"><meta name="groc-document-path" content="lib/routes/document/index"><meta name="groc-project-path" content="lib/routes/document/index.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../../../assets/style.css"><script type="text/javascript" src="../../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/routes/document/index.js">lib/routes/document/index.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+<span class="hljs-keyword">const</span> createRouter = <span class="hljs-built_in">require</span>(<span class="hljs-string">'@arangodb/foxx/router'</span>)
+
+<span class="hljs-keyword">const</span> router = createRouter()
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'./create'</span>)(router)
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'./replace'</span>)(router)
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'./remove'</span>)(router)
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'./update'</span>)(router)
+<span class="hljs-built_in">require</span>(<span class="hljs-string">'./restore'</span>)(router)
+
+<span class="hljs-built_in">module</span>.exports = router</div></div></div></div></body></html>
