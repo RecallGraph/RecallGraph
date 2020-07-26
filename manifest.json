@@ -31,7 +31,7 @@
   "files": {
     "assets": "assets"
   },
-  "thumbnail": "assets/RecallGraph.jpeg",
+  "thumbnail": "assets/Rg-2-trans.png",
   "scripts": {
     "setup": "scripts/setup.js",
     "teardown": "scripts/teardown.js",
