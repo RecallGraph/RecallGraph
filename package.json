@@ -17,7 +17,8 @@
     "test": "grunt test",
     "testWithCoverage": "grunt testWithCoverage",
     "analyze": "grunt analyze",
-    "bundle": "grunt dist"
+    "bundle": "grunt dist",
+    "docgen": "grunt clean:docs && groc"
   },
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
