@@ -2432,7 +2432,7 @@
               l ? n = n.replace(/'/g, '\\$&') : e.setAttribute('id', n), q && p && (e = e.parentNode)
               try {
                 if (!q || p) {
-                  return s(e.querySelectorAll('[id=\'' + n + '\'] ' + b), f)
+                  return s(e.querySelectorAll("[id='" + n + "'] " + b), f)
                 }
               } catch (r) {} finally {
                 l || k.removeAttribute("id")
@@ -3252,7 +3252,7 @@
             a = a || 'abort', p && p.abort(a), w(0, a)
             return this
           }
-        };
+        }
       h.promise(v), v.success = v.done, v.error = v.fail, v.complete = i.add, v.statusCode = function (a) {
         if (a) {
           var b
@@ -3389,7 +3389,7 @@
     if (!c.crossDomain || f.support.cors) {
       var d
       return {
-        send    : function (e, g) {
+        send: function (e, g) {
           var h = c.xhr(), i, j
           c.username ? h.open(c.type, c.url, c.async, c.username, c.password) : h.open(c.type, c.url, c.async)
           if (c.xhrFields) {
@@ -3432,7 +3432,7 @@
     ['opacity']
   ], cr
   f.fn.extend({
-    show: function (a, b, c) {
+    show   : function (a, b, c) {
       var d, e
       if (a || a === 0) {
         return this.animate(cu('show', 3), a, b, c)
@@ -3453,7 +3453,7 @@
       }
       return this
     },
-    hide: function (a, b, c) {
+    hide   : function (a, b, c) {
       if (a || a === 0) {
         return this.animate(cu('hide', 3), a, b, c)
       }
@@ -3463,7 +3463,7 @@
                      && f._data(d, 'olddisplay', e))
       }
       for (g = 0; g < h; g++) {
-        this[g].style && (this[g].style.display = "none");
+        this[g].style && (this[g].style.display = 'none')
       }
       return this
     },
@@ -3474,7 +3474,7 @@
         function () {
           var b = d ? a : f(this).is(':hidden')
           f(this)[b ? 'show' : 'hide']()
-        }) : this.animate(cu('toggle', 3), a, b, c)
+        }) : this.animate(cu("toggle", 3), a, b, c);
       return this
     },
     fadeTo : function (a, b, c, d) {
@@ -3835,25 +3835,6 @@
       'depth'   : 1,
       'children': [
         {
-          'type' : 'file',
-          'data' : {
-            'language'   : {
-              'nameMatchers'     : ['.js'],
-              'pygmentsLexer'    : 'javascript',
-              'multiLineComment' : ['/*', '*', '*/'],
-              'singleLineComment': ['//'],
-              'ignorePrefix'     : '}',
-              'foldPrefix'       : '^',
-              'name'             : 'JavaScript'
-            },
-            'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/constants.js',
-            'projectPath': 'lib/constants.js',
-            'targetPath' : 'lib/constants',
-            'pageTitle'  : 'lib/constants',
-            'title'      : 'constants'
-          },
-          'depth': 2
-        }, {
           'type'    : 'folder',
           'data'    : {
             'path' : 'lib/handlers',
@@ -3862,8 +3843,8 @@
           'depth'   : 2,
           'children': [
             {
-              'type' : 'file',
-              'data' : {
+              'type'   : 'file',
+              'data'   : {
                 'language'   : {
                   'nameMatchers'     : ['.js'],
                   'pygmentsLexer'    : 'javascript',
@@ -3879,7 +3860,18 @@
                 'pageTitle'  : 'lib/handlers/commitHandlers',
                 'title'      : 'commitHandlers'
               },
-              'depth': 3
+              'depth'  : 3,
+              'outline': [
+                {
+                  'type' : 'heading',
+                  'data' : {
+                    'level': 3,
+                    'title': 'commitProvider',
+                    'slug' : 'commitprovider'
+                  },
+                  'depth': 3
+                }
+              ]
             }, {
               'type' : 'file',
               'data' : {
@@ -3957,8 +3949,8 @@
               },
               'depth': 3
             }, {
-              'type'   : 'file',
-              'data'   : {
+              'type' : 'file',
+              'data' : {
                 'language'   : {
                   'nameMatchers'     : ['.js'],
                   'pygmentsLexer'    : 'javascript',
@@ -3974,150 +3966,7 @@
                 'pageTitle'  : 'lib/handlers/providers',
                 'title'      : 'providers'
               },
-              'depth'  : 3,
-              'outline': [
-                {
-                  'type'    : 'heading',
-                  'data'    : {
-                    'level': 1,
-                    'title': 'Provider Exports',
-                    'slug' : 'provider-exports'
-                  },
-                  'depth'   : 1,
-                  'children': [
-                    {
-                      'type'    : 'heading',
-                      'data'    : {
-                        'level': 2,
-                        'title': 'Document Category',
-                        'slug' : 'document-category'
-                      },
-                      'depth'   : 2,
-                      'children': [
-                        {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Create Provider',
-                            'slug' : 'create-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Replace Provider',
-                            'slug' : 'replace-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Update Provider',
-                            'slug' : 'update-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Remove Provider',
-                            'slug' : 'remove-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Restore Provider',
-                            'slug' : 'restore-provider'
-                          },
-                          'depth': 3
-                        }
-                      ]
-                    }, {
-                      'type'    : 'heading',
-                      'data'    : {
-                        'level': 2,
-                        'title': 'Event Category',
-                        'slug' : 'event-category'
-                      },
-                      'depth'   : 2,
-                      'children': [
-                        {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Log Provider',
-                            'slug' : 'log-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Diff Provider',
-                            'slug' : 'diff-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Commit Provider',
-                            'slug' : 'commit-provider'
-                          },
-                          'depth': 3
-                        }
-                      ]
-                    }, {
-                      'type'    : 'heading',
-                      'data'    : {
-                        'level': 2,
-                        'title': 'History Category',
-                        'slug' : 'history-category'
-                      },
-                      'depth'   : 2,
-                      'children': [
-                        {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Show Provider',
-                            'slug' : 'show-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Traverse Provider',
-                            'slug' : 'traverse-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'k Shortest Paths Provider',
-                            'slug' : 'k-shortest-paths-provider'
-                          },
-                          'depth': 3
-                        }, {
-                          'type' : 'heading',
-                          'data' : {
-                            'level': 3,
-                            'title': 'Purge Provider',
-                            'slug' : 'purge-provider'
-                          },
-                          'depth': 3
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              'depth': 3
             }, {
               'type' : 'file',
               'data' : {
@@ -4176,8 +4025,8 @@
               },
               'depth': 3
             }, {
-              'type' : 'file',
-              'data' : {
+              'type'   : 'file',
+              'data'   : {
                 'language'   : {
                   'nameMatchers'     : ['.js'],
                   'pygmentsLexer'    : 'javascript',
@@ -4193,7 +4042,18 @@
                 'pageTitle'  : 'lib/handlers/restoreHandlers',
                 'title'      : 'restoreHandlers'
               },
-              'depth': 3
+              'depth'  : 3,
+              'outline': [
+                {
+                  'type' : 'heading',
+                  'data' : {
+                    'level': 3,
+                    'title': 'restoreProvider',
+                    'slug' : 'restoreprovider'
+                  },
+                  'depth': 3
+                }
+              ]
             }, {
               'type' : 'file',
               'data' : {
@@ -4249,830 +4109,6 @@
                 'targetPath' : 'lib/handlers/updateHandlers',
                 'pageTitle'  : 'lib/handlers/updateHandlers',
                 'title'      : 'updateHandlers'
-              },
-              'depth': 3
-            }
-          ]
-        }, {
-          'type' : 'file',
-          'data' : {
-            'language'   : {
-              'nameMatchers'     : ['.js'],
-              'pygmentsLexer'    : 'javascript',
-              'multiLineComment' : ['/*', '*', '*/'],
-              'singleLineComment': ['//'],
-              'ignorePrefix'     : '}',
-              'foldPrefix'       : '^',
-              'name'             : 'JavaScript'
-            },
-            'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/helpers.js',
-            'projectPath': 'lib/helpers.js',
-            'targetPath' : 'lib/helpers',
-            'pageTitle'  : 'lib/helpers',
-            'title'      : 'helpers'
-          },
-          'depth': 2
-        }, {
-          'type'    : 'folder',
-          'data'    : {
-            'path' : 'lib/middleware',
-            'title': 'middleware'
-          },
-          'depth'   : 2,
-          'children': [
-            {
-              'type' : 'file',
-              'data' : {
-                'language'   : {
-                  'nameMatchers'     : ['.js'],
-                  'pygmentsLexer'    : 'javascript',
-                  'multiLineComment' : ['/*', '*', '*/'],
-                  'singleLineComment': ['//'],
-                  'ignorePrefix'     : '}',
-                  'foldPrefix'       : '^',
-                  'name'             : 'JavaScript'
-                },
-                'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/middleware/verifyCollection.js',
-                'projectPath': 'lib/middleware/verifyCollection.js',
-                'targetPath' : 'lib/middleware/verifyCollection',
-                'pageTitle'  : 'lib/middleware/verifyCollection',
-                'title'      : 'verifyCollection'
-              },
-              'depth': 3
-            }
-          ]
-        }, {
-          'type'    : 'folder',
-          'data'    : {
-            'path' : 'lib/operations',
-            'title': 'operations'
-          },
-          'depth'   : 2,
-          'children': [
-            {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/commit',
-                'title': 'commit'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/helpers.js',
-                    'projectPath': 'lib/operations/commit/helpers.js',
-                    'targetPath' : 'lib/operations/commit/helpers',
-                    'pageTitle'  : 'lib/operations/commit/helpers',
-                    'title'      : 'helpers'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/index.js',
-                    'projectPath': 'lib/operations/commit/index.js',
-                    'targetPath' : 'lib/operations/commit/index',
-                    'pageTitle'  : 'lib/operations/commit/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/sync.js',
-                    'projectPath': 'lib/operations/commit/sync.js',
-                    'targetPath' : 'lib/operations/commit/sync',
-                    'pageTitle'  : 'lib/operations/commit/sync',
-                    'title'      : 'sync'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/diff',
-                'title': 'diff'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/diff/helpers.js',
-                    'projectPath': 'lib/operations/diff/helpers.js',
-                    'targetPath' : 'lib/operations/diff/helpers',
-                    'pageTitle'  : 'lib/operations/diff/helpers',
-                    'title'      : 'helpers'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/diff/index.js',
-                    'projectPath': 'lib/operations/diff/index.js',
-                    'targetPath' : 'lib/operations/diff/index',
-                    'pageTitle'  : 'lib/operations/diff/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type' : 'file',
-              'data' : {
-                'language'   : {
-                  'nameMatchers'     : ['.js'],
-                  'pygmentsLexer'    : 'javascript',
-                  'multiLineComment' : ['/*', '*', '*/'],
-                  'singleLineComment': ['//'],
-                  'ignorePrefix'     : '}',
-                  'foldPrefix'       : '^',
-                  'name'             : 'JavaScript'
-                },
-                'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/helpers.js',
-                'projectPath': 'lib/operations/helpers.js',
-                'targetPath' : 'lib/operations/helpers',
-                'pageTitle'  : 'lib/operations/helpers',
-                'title'      : 'helpers'
-              },
-              'depth': 3
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/k_shortest_paths',
-                'title': 'k_shortest_paths'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/k_shortest_paths/helpers.js',
-                    'projectPath': 'lib/operations/k_shortest_paths/helpers.js',
-                    'targetPath' : 'lib/operations/k_shortest_paths/helpers',
-                    'pageTitle'  : 'lib/operations/k_shortest_paths/helpers',
-                    'title'      : 'helpers'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/k_shortest_paths/index.js',
-                    'projectPath': 'lib/operations/k_shortest_paths/index.js',
-                    'targetPath' : 'lib/operations/k_shortest_paths/index',
-                    'pageTitle'  : 'lib/operations/k_shortest_paths/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/log',
-                'title': 'log'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/log/helpers.js',
-                    'projectPath': 'lib/operations/log/helpers.js',
-                    'targetPath' : 'lib/operations/log/helpers',
-                    'pageTitle'  : 'lib/operations/log/helpers',
-                    'title'      : 'helpers'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/log/index.js',
-                    'projectPath': 'lib/operations/log/index.js',
-                    'targetPath' : 'lib/operations/log/index',
-                    'pageTitle'  : 'lib/operations/log/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/purge',
-                'title': 'purge'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/purge/helpers.js',
-                    'projectPath': 'lib/operations/purge/helpers.js',
-                    'targetPath' : 'lib/operations/purge/helpers',
-                    'pageTitle'  : 'lib/operations/purge/helpers',
-                    'title'      : 'helpers'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/purge/index.js',
-                    'projectPath': 'lib/operations/purge/index.js',
-                    'targetPath' : 'lib/operations/purge/index',
-                    'pageTitle'  : 'lib/operations/purge/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/restore',
-                'title': 'restore'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/restore/index.js',
-                    'projectPath': 'lib/operations/restore/index.js',
-                    'targetPath' : 'lib/operations/restore/index',
-                    'pageTitle'  : 'lib/operations/restore/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/show',
-                'title': 'show'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/show/helpers.js',
-                    'projectPath': 'lib/operations/show/helpers.js',
-                    'targetPath' : 'lib/operations/show/helpers',
-                    'pageTitle'  : 'lib/operations/show/helpers',
-                    'title'      : 'helpers'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/show/index.js',
-                    'projectPath': 'lib/operations/show/index.js',
-                    'targetPath' : 'lib/operations/show/index',
-                    'pageTitle'  : 'lib/operations/show/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/operations/traverse',
-                'title': 'traverse'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/traverse/helpers.js',
-                    'projectPath': 'lib/operations/traverse/helpers.js',
-                    'targetPath' : 'lib/operations/traverse/helpers',
-                    'pageTitle'  : 'lib/operations/traverse/helpers',
-                    'title'      : 'helpers'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/traverse/index.js',
-                    'projectPath': 'lib/operations/traverse/index.js',
-                    'targetPath' : 'lib/operations/traverse/index',
-                    'pageTitle'  : 'lib/operations/traverse/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }
-              ]
-            }
-          ]
-        }, {
-          'type'    : 'folder',
-          'data'    : {
-            'path' : 'lib/routes',
-            'title': 'routes'
-          },
-          'depth'   : 2,
-          'children': [
-            {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/routes/document',
-                'title': 'document'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/create.js',
-                    'projectPath': 'lib/routes/document/create.js',
-                    'targetPath' : 'lib/routes/document/create',
-                    'pageTitle'  : 'lib/routes/document/create',
-                    'title'      : 'create'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/index.js',
-                    'projectPath': 'lib/routes/document/index.js',
-                    'targetPath' : 'lib/routes/document/index',
-                    'pageTitle'  : 'lib/routes/document/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/remove.js',
-                    'projectPath': 'lib/routes/document/remove.js',
-                    'targetPath' : 'lib/routes/document/remove',
-                    'pageTitle'  : 'lib/routes/document/remove',
-                    'title'      : 'remove'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/replace.js',
-                    'projectPath': 'lib/routes/document/replace.js',
-                    'targetPath' : 'lib/routes/document/replace',
-                    'pageTitle'  : 'lib/routes/document/replace',
-                    'title'      : 'replace'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/restore.js',
-                    'projectPath': 'lib/routes/document/restore.js',
-                    'targetPath' : 'lib/routes/document/restore',
-                    'pageTitle'  : 'lib/routes/document/restore',
-                    'title'      : 'restore'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/update.js',
-                    'projectPath': 'lib/routes/document/update.js',
-                    'targetPath' : 'lib/routes/document/update',
-                    'pageTitle'  : 'lib/routes/document/update',
-                    'title'      : 'update'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/routes/event',
-                'title': 'event'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/commit.js',
-                    'projectPath': 'lib/routes/event/commit.js',
-                    'targetPath' : 'lib/routes/event/commit',
-                    'pageTitle'  : 'lib/routes/event/commit',
-                    'title'      : 'commit'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/diff.js',
-                    'projectPath': 'lib/routes/event/diff.js',
-                    'targetPath' : 'lib/routes/event/diff',
-                    'pageTitle'  : 'lib/routes/event/diff',
-                    'title'      : 'diff'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/index.js',
-                    'projectPath': 'lib/routes/event/index.js',
-                    'targetPath' : 'lib/routes/event/index',
-                    'pageTitle'  : 'lib/routes/event/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/log.js',
-                    'projectPath': 'lib/routes/event/log.js',
-                    'targetPath' : 'lib/routes/event/log',
-                    'pageTitle'  : 'lib/routes/event/log',
-                    'title'      : 'log'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type' : 'file',
-              'data' : {
-                'language'   : {
-                  'nameMatchers'     : ['.js'],
-                  'pygmentsLexer'    : 'javascript',
-                  'multiLineComment' : ['/*', '*', '*/'],
-                  'singleLineComment': ['//'],
-                  'ignorePrefix'     : '}',
-                  'foldPrefix'       : '^',
-                  'name'             : 'JavaScript'
-                },
-                'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/helpers.js',
-                'projectPath': 'lib/routes/helpers.js',
-                'targetPath' : 'lib/routes/helpers',
-                'pageTitle'  : 'lib/routes/helpers',
-                'title'      : 'helpers'
-              },
-              'depth': 3
-            }, {
-              'type'    : 'folder',
-              'data'    : {
-                'path' : 'lib/routes/history',
-                'title': 'history'
-              },
-              'depth'   : 3,
-              'children': [
-                {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/index.js',
-                    'projectPath': 'lib/routes/history/index.js',
-                    'targetPath' : 'lib/routes/history/index',
-                    'pageTitle'  : 'lib/routes/history/index',
-                    'title'      : 'index'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/kShortestPaths.js',
-                    'projectPath': 'lib/routes/history/kShortestPaths.js',
-                    'targetPath' : 'lib/routes/history/kShortestPaths',
-                    'pageTitle'  : 'lib/routes/history/kShortestPaths',
-                    'title'      : 'kShortestPaths'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/purge.js',
-                    'projectPath': 'lib/routes/history/purge.js',
-                    'targetPath' : 'lib/routes/history/purge',
-                    'pageTitle'  : 'lib/routes/history/purge',
-                    'title'      : 'purge'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/show.js',
-                    'projectPath': 'lib/routes/history/show.js',
-                    'targetPath' : 'lib/routes/history/show',
-                    'pageTitle'  : 'lib/routes/history/show',
-                    'title'      : 'show'
-                  },
-                  'depth': 4
-                }, {
-                  'type' : 'file',
-                  'data' : {
-                    'language'   : {
-                      'nameMatchers'     : ['.js'],
-                      'pygmentsLexer'    : 'javascript',
-                      'multiLineComment' : ['/*', '*', '*/'],
-                      'singleLineComment': ['//'],
-                      'ignorePrefix'     : '}',
-                      'foldPrefix'       : '^',
-                      'name'             : 'JavaScript'
-                    },
-                    'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/traverse.js',
-                    'projectPath': 'lib/routes/history/traverse.js',
-                    'targetPath' : 'lib/routes/history/traverse',
-                    'pageTitle'  : 'lib/routes/history/traverse',
-                    'title'      : 'traverse'
-                  },
-                  'depth': 4
-                }
-              ]
-            }, {
-              'type' : 'file',
-              'data' : {
-                'language'   : {
-                  'nameMatchers'     : ['.js'],
-                  'pygmentsLexer'    : 'javascript',
-                  'multiLineComment' : ['/*', '*', '*/'],
-                  'singleLineComment': ['//'],
-                  'ignorePrefix'     : '}',
-                  'foldPrefix'       : '^',
-                  'name'             : 'JavaScript'
-                },
-                'sourcePath' : '/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/schemas.js',
-                'projectPath': 'lib/routes/schemas.js',
-                'targetPath' : 'lib/routes/schemas',
-                'pageTitle'  : 'lib/routes/schemas',
-                'title'      : 'schemas'
               },
               'depth': 3
             }

@@ -42,10 +42,38 @@
     </div>
     <div class="segment">
         <div class="comments ">
-            <div class="wrapper"><p>This function deletes ALL history of the given path. If deleteUserObjects is true,
-                it also
-                deletes the corresponding objects from the plain collections (holding the current state)</p>
-                <pre><code>purgeProvider(&#39;/c/vertex_collection&#39;, { deleteUserObjects: true, silent: false })`</code></pre>
+            <div class="wrapper"><h3 id="purgeprovider">purgeProvider</h3>
+                <p> Purges all history for nodes matching the given path pattern. All event logs, snapshots and
+                    structural history
+                    is purged from the service collections for the selected nodes. Optionally, the actual objects whose
+                    event records
+                    are being purged can also be deleted.</p>
+                <p><strong>Args:</strong></p>
+                <ul>
+                    <li><code>path</code> - The path pattern to pick nodes whose history should be purged.</li>
+                    <li><code>options</code> - An optional object, containing any combination of the following keys:
+                        <ul>
+                            <li><code>deleteUserObjects</code> - Determines whether to delete the corresponding
+                                user-defined objects. Default: <code>false</code>.
+                            </li>
+                            <li><code>silent</code> - Whether to return anything in the result. Default
+                                <code>false</code>.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><strong>Examples:</strong></p>
+                <ol>
+                    <li>Default options:
+                        <pre><code>purgeProvider(&#39;/c/vertex_collection&#39;)</code></pre>
+                    </li>
+                    <li>Delete user objects along with purge:
+                        <pre><code>purgeProvider(&#39;/c/vertex_collection&#39;, {
+   deleteUserObjects: true
+ }
+)</code></pre>
+                    </li>
+                </ol>
             </div>
         </div>
         <div class="code">

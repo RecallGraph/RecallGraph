@@ -54,6 +54,6 @@ module.context.use(router)
  information, see the relevant section in
  [ArangoDB Docs](https://www.arangodb.com/docs/stable/foxx-guides-dependencies.html).
 
- **See [lib/handlers/providers.js](lib/handlers/providers.html) for the full list of available exports.**
+ **See [providers.js](lib/handlers/providers.html) for the full list of available exports.**
  */
 module.exports = providers
