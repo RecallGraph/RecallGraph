@@ -17,13 +17,62 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "foldPrefix": "^",
           "name": "JavaScript"
         },
-        "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/main.js",
+        "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/main.js",
         "projectPath": "main.js",
         "targetPath": "index",
-        "pageTitle": "index",
-        "title": "index"
+        "pageTitle": "main (RecallGraph Annotated Source)",
+        "title": "main (RecallGraph Annotated Source)"
       },
-      "depth": 1
+      "depth": 1,
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "RecallGraph",
+            "slug": "recallgraph"
+          },
+          "depth": 1,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "A versioning data store for time-variant graph data.",
+                "slug": "a-versioning-data-store-for-time-variant-graph-data"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Software Version: 1.0.0",
+                    "slug": "software-version-100"
+                  },
+                  "depth": 3
+                }
+              ]
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Tracing and Instrumentation",
+                "slug": "tracing-and-instrumentation"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "Provider Exports",
+                "slug": "provider-exports"
+              },
+              "depth": 2
+            }
+          ]
+        }
+      ]
     }, {
       "type": "folder",
       "data": {
@@ -44,7 +93,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/constants.js",
+            "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/constants.js",
             "projectPath": "lib/constants.js",
             "targetPath": "lib/constants",
             "pageTitle": "lib/constants",
@@ -71,7 +120,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/commitHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/commitHandlers.js",
                 "projectPath": "lib/handlers/commitHandlers.js",
                 "targetPath": "lib/handlers/commitHandlers",
                 "pageTitle": "lib/handlers/commitHandlers",
@@ -90,7 +139,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/createHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/createHandlers.js",
                 "projectPath": "lib/handlers/createHandlers.js",
                 "targetPath": "lib/handlers/createHandlers",
                 "pageTitle": "lib/handlers/createHandlers",
@@ -109,7 +158,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/diffHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/diffHandlers.js",
                 "projectPath": "lib/handlers/diffHandlers.js",
                 "targetPath": "lib/handlers/diffHandlers",
                 "pageTitle": "lib/handlers/diffHandlers",
@@ -128,7 +177,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/kShortestPathsHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/kShortestPathsHandlers.js",
                 "projectPath": "lib/handlers/kShortestPathsHandlers.js",
                 "targetPath": "lib/handlers/kShortestPathsHandlers",
                 "pageTitle": "lib/handlers/kShortestPathsHandlers",
@@ -147,7 +196,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/logHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/logHandlers.js",
                 "projectPath": "lib/handlers/logHandlers.js",
                 "targetPath": "lib/handlers/logHandlers",
                 "pageTitle": "lib/handlers/logHandlers",
@@ -166,7 +215,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/providers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/providers.js",
                 "projectPath": "lib/handlers/providers.js",
                 "targetPath": "lib/handlers/providers",
                 "pageTitle": "lib/handlers/providers",
@@ -185,7 +234,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/purgeHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/purgeHandlers.js",
                 "projectPath": "lib/handlers/purgeHandlers.js",
                 "targetPath": "lib/handlers/purgeHandlers",
                 "pageTitle": "lib/handlers/purgeHandlers",
@@ -204,7 +253,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/removeHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/removeHandlers.js",
                 "projectPath": "lib/handlers/removeHandlers.js",
                 "targetPath": "lib/handlers/removeHandlers",
                 "pageTitle": "lib/handlers/removeHandlers",
@@ -223,7 +272,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/replaceHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/replaceHandlers.js",
                 "projectPath": "lib/handlers/replaceHandlers.js",
                 "targetPath": "lib/handlers/replaceHandlers",
                 "pageTitle": "lib/handlers/replaceHandlers",
@@ -242,7 +291,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/restoreHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/restoreHandlers.js",
                 "projectPath": "lib/handlers/restoreHandlers.js",
                 "targetPath": "lib/handlers/restoreHandlers",
                 "pageTitle": "lib/handlers/restoreHandlers",
@@ -261,7 +310,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/showHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/showHandlers.js",
                 "projectPath": "lib/handlers/showHandlers.js",
                 "targetPath": "lib/handlers/showHandlers",
                 "pageTitle": "lib/handlers/showHandlers",
@@ -280,7 +329,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/traverseHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/traverseHandlers.js",
                 "projectPath": "lib/handlers/traverseHandlers.js",
                 "targetPath": "lib/handlers/traverseHandlers",
                 "pageTitle": "lib/handlers/traverseHandlers",
@@ -299,7 +348,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/updateHandlers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/handlers/updateHandlers.js",
                 "projectPath": "lib/handlers/updateHandlers.js",
                 "targetPath": "lib/handlers/updateHandlers",
                 "pageTitle": "lib/handlers/updateHandlers",
@@ -320,7 +369,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "foldPrefix": "^",
               "name": "JavaScript"
             },
-            "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/helpers.js",
+            "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/helpers.js",
             "projectPath": "lib/helpers.js",
             "targetPath": "lib/helpers",
             "pageTitle": "lib/helpers",
@@ -347,7 +396,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/middleware/verifyCollection.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/middleware/verifyCollection.js",
                 "projectPath": "lib/middleware/verifyCollection.js",
                 "targetPath": "lib/middleware/verifyCollection",
                 "pageTitle": "lib/middleware/verifyCollection",
@@ -384,7 +433,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/helpers.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/helpers.js",
                     "projectPath": "lib/operations/commit/helpers.js",
                     "targetPath": "lib/operations/commit/helpers",
                     "pageTitle": "lib/operations/commit/helpers",
@@ -403,7 +452,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/index.js",
                     "projectPath": "lib/operations/commit/index.js",
                     "targetPath": "lib/operations/commit/index",
                     "pageTitle": "lib/operations/commit/index",
@@ -422,7 +471,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/sync.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/commit/sync.js",
                     "projectPath": "lib/operations/commit/sync.js",
                     "targetPath": "lib/operations/commit/sync",
                     "pageTitle": "lib/operations/commit/sync",
@@ -451,7 +500,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/diff/helpers.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/diff/helpers.js",
                     "projectPath": "lib/operations/diff/helpers.js",
                     "targetPath": "lib/operations/diff/helpers",
                     "pageTitle": "lib/operations/diff/helpers",
@@ -470,7 +519,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/diff/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/diff/index.js",
                     "projectPath": "lib/operations/diff/index.js",
                     "targetPath": "lib/operations/diff/index",
                     "pageTitle": "lib/operations/diff/index",
@@ -491,7 +540,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/helpers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/helpers.js",
                 "projectPath": "lib/operations/helpers.js",
                 "targetPath": "lib/operations/helpers",
                 "pageTitle": "lib/operations/helpers",
@@ -518,7 +567,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/k_shortest_paths/helpers.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/k_shortest_paths/helpers.js",
                     "projectPath": "lib/operations/k_shortest_paths/helpers.js",
                     "targetPath": "lib/operations/k_shortest_paths/helpers",
                     "pageTitle": "lib/operations/k_shortest_paths/helpers",
@@ -537,7 +586,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/k_shortest_paths/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/k_shortest_paths/index.js",
                     "projectPath": "lib/operations/k_shortest_paths/index.js",
                     "targetPath": "lib/operations/k_shortest_paths/index",
                     "pageTitle": "lib/operations/k_shortest_paths/index",
@@ -566,7 +615,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/log/helpers.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/log/helpers.js",
                     "projectPath": "lib/operations/log/helpers.js",
                     "targetPath": "lib/operations/log/helpers",
                     "pageTitle": "lib/operations/log/helpers",
@@ -585,7 +634,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/log/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/log/index.js",
                     "projectPath": "lib/operations/log/index.js",
                     "targetPath": "lib/operations/log/index",
                     "pageTitle": "lib/operations/log/index",
@@ -614,7 +663,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/purge/helpers.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/purge/helpers.js",
                     "projectPath": "lib/operations/purge/helpers.js",
                     "targetPath": "lib/operations/purge/helpers",
                     "pageTitle": "lib/operations/purge/helpers",
@@ -633,7 +682,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/purge/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/purge/index.js",
                     "projectPath": "lib/operations/purge/index.js",
                     "targetPath": "lib/operations/purge/index",
                     "pageTitle": "lib/operations/purge/index",
@@ -662,7 +711,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/restore/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/restore/index.js",
                     "projectPath": "lib/operations/restore/index.js",
                     "targetPath": "lib/operations/restore/index",
                     "pageTitle": "lib/operations/restore/index",
@@ -691,7 +740,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/show/helpers.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/show/helpers.js",
                     "projectPath": "lib/operations/show/helpers.js",
                     "targetPath": "lib/operations/show/helpers",
                     "pageTitle": "lib/operations/show/helpers",
@@ -710,7 +759,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/show/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/show/index.js",
                     "projectPath": "lib/operations/show/index.js",
                     "targetPath": "lib/operations/show/index",
                     "pageTitle": "lib/operations/show/index",
@@ -739,7 +788,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/traverse/helpers.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/traverse/helpers.js",
                     "projectPath": "lib/operations/traverse/helpers.js",
                     "targetPath": "lib/operations/traverse/helpers",
                     "pageTitle": "lib/operations/traverse/helpers",
@@ -758,7 +807,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/traverse/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/operations/traverse/index.js",
                     "projectPath": "lib/operations/traverse/index.js",
                     "targetPath": "lib/operations/traverse/index",
                     "pageTitle": "lib/operations/traverse/index",
@@ -797,7 +846,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/create.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/create.js",
                     "projectPath": "lib/routes/document/create.js",
                     "targetPath": "lib/routes/document/create",
                     "pageTitle": "lib/routes/document/create",
@@ -816,7 +865,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/index.js",
                     "projectPath": "lib/routes/document/index.js",
                     "targetPath": "lib/routes/document/index",
                     "pageTitle": "lib/routes/document/index",
@@ -835,7 +884,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/remove.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/remove.js",
                     "projectPath": "lib/routes/document/remove.js",
                     "targetPath": "lib/routes/document/remove",
                     "pageTitle": "lib/routes/document/remove",
@@ -854,7 +903,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/replace.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/replace.js",
                     "projectPath": "lib/routes/document/replace.js",
                     "targetPath": "lib/routes/document/replace",
                     "pageTitle": "lib/routes/document/replace",
@@ -873,7 +922,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/restore.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/restore.js",
                     "projectPath": "lib/routes/document/restore.js",
                     "targetPath": "lib/routes/document/restore",
                     "pageTitle": "lib/routes/document/restore",
@@ -892,7 +941,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/update.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/document/update.js",
                     "projectPath": "lib/routes/document/update.js",
                     "targetPath": "lib/routes/document/update",
                     "pageTitle": "lib/routes/document/update",
@@ -921,7 +970,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/commit.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/commit.js",
                     "projectPath": "lib/routes/event/commit.js",
                     "targetPath": "lib/routes/event/commit",
                     "pageTitle": "lib/routes/event/commit",
@@ -940,7 +989,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/diff.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/diff.js",
                     "projectPath": "lib/routes/event/diff.js",
                     "targetPath": "lib/routes/event/diff",
                     "pageTitle": "lib/routes/event/diff",
@@ -959,7 +1008,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/index.js",
                     "projectPath": "lib/routes/event/index.js",
                     "targetPath": "lib/routes/event/index",
                     "pageTitle": "lib/routes/event/index",
@@ -978,7 +1027,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/log.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/event/log.js",
                     "projectPath": "lib/routes/event/log.js",
                     "targetPath": "lib/routes/event/log",
                     "pageTitle": "lib/routes/event/log",
@@ -999,7 +1048,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/helpers.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/helpers.js",
                 "projectPath": "lib/routes/helpers.js",
                 "targetPath": "lib/routes/helpers",
                 "pageTitle": "lib/routes/helpers",
@@ -1026,7 +1075,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/index.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/index.js",
                     "projectPath": "lib/routes/history/index.js",
                     "targetPath": "lib/routes/history/index",
                     "pageTitle": "lib/routes/history/index",
@@ -1045,7 +1094,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/kShortestPaths.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/kShortestPaths.js",
                     "projectPath": "lib/routes/history/kShortestPaths.js",
                     "targetPath": "lib/routes/history/kShortestPaths",
                     "pageTitle": "lib/routes/history/kShortestPaths",
@@ -1064,7 +1113,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/purge.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/purge.js",
                     "projectPath": "lib/routes/history/purge.js",
                     "targetPath": "lib/routes/history/purge",
                     "pageTitle": "lib/routes/history/purge",
@@ -1083,7 +1132,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/show.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/show.js",
                     "projectPath": "lib/routes/history/show.js",
                     "targetPath": "lib/routes/history/show",
                     "pageTitle": "lib/routes/history/show",
@@ -1102,7 +1151,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                       "foldPrefix": "^",
                       "name": "JavaScript"
                     },
-                    "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/traverse.js",
+                    "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/history/traverse.js",
                     "projectPath": "lib/routes/history/traverse.js",
                     "targetPath": "lib/routes/history/traverse",
                     "pageTitle": "lib/routes/history/traverse",
@@ -1123,7 +1172,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                   "foldPrefix": "^",
                   "name": "JavaScript"
                 },
-                "sourcePath": "/mnt/c/Users/adity/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/schemas.js",
+                "sourcePath": "/home/aditya/workspaces/webstorm/RecallGraph/RecallGraph/lib/routes/schemas.js",
                 "projectPath": "lib/routes/schemas.js",
                 "targetPath": "lib/routes/schemas",
                 "pageTitle": "lib/routes/schemas",
