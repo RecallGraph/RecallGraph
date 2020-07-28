@@ -17,10 +17,24 @@
 <div id="document">
     <div class="segment">
         <div class="code">
-            <div class="wrapper"><span class="hljs-pi">'use strict'</span>
-
-                <span class="hljs-keyword">const</span> { commitProvider } = <span class="hljs-built_in">require</span>(<span
-                        class="hljs-string">'./commitHandlers'</span>)
+            <div class="wrapper"><span class="hljs-pi">'use strict'</span></div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h1 id="provider-exports">Provider Exports</h1>
+                <p> RecallGraph exports all its HTTP API methods as providers. The HTTP API methods are grouped into 3
+                    categories,
+                    viz. <em>Document</em>, <em>Event</em> and <em>History</em>. The functionality behind each of the
+                    API methods in these categories
+                    can also be accessed directly by any Foxx service that declares RecallGraph as dependency. For more
+                    information, see the relevant section in
+                    <a href="https://www.arangodb.com/docs/stable/foxx-guides-dependencies.html">ArangoDB Docs</a>.</p>
+                <p> The exported methods, along with their linked documentation, are listed below.</p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"><span class="hljs-keyword">const</span> { commitProvider } = <span
+                    class="hljs-built_in">require</span>(<span class="hljs-string">'./commitHandlers'</span>)
                 <span class="hljs-keyword">const</span> { createProvider } = <span class="hljs-built_in">require</span>(<span
                         class="hljs-string">'./createHandlers'</span>)
                 <span class="hljs-keyword">const</span> { diffProvider } = <span
@@ -50,37 +64,137 @@
     </div>
     <div class="segment">
         <div class="comments ">
-            <div class="wrapper"><p>Document</p></div>
-        </div>
-        <div class="code">
-            <div class="wrapper"> create: createProvider,
-                replace: replaceProvider,
-                update: updateProvider,
-                remove: removeProvider,
-                restore: restoreProvider,
-            </div>
+            <div class="wrapper"><h2 id="document-category">Document Category</h2></div>
         </div>
     </div>
     <div class="segment">
         <div class="comments ">
-            <div class="wrapper"><p>Event</p></div>
+            <div class="wrapper"><h3 id="create-provider">Create Provider</h3>
+                <p> Create a document (vertex or edge).
+                    See <a href="createHandlers.html">lib/handlers/createHandlers.js</a></p></div>
         </div>
         <div class="code">
-            <div class="wrapper"> log: logProvider,
-                diff: diffProvider,
-                commit: commitProvider,
-            </div>
+            <div class="wrapper"> create: createProvider,</div>
         </div>
     </div>
     <div class="segment">
         <div class="comments ">
-            <div class="wrapper"><p>History</p></div>
+            <div class="wrapper"><h3 id="replace-provider">Replace Provider</h3>
+                <p> Replace a document or documents (vertex or edge).
+                    See <a href="replaceHandlers.html">lib/handlers/replaceHandlers.js</a></p></div>
         </div>
         <div class="code">
-            <div class="wrapper"> show: showProvider,
-                traverse: traverseProvider,
-                kShortestPaths: kspProvider,
-                purge: purgeProvider
+            <div class="wrapper"> replace: replaceProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="update-provider">Update Provider</h3>
+                <p> Update a document or documents (vertex or edge).
+                    See <a href="updateHandlers.html">lib/handlers/updateHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> update: updateProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="remove-provider">Remove Provider</h3>
+                <p> Remove a document or documents (vertex or edge).
+                    See <a href="removeHandlers.html">lib/handlers/removeHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> remove: removeProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="restore-provider">Restore Provider</h3>
+                <p> Restore deleted nodes.
+                    See <a href="restoreHandlers.html">lib/handlers/restoreHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> restore: restoreProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h2 id="event-category">Event Category</h2></div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="log-provider">Log Provider</h3>
+                <p> Get event logs.
+                    See <a href="logHandlers.html">lib/handlers/logHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> log: logProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="diff-provider">Diff Provider</h3>
+                <p> Get diffs between successive events.
+                    See <a href="diffHandlers.html">lib/handlers/diffHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> diff: diffProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="commit-provider">Commit Provider</h3>
+                <p> Commit nodes having states that are AHEAD of the log.
+                    See <a href="commitHandlers.html">lib/handlers/commitHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> commit: commitProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h2 id="history-category">History Category</h2></div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="show-provider">Show Provider</h3>
+                <p> Show node states at a given timestamp.
+                    See <a href="showHandlers.html">lib/handlers/showHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> show: showProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="traverse-provider">Traverse Provider</h3>
+                <p> Traverse historic graph states.
+                    See <a href="traverseHandlers.html">lib/handlers/traverseHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> traverse: traverseProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="k-shortest-paths-provider">k Shortest Paths Provider</h3>
+                <p><em>k</em> shortest historic paths between vertices.
+                    See <a href="kShortestPathsHandlers.html">lib/handlers/kShortestPathsHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> kShortestPaths: kspProvider,</div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><h3 id="purge-provider">Purge Provider</h3>
+                <p> Purge node history.
+                    See <a href="purgeHandlers.html">lib/handlers/purgeHandlers.js</a></p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> purge: purgeProvider
                 }
             </div>
         </div>
