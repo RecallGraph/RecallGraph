@@ -4,7 +4,7 @@
     "lib/**/*.js"
   ],
   "index": "main.js",
-  "index-page-title": "main",
+  "index-page-title": "main (RecallGraph Annotated Source)",
   "strip": [],
   "out": "docs",
   "repository-url": "https://github.com/RecallGraph/RecallGraph"
