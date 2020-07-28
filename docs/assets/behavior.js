@@ -399,7 +399,7 @@
         var d = this.constructor()
         e.isArray(a) ? E.apply(d, a) : e.merge(d, a), d.prevObject = this, d.context = this.context, b === 'find'
           ? d.selector = this.selector + (this.selector ? ' ' : '') + c : b && (d.selector = this.selector + '.' + b
-                                                                                             + '(' + c + ')')
+                                                                                             + "(" + c + ")");
         return d
       },
       each       : function (a, b) {return e.each(this, a, b)},
@@ -454,7 +454,7 @@
           if (a !== !0 && --e.readyWait > 0) {
             return
           }
-          A.fireWith(c, [e]), e.fn.trigger && e(c).trigger('ready').off('ready')
+          A.fireWith(c, [e]), e.fn.trigger && e(c).trigger("ready").off("ready")
         }
       },
       bindReady    : function () {
@@ -490,13 +490,13 @@
         } catch (c) {return !1}
         var d
         for (d in a) {
-
+          ;
         }
         return d === b || D.call(a, d)
       },
       isEmptyObject: function (a) {
         for (var b in a) {
-          return !1
+          return !1;
         }
         return !0
       },
@@ -510,9 +510,9 @@
           return a.JSON.parse(b)
         }
         if (n.test(b.replace(o, '@').replace(p, ']').replace(q, ''))) {
-          return (new Function('return ' + b))()
+          return (new Function('return ' + b))();
         }
-        e.error('Invalid JSON: ' + b)
+        e.error("Invalid JSON: " + b)
       },
       parseXML     : function (c) {
         var d, f
@@ -554,7 +554,7 @@
           for (; g < h;) {
             if (c.call(a[g], g,
               a[g++]) === !1) {
-              break
+              break;
             }
           }
         }
@@ -704,7 +704,7 @@
       }
       i = !1, c && (a.once ? e === !0 ? o.disable() : c = [] : d && d.length && (e = d.shift(), o.fireWith(e[0], e[1])))
     }, o = {
-      add   : function () {
+      add     : function () {
         if (c) {
           var a = c.length
           m(arguments), i ? k = c.length : e && e !== !0 && (j = a, n(e[0], e[1]))
@@ -835,7 +835,7 @@
         }
         g || j.resolveWith(j, b)
       } else {
-        j !== a && j.resolveWith(j, d ? [a] : [])
+        j !== a && j.resolveWith(j, d ? [a] : []);
       }
       return k
     }
@@ -919,7 +919,7 @@
                                                                                                                                                         === -5, i.doesNotIncludeMarginInBodyOffset = r.offsetTop
                                                                                                                                                                                                      !== j, r.removeChild(
         a), q = a = null, f.extend(b, i))
-    })
+    });
     return b
   }();
   var j = /^(?:\{.*\}|\[.*\])$/, k = /([A-Z])/g
@@ -946,7 +946,7 @@
         }
         g = h = m[n], e || (h.data || (h.data = {}), h = h.data), d !== b && (h[f.camelCase(c)] = d)
         if (o && !h[c]) {
-          return g.events;
+          return g.events
         }
         k ? (i = h[c], i == null && (i = h[f.camelCase(c)])) : i = h;
         return i
@@ -971,7 +971,7 @@
           }
         }
         if (!c) {
-          delete j[k].data
+          delete j[k].data;
           if (!m(j[k])) {
             return
           }
@@ -985,7 +985,7 @@
       if (a.nodeName) {
         var b = f.noData[a.nodeName.toLowerCase()]
         if (b) {
-          return b !== !0 && a.getAttribute("classid") === b
+          return b !== !0 && a.getAttribute('classid') === b
         }
       }
       return !0
@@ -1018,7 +1018,7 @@
       }
       return this.each(function () {
         var b = f(this), e = [d[0], c]
-        b.triggerHandler('setData' + d[1] + '!', e), f.data(this, a, c), b.triggerHandler('changeData' + d[1] + '!', e)
+        b.triggerHandler('setData' + d[1] + '!', e), f.data(this, a, c), b.triggerHandler("changeData" + d[1] + "!", e)
       })
     }, removeData: function (a) {return this.each(function () {f.removeData(this, a)})}
   }), f.extend({
@@ -1077,7 +1077,7 @@
           h++, l.add(m)
         }
       }
-      m()
+      m();
       return d.promise()
     }
   });
@@ -1108,7 +1108,7 @@
             } else {
               g = ' ' + e.className + ' '
               for (h = 0, i = b.length; h < i; h++) {
-                ~g.indexOf(" " + b[h] + " ") || (g += b[h] + " ");
+                ~g.indexOf(' ' + b[h] + ' ') || (g += b[h] + ' ')
               }
               e.className = f.trim(g)
             }
@@ -1223,13 +1223,13 @@
             }
           }
           if (j && !h.length && i.length) {
-            return f(i[g]).val()
+            return f(i[g]).val();
           }
           return h
         }, set: function (a, b) {
           var c = f.makeArray(b)
           f(a).find('option').each(function () {this.selected = f.inArray(f(this).val(), c) >= 0}), c.length
-                                                                                                    || (a.selectedIndex = -1);
+                                                                                                    || (a.selectedIndex = -1)
           return c
         }
       }
@@ -1256,8 +1256,8 @@
           a.setAttribute(c, '' + d)
           return d
         }
-        if (h && 'get' in h && i && (g = h.get(a, c)) !== null) {
-          return g
+        if (h && "get" in h && i && (g = h.get(a, c)) !== null) {
+          return g;
         }
         g = a.getAttribute(c);
         return g === null ? b : g
@@ -1289,7 +1289,7 @@
       }, value: {
         get   : function (a, b) {
           if (w && f.nodeName(a, 'button')) {
-            return w.get(a, b)
+            return w.get(a, b);
           }
           return b in a ? a.value : null
         }, set: function (a, b, c) {
@@ -1409,7 +1409,7 @@
           (c['class'] || {}).value))
     }, I = function (a) {return f.event.special.hover ? a : a.replace(B, 'mouseenter$1 mouseleave$1')}
   f.event = {
-    add: function (a, c, d, e, g) {
+    add        : function (a, c, d, e, g) {
       var h, i, j, k, l, m, n, o, p, q, r, s
       if (!(a.nodeType === 3 || a.nodeType === 8 || !c || !d || !(h = f._data(a)))) {
         d.handler && (p = d, d = p.handler), d.guid || (d.guid = f.guid++), j = h.events, j
@@ -1435,7 +1435,7 @@
             r = j[m] = [], r.delegateCount = 0
             if (!s.setup || s.setup.call(a, e, n, i) === !1) {
               a.addEventListener ? a.addEventListener(m, i, !1)
-                : a.attachEvent && a.attachEvent("on" + m, i)
+                : a.attachEvent && a.attachEvent('on' + m, i)
             }
           }
           s.add && (s.add.call(a, o), o.handler.guid || (o.handler.guid = d.guid)), g ? r.splice(r.delegateCount++, 0,
@@ -1592,7 +1592,7 @@
                                                                                                                                        && i
                                                                                                                                        && (a.relatedTarget = i
                                                                                                                                                              === a.target
-          ? d.toElement : i), !a.which && h !== b && (a.which = h & 1 ? 1 : h & 2 ? 3 : h & 4 ? 2 : 0)
+          ? d.toElement : i), !a.which && h !== b && (a.which = h & 1 ? 1 : h & 2 ? 3 : h & 4 ? 2 : 0);
         return a
       }
     },
@@ -1629,7 +1629,7 @@
       a.detachEvent && a.detachEvent('on' + b, c)
     }, f.Event = function (a, b) {
     if (!(this instanceof f.Event)) {
-      return new f.Event(a, b)
+      return new f.Event(a, b);
     }
     a && a.type ? (this.originalEvent = a, this.type = a.type, this.isDefaultPrevented = a.defaultPrevented
                                                                                          || a.returnValue === !1
@@ -1677,7 +1677,7 @@
     },
     teardown: function () {
       if (f.nodeName(this, 'form')) {
-        return !1
+        return !1;
       }
       f.event.remove(this, "._submit")
     }
@@ -1816,7 +1816,7 @@
                   break
                 }
               } else if (m.filter(b, [j]).length > 0) {
-                k = j;
+                k = j
                 break
               }
             }
@@ -1979,9 +1979,9 @@
               }
             }
             if (i !== b) {
-              d || (s = r), a = a.replace(o.match[h], '')
+              d || (s = r), a = a.replace(o.match[h], "");
               if (!g) {
-                return []
+                return [];
               }
               break
             }
@@ -2016,7 +2016,7 @@
         }
       } else {
         for (b = 0; c = a[b]; b++) {
-          c.nodeType !== 8 && (e += n(c))
+          c.nodeType !== 8 && (e += n(c));
         }
       }
       return e
@@ -2071,9 +2071,9 @@
         }, '' : function (a, b, c) {
           var d, f = e++, g = x
           typeof b == 'string' && !l.test(b) && (b = b.toLowerCase(), d = b, g = w), g('parentNode', b, f, a, d, c)
-        }, "~": function (a, b, c) {
-          var d, f = e++, g = x;
-          typeof b == "string" && !l.test(b) && (b = b.toLowerCase(), d = b, g = w), g("previousSibling", b, f, a, d, c)
+        }, '~': function (a, b, c) {
+          var d, f = e++, g = x
+          typeof b == 'string' && !l.test(b) && (b = b.toLowerCase(), d = b, g = w), g("previousSibling", b, f, a, d, c)
         }
       },
       find      : {
@@ -2351,7 +2351,7 @@
       c = e.length, d = f.length
       for (var k = 0; k < c && k < d; k++) {
         if (e[k] !== f[k]) {
-          return v(e[k], f[k])
+          return v(e[k], f[k]);
         }
       }
       return k === c ? v(a, f[k], -1) : v(e[k], b, 1)
@@ -2435,14 +2435,14 @@
                   return s(e.querySelectorAll('[id=\'' + n + '\'] ' + b), f)
                 }
               } catch (r) {} finally {
-                l || k.removeAttribute('id')
+                l || k.removeAttribute("id")
               }
             }
           }
           return a(b, e, f, g)
-        }
+        };
         for (var e in a) {
-          m[e] = a[e]
+          m[e] = a[e];
         }
         b = null
       }
@@ -2523,7 +2523,7 @@
           for (h = g; h < e.length; h++) {
             for (i = 0; i < g; i++) {
               if (e[i] === e[h]) {
-                e.splice(h--, 1)
+                e.splice(h--, 1);
                 break
               }
             }
@@ -2665,7 +2665,7 @@
     'div<div>',
     '</div>'
   ]), f.fn.extend({
-    text   : function (a) {
+    text       : function (a) {
       if (f.isFunction(a)) {
         return this.each(function (b) {
           var c = f(this)
@@ -2674,11 +2674,11 @@
       }
       if (typeof a != 'object' && a !== b) {
         return this.empty().append(
-          (this[0] && this[0].ownerDocument || c).createTextNode(a));
+          (this[0] && this[0].ownerDocument || c).createTextNode(a))
       }
       return f.text(this)
     },
-    wrapAll: function (a) {
+    wrapAll    : function (a) {
       if (f.isFunction(a)) {
         return this.each(function (b) {f(this).wrapAll(a.call(this, b))})
       }
@@ -2841,7 +2841,7 @@
                                                                                         && (g = !0, h = f.fragments[j], h
                                                                                         && h !== 1 && (e = h)), e
                                                                                                                 || (e = i.createDocumentFragment(), f.clean(
-      a, i, e, d)), g && (f.fragments[j] = h ? e : 1)
+      a, i, e, d)), g && (f.fragments[j] = h ? e : 1);
     return { fragment: e, cacheable: g }
   }, f.fragments = {}, f.each({
     appendTo    : 'append',
@@ -2971,16 +2971,16 @@
     bx = ['Left', 'Right'], by = ['Top', 'Bottom'], bz, bA, bB
   f.fn.css = function (a, c) {
     if (arguments.length === 2 && c === b) {
-      return this
+      return this;
     }
     return f.access(this, a, c, !0, function (a, c, d) {return d !== b ? f.style(a, c, d) : f.css(a, c)})
   }, f.extend({
-    cssHooks: {
+    cssHooks : {
       opacity: {
         get: function (a, b) {
           if (b) {
-            var c = bz(a, "opacity", "opacity");
-            return c === "" ? "1" : c
+            var c = bz(a, 'opacity', 'opacity')
+            return c === '' ? '1' : c
           }
           return a.style.opacity
         }
@@ -3044,9 +3044,9 @@
         var e
         if (c) {
           if (a.offsetWidth !== 0) {
-            return bC(a, b, d)
+            return bC(a, b, d);
           }
-          f.swap(a, bw, function () {e = bC(a, b, d)})
+          f.swap(a, bw, function () {e = bC(a, b, d)});
           return e
         }
       },
@@ -3112,7 +3112,7 @@
     bW, bX = ['*/'] + ['*']
   try {bV = e.href} catch (bY) {bV = c.createElement('a'), bV.href = '', bV = bV.href}
   bW = bR.exec(bV.toLowerCase()) || [], f.fn.extend({
-    load          : function (a, c, d) {
+    load: function (a, c, d) {
       if (typeof a != 'string' && bS) {
         return bS.apply(this, arguments)
       }
@@ -3137,7 +3137,7 @@
           c = a.responseText, a.isResolved() && (a.done(function (a) {c = a}), i.html(
             g ? f('<div>').append(c.replace(bN, '')).find(g) : c)), d && i.each(d, [c, b, a])
         }
-      })
+      });
       return this
     },
     serialize     : function () {return f.param(this.serializeArray())},
@@ -3219,7 +3219,7 @@
             [v, w, u]), v.statusCode(j), j = b, t && g.trigger('ajax' + (o ? 'Success' : 'Error'),
             [v, d, o ? r : u]), i.fireWith(e, [v, w]), t && (g.trigger('ajaxComplete', [v, d]), --f.active
                                                                                                 || f.event.trigger(
-            'ajaxStop'))
+            "ajaxStop"))
         }
       }
 
@@ -3227,7 +3227,7 @@
       var d = f.ajaxSetup({}, c), e = d.context || d, g = e !== d && (e.nodeType || e instanceof f) ? f(e) : f.event,
         h = f.Deferred(), i = f.Callbacks('once memory'), j = d.statusCode || {}, k, l = {}, m = {}, n, o, p, q, r,
         s = 0, t, u, v = {
-          readyState                                                                          : 0, setRequestHeader                                                     : function (a, b) {
+          readyState                                                                          : 0, setRequestHeader: function (a, b) {
             if (!s) {
               var c = a.toLowerCase()
               a = m[c] = m[c] || a, l[a] = b
@@ -3252,7 +3252,7 @@
             a = a || 'abort', p && p.abort(a), w(0, a)
             return this
           }
-        }
+        };
       h.promise(v), v.success = v.done, v.error = v.fail, v.complete = i.add, v.statusCode = function (a) {
         if (a) {
           var b
@@ -3306,10 +3306,10 @@
         w(-1, 'No Transport')
       } else {
         v.readyState = 1, t && g.trigger('ajaxSend', [v, d]), d.async && d.timeout > 0 && (q = setTimeout(
-          function () {v.abort('timeout')}, d.timeout))
+          function () {v.abort("timeout")}, d.timeout));
         try {s = 1, p.send(l, w)} catch (z) {
           if (s < 2) {
-            w(-1, z)
+            w(-1, z);
           } else {
             throw z
           }
@@ -3317,7 +3317,7 @@
       }
       return v
     },
-    param        : function (a, c) {
+    param: function (a, c) {
       var d = [], e = function (a, b) {
         b = f.isFunction(b) ? b() : b, d[d.length] = encodeURIComponent(a) + '=' + encodeURIComponent(b)
       }
@@ -3425,7 +3425,7 @@
         }, abort: function () {d && d(0, 1)}
       }
     }
-  })
+  });
   var ck = {}, cl, cm, cn = /^(?:toggle|show|hide)$/, co = /^([+\-]=)?([\d+.\-]+)([a-z%]*)$/i, cp, cq = [
     ['height', 'marginTop', 'marginBottom', 'paddingTop', 'paddingBottom'],
     ['width', 'marginLeft', 'marginRight', 'paddingLeft', 'paddingRight'],
@@ -3435,25 +3435,25 @@
     show: function (a, b, c) {
       var d, e
       if (a || a === 0) {
-        return this.animate(cu('show', 3), a, b, c);
+        return this.animate(cu('show', 3), a, b, c)
       }
       for (var g = 0, h = this.length; g < h; g++) {
         d = this[g], d.style && (e = d.style.display, !f._data(d,
-          "olddisplay") && e === "none" && (e = d.style.display = ""), e === "" && f.css(d, "display") === "none"
-                     && f._data(d, "olddisplay", cv(d.nodeName)));
+          'olddisplay') && e === 'none' && (e = d.style.display = ''), e === '' && f.css(d, 'display') === 'none'
+                     && f._data(d, 'olddisplay', cv(d.nodeName)))
       }
       for (g = 0; g < h; g++) {
-        d = this[g];
+        d = this[g]
         if (d.style) {
-          e = d.style.display;
-          if (e === "" || e === "none") {
-            d.style.display = f._data(d, "olddisplay") || ""
+          e = d.style.display
+          if (e === '' || e === 'none') {
+            d.style.display = f._data(d, 'olddisplay') || ''
           }
         }
       }
       return this
     },
-    hide   : function (a, b, c) {
+    hide: function (a, b, c) {
       if (a || a === 0) {
         return this.animate(cu('hide', 3), a, b, c)
       }
@@ -3463,7 +3463,7 @@
                      && f._data(d, 'olddisplay', e))
       }
       for (g = 0; g < h; g++) {
-        this[g].style && (this[g].style.display = 'none')
+        this[g].style && (this[g].style.display = "none");
       }
       return this
     },
@@ -3540,7 +3540,7 @@
         }
         for (b = e.length; b--;) {
           e[b].elem === this && (a == null || e[b].queue === a) && (d ? e[b](!0)
-            : e[b].saveState(), c = !0, e.splice(b, 1))
+            : e[b].saveState(), c = !0, e.splice(b, 1));
         }
         (!d || !c) && f.dequeue(this, a)
       })
@@ -3553,7 +3553,7 @@
     fadeOut    : { opacity: 'hide' },
     fadeToggle : { opacity: 'toggle' }
   }, function (a, b) {f.fn[a] = function (a, c, d) {return this.animate(b, a, c, d)}}), f.extend({
-    speed: function (a, b, c) {
+    speed : function (a, b, c) {
       var d = a && typeof a == 'object' ? f.extend({}, a) : {
         complete: c || !c && b || f.isFunction(a) && a, duration: a, easing: c && b || b && !f.isFunction(b) && b
       }
@@ -3564,7 +3564,7 @@
       }
       d.old = d.complete, d.complete = function (a) {
         f.isFunction(d.old) && d.old.call(this), d.queue ? f.dequeue(this, d.queue) : a !== !1 && f._unmark(this)
-      };
+      }
       return d
     },
     easing: {
@@ -3795,7 +3795,7 @@
         var i = f.css(e, d), j = parseFloat(i)
         return f.isNumeric(j) ? j : i
       }
-      return this.css(d, typeof a == 'string' ? a : a + 'px')
+      return this.css(d, typeof a == "string" ? a : a + "px")
     }
   }), a.jQuery = a.$ = f, typeof define == "function" && define.amd && define.amd.jQuery && define("jquery", [],
     function () {return f})
