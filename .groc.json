@@ -1,7 +1,7 @@
 {
   "glob": [
     "main.js",
-    "lib/**/*.js"
+    "lib/handlers/*.js"
   ],
   "index": "main.js",
   "index-page-title": "main (RecallGraph Annotated Source)",
