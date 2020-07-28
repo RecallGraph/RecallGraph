@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>lib/routes/document/create</title></head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="../../../" name="groc-relative-root">
+<meta content="lib/routes/document/create" name="groc-document-path">
+<meta content="lib/routes/document/create.js" name="groc-project-path">
+<meta content="https://github.com/RecallGraph/RecallGraph" name="groc-github-url">
+<link href="../../../assets/style.css" media="all" rel="stylesheet" type="text/css">
+<script src="../../../assets/behavior.js" type="text/javascript"></script>
+<body>
+<div id="meta">
+    <div class="file-path"><a
+            href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/routes/document/create.js">lib/routes/document/create.js</a>
+    </div>
+</div>
+<div id="document">
+    <div class="segment">
+        <div class="code">
+            <div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+                <span class="hljs-keyword">const</span> Joi = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'joi'</span>)
+                <span class="hljs-keyword">const</span> verifyCollection = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../../middleware/verifyCollection'</span>)
+                <span class="hljs-keyword">const</span> { createSingle, createMultiple } = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'../../handlers/createHandlers'</span>)
+                <span class="hljs-keyword">const</span> { DB_OPS: { INSERT }, COLL_NAME_REGEX } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../../constants'</span>)
+                <span class="hljs-keyword">const</span> { isEmpty } = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'lodash'</span>)
+                <span class="hljs-keyword">const</span> { getCRUDErrors } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../helpers'</span>)
+                <span class="hljs-keyword">const</span> dd = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'dedent'</span>)
+                <span class="hljs-keyword">const</span> { CREATE_BODY_SCHEMA } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../schemas'</span>)
+
+                <span class="hljs-built_in">module</span>.exports = router =&gt; {
+                router.post(<span class="hljs-string">'/:collection'</span>, verifyCollection, <span
+                        class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) </span>{
+                <span class="hljs-keyword">let</span> result
+
+                <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(req.body)) {
+                result = createMultiple(req, req.queryParams)
+
+                <span class="hljs-keyword">const</span> errors = getCRUDErrors(result)
+                <span class="hljs-keyword">if</span> (isEmpty(errors)) {
+                res.status(<span class="hljs-number">201</span>)
+                } <span class="hljs-keyword">else</span> {
+                res.setHeader(<span class="hljs-string">'X-Arango-Error-Codes'</span>, errors)
+                res.status(<span class="hljs-number">412</span>)
+                }
+                } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">try</span> {
+                result = createSingle(req, req.queryParams)
+                res.status(<span class="hljs-number">201</span>)
+                } <span class="hljs-keyword">catch</span> (e) {
+                <span class="hljs-built_in">console</span>.error(e.stack)
+                <span class="hljs-keyword">if</span> (e.errorNum) {
+                res.setHeader(<span class="hljs-string">'X-Arango-Error-Codes'</span>, <span class="hljs-string">`<span
+                        class="hljs-subst">${e.errorNum}</span>:1`</span>)
+                result = e.errorMessage
+
+                res.status(<span class="hljs-number">412</span>)
+                } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">return</span> res.throw(<span class="hljs-number">500</span>, { cause: e })
+                }
+                }
+                }
+
+                res.json(result)
+                }, INSERT)
+
+                .pathParam(<span class="hljs-string">'collection'</span>,
+                Joi.string().regex(COLL_NAME_REGEX).required(),
+                <span class="hljs-string">'The collection into which to add the document.'</span>)
+
+                .queryParam(<span class="hljs-string">'returnNew'</span>, Joi.boolean(),
+                <span class="hljs-string">'Whether to return the newly created object. Default `false`'</span>)
+
+                .queryParam(<span class="hljs-string">'silent'</span>, Joi.boolean(),
+                <span class="hljs-string">'Whether to return anything in the response body. Default `false`'</span>)
+
+                .body(CREATE_BODY_SCHEMA, <span class="hljs-string">'The JSON object/s to persist.'</span>)
+                .response(<span class="hljs-number">201</span>, [<span class="hljs-string">'application/json'</span>],
+                dd<span class="hljs-string">`
+      The create call succeeded. For multiple docs, this is returned only if **ALL** documents were successfully created.
+    `</span>)
+
+                .error(<span class="hljs-number">400</span>, <span class="hljs-string">'Invalid request body/params. Response body contains the error details.'</span>)
+                .error(<span class="hljs-number">404</span>, <span class="hljs-string">'The specified collection does not exist.'</span>)
+                .error(<span class="hljs-number">412</span>, dd<span class="hljs-string">`
+      One or more documents could not be created (due to a conflict or some other failed pre-condition). A header,
+      \`X-Arango-Error-Codes\`, is set, which contains a map of the error codes that occurred together with their
+      multiplicities, as in: 1200:17,1205:10 which means that in 17 cases the error 1200 “revision conflict” and in 10
+      cases the error 1205 “illegal document handle” has happened. The error details are in the response body.
+    `</span>)
+
+                .summary(<span class="hljs-string">'Create a document (vertex or edge).'</span>)
+                .description(<span
+                        class="hljs-string">'Creates a new document and adds it to the tracking index.'</span>)
+                .tag(<span class="hljs-string">'Document'</span>)
+
+                <span class="hljs-built_in">console</span>.debug(<span
+                        class="hljs-string">'Loaded "create" route'</span>)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

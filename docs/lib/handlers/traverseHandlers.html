@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>lib/handlers/traverseHandlers</title></head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="../../" name="groc-relative-root">
+<meta content="lib/handlers/traverseHandlers" name="groc-document-path">
+<meta content="lib/handlers/traverseHandlers.js" name="groc-project-path">
+<meta content="https://github.com/RecallGraph/RecallGraph" name="groc-github-url">
+<link href="../../assets/style.css" media="all" rel="stylesheet" type="text/css">
+<script src="../../assets/behavior.js" type="text/javascript"></script>
+<body>
+<div id="meta">
+    <div class="file-path"><a
+            href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/handlers/traverseHandlers.js">lib/handlers/traverseHandlers.js</a>
+    </div>
+</div>
+<div id="document">
+    <div class="segment">
+        <div class="code">
+            <div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+                <span class="hljs-keyword">const</span> traverseOp = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'../operations/traverse'</span>)
+                <span class="hljs-keyword">const</span> { omit } = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'lodash'</span>)
+                <span class="hljs-keyword">const</span> { JoiRG, validate, checkValidation } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/helpers'</span>)
+                <span class="hljs-keyword">const</span> { DOC_ID_REGEX } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../constants'</span>)
+                <span class="hljs-keyword">const</span> { TRAVERSE_BODY_SCHEMA } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/schemas'</span>)
+
+                <span class="hljs-keyword">const</span> intSchema = JoiRG.number().integer()
+                <span class="hljs-keyword">const</span> docIDSchema = JoiRG.string().regex(DOC_ID_REGEX).required()
+                <span class="hljs-keyword">const</span> optionsSchema =
+                TRAVERSE_BODY_SCHEMA.concat(JoiRG.object().keys({
+                bfs: JoiRG.boolean(),
+                uniqueVertices: JoiRG.string().valid(<span class="hljs-string">'path'</span>, <span class="hljs-string">'global'</span>,
+                <span class="hljs-string">'none'</span>),
+                uniqueEdges: JoiRG.string().valid(<span class="hljs-string">'path'</span>, <span class="hljs-string">'none'</span>),
+                returnVertices: JoiRG.boolean(),
+                returnEdges: JoiRG.boolean(),
+                returnPaths: JoiRG.boolean()
+                }))
+                <span class="hljs-keyword">const</span> providerSchemas = [
+                JoiRG.number(), docIDSchema, intSchema.min(<span class="hljs-number">0</span>), intSchema.min(<span
+                        class="hljs-number">0</span>), optionsSchema
+                ]
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span
+                        class="hljs-title">traverse</span> (<span class="hljs-params">req</span>) </span>{
+                <span class="hljs-keyword">const</span> options = omit(req.queryParams, <span class="hljs-string">'timestamp'</span>,
+                <span class="hljs-string">'svid'</span>, <span class="hljs-string">'minDepth'</span>, <span
+                        class="hljs-string">'maxDepth'</span>)
+                <span class="hljs-keyword">const</span> { edges: edgeCollections, vFilter, eFilter, pFilter } = req.body
+                <span class="hljs-keyword">const</span> { timestamp, svid, minDepth, maxDepth } = req.queryParams
+
+                <span class="hljs-keyword">return</span> traverseOp(timestamp, svid, minDepth, maxDepth,
+                edgeCollections,
+                <span class="hljs-built_in">Object</span>.assign({ vFilter, eFilter, pFilter }, options))
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">traverseProvider</span> (<span
+                        class="hljs-params">timestamp, svid, minDepth, maxDepth, edges, options = {}</span>) </span>{
+                <span class="hljs-keyword">const</span> result = validate([timestamp, svid, minDepth, maxDepth, <span
+                        class="hljs-built_in">Object</span>.assign({ edges }, options)],
+                providerSchemas)
+                checkValidation(result)
+
+                <span class="hljs-keyword">const</span> args = result.values
+                timestamp = args[<span class="hljs-number">0</span>]
+                svid = args[<span class="hljs-number">1</span>]
+                minDepth = args[<span class="hljs-number">2</span>]
+                maxDepth = args[<span class="hljs-number">3</span>]
+                edges = args[<span class="hljs-number">4</span>].edges
+                options = omit(args[<span class="hljs-number">4</span>], <span class="hljs-string">'edges'</span>)
+
+                <span class="hljs-keyword">return</span> traverseOp(timestamp, svid, minDepth, maxDepth, edges, options)
+                }
+
+                <span class="hljs-built_in">module</span>.exports = {
+                traverse,
+                traverseProvider
+                }
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
