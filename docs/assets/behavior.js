@@ -3081,8 +3081,8 @@
           "depth"   : 2,
           "children": [
             {
-              "type"   : "file",
-              "data"   : {
+              "type" : "file",
+              "data" : {
                 "language"   : {
                   "nameMatchers"     : [".js"],
                   "pygmentsLexer"    : "javascript",
@@ -3098,18 +3098,7 @@
                 "pageTitle"  : "lib/handlers/commitHandlers",
                 "title"      : "commitHandlers"
               },
-              "depth"  : 3,
-              "outline": [
-                {
-                  "type" : "heading",
-                  "data" : {
-                    "level": 3,
-                    "title": "commitProvider",
-                    "slug" : "commitprovider"
-                  },
-                  "depth": 3
-                }
-              ]
+              "depth": 3
             }, {
               "type" : "file",
               "data" : {
@@ -3206,8 +3195,8 @@
               },
               "depth": 3
             }, {
-              "type" : "file",
-              "data" : {
+              "type"   : "file",
+              "data"   : {
                 "language"   : {
                   "nameMatchers"     : [".js"],
                   "pygmentsLexer"    : "javascript",
@@ -3223,7 +3212,18 @@
                 "pageTitle"  : "lib/handlers/purgeHandlers",
                 "title"      : "purgeHandlers"
               },
-              "depth": 3
+              "depth"  : 3,
+              "outline": [
+                {
+                  "type" : "heading",
+                  "data" : {
+                    "level": 3,
+                    "title": "purgeProvider",
+                    "slug" : "purgeprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type" : "file",
               "data" : {
@@ -3263,8 +3263,8 @@
               },
               "depth": 3
             }, {
-              "type"   : "file",
-              "data"   : {
+              "type" : "file",
+              "data" : {
                 "language"   : {
                   "nameMatchers"     : [".js"],
                   "pygmentsLexer"    : "javascript",
@@ -3280,18 +3280,7 @@
                 "pageTitle"  : "lib/handlers/restoreHandlers",
                 "title"      : "restoreHandlers"
               },
-              "depth"  : 3,
-              "outline": [
-                {
-                  "type" : "heading",
-                  "data" : {
-                    "level": 3,
-                    "title": "restoreProvider",
-                    "slug" : "restoreprovider"
-                  },
-                  "depth": 3
-                }
-              ]
+              "depth": 3
             }, {
               "type" : "file",
               "data" : {
