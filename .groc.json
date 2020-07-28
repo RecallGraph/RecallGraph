@@ -1,0 +1,11 @@
+{
+  "glob": [
+    "main.js",
+    "lib/**/*.js"
+  ],
+  "index": "main.js",
+  "index-page-title": "main",
+  "strip": [],
+  "out": "docs",
+  "repository-url": "https://github.com/RecallGraph/RecallGraph"
+}

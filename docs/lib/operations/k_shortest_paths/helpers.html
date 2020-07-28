@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>lib/operations/k_shortest_paths/helpers</title></head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="../../../" name="groc-relative-root">
+<meta content="lib/operations/k_shortest_paths/helpers" name="groc-document-path">
+<meta content="lib/operations/k_shortest_paths/helpers.js" name="groc-project-path">
+<meta content="https://github.com/RecallGraph/RecallGraph" name="groc-github-url">
+<link href="../../../assets/style.css" media="all" rel="stylesheet" type="text/css">
+<script src="../../../assets/behavior.js" type="text/javascript"></script>
+<body>
+<div id="meta">
+    <div class="file-path"><a
+            href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/operations/k_shortest_paths/helpers.js">lib/operations/k_shortest_paths/helpers.js</a>
+    </div>
+</div>
+<div id="document">
+    <div class="segment">
+        <div class="code">
+            <div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+                <span class="hljs-keyword">const</span> { getComponentTagOption } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../../helpers'</span>)
+                <span class="hljs-keyword">const</span> { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../../constants'</span>)
+                <span class="hljs-keyword">const</span> { db, query } = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'@arangodb'</span>)
+                <span class="hljs-keyword">const</span> { mapValues, chain, zipObject, map } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)
+                <span class="hljs-keyword">const</span> { utils: { attachSpan } } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'foxx-tracing'</span>)
+                <span class="hljs-keyword">const</span> { getEnds } = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'../traverse/helpers'</span>)
+
+                <span class="hljs-keyword">const</span> skeletonVerticesColl =
+                db._collection(SERVICE_COLLECTIONS.skeletonVertices)
+                <span class="hljs-keyword">const</span> cto = getComponentTagOption(__filename)
+
+                exports.getAllPaths = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span
+                        class="hljs-title">getAllPaths</span> (<span class="hljs-params">timestamp, svid, evid, depth, edgeCollections</span>) </span>{
+                depth *= <span class="hljs-number">2</span>
+
+                <span class="hljs-keyword">const</span> sv = skeletonVerticesColl.firstExample(<span
+                        class="hljs-string">'meta.id'</span>, svid)
+                <span class="hljs-keyword">const</span> ev = skeletonVerticesColl.firstExample(<span
+                        class="hljs-string">'meta.id'</span>, evid)
+                <span class="hljs-keyword">const</span> svl = sv &amp;&amp; sv.validity
+                <span class="hljs-keyword">const</span> evl = ev &amp;&amp; ev.validity
+                <span class="hljs-keyword">const</span> svv = svl &amp;&amp; svl.some(vo =&gt; vo.valid_since &lt;=
+                timestamp &amp;&amp; vo.valid_until &gt; timestamp)
+                <span class="hljs-keyword">const</span> evv = evl &amp;&amp; evl.some(vo =&gt; vo.valid_since &lt;=
+                timestamp &amp;&amp; vo.valid_until &gt; timestamp)
+
+                <span class="hljs-keyword">if</span> (svv &amp;&amp; evv) {
+                <span class="hljs-keyword">if</span> (sv._id === ev._id) {
+                <span class="hljs-keyword">return</span> [
+                {
+                vertices: [sv._id],
+                edges: []
+                }
+                ]
+                }
+
+                <span class="hljs-keyword">const</span> ecs = mapValues(edgeCollections, getEnds)
+
+                <span class="hljs-keyword">return</span> query<span class="hljs-string">`
+      let ecs = <span class="hljs-subst">${ecs}</span>
+      let eca = attributes(ecs)
+      
+      for v, e, p in 2..<span class="hljs-subst">${depth}</span>
+      any <span class="hljs-subst">${sv._id}</span>
+      graph <span class="hljs-subst">${SERVICE_GRAPHS.skeleton}</span>
+      
+      prune v == null || v._id == <span class="hljs-subst">${ev._id}</span> ||
+        !length(v.validity[* filter CURRENT.valid_since &lt;= <span class="hljs-subst">${timestamp}</span> &amp;&amp; CURRENT.valid_until &gt; <span
+                            class="hljs-subst">${timestamp}</span>]) ||
+        e != null &amp;&amp;
+        !length(e.validity[* filter CURRENT.valid_since &lt;= <span class="hljs-subst">${timestamp}</span> &amp;&amp; CURRENT.valid_until &gt; <span
+                            class="hljs-subst">${timestamp}</span>]) ||
+        is_same_collection(<span class="hljs-subst">${SERVICE_COLLECTIONS.skeletonEdgeHubs}</span>, v) &amp;&amp;
+        (v.collection not in eca || ((v._id == e._from) ? '_from' : '_to') not in ecs[v.collection])
+        
+      options { uniqueVertices: 'path' }
+        
+      filter v._id == <span class="hljs-subst">${ev._id}</span>
+      filter length(e.validity[* filter CURRENT.valid_since &lt;= <span class="hljs-subst">${timestamp}</span> &amp;&amp; CURRENT.valid_until &gt; <span
+                            class="hljs-subst">${timestamp}</span>])
+      
+      let seh = is_same_collection(<span class="hljs-subst">${SERVICE_COLLECTIONS.skeletonEdgeHubs}</span>, v) ? v : p.vertices[-2]
+      let oc = seh &amp;&amp; seh.collection
+      let dKey = (v._id == e._from) ? '_from' : '_to'
+      filter oc in eca &amp;&amp; dKey in ecs[oc]
+      
+      let maxIdx = length(p.vertices) - 1
+      
+      return merge(
+        for i in 0..maxIdx
+        let t = i % 2 == 0 ? 'vertices' : 'edges'
+        
+        collect type = t into elements = p.vertices[i].meta.id
+        
+        return {[type]: elements}
+      )
+  `</span>.toArray()
+                } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">return</span> []
+                }
+                }, <span class="hljs-string">'getAllPaths'</span>, cto)
+
+                exports.buildPaths = attachSpan(<span class="hljs-function"><span
+                        class="hljs-keyword">function</span> <span class="hljs-title">buildPaths</span> (<span
+                        class="hljs-params">built, paths</span>) </span>{
+                <span class="hljs-keyword">const</span> builtMap = {
+                vertices: zipObject(map(built.vertices, <span class="hljs-string">'_id'</span>), built.vertices),
+                edges: zipObject(map(built.edges, <span class="hljs-string">'_id'</span>), built.edges)
+                }
+                <span class="hljs-keyword">const</span> builtPaths = []
+
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> path <span
+                        class="hljs-keyword">of</span> paths) {
+                <span class="hljs-keyword">const</span> builtPath = {
+                vertices: [],
+                edges: []
+                }
+
+                <span class="hljs-keyword">let</span> pathIsBroken = <span class="hljs-literal">false</span>
+
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> type <span
+                        class="hljs-keyword">in</span> path) {
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> id <span
+                        class="hljs-keyword">of</span> path[type]) {
+                <span class="hljs-keyword">const</span> obj = builtMap[type][id]
+                <span class="hljs-keyword">if</span> (!obj) {
+                pathIsBroken = <span class="hljs-literal">true</span>
+                <span class="hljs-keyword">break</span>
+                }
+
+                builtPath[type].push(obj)
+                }
+
+                <span class="hljs-keyword">if</span> (pathIsBroken) {
+                <span class="hljs-keyword">break</span>
+                }
+                }
+
+                <span class="hljs-keyword">if</span> (!pathIsBroken) {
+                builtPaths.push(builtPath)
+                }
+                }
+
+                <span class="hljs-keyword">return</span> builtPaths
+                }, <span class="hljs-string">'buildPaths'</span>, cto)
+
+                exports.kShortestPaths = attachSpan(<span class="hljs-function"><span
+                        class="hljs-keyword">function</span> <span class="hljs-title">kShortestPaths</span> (<span
+                        class="hljs-params">builtPaths, weightFn, skip, limit</span>) </span>{
+                <span class="hljs-keyword">return</span> chain(builtPaths)
+                .map(path =&gt; {
+                path.cost = path.edges.reduce((cost, edge) =&gt; cost + weightFn(edge), <span
+                        class="hljs-number">0</span>)
+
+                <span class="hljs-keyword">return</span> path
+                })
+                .sortBy(<span class="hljs-string">'cost'</span>)
+                .slice(skip, limit)
+                .value()
+                }, <span class="hljs-string">'kShortestPaths'</span>, cto)
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

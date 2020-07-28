@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>lib/operations/show/helpers</title></head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+<meta content="../../../" name="groc-relative-root">
+<meta content="lib/operations/show/helpers" name="groc-document-path">
+<meta content="lib/operations/show/helpers.js" name="groc-project-path">
+<meta content="https://github.com/RecallGraph/RecallGraph" name="groc-github-url">
+<link href="../../../assets/style.css" media="all" rel="stylesheet" type="text/css">
+<script src="../../../assets/behavior.js" type="text/javascript"></script>
+<body>
+<div id="meta">
+    <div class="file-path"><a
+            href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/operations/show/helpers.js">lib/operations/show/helpers.js</a>
+    </div>
+</div>
+<div id="document">
+    <div class="segment">
+        <div class="code">
+            <div class="wrapper"><span class="hljs-pi">'use strict'</span>
+
+                <span class="hljs-keyword">const</span> { db, aql } = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'@arangodb'</span>)
+                <span class="hljs-keyword">const</span> {
+                getCollTypeInitializer, getScopeInitializers, getSort, getNonServiceCollections, getLimitClause,
+                getDBScope,
+                getMatchingCollNames, getNodeBraceScope: getOpNodeBraceScope
+                } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../helpers'</span>)
+                <span class="hljs-keyword">const</span> { getComponentTagOption } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'../../helpers'</span>)
+                <span class="hljs-keyword">const</span> { SERVICE_COLLECTIONS, SERVICE_GRAPHS, EVENTS: { DELETED } } =
+                <span class="hljs-built_in">require</span>(<span class="hljs-string">'../../constants'</span>)
+                <span class="hljs-keyword">const</span> minimatch = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'minimatch'</span>)
+                <span class="hljs-keyword">const</span> expand = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'brace-expansion'</span>)
+                <span class="hljs-keyword">const</span> { chain, isString, find, difference, values } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)
+                <span class="hljs-keyword">const</span> jiff = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'jiff'</span>)
+                <span class="hljs-keyword">const</span> gg = <span class="hljs-built_in">require</span>(<span
+                        class="hljs-string">'@arangodb/general-graph'</span>)
+                <span class="hljs-keyword">const</span> { utils: { attachSpan } } = <span
+                        class="hljs-built_in">require</span>(<span class="hljs-string">'foxx-tracing'</span>)
+
+                <span class="hljs-keyword">const</span> CLAUSE_FLAGS = <span class="hljs-built_in">Object</span>.freeze({
+                <span class="hljs-string">'+g+c'</span>: [<span class="hljs-string">'ac'</span>, <span
+                        class="hljs-string">'slc'</span>],
+                <span class="hljs-string">'+g-c'</span>: [<span class="hljs-string">'qs'</span>, <span
+                        class="hljs-string">'ac'</span>, <span class="hljs-string">'slc'</span>],
+                <span class="hljs-string">'-g+c'</span>: [<span class="hljs-string">'alc'</span>],
+                <span class="hljs-string">'-g-c'</span>: [<span class="hljs-string">'slc'</span>, <span
+                        class="hljs-string">'qs'</span>]
+                })
+                <span class="hljs-keyword">const</span> GROUP_BY = <span class="hljs-built_in">Object</span>.freeze({
+                TYPE: <span class="hljs-string">'collTypes[ne.latest_event.collection]'</span>,
+                COLLECTION: <span class="hljs-string">'ne.latest_event.collection'</span>
+                })
+
+                <span class="hljs-keyword">const</span> eventColl = db._collection(SERVICE_COLLECTIONS.events)
+                <span class="hljs-keyword">const</span> commandColl = db._collection(SERVICE_COLLECTIONS.commands)
+                <span class="hljs-keyword">const</span> evtSSLinkColl = db._collection(SERVICE_COLLECTIONS.evtSSLinks)
+                <span class="hljs-keyword">const</span> snapshotLinkColl =
+                db._collection(SERVICE_COLLECTIONS.snapshotLinks)
+
+                <span class="hljs-keyword">const</span> cto = getComponentTagOption(__filename)
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getScopeFilters</span> (<span
+                        class="hljs-params">scope, searchPattern</span>) </span>{
+                <span class="hljs-keyword">return</span> scope.filters ? scope.filters(searchPattern) :
+                aql.literal(<span class="hljs-string">''</span>)
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getGroupExpr</span> (<span
+                        class="hljs-params">groupByKey</span>) </span>{
+                <span class="hljs-keyword">return</span> isString(groupByKey) &amp;&amp;
+                GROUP_BY[groupByKey.toUpperCase()]
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getShowQueryPrefix</span> (<span
+                        class="hljs-params">timestamp, scope, searchPattern</span>) </span>{
+                <span class="hljs-keyword">const</span> queryParts = [
+                aql<span class="hljs-string">`
+      let nodeEvents = (
+        for e in <span class="hljs-subst">${eventColl}</span>
+    `</span>,
+                getScopeFilters(scope, searchPattern),
+                aql<span class="hljs-string">`
+          filter e['hops-from-origin'] &gt; 0
+    `</span>
+                ]
+
+                <span class="hljs-keyword">if</span> (timestamp) {
+                queryParts.push(aql<span class="hljs-string">`filter e.ctime &lt;= <span
+                        class="hljs-subst">${timestamp}</span>`</span>)
+                }
+
+                queryParts.push(
+                aql<span class="hljs-string">`
+          sort e['hops-from-origin'] desc
+          collect node = e.meta.id into events = e
+        return {
+          node,
+          latest_event: events[0]
+        }
+      )
+      for ne in nodeEvents
+        filter ne.latest_event.event != <span class="hljs-subst">${DELETED}</span>
+     `</span>
+                )
+
+                <span class="hljs-keyword">return</span> queryParts
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getShowQuerySuffix</span> (<span
+                        class="hljs-params">groupExpr, groupSort</span>) </span>{
+                <span class="hljs-keyword">const</span> queryParts = [
+                aql<span class="hljs-string">`
+      let path = (
+        for v, e in any shortest_path
+        ne.latest_event['last-snapshot'] to ne.latest_event._id
+        <span class="hljs-subst">${commandColl}</span>, <span class="hljs-subst">${evtSSLinkColl}</span>, outbound <span
+                            class="hljs-subst">${snapshotLinkColl}</span>
+        return {hop: keep(v, '_id', 'data'), command: ((e || {}).command || [])}
+      )
+    `</span>
+                ]
+
+                <span class="hljs-keyword">if</span> (groupExpr) {
+                <span class="hljs-keyword">const</span> groupSortDir = getSort(groupSort)
+                queryParts.unshift(aql<span class="hljs-string">`sort ne.node <span
+                        class="hljs-subst">${groupSortDir}</span>`</span>)
+                }
+
+                <span class="hljs-keyword">return</span> queryParts
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAggregationClause</span> (<span
+                        class="hljs-params">groupBy, countsOnly</span>) </span>{
+                <span class="hljs-keyword">const</span> groupExpr = getGroupExpr(groupBy)
+                <span class="hljs-keyword">const</span> groupingPrefix = groupExpr ? <span class="hljs-string">`collect <span
+                        class="hljs-subst">${groupBy}</span> = <span class="hljs-subst">${groupExpr}</span> `</span> :
+                countsOnly ? <span class="hljs-string">'collect '</span> : <span class="hljs-string">''</span>
+                <span class="hljs-keyword">const</span> groupingSuffix = countsOnly ? <span class="hljs-string">'with count into total'</span>
+                : groupExpr ? <span class="hljs-string">'into paths = path'</span> : <span class="hljs-string">''</span>
+
+                <span class="hljs-keyword">return</span> aql.literal(<span class="hljs-string">`<span
+                        class="hljs-subst">${groupingPrefix}</span><span
+                        class="hljs-subst">${groupingSuffix}</span>`</span>)
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSortingClause</span> (<span
+                        class="hljs-params">sort, groupBy, countsOnly</span>) </span>{
+                <span class="hljs-keyword">const</span> sortDir = getSort(sort)
+                <span class="hljs-keyword">const</span> groupExpr = getGroupExpr(groupBy)
+                <span class="hljs-keyword">const</span> sortPrefix = (groupExpr || !countsOnly) ? <span
+                        class="hljs-string">'sort '</span> : <span class="hljs-string">''</span>
+                <span class="hljs-keyword">const</span> primarySort = getPrimarySort(sortPrefix, groupExpr, countsOnly,
+                groupBy, sortDir)
+                <span class="hljs-keyword">const</span> secondarySort = primarySort &amp;&amp; groupExpr &amp;&amp;
+                countsOnly ? <span class="hljs-string">`, <span class="hljs-subst">${groupBy}</span> asc`</span> : <span
+                        class="hljs-string">''</span>
+
+                <span class="hljs-keyword">return</span> aql.literal(<span class="hljs-string">`<span
+                        class="hljs-subst">${sortPrefix}</span><span class="hljs-subst">${primarySort}</span><span
+                        class="hljs-subst">${secondarySort}</span>`</span>)
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getPrimarySort</span> (<span
+                        class="hljs-params">sortPrefix, groupExpr, countsOnly, groupBy, sortDir</span>) </span>{
+                <span class="hljs-keyword">let</span> primarySort = <span class="hljs-string">''</span>
+
+                <span class="hljs-keyword">if</span> (sortPrefix) {
+                <span class="hljs-keyword">if</span> (countsOnly) {
+                primarySort = <span class="hljs-string">'total'</span>
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (groupExpr) {
+                primarySort = groupBy
+                } <span class="hljs-keyword">else</span> {
+                primarySort = <span class="hljs-string">'ne.node'</span>
+                }
+
+                primarySort += <span class="hljs-string">` <span class="hljs-subst">${sortDir}</span>`</span>
+                }
+
+                <span class="hljs-keyword">return</span> primarySort
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReturnClause</span> (<span
+                        class="hljs-params">
+  groupBy,
+  countsOnly,
+  groupSkip,
+  groupLimit
+</span>) </span>{
+                <span class="hljs-keyword">const</span> groupExpr = getGroupExpr(groupBy)
+                <span class="hljs-keyword">let</span> returnClause
+
+                <span class="hljs-keyword">if</span> (groupExpr) {
+                <span class="hljs-keyword">if</span> (countsOnly) {
+                returnClause = aql.literal(<span class="hljs-string">`return {<span class="hljs-subst">${groupBy}</span>, total}`</span>)
+                } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">const</span> queryParts = [
+                aql.literal(<span class="hljs-string">`return {<span class="hljs-subst">${groupBy}</span>, paths`</span>)
+                ]
+                <span class="hljs-keyword">if</span> (groupLimit) {
+                queryParts.push(aql<span class="hljs-string">`: paths[* <span class="hljs-subst">${getLimitClause(groupLimit, groupSkip)}</span>]`</span>)
+                }
+                queryParts.push(aql.literal(<span class="hljs-string">'}'</span>))
+
+                returnClause = aql.join(queryParts, <span class="hljs-string">''</span>)
+                }
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (countsOnly) {
+                returnClause = aql.literal(
+                <span class="hljs-string">'return {total}'</span>
+                )
+                } <span class="hljs-keyword">else</span> {
+                returnClause = aql.literal(
+                <span class="hljs-string">'return path'</span>
+                )
+                }
+
+                <span class="hljs-keyword">return</span> returnClause
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getScopeAndSearchPatternFor</span> (<span
+                        class="hljs-params">path</span>) </span>{
+                <span class="hljs-keyword">const</span> collections = getNonServiceCollections()
+                <span class="hljs-keyword">const</span> scopes = getAvailableScopes(collections)
+
+                <span class="hljs-keyword">const</span> scope = find(scopes, scope =&gt; minimatch(path,
+                scope.pathPattern))
+                <span class="hljs-keyword">const</span> searchPattern = scope.prefix ?
+                path.substring(scope.prefix.length) : path
+
+                <span class="hljs-keyword">return</span> { scope, searchPattern }
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAvailableScopes</span> (<span
+                        class="hljs-params">collections</span>) </span>{
+                <span class="hljs-keyword">return</span> {
+                database: getDBScope(),
+                graph: getGraphScope(),
+                collection: getCollectionScope(collections),
+                nodeGlob: getNodeGlobScope(),
+                nodeExact: getNodeBraceScope(collections)
+                }
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getGraphScope</span> (<span
+                        class="hljs-params"></span>) </span>{
+                <span class="hljs-keyword">return</span> {
+                pathPattern: <span class="hljs-string">'/g/*'</span>,
+                prefix: <span class="hljs-string">'/g/'</span>,
+                filters: searchPattern =&gt; {
+                <span class="hljs-keyword">const</span> graphNames = difference(gg._list(), values(SERVICE_GRAPHS))
+                <span class="hljs-keyword">const</span> matches = minimatch.match(graphNames, searchPattern)
+                <span class="hljs-keyword">const</span> collNames = getMatchingCollNames(matches)
+
+                <span class="hljs-keyword">return</span> aql<span class="hljs-string">`filter e.collection in <span
+                        class="hljs-subst">${collNames}</span>`</span>
+                }
+                }
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCollectionScope</span> (<span
+                        class="hljs-params">collections</span>) </span>{
+                <span class="hljs-keyword">return</span> {
+                pathPattern: <span class="hljs-string">'/c/*'</span>,
+                prefix: <span class="hljs-string">'/c/'</span>,
+                filters: searchPattern =&gt; {
+                <span class="hljs-keyword">const</span> matches = minimatch.match(collections, searchPattern)
+
+                <span class="hljs-keyword">return</span> aql<span class="hljs-string">`filter e.collection in <span
+                        class="hljs-subst">${matches}</span>`</span>
+                }
+                }
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getNodeGlobScope</span> (<span
+                        class="hljs-params"></span>) </span>{
+                <span class="hljs-keyword">return</span> {
+                pathPattern: <span class="hljs-string">'/ng/**'</span>,
+                prefix: <span class="hljs-string">'/ng/'</span>,
+                filters: searchPattern =&gt; {
+                <span class="hljs-keyword">const</span> idPattern = minimatch.makeRe(searchPattern).source
+
+                <span class="hljs-keyword">return</span> aql<span
+                        class="hljs-string">`filter regex_test(e.meta.id, <span class="hljs-subst">${idPattern}</span>)`</span>
+                }
+                }
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getNodeBraceScope</span> (<span
+                        class="hljs-params">collections</span>) </span>{
+                <span class="hljs-keyword">return</span> {
+                pathPattern: <span class="hljs-string">'/n/**'</span>,
+                prefix: <span class="hljs-string">'/n/'</span>,
+                filters: searchPattern =&gt; {
+                <span class="hljs-keyword">const</span> collMatches = chain(expand(searchPattern))
+                .map(pattern =&gt; pattern.split(<span class="hljs-string">'/'</span>)[<span
+                        class="hljs-number">0</span>])
+                .intersection(collections)
+                .value()
+
+                <span class="hljs-keyword">return</span> aql<span class="hljs-string">`
+        let collName = e.collection
+        filter collName in <span class="hljs-subst">${collMatches}</span>
+        filter e.meta.id in idGroups[collName]
+      `</span> <span class="hljs-comment">// See initializers below for idGroups definition.</span>
+                },
+                initializers: getOpNodeBraceScope(collections).initializers
+                }
+                }
+
+                exports.buildShowQuery = <span class="hljs-function"><span class="hljs-keyword">function</span> <span
+                        class="hljs-title">buildShowQuery</span> (<span class="hljs-params">{ path, timestamp, sort, skip, limit, groupBy, countsOnly, groupSort, groupSkip, groupLimit }</span>) </span>{
+                <span class="hljs-keyword">const</span> { scope, searchPattern } = getScopeAndSearchPatternFor(path)
+                <span class="hljs-keyword">const</span> queryParts = [
+                getCollTypeInitializer(),
+                getScopeInitializers(scope, searchPattern),
+                ...getShowQueryPrefix(timestamp, scope, searchPattern)
+                ]
+                <span class="hljs-keyword">const</span> groupExpr = getGroupExpr(groupBy)
+                <span class="hljs-keyword">const</span> clauseFlag = (groupExpr ? <span class="hljs-string">'+g'</span>
+                : <span class="hljs-string">'-g'</span>) + (countsOnly ? <span class="hljs-string">'+c'</span> : <span
+                        class="hljs-string">'-c'</span>)
+                <span class="hljs-keyword">const</span> sequence = CLAUSE_FLAGS[clauseFlag]
+                <span class="hljs-keyword">const</span> clauseMap = {
+                ac: () =&gt; [getAggregationClause(groupBy, countsOnly)],
+                alc: () =&gt; [getAggregationClause(groupBy, countsOnly), getLimitClause(limit, skip)],
+                slc: () =&gt; [getSortingClause(sort, groupBy, countsOnly), getLimitClause(limit, skip)],
+                qs: () =&gt; getShowQuerySuffix(groupExpr, groupSort)
+                }
+
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> clauseKey <span
+                        class="hljs-keyword">of</span> sequence) {
+                queryParts.push(...clauseMap[clauseKey]())
+                }
+
+                queryParts.push(getReturnClause(groupBy, countsOnly, groupSkip, groupLimit))
+
+                <span class="hljs-keyword">return</span> aql.join(queryParts, <span class="hljs-string">'\n'</span>)
+                }
+
+                exports.patch = attachSpan(<span class="hljs-function"><span class="hljs-keyword">function</span> <span
+                        class="hljs-title">patch</span> (<span class="hljs-params">paths</span>) </span>{
+                <span class="hljs-keyword">const</span> nodes = []
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> p <span
+                        class="hljs-keyword">of</span> paths) {
+                <span class="hljs-keyword">let</span> diffs = []
+                <span class="hljs-keyword">const</span> startingIdx = p[<span class="hljs-number">1</span>].hop._id.startsWith(SERVICE_COLLECTIONS.snapshots)
+                ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>
+                <span class="hljs-keyword">const</span> startingNode = p[startingIdx].hop.data
+
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = startingIdx + <span
+                        class="hljs-number">2</span>; i &lt; p.length; i++) {
+                diffs.push(p[i].command)
+                }
+
+                <span class="hljs-keyword">if</span> (startingIdx === <span class="hljs-number">1</span>) {
+            </div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><p>Reverse the individual diffs</p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> diffs = diffs.map(c =&gt; jiff.inverse(c))
+                }
+
+                <span class="hljs-keyword">let</span> node = startingNode
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> d <span
+                        class="hljs-keyword">of</span> diffs) {
+            </div>
+        </div>
+    </div>
+    <div class="segment">
+        <div class="comments ">
+            <div class="wrapper"><p>noinspection JSCheckFunctionSignatures</p></div>
+        </div>
+        <div class="code">
+            <div class="wrapper"> node = jiff.patch(d, node, {})
+                }
+
+                nodes.push(node)
+                }
+
+                <span class="hljs-keyword">return</span> nodes
+                }, <span class="hljs-string">'patch'</span>, cto)
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
