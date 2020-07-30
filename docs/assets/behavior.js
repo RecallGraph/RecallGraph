@@ -137,7 +137,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/createHandlers",
                 "title": "createHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "createProvider",
+                    "slug": "createprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -156,7 +167,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/diffHandlers",
                 "title": "diffHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "diffProvider",
+                    "slug": "diffprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -175,7 +197,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/kShortestPathsHandlers",
                 "title": "kShortestPathsHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "kspProvider",
+                    "slug": "kspprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -194,7 +227,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/logHandlers",
                 "title": "logHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": []
             }, {
               "type": "file",
               "data": {
@@ -375,7 +409,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/purgeHandlers",
                 "title": "purgeHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "purgeProvider",
+                    "slug": "purgeprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -394,7 +439,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/removeHandlers",
                 "title": "removeHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": []
             }, {
               "type": "file",
               "data": {
@@ -413,7 +459,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/replaceHandlers",
                 "title": "replaceHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": []
             }, {
               "type": "file",
               "data": {
@@ -462,7 +509,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/showHandlers",
                 "title": "showHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": []
             }, {
               "type": "file",
               "data": {
@@ -481,7 +529,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/traverseHandlers",
                 "title": "traverseHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": []
             }, {
               "type": "file",
               "data": {
@@ -500,7 +549,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "pageTitle": "lib/handlers/updateHandlers",
                 "title": "updateHandlers"
               },
-              "depth": 3
+              "depth": 3,
+              "outline": []
             }
           ]
         }

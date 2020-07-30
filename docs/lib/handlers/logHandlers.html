@@ -1,76 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head><title>lib/handlers/logHandlers</title></head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
-<meta content="../../" name="groc-relative-root">
-<meta content="lib/handlers/logHandlers" name="groc-document-path">
-<meta content="lib/handlers/logHandlers.js" name="groc-project-path">
-<meta content="https://github.com/RecallGraph/RecallGraph" name="groc-github-url">
-<link href="../../assets/style.css" media="all" rel="stylesheet" type="text/css">
-<script src="../../assets/behavior.js" type="text/javascript"></script>
-<body>
-<div id="meta">
-    <div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/handlers/logHandlers.js">lib/handlers/logHandlers.js</a>
-    </div>
-</div>
-<div id="document">
-    <div class="segment">
-        <div class="code">
-            <div class="wrapper"><span class="hljs-pi">'use strict'</span>
+<!DOCTYPE html><html lang="en"><head><title>lib/handlers/logHandlers</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../../"><meta name="groc-document-path" content="lib/handlers/logHandlers"><meta name="groc-project-path" content="lib/handlers/logHandlers.js"><meta name="groc-github-url" content="https://github.com/RecallGraph/RecallGraph"><link rel="stylesheet" type="text/css" media="all" href="../../assets/style.css"><script type="text/javascript" src="../../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/RecallGraph/RecallGraph/blob/master/lib/handlers/logHandlers.js">lib/handlers/logHandlers.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="hljs-pi">'use strict'</span>
 
-                <span class="hljs-keyword">const</span> logOp = <span class="hljs-built_in">require</span>(<span
-                        class="hljs-string">'../operations/log'</span>)
-                <span class="hljs-keyword">const</span> { omit } = <span class="hljs-built_in">require</span>(<span
-                        class="hljs-string">'lodash'</span>)
-                <span class="hljs-keyword">const</span> { JoiRG, validate, checkValidation } = <span
-                        class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/helpers'</span>)
-                <span class="hljs-keyword">const</span> { PATH_SCHEMA } = <span
-                        class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/schemas'</span>)
+<span class="hljs-keyword">const</span> logOp = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../operations/log'</span>)
+<span class="hljs-keyword">const</span> { omit } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)
+<span class="hljs-keyword">const</span> { JoiRG, validate, checkValidation } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/helpers'</span>)
+<span class="hljs-keyword">const</span> { PATH_SCHEMA } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../routes/schemas'</span>)
 
-                <span class="hljs-keyword">const</span> optionsSchema = JoiRG.object().keys({
-                since: JoiRG.number(),
-                until: JoiRG.number(),
-                sort: JoiRG.string().valid(<span class="hljs-string">'asc'</span>, <span
-                        class="hljs-string">'desc'</span>),
-                skip: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
-                limit: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
-                groupBy: JoiRG.string().valid(<span class="hljs-string">'node'</span>, <span class="hljs-string">'collection'</span>,
-                <span class="hljs-string">'event'</span>, <span class="hljs-string">'type'</span>),
-                countsOnly: JoiRG.boolean(),
-                groupSort: JoiRG.string().valid(<span class="hljs-string">'asc'</span>, <span
-                        class="hljs-string">'desc'</span>),
-                groupSkip: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
-                groupLimit: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
-                postFilter: JoiRG.string().filter().empty(<span class="hljs-string">''</span>)
-                })
+<span class="hljs-keyword">const</span> optionsSchema = JoiRG.object().keys({
+  since: JoiRG.number(),
+  until: JoiRG.number(),
+  sort: JoiRG.string().valid(<span class="hljs-string">'asc'</span>, <span class="hljs-string">'desc'</span>),
+  skip: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
+  limit: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
+  groupBy: JoiRG.string().valid(<span class="hljs-string">'node'</span>, <span class="hljs-string">'collection'</span>, <span class="hljs-string">'event'</span>, <span class="hljs-string">'type'</span>),
+  countsOnly: JoiRG.boolean(),
+  groupSort: JoiRG.string().valid(<span class="hljs-string">'asc'</span>, <span class="hljs-string">'desc'</span>),
+  groupSkip: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
+  groupLimit: JoiRG.number().integer().min(<span class="hljs-number">0</span>),
+  postFilter: JoiRG.string().filter().empty(<span class="hljs-string">''</span>)
+})
 
-                <span class="hljs-function"><span class="hljs-keyword">function</span> <span
-                        class="hljs-title">log</span> (<span class="hljs-params">req</span>) </span>{
-                <span class="hljs-keyword">const</span> path = req.queryParams.path || req.body.path
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span> (<span class="hljs-params">req</span>) </span>{
+  <span class="hljs-keyword">const</span> path = req.queryParams.path || req.body.path
 
-                <span class="hljs-keyword">const</span> options = omit(req.queryParams, <span
-                        class="hljs-string">'path'</span>, <span class="hljs-string">'postFilter'</span>)
-                options.postFilter = req.queryParams.postFilter || (req.body &amp;&amp; req.body.postFilter)
+  <span class="hljs-keyword">const</span> options = omit(req.queryParams, <span class="hljs-string">'path'</span>, <span class="hljs-string">'postFilter'</span>)
+  options.postFilter = req.queryParams.postFilter || (req.body &amp;&amp; req.body.postFilter)
 
-                <span class="hljs-keyword">return</span> logOp(path, options)
-                }
+  <span class="hljs-keyword">return</span> logOp(path, options)
+}
 
-                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logProvider</span> (<span
-                        class="hljs-params">path, options = {}</span>) </span>{
-                <span class="hljs-keyword">const</span> result = validate([path, options], [PATH_SCHEMA, optionsSchema])
-                checkValidation(result)
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logProvider</span> (<span class="hljs-params">path, options = {}</span>) </span>{
+  <span class="hljs-keyword">const</span> result = validate([path, options], [PATH_SCHEMA, optionsSchema])
+  checkValidation(result)
 
-                <span class="hljs-keyword">return</span> logOp(...result.values)
-                }
+  <span class="hljs-keyword">return</span> logOp(...result.values)
+}
 
-                <span class="hljs-built_in">module</span>.exports = {
-                log,
-                logProvider
-                }
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-</html>
+<span class="hljs-built_in">module</span>.exports = {
+  log,
+  logProvider
+}</div></div></div></div></body></html>
