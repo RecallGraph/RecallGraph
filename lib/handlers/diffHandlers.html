@@ -23,9 +23,45 @@
   options.postFilter = req.queryParams.postFilter || (req.body &amp;&amp; req.body.postFilter)
 
   <span class="hljs-keyword">return</span> diffOp(path, options)
-}
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">diffProvider</span> (<span class="hljs-params">path, options = {}</span>) </span>{
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="diffprovider">diffProvider</h3>
+<p>Returns diffs for nodes matching the given path pattern and the sorting/slicing/post-filter constraints.</p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><code>path</code> - The path pattern to pick nodes whose diffs should be returned.</li>
+<li><code>options</code> - An optional object, containing any combination of the following keys:<ul>
+<li><code>since</code> - The unix timestamp (sec) for the earliest matching event from which to start fetching diffs
+(inclusive). Precision: 0.1μs. Example: since=1581583228.2800217</li>
+<li><code>until</code> - The unix timestamp (sec) for the latest matching event until which to keep fetching diffs
+(exclusive). Precision: 0.1μs. Example: until=1581583228.2800217</li>
+<li><code>sort</code> - The primary sort order of records in the result set, sorted by node ID. Default: <code>asc</code>.</li>
+<li><code>skip</code> - The number records to skip/omit from the result set, starting from the first. Falsey implies
+none.</li>
+<li><code>limit</code> - The number records to keep in the result set, starting from <code>skip</code> or <code>0</code>. Falsey implies all.</li>
+<li><code>reverse</code> - Whether to invert the individual diffs, so that they can be applied in reverse order. This
+also reverses the order of diffs within a node.</li>
+<li><code>postFilter</code> - The post-filter expression to apply on the diff result.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Return:</strong></p>
+<p>The contents of the result returned by the method is identical to the contents of the response
+body of the corresponding
+<a href="https://app.swaggerhub.com/apis-docs/RecallGraph/RecallGraph/1.0.0#/Event/diffGet">HTTP API</a>,
+invoked with identical input, except when the method throws an error.
+In the latter case, the error message would be identical to the error response of the HTTP call.</p>
+<p><strong>Errors:</strong></p>
+<p>Any error that occurs while executing the method is thrown back to the caller.</p>
+<p><strong>Examples:</strong></p>
+<ol>
+<li>Default options:<pre><code>diffProvider(&#39;/c/vertex_collection&#39;)</code></pre>
+</li>
+<li>Reversed diffs starting from a time point:<pre><code>diffProvider(&#39;/c/vertex_collection&#39;, {
+   since: 1581583228.2800217,
+   reverse: true
+ }
+)</code></pre>
+</li>
+</ol></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">diffProvider</span> (<span class="hljs-params">path, options = {}</span>) </span>{
   <span class="hljs-keyword">const</span> result = validate([path, options], providerSchemas)
   checkValidation(result)
 

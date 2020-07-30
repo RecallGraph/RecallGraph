@@ -9,7 +9,8 @@
 <span class="hljs-keyword">const</span> intSchema = JoiRG.number().integer()
 <span class="hljs-keyword">const</span> docIDSchema = JoiRG.string().regex(DOC_ID_REGEX).required()
 <span class="hljs-keyword">const</span> providerSchemas = [
-  JoiRG.number(), docIDSchema, docIDSchema, intSchema.min(<span class="hljs-number">1</span>), intSchema.min(<span class="hljs-number">0</span>), intSchema.min(<span class="hljs-number">1</span>), KSP_BODY_SCHEMA
+  JoiRG.number(), docIDSchema, docIDSchema, intSchema.min(<span class="hljs-number">1</span>), intSchema.min(<span class="hljs-number">0</span>),
+  intSchema.min(<span class="hljs-number">1</span>), KSP_BODY_SCHEMA
 ]
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">kShortestPaths</span> (<span class="hljs-params">req</span>) </span>{
@@ -17,12 +18,63 @@
   <span class="hljs-keyword">const</span> { timestamp, svid, evid, depth, skip, limit } = req.queryParams
 
   <span class="hljs-keyword">return</span> kspOp(timestamp, svid, evid, depth, edges, skip, limit, { vFilter, eFilter, weightExpr })
-}
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">kspProvider</span> (<span class="hljs-params">timestamp, svid, evid, depth, edges, skip = 0, limit = 1,
+}</div></div></div><div class="segment"><div class="comments "><div class="wrapper"><h3 id="kspprovider">kspProvider</h3>
+<p>Returns k shortest historic paths between vertices, matching the given filters.</p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><code>timestamp</code> - The unix timestamp (sec) for which to traverse node states. Precision: 0.1μs.
+ Example: timestamp=1581583228.2800217. Default: Current Time.</li>
+<li><code>svid</code> - The id of the starting vertex from which to begin traversal.</li>
+<li><code>evid</code> - The id of the ending vertex at which to end traversal.</li>
+<li><code>depth</code> - The max depth to which the traversal should execute.</li>
+<li><code>edges</code> - The edge collections to traverse along with their specified directions.</li>
+<li><code>skip</code> - The number of paths to skip. Default: <code>0</code>.</li>
+<li><code>limit</code> - The max number of shortest paths to return. Default: <code>1</code>.</li>
+<li><code>options</code> - An optional object, containing any combination of the following keys:<ul>
+<li><code>vFilter</code> - The filter expression to apply on the traversed vertices.</li>
+<li><code>eFilter</code> - The filter expression to apply on the traversed edges.</li>
+<li><code>weightExpr</code> - The weight expression to evaluate cost per edge. Default <code>1</code>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Return:</strong></p>
+<p>The contents of the result returned by the method is identical to the contents of the response
+body of the corresponding
+<a href="https://app.swaggerhub.com/apis-docs/RecallGraph/RecallGraph/1.0.0#/History/kShortestPathsPost">HTTP API</a>,
+invoked with identical input, except when the method throws an error.
+In the latter case, the error message would be identical to the error response of the HTTP call.</p>
+<p><strong>Errors:</strong></p>
+<p>Any error that occurs while executing the method is thrown back to the caller.</p>
+<p><strong>Examples:</strong></p>
+<ol>
+<li>Default options:<pre><code>kspProvider(1581583228.2800217, &#39;/vertex_collection/1&#39;,
+ &#39;/vertex_collection/10&#39;, 3,
+ {
+   &quot;edge_collection_1&quot;: &quot;inbound&quot;,
+   &quot;edge_collection_2&quot;: &quot;outbound&quot;,
+   &quot;edge_collection_3&quot;: &quot;any&quot;
+ }
+)</code></pre>
+</li>
+<li>Skip the 1st path and return the next 2, using a weight expression of
+&#39;price + service charge + 18% service tax&#39;:<pre><code>kspProvider(1581583228.2800217, &#39;/vertex_collection/1&#39;,
+ &#39;/vertex_collection/10&#39;, 3,
+ {
+   &quot;edge_collection_1&quot;: &quot;inbound&quot;,
+   &quot;edge_collection_2&quot;: &quot;outbound&quot;,
+   &quot;edge_collection_3&quot;: &quot;any&quot;
+ },
+ 1, 2,
+ { weightExpr: &quot;price + service_charge * 1.18&quot; }
+)</code></pre>
+</li>
+</ol></div></div><div class="code"><div class="wrapper"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">kspProvider</span> (<span class="hljs-params">timestamp, svid, evid, depth, edges, skip = 0, limit = 1,
   { vFilter, eFilter, weightExpr } = {}</span>) </span>{
-  <span class="hljs-keyword">const</span> result = validate([timestamp, svid, evid, depth, skip, limit, { edges, vFilter, eFilter, weightExpr }],
-    providerSchemas)
+  <span class="hljs-keyword">const</span> result = validate([
+    timestamp, svid, evid, depth, skip, limit,
+    { edges, vFilter, eFilter, weightExpr }
+  ],
+  providerSchemas)
   checkValidation(result)
 
   <span class="hljs-keyword">const</span> args = result.values
