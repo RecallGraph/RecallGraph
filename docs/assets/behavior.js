@@ -228,7 +228,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "logHandlers"
               },
               "depth": 3,
-              "outline": []
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "logProvider",
+                    "slug": "logprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -440,7 +450,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "removeHandlers"
               },
               "depth": 3,
-              "outline": []
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "removeProvider",
+                    "slug": "removeprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -460,7 +480,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "replaceHandlers"
               },
               "depth": 3,
-              "outline": []
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "replaceProvider",
+                    "slug": "replaceprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -510,7 +540,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "showHandlers"
               },
               "depth": 3,
-              "outline": []
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "showProvider",
+                    "slug": "showprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -530,7 +570,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "traverseHandlers"
               },
               "depth": 3,
-              "outline": []
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "traverseProvider",
+                    "slug": "traverseprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }, {
               "type": "file",
               "data": {
@@ -550,7 +600,17 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "updateHandlers"
               },
               "depth": 3,
-              "outline": []
+              "outline": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "updateProvider",
+                    "slug": "updateprovider"
+                  },
+                  "depth": 3
+                }
+              ]
             }
           ]
         }
