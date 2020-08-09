@@ -70,8 +70,12 @@ Refer to the [installation docs](https://docs.recallgraph.tech/getting-started/i
 ## Documentation
 
 ### API
+#### HTTP API
 - API documentation is hosted at [SwaggerHub](https://app.swaggerhub.com/apis-docs/RecallGraph/RecallGraph/1.0.0#/).
 - API documentation is also available directly in the Swagger console once the service is installed (accessed through ArangoDB's web UI).
+
+#### Provider API
+- API documentation is hosted at [Github Pages](https://recallgraph.github.io/RecallGraph/lib/handlers/providers.html).
 
 ### Concepts and Guides
 User guides, glossary and technical docs are available at the [main documentation website](https://docs.recallgraph.tech/).
