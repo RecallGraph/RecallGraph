@@ -19,7 +19,7 @@
   "dependencies": {
     "traceCollector": {
       "name": "@RecallGraph/foxx-tracer-collector",
-      "version": "^0.0.1",
+      "version": "^0.0.5",
       "description": "Opentrace-compatible collector to send span records to.",
       "required": false,
       "multiple": false

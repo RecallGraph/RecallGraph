@@ -19,7 +19,7 @@ const path = require('path')
 const fs = require('fs')
 const {
   utils: { setEndpointTraceHeaders, initTracer }, middleware
-} = require('foxx-tracing')
+} = require('@recallgraph/foxx-tracer')
 const providers = require('./lib/handlers/providers')
 
 /*

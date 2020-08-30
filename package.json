@@ -2,6 +2,7 @@
   "name": "recallgraph",
   "version": "1.0.0",
   "description": "A versioning data store for time-variant graph data",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/RecallGraph/RecallGraph"
@@ -23,9 +24,9 @@
   "author": "Aditya Mukhopadhyay",
   "license": "Apache-2.0",
   "dependencies": {
+    "@recallgraph/foxx-tracer": "4.0.0",
     "brace-expansion": "^1.1.11",
     "cytoscape": "^3.15.0",
-    "foxx-tracing": "RecallGraph/foxx-tracer#master",
     "jiff": "^0.7.3",
     "jsep": "RecallGraph/jsep#master",
     "opentracing": "^0.14.4"
