@@ -65,7 +65,7 @@ RecallGraph installs like any other _Foxx Microservice_ inside a database, on an
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.6/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
 ### Install From Source
-Refer to the [installation docs](https://docs.recallgraph.tech/getting-started/installation#from-source) if you want to install from source.
+Refer to the [installation docs](https://docs.recallgraph.tech/working-with-recallgraph/installation#from-source) if you want to install from source.
 
 ## Documentation
 
