@@ -5,6 +5,8 @@ RecallGraph is a _versioned-graph_ data store - it retains all changes that its 
 
 It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB v3.5 and v3.6, with support for v3.7 in the pipeline.
 
+**Example: [A Time-Travelling Mind Map Tool](https://hivemind-git-development-adityamukho.vercel.app/).**
+
 ---
 
 [![Build Status](https://travis-ci.org/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.org/github/RecallGraph/RecallGraph/branches)
