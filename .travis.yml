@@ -95,9 +95,9 @@ before_script:
   - export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
   - sleep 60
   - docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/travis/create_db.js
-  - docker exec arangodb /mnt/evstore/test/travis/install.sh
+  - docker exec arangodb /bin/sh -c 'dos2unix < /mnt/evstore/test/travis/install.sh |sh -s'
 
-script: ./test/travis/travis-runner.sh
+script: dos2unix < ./test/travis/travis-runner.sh |bash -s
 
 after_script:
   - aws s3 sync ./test/reports/ s3://$TRAVIS_S3_BUCKET/$TRAVIS_BUILD_NUMBER/
