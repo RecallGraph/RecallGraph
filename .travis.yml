@@ -2,7 +2,7 @@ os: linux
 dist: focal
 group: edge
 arch: arm64-graviton2
-virt: lxd
+virt: full
 language: node_js
 node_js: node
 services: docker
