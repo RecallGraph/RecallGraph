@@ -73,6 +73,7 @@ env:
 install:
   - npm install
   - pip install --user awscli
+  - sudo apt update
   - sudo apt install dos2unix
 
 before_script:
