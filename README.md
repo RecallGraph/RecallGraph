@@ -11,7 +11,7 @@ currently being developed and tested on ArangoDB v3.6, with support for v3.7 in 
 
 ---
 
-[![Build Status](https://travis-ci.org/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.org/github/RecallGraph/RecallGraph/branches)
+[![Build Status](https://travis-ci.com/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.com/github/RecallGraph/RecallGraph/branches)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
