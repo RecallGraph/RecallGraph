@@ -81,7 +81,7 @@ before_script:
   - rm -rf ./.nyc_output/*
   - npx nyc instrument . ./.nyc_output/instrumented
   - cp -r ./.nyc_output/instrumented/lib .
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin || login_failed=1
   - docker pull arangodb/arangodb-preview:$ARANGODB_VERSION
   - docker run
     -e ARANGO_RANDOM_ROOT_PASSWORD=1
