@@ -9,6 +9,8 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is
 currently being developed and tested on ArangoDB v3.6, with support for v3.7 in the pipeline.
 
+**Example: [A Time-Travelling Mind Map Tool](https://hivemind-git-development-adityamukho.vercel.app/).**
+
 ---
 
 [![Build Status](https://travis-ci.com/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.com/github/RecallGraph/RecallGraph/branches)
@@ -69,7 +71,7 @@ RecallGraph installs like any other _Foxx Microservice_ inside a database, on an
 2. Follow the instructions in the [Foxx Deployment Manual](https://www.arangodb.com/docs/3.6/foxx-deployment.html). The web interface is the easiest, while the `foxx-cli` is more suitable for power users.
 
 ### Install From Source
-Refer to the [installation docs](https://docs.recallgraph.tech/getting-started/installation#from-source) if you want to install from source.
+Refer to the [installation docs](https://docs.recallgraph.tech/working-with-recallgraph/installation#from-source) if you want to install from source.
 
 ## Documentation
 
