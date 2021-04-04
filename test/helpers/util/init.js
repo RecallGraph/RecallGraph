@@ -3,7 +3,7 @@
 const { db } = require('@arangodb')
 const cache = require('@arangodb/aql/cache')
 const { forEach, omit, isPlainObject, get } = require('lodash')
-const { utils: { setTrace, clearTraceContext } } = require('foxx-tracing')
+const { utils: { setTrace, clearTraceContext } } = require('@recallgraph/foxx-tracer')
 const loadSampleData = require('./loadSampleData')
 const loadFlightData = require('./loadFlightData')
 const { SERVICE_COLLECTIONS } = require('../../../lib/constants')

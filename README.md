@@ -1,15 +1,19 @@
 ![Logo](assets/Rg-1-bg.jpg)
 
 # RecallGraph - A versioning data store for time-variant graph data.
-RecallGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past state of the graph just as easily as the present.
+RecallGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone
+through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past
+state of the graph just as easily as the present.
 
-It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is currently being developed and tested on ArangoDB v3.5 and v3.6, with support for v3.7 in the pipeline.
+It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [ArangoDB](https://www.arangodb.com/) that
+features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is
+currently being developed and tested on ArangoDB v3.6, with support for v3.7 in the pipeline.
 
 **Example: [A Time-Travelling Mind Map Tool](https://hivemind-git-development-adityamukho.vercel.app/).**
 
 ---
 
-[![Build Status](https://travis-ci.org/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.org/github/RecallGraph/RecallGraph/branches)
+[![Build Status](https://travis-ci.com/RecallGraph/RecallGraph.svg?branch=development)](https://travis-ci.com/github/RecallGraph/RecallGraph/branches)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=coverage)](https://sonarcloud.io/component_measures?id=adityamukho_evstore&metric=coverage)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=adityamukho_evstore&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=adityamukho_evstore)
@@ -72,8 +76,12 @@ Refer to the [installation docs](https://docs.recallgraph.tech/working-with-reca
 ## Documentation
 
 ### API
+#### HTTP API
 - API documentation is hosted at [SwaggerHub](https://app.swaggerhub.com/apis-docs/RecallGraph/RecallGraph/1.0.0#/).
 - API documentation is also available directly in the Swagger console once the service is installed (accessed through ArangoDB's web UI).
+
+#### Provider API
+- API documentation is hosted at [Github Pages](https://recallgraph.github.io/RecallGraph/lib/handlers/providers.html).
 
 ### Concepts and Guides
 User guides, glossary and technical docs are available at the [main documentation website](https://docs.recallgraph.tech/).

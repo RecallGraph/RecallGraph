@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # send the long living command to background
-docker exec arangodb /mnt/evstore/test/travis/run.sh &
+docker exec arangodb /bin/sh -c 'dos2unix < /mnt/evstore/test/travis/run.sh |sh -s' &
 
 # Constants
 pid=$!
