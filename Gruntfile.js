@@ -54,7 +54,8 @@ module.exports = function (grunt) {
     },
     clean: {
       build: ['build'],
-      dist: ['dist']
+      dist: ['dist'],
+      docs: ['docs']
     },
     uninstall: {
       command: ['build', 'foxx', 'uninstall'],
