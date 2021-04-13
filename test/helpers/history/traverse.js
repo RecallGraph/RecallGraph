@@ -1,9 +1,25 @@
+/* eslint-disable no-unused-expressions */
 'use strict'
 
 const { expect } = require('chai')
-const { db, aql } = require('@arangodb')
+const { db, aql, time: dbtime } = require('@arangodb')
 const request = require('@arangodb/request')
-const { chain, sample, memoize, omit, isObject, pick, isEmpty, map, remove, cloneDeep, zipObject, stubTrue } = require(
+const {
+  chain,
+  sample,
+  memoize,
+  omit,
+  isObject,
+  pick,
+  isEmpty,
+  map,
+  remove,
+  cloneDeep,
+  zipObject,
+  stubTrue,
+  last,
+  compact
+} = require(
   'lodash')
 const init = require('../util/init')
 const show = require('../../../lib/operations/show')
@@ -11,7 +27,6 @@ const { cartesian, generateFilters } = require('../util')
 const { getNonServiceCollections } = require('../../../lib/operations/helpers')
 const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
 const { getCollectionType } = require('../../../lib/helpers')
-const { DOC_ID_REGEX } = require('../../../lib/constants')
 const {
   traverseSkeletonGraph, createNodeBracepath
 } = require('../../../lib/operations/traverse/helpers')
@@ -22,14 +37,8 @@ const { baseUrl } = module.context
 const lineageCollName = module.context.collectionName('test_lineage')
 
 // Private
-function removeFreeEdges (vertices, edges) {
-  const vSet = new Set(map(vertices, '_id'))
-
-  remove(edges, e => [e._from, e._to].some(vid => !vSet.has(vid)))
-}
-
 function edgeIsValid (v, e, edgeCollections) {
-  const eColl = e.id().split('/')[0]
+  const eColl = e.data().coll
 
   switch (edgeCollections[eColl]) {
     case 'inbound':
@@ -174,7 +183,8 @@ function buildFilteredGraph (svid, vertices, edges, minDepth, maxDepth, bfs, uni
   cy.add(vertices.map(v => ({
     group: 'nodes',
     data: Object.assign({
-      id: v._id
+      id: v._id,
+      coll: v._id.split('/')[0]
     }, v)
   })))
 
@@ -183,12 +193,25 @@ function buildFilteredGraph (svid, vertices, edges, minDepth, maxDepth, bfs, uni
     data: Object.assign({
       id: e._id,
       source: e._from,
-      target: e._to
+      target: e._to,
+      coll: e._id.split('/')[0]
     }, e)
   })))
 
   cy.endBatch()
 
+  return traverse(cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter,
+    pFilter)
+}
+
+function traverse (cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter, pFilter) {
+  const sv = cy.$id(svid)
+  if (!sv.data()) {
+    return { vertices: [], edges: [], paths: [] }
+  }
+
+  const vertices = cy.nodes().map(v => omit(v.data(), 'id'))
+  const edges = cy.edges().map(e => omit(e.data(), 'id', 'source', 'target'))
   const vMap = zipObject(map(vertices, '_id'), vertices)
   const eMap = zipObject(map(edges, '_id'), edges)
   const traversal = {
@@ -197,7 +220,7 @@ function buildFilteredGraph (svid, vertices, edges, minDepth, maxDepth, bfs, uni
     eSet: new Set(),
     paths: []
   }
-  const sv = cy.$id(svid)
+
   const vFilterFn = vFilter ? parseExpr(vFilter) : stubTrue
   const eFilterFn = eFilter ? parseExpr(eFilter) : stubTrue
   const pFilterFn = pFilter ? parseExpr(pFilter) : stubTrue
@@ -207,8 +230,7 @@ function buildFilteredGraph (svid, vertices, edges, minDepth, maxDepth, bfs, uni
   }
 
   if (bfs) {
-    breadthFirstWalk(traversal, minDepth, maxDepth, uniqueVertices, uniqueEdges, edgeCollections, vFilterFn,
-      eFilterFn,
+    breadthFirstWalk(traversal, minDepth, maxDepth, uniqueVertices, uniqueEdges, edgeCollections, vFilterFn, eFilterFn,
       pFilterFn, [
         {
           path: { vertices: [], edges: [], vSet: new Set(), eSet: new Set() },
@@ -240,11 +262,17 @@ function buildFilteredGraph (svid, vertices, edges, minDepth, maxDepth, bfs, uni
 }
 
 // Public
+function removeFreeEdges (vertices, edges) {
+  const vSet = new Set(map(vertices, '_id'))
+
+  remove(edges, e => [e._from, e._to].some(vid => !vSet.has(vid)))
+}
+
 const generateCombos = memoize((keys = [], include = true, {
   bfs = [false, true],
   uniqueVertices = ['none', 'path', 'global'],
   uniqueEdges = ['none', 'path'],
-  timestamp = [undefined, ...init.getMilestones()],
+  timestamp = [undefined, ...init.getSampleDataRefs().milestones],
   minDepth = [0, 1],
   relDepth = [0, 1],
   edgeCollections = ['inbound', 'outbound', 'any'].map(dir => ({
@@ -283,29 +311,50 @@ function generateOptionCombos (bfs = true) {
   return generateCombos(['bfs', 'uniqueVertices', 'uniqueEdges'], true, { bfs: [bfs] })
 }
 
-function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices }) {
+function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges }) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
-  const combos = generateCombos(['bfs', 'uniqueVertices', 'uniqueEdges'], false)
+  const combos = generateCombos(['timestamp', 'minDepth', 'relDepth', 'edgeCollections'])
   combos.forEach(combo => {
     const { timestamp, minDepth, relDepth, edgeCollections } = combo
     const maxDepth = minDepth + relDepth
     const svColl = db._collection(sample(vertexCollNames))
     const svid = svColl.any()._id
+    const params = JSON.stringify(combo)
 
-    const nodeGroups = traverseSkeletonGraph(timestamp, svid, maxDepth, edgeCollections, bfs, uniqueVertices)
-    const params = JSON.stringify(Object.assign({ bfs, uniqueVertices }, combo))
+    const nodeGroups = traverseSkeletonGraph(timestamp || dbtime(), svid, minDepth, maxDepth, edgeCollections, bfs,
+      uniqueVertices, uniqueEdges)
 
     expect(nodeGroups, params).to.be.an.instanceOf(Object)
     expect(nodeGroups.vertices, params).to.be.an.instanceOf(Array)
     expect(nodeGroups.edges, params).to.be.an.instanceOf(Array)
+    expect(nodeGroups.paths, params).to.be.an.instanceOf(Array)
 
-    nodeGroups.vertices.forEach(vid => {
-      expect(vid, params).to.match(DOC_ID_REGEX)
+    const { milestones: tsMilestones, cyGraphs: { milestones: cyMilestones } } = init.getSampleDataRefs()
+    const tsIdx = tsMilestones.findIndex(ts => ts === timestamp)
+    let cy
+    if (tsIdx === -1) {
+      cy = last(cyMilestones)
+    } else {
+      cy = cyMilestones[tsIdx]
+    }
+    const expectedNodeGroups = traverse(cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections)
+    expectedNodeGroups.vertices = map(expectedNodeGroups.vertices, '_id')
+    expectedNodeGroups.edges = map(expectedNodeGroups.edges, '_id')
+    expectedNodeGroups.paths = expectedNodeGroups.paths.map(path => {
+      const skelPath = {
+        vertices: map(path.vertices, '_id')
+      }
+
+      if (path.edges.length) {
+        skelPath.edges = map(path.edges, '_id')
+      }
+
+      return skelPath
     })
 
-    nodeGroups.edges.forEach(eid => {
-      expect(eid, params).to.match(DOC_ID_REGEX)
-    })
+    expect(nodeGroups.vertices, params).to.have.members(expectedNodeGroups.vertices)
+    expect(compact(nodeGroups.edges), params).to.have.members(expectedNodeGroups.edges)
+    expect(nodeGroups.paths, params).to.have.deep.members(expectedNodeGroups.paths)
   })
 }
 
@@ -467,6 +516,7 @@ function traversePostWrapper (timestamp, svid, minDepth, maxDepth, edgeCollectio
 }
 
 module.exports = {
+  removeFreeEdges,
   generateCombos,
   generateOptionCombos,
   testTraverseSkeletonGraphWithParams,
