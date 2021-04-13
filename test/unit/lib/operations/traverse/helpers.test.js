@@ -1,15 +1,14 @@
-/* eslint-disable no-unused-expressions */
 'use strict'
 
 const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
 const {
-  testTraverseSkeletonGraphWithParams, generateOptionCombos, generateCombos
+  testTraverseSkeletonGraphWithParams, generateOptionCombos, generateCombos, removeFreeEdges
 } = require('../../../../helpers/history/traverse')
 const {
-  createNodeBracepath, buildFilteredGraph, removeFreeEdges, getEnds
+  createNodeBracepath, buildFilteredGraph, getEnds
 } = require('../../../../../lib/operations/traverse/helpers')
-const { db, query, aql } = require('@arangodb')
+const { db, aql } = require('@arangodb')
 const { shuffle, chain, sample, cloneDeep, stubTrue } = require('lodash')
 const { cartesian, generateFilters } = require('../../../../helpers/util')
 const { parseExpr } = require('../../../../../lib/operations/helpers')
@@ -45,10 +44,7 @@ describe('Traverse Helpers - traverseSkeletonGraph', () => {
   after(init.teardown)
 
   it('should return collected vertex+edge sets when bfs=true', () => {
-    const bfs = [true]
-    const uniqueVertices = ['none', 'path', 'global']
-
-    const combos = cartesian({ bfs, uniqueVertices })
+    const combos = generateOptionCombos()
     combos.forEach(combo => testTraverseSkeletonGraphWithParams(combo))
   })
 
@@ -201,42 +197,5 @@ describe('Traverse Helpers - buildFilteredGraph', () => {
         expect(filteredGraph.paths, params).to.have.deep.members(expectedGraph.paths)
       })
     })
-  })
-})
-
-describe('Traverse Helpers - removeFreeEdges', () => {
-  before(() => init.setup({ ensureSampleDataLoad: true }))
-
-  after(init.teardown)
-
-  it('should remove free edges given a specific vertex and edge set', () => {
-    const [lineageColl, starsColl, planetsColl, moonsColl] = ['lineage', 'stars', 'planets', 'moons'].map(
-      suffix => db._collection(module.context.collectionName(`test_${suffix}`)))
-
-    const edges = shuffle(lineageColl.all().toArray())
-    const vertices = chain([starsColl, planetsColl, moonsColl]).flatMap(coll => coll.all().toArray()).shuffle().value()
-    removeFreeEdges(vertices, edges)
-
-    const svid = starsColl.any()._id
-    const vertexCollNames = [starsColl, planetsColl, moonsColl].map(coll => coll.name())
-    const cursor = query`
-      let vColls = ${vertexCollNames}
-    
-      for v, e in 0..2
-      outbound ${svid}
-      ${lineageColl}
-      
-      prune parse_identifier(v).collection not in vColls
-      
-      filter parse_identifier(v).collection in vColls
-      
-      collect aggregate edges = unique(e)
-
-      return edges[* filter CURRENT != null]
-    `
-    const expectedEdges = cursor.next()
-    cursor.dispose()
-
-    expect(edges).to.have.deep.members(expectedEdges)
   })
 })
