@@ -3,12 +3,79 @@
 const fs = require('fs')
 const gg = require('@arangodb/general-graph')
 const { db, query, errors: ARANGO_ERRORS } = require('@arangodb')
-const { mapValues, isEqual, omitBy, isEmpty, trim, invokeMap, pick, cloneDeep, map } = require('lodash')
+const { chain, mapValues, isEqual, omitBy, isEmpty, trim, invokeMap, pick, cloneDeep, map } = require('lodash')
 const { createSingle } = require('../../../lib/handlers/createHandlers')
 const { replaceSingle } = require('../../../lib/handlers/replaceHandlers')
 const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
 const purge = require('../../../lib/operations/purge')
 const restore = require('../../../lib/operations/restore')
+const cytoscape = require('cytoscape')
+const { COLL_TYPES_REF, COLLECTION_TYPES, SERVICE_COLLECTIONS } = require('../../../lib/constants')
+
+const RG2CY_TYPE_MAP = {
+  vertex: 'nodes',
+  edge: 'edges'
+}
+const RG2CY_FIELD_MAP = {
+  _id: 'id',
+  _from: 'source',
+  _to: 'target'
+}
+
+// Private
+function rg2cy (data) {
+  const result = []
+
+  for (const el of data) {
+    const group = RG2CY_TYPE_MAP[el.type]
+    for (const node of el.nodes) {
+      const item = {}
+      for (const k in node) {
+        item[k] = node[k]
+
+        const mappedField = RG2CY_FIELD_MAP[k]
+        if (mappedField) {
+          item[mappedField] = node[k]
+        }
+      }
+      item.coll = item.id.split('/')[0]
+
+      result.push({
+        group,
+        data: item
+      })
+    }
+  }
+
+  return result
+}
+
+function loadCy (colls) {
+  console.log(`About to load following collection data into CY instance: ${invokeMap(colls, 'name').join(', ')}`)
+
+  const nodes = chain(COLLECTION_TYPES).map(type => [type, []]).fromPairs().value()
+
+  for (const coll of colls) {
+    const data = coll.all().toArray()
+    nodes[coll.type()].push(...data)
+
+    console.log(`Loaded ${data.length} elements from ${coll.name()} into cy buffer.`)
+  }
+
+  const data = map(nodes, (nodes, type) => ({
+    type: COLL_TYPES_REF[type],
+    nodes
+  }))
+  const els = rg2cy(data)
+  // console.log({ els })
+
+  const cy = cytoscape()
+  cy.startBatch()
+  cy.add(els)
+  cy.endBatch()
+
+  return cy
+}
 
 // Public
 module.exports = function loadSampleData (testDataCollections) {
@@ -19,6 +86,16 @@ module.exports = function loadSampleData (testDataCollections) {
     'dwarfPlanets', 'lineage')
   const colls = mapValues(sampleDataCollections, collName => db._collection(collName))
   const { rawData, stars, planets, moons, asteroids, comets, dwarfPlanets, lineage } = colls
+  const {
+    events,
+    commands,
+    snapshots,
+    snapshotLinks,
+    evtSSLinks,
+    skeletonEdgeHubs,
+    skeletonEdgeSpokes,
+    skeletonVertices
+  } = mapValues(SERVICE_COLLECTIONS, collName => db._collection(collName))
 
   // Init results
   const results = {
@@ -26,7 +103,10 @@ module.exports = function loadSampleData (testDataCollections) {
     vertexCollections: undefined,
     edgeCollections: undefined,
     graphs: [],
-    milestones: []
+    milestones: [],
+    cyGraphs: {
+      milestones: []
+    }
   }
 
   // Load and insert raw data
@@ -60,6 +140,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData]))
 
   // Remove footnote references from raw data
   let cursor = rawData.all()
@@ -92,6 +173,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData]))
 
   // Remove empty/unspecified fields from raw data
   cursor = rawData.all()
@@ -121,6 +203,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData]))
 
   // Insert spaces at title-case boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -149,6 +232,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData]))
 
   // Insert spaces at alpha-numeric boundaries in Body field in raw data
   docCount = errorCount = replaceCount = 0
@@ -174,6 +258,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData]))
 
   // Populate stars
   cursor = rawData.byExample({ Type: 'star' })
@@ -204,6 +289,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars]))
 
   // Populate planets
   docCount = insertCount = errorCount = 0
@@ -248,6 +334,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, lineage]))
 
   // Populate dwarf planets
   docCount = insertCount = errorCount = 0
@@ -291,6 +378,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, dwarfPlanets, lineage]))
 
   // Populate asteroids
   docCount = insertCount = errorCount = 0
@@ -334,6 +422,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, dwarfPlanets, asteroids, lineage]))
 
   // Populate comets
   docCount = insertCount = errorCount = 0
@@ -377,6 +466,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, dwarfPlanets, asteroids, comets, lineage]))
 
   // Populate moons
   docCount = insertCount = errorCount = 0
@@ -436,6 +526,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, dwarfPlanets, asteroids, comets, moons, lineage]))
 
   // Cleanup raw data of entries copied to other collections
   errorCount = 0
@@ -463,6 +554,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, dwarfPlanets, asteroids, comets, moons, lineage]))
 
   // Purge unmapped raw data
   const unmappedKeys = map(rawData.all().toArray(), '_key').join(',')
@@ -474,6 +566,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, dwarfPlanets, asteroids, comets, moons, lineage]))
 
   // Restore deleted raw data
   path = `/c/${rawData.name()}`
@@ -484,6 +577,7 @@ module.exports = function loadSampleData (testDataCollections) {
   console.log(message)
   results.messages.push(message)
   results.milestones.push(Date.now() / 1000)
+  results.cyGraphs.milestones.push(loadCy([rawData, stars, planets, dwarfPlanets, asteroids, comets, moons, lineage]))
 
   // (Re-)Create Solar System Objects Graph
   const ssGraph = `${module.context.collectionPrefix}test_ss_lineage`
@@ -511,6 +605,9 @@ module.exports = function loadSampleData (testDataCollections) {
     results.graphs.push(ssGraph)
     results.vertexCollections = invokeMap(g._vertexCollections(), 'name')
     results.edgeCollections = invokeMap(g._edgeCollections(), 'name')
+
+    results.cyGraphs.eventLog = loadCy([events, commands, snapshots, snapshotLinks, evtSSLinks])
+    results.cyGraphs.skeleton = loadCy([skeletonEdgeHubs, skeletonEdgeSpokes, skeletonVertices])
   }
 
   console.log('Milestones: %o', results.milestones)
