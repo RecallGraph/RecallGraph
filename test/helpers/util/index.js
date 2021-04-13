@@ -5,6 +5,7 @@ const minimatch = require('minimatch')
 const {
   random, sampleSize, sample, isFunction, toString, escapeRegExp, isObject, chain, isEmpty, pick, flatMap
 } = require('lodash')
+const ErrorStackParser = require('error-stack-parser')
 
 const OPS = {
   primitive: [
@@ -201,9 +202,16 @@ function getRandomSubRange (objWithLength, maxLength = Number.POSITIVE_INFINITY)
   return []
 }
 
+function getStackInfo (level = 1) {
+  const stack = ErrorStackParser.parse(new Error())[level]
+
+  return pick(stack, 'functionName', 'lineNumber', 'fileName')
+}
+
 module.exports = {
   getPrefixPattern,
   generateFilters,
   cartesian,
-  getRandomSubRange
+  getRandomSubRange,
+  getStackInfo
 }
