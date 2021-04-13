@@ -19,7 +19,7 @@ describe('Show - DB Scope', () => {
     () => {
       const path = '/'
 
-      for (const timestamp of init.getMilestones()) {
+      for (const timestamp of init.getSampleDataRefs().milestones) {
         const allNodes = show(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
@@ -33,7 +33,7 @@ describe('Show - DB Scope', () => {
   it('should return grouped nodes in DB scope for the root path, when groupBy is specified', () => {
     const path = '/'
 
-    for (let timestamp of init.getMilestones()) {
+    for (let timestamp of init.getSampleDataRefs().milestones) {
       testGroupedNodes(path, timestamp, show)
     }
   })
@@ -48,7 +48,7 @@ describe('Show - Graph Scope', () => {
     () => {
       const path = getRandomGraphPathPattern()
 
-      for (let timestamp of init.getMilestones()) {
+      for (let timestamp of init.getSampleDataRefs().milestones) {
         const allNodes = show(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
@@ -62,7 +62,7 @@ describe('Show - Graph Scope', () => {
   it('should return grouped nodes in Graph scope for a graph path, when groupBy is specified', () => {
     const path = getRandomGraphPathPattern()
 
-    for (let timestamp of init.getMilestones()) {
+    for (let timestamp of init.getSampleDataRefs().milestones) {
       testGroupedNodes(path, timestamp, show)
     }
   })
@@ -78,7 +78,7 @@ describe('Show - Collection Scope', () => {
     () => {
       const path = getRandomCollectionPathPattern()
 
-      for (let timestamp of init.getMilestones()) {
+      for (let timestamp of init.getSampleDataRefs().milestones) {
         const allNodes = show(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
@@ -92,7 +92,7 @@ describe('Show - Collection Scope', () => {
   it('should return grouped nodes in Collection scope for a collection path, when groupBy is specified', () => {
     const path = getRandomCollectionPathPattern()
 
-    for (let timestamp of init.getMilestones()) {
+    for (let timestamp of init.getSampleDataRefs().milestones) {
       testGroupedNodes(path, timestamp, show)
     }
   })
@@ -108,7 +108,7 @@ describe('Show - Node Glob Scope', () => {
     () => {
       const path = getRandomNodeGlobPathPattern()
 
-      for (let timestamp of init.getMilestones()) {
+      for (let timestamp of init.getSampleDataRefs().milestones) {
         const allNodes = show(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
@@ -122,7 +122,7 @@ describe('Show - Node Glob Scope', () => {
   it('should return grouped nodes in Node Glob scope for a node-glob path, when groupBy is specified', () => {
     const path = getRandomNodeGlobPathPattern()
 
-    for (let timestamp of init.getMilestones()) {
+    for (let timestamp of init.getSampleDataRefs().milestones) {
       testGroupedNodes(path, timestamp, show)
     }
   })
@@ -138,7 +138,7 @@ describe('Show - Node Brace Scope', () => {
     () => {
       const path = getRandomNodeBracePathPattern()
 
-      for (let timestamp of init.getMilestones()) {
+      for (let timestamp of init.getSampleDataRefs().milestones) {
         const allNodes = show(path, timestamp)
 
         expect(allNodes).to.be.an.instanceOf(Array)
@@ -152,7 +152,7 @@ describe('Show - Node Brace Scope', () => {
   it('should return grouped nodes in Node Brace scope for a node-brace path, when groupBy is specified', () => {
     const path = getRandomNodeBracePathPattern()
 
-    for (let timestamp of init.getMilestones()) {
+    for (let timestamp of init.getSampleDataRefs().milestones) {
       testGroupedNodes(path, timestamp, show)
     }
   })

@@ -41,7 +41,6 @@ let sampleDataRefs = {}
 let sampleDataLoaded = false
 let flightDataRefs = {}
 let flightDataLoaded = false
-let milestones = []
 
 function ensureTestDocumentCollections (truncate = true) {
   ensureCollections(TEST_DOCUMENT_COLLECTIONS, db._createDocumentCollection, truncate)
@@ -115,7 +114,6 @@ function setup ({
     sampleDataRefs = omit(results, 'messages')
     sampleDataLoadMessages = results.messages
     sampleDataLoaded = true
-    milestones = results.milestones
   }
 
   if (ensureFlightDataLoad && !flightDataLoaded) {
@@ -145,16 +143,11 @@ function getFlightDataRefs () {
   return flightDataRefs
 }
 
-function getMilestones () {
-  return milestones
-}
-
 module.exports = {
   TEST_DATA_COLLECTIONS,
   TEST_DATA_COLLECTION_SNAPSHPOT_INTERVAL,
   setup,
   teardown,
   getSampleDataRefs,
-  getMilestones,
   getFlightDataRefs
 }

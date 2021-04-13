@@ -54,7 +54,7 @@ describe('Diff Helpers - extractDiffs', () => {
   it('should return expected diffs',
     () => {
       const path = '/'
-      const timestampRange = [0, ...init.getMilestones(), null]
+      const timestampRange = [0, ...init.getSampleDataRefs().milestones, null]
       const timestampIdx = getRandomSubRange(timestampRange)
       const since = timestampRange[timestampIdx[0]]
       const until = timestampRange[timestampIdx[1]]

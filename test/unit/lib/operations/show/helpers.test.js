@@ -28,7 +28,7 @@ describe('Show Helpers - buildShowQuery', () => {
       '/', getRandomGraphPathPattern(), getRandomCollectionPathPattern(), getRandomNodeGlobPathPattern(),
       getRandomNodeBracePathPattern()
     ]
-    const timestamp = init.getMilestones()
+    const timestamp = init.getSampleDataRefs().milestones
     const sort = ['asc', 'desc']
     const skip = [0, 1]
     const limit = [0, 1]
@@ -60,7 +60,7 @@ describe('Show Helpers - patch', () => {
     const keys = log(`/c/${collName}`, { limit: 100, groupBy: 'node', countsOnly: true }).map(
       item => item.node.split('/')[1])
     const path = `/n/${collName}/{${keys.join(',')}}`
-    const timestamps = init.getMilestones()
+    const timestamps = init.getSampleDataRefs().milestones
 
     for (const ts of timestamps) {
       const expectedNodes = []
