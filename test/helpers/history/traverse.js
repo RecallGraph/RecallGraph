@@ -2,10 +2,9 @@
 'use strict'
 
 const { expect } = require('chai')
-const { db, aql, time: dbtime } = require('@arangodb')
+const { db, time: dbtime } = require('@arangodb')
 const request = require('@arangodb/request')
 const {
-  chain,
   sample,
   memoize,
   omit,
@@ -13,24 +12,16 @@ const {
   pick,
   isEmpty,
   map,
-  remove,
   cloneDeep,
   zipObject,
   stubTrue,
-  last,
-  compact
+  last
 } = require(
   'lodash')
 const init = require('../util/init')
-const show = require('../../../lib/operations/show')
 const { cartesian, generateFilters } = require('../util')
-const { getNonServiceCollections } = require('../../../lib/operations/helpers')
 const { traverse: traverseHandler } = require('../../../lib/handlers/traverseHandlers')
-const { getCollectionType } = require('../../../lib/helpers')
-const {
-  traverseSkeletonGraph, createNodeBracepath
-} = require('../../../lib/operations/traverse/helpers')
-const cytoscape = require('cytoscape')
+const { traverseSkeletonGraph } = require('../../../lib/operations/traverse/helpers')
 const { parseExpr } = require('../../../lib/operations/helpers')
 
 const { baseUrl } = module.context
@@ -74,7 +65,7 @@ function visitIsValid (traversal, uniqueVertices, uniqueEdges, edgeCollections, 
 
 function addVisit (traversal, minDepth, v, e, currentDepth, currentPath, vFilterFn, eFilterFn, pFilterFn) {
   const path = cloneDeep(currentPath)
-  const vData = omit(v.data(), 'id')
+  const vData = omit(v.data(), 'id', 'coll')
 
   traversal.gSet.add(v.id())
   path.vertices.push(vData)
@@ -82,12 +73,12 @@ function addVisit (traversal, minDepth, v, e, currentDepth, currentPath, vFilter
 
   let eData = null
   if (e) {
-    eData = omit(e.data(), 'id', 'source', 'target')
+    eData = omit(e.data(), 'id', 'source', 'target', 'coll')
     path.edges.push(eData)
     path.eSet.add(e.id())
   }
 
-  if (currentDepth >= minDepth && vFilterFn(vData) && (!eData || eFilterFn(eData)) && pFilterFn(path)) {
+  if (currentDepth >= minDepth && vFilterFn(vData) && eFilterFn(eData) && pFilterFn(path)) {
     traversal.vSet.add(v.id())
     traversal.paths.push(path)
 
@@ -174,36 +165,7 @@ function breadthFirstWalk (traversal, minDepth, maxDepth, uniqueVertices, unique
   }
 }
 
-function buildFilteredGraph (svid, vertices, edges, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges,
-  edgeCollections, vFilter, eFilter, pFilter) {
-  const cy = cytoscape()
-
-  cy.startBatch()
-
-  cy.add(vertices.map(v => ({
-    group: 'nodes',
-    data: Object.assign({
-      id: v._id,
-      coll: v._id.split('/')[0]
-    }, v)
-  })))
-
-  cy.add(edges.map(e => ({
-    group: 'edges',
-    data: Object.assign({
-      id: e._id,
-      source: e._from,
-      target: e._to,
-      coll: e._id.split('/')[0]
-    }, e)
-  })))
-
-  cy.endBatch()
-
-  return traverse(cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter,
-    pFilter)
-}
-
+// Public
 function traverse (cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter, pFilter) {
   const sv = cy.$id(svid)
   if (!sv.data()) {
@@ -261,13 +223,6 @@ function traverse (cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdge
   return traversal
 }
 
-// Public
-function removeFreeEdges (vertices, edges) {
-  const vSet = new Set(map(vertices, '_id'))
-
-  remove(edges, e => [e._from, e._to].some(vid => !vSet.has(vid)))
-}
-
 const generateCombos = memoize((keys = [], include = true, {
   bfs = [false, true],
   uniqueVertices = ['none', 'path', 'global'],
@@ -321,13 +276,18 @@ function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges
     const svid = svColl.any()._id
     const params = JSON.stringify(combo)
 
-    const nodeGroups = traverseSkeletonGraph(timestamp || dbtime(), svid, minDepth, maxDepth, edgeCollections, bfs,
+    const paths = traverseSkeletonGraph(timestamp || dbtime(), svid, minDepth, maxDepth, edgeCollections, bfs,
       uniqueVertices, uniqueEdges)
 
-    expect(nodeGroups, params).to.be.an.instanceOf(Object)
-    expect(nodeGroups.vertices, params).to.be.an.instanceOf(Array)
-    expect(nodeGroups.edges, params).to.be.an.instanceOf(Array)
-    expect(nodeGroups.paths, params).to.be.an.instanceOf(Array)
+    expect(paths, params).to.be.an.instanceOf(Array)
+    paths.forEach(path => {
+      expect(path, params).to.be.an.instanceOf(Object)
+      expect(path.vertices, params).to.be.an.instanceOf(Array)
+
+      if (path.edges) {
+        expect(path.edges, params).to.be.an.instanceOf(Array)
+      }
+    })
 
     const { milestones: tsMilestones, cyGraphs: { milestones: cyMilestones } } = init.getSampleDataRefs()
     const tsIdx = tsMilestones.findIndex(ts => ts === timestamp)
@@ -337,10 +297,8 @@ function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges
     } else {
       cy = cyMilestones[tsIdx]
     }
-    const expectedNodeGroups = traverse(cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections)
-    expectedNodeGroups.vertices = map(expectedNodeGroups.vertices, '_id')
-    expectedNodeGroups.edges = map(expectedNodeGroups.edges, '_id')
-    expectedNodeGroups.paths = expectedNodeGroups.paths.map(path => {
+    const nodeGroups = traverse(cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections)
+    const expectedPaths = nodeGroups.paths.map(path => {
       const skelPath = {
         vertices: map(path.vertices, '_id')
       }
@@ -352,125 +310,81 @@ function testTraverseSkeletonGraphWithParams ({ bfs, uniqueVertices, uniqueEdges
       return skelPath
     })
 
-    expect(nodeGroups.vertices, params).to.have.members(expectedNodeGroups.vertices)
-    expect(compact(nodeGroups.edges), params).to.have.members(expectedNodeGroups.edges)
-    expect(nodeGroups.paths, params).to.have.deep.members(expectedNodeGroups.paths)
+    expect(paths, params).to.have.deep.members(expectedPaths)
   })
 }
 
 function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseFn, useFilters = true) {
   const vertexCollNames = init.getSampleDataRefs().vertexCollections
-  const ssGraph = init.getSampleDataRefs().graphs[0]
-  const collTypes = chain(getNonServiceCollections())
-    .map(collName => [collName, getCollectionType(collName)])
-    .fromPairs()
-    .value()
-
   const combos = generateCombos(['bfs', 'uniqueVertices', 'uniqueEdges'], false)
   combos.forEach(combo => {
     const { timestamp, minDepth, relDepth, edgeCollections, returnVertices, returnEdges, returnPaths } = combo
-    const svColl = db._collection(sample(vertexCollNames))
-    const svid = svColl.any()._id
-    const maxDepth = minDepth + relDepth
-    const forcedBfs = uniqueVertices === 'global' || bfs
 
-    const queryParts = [
-      aql`
-        let collTypes = ${collTypes}
-        
-        for v, e in 0..${maxDepth}
-      `,
-      aql.literal(`${edgeCollections[lineageCollName]} '${svid}'`),
-      aql.literal(`graph '${ssGraph}'`),
-      aql`
-        options {bfs: ${forcedBfs}, uniqueVertices: ${uniqueVertices}, uniqueEdges: ${uniqueEdges}}
-        
-        collect aggregate vertices = unique(v._id), edges = unique(e._id)
-        
-        let vGroups = (
-          for vid in vertices
-          let vp = parse_identifier(vid)
-          collect coll = vp.collection into keys = vp.key
-          
-          return {coll, keys}
-        )
-        let eGroups = (
-          for eid in edges[* filter CURRENT != null]
-          let ep = parse_identifier(eid)
-          collect coll = ep.collection into keys = ep.key
-          
-          return {coll, keys}
-        )
-        
-        return {vertices: vGroups, edges: eGroups}
-      `
-    ]
-    const query = aql.join(queryParts, '\n')
-    const cursor = db._query(query)
+    function test (nodeGroups, expectedNodeGroups, svid, filterCombo = {}) {
+      const params = JSON.stringify(Object.assign({ svid, bfs, uniqueVertices, uniqueEdges }, combo, filterCombo))
 
-    const unfilteredNodes = cursor.next()
-    cursor.dispose()
+      expect(nodeGroups, params).to.be.an.instanceOf(Object)
 
-    const vPath = createNodeBracepath(unfilteredNodes.vertices)
-    const ePath = unfilteredNodes.edges.length ? createNodeBracepath(unfilteredNodes.edges) : null
+      if (returnVertices) {
+        expect(nodeGroups.vertices, params).to.be.an.instanceOf(Array)
+        expect(nodeGroups.vertices, params).to.have.deep.members(expectedNodeGroups.vertices)
+      } else {
+        expect(nodeGroups.vertices, params).to.be.undefined
+      }
 
-    const timeBoundVertices = show(vPath, timestamp)
-    const timeBoundEdges = ePath ? show(ePath, timestamp) : []
-    removeFreeEdges(timeBoundVertices, timeBoundEdges)
+      if (returnEdges) {
+        expect(nodeGroups.edges, params).to.be.an.instanceOf(Array)
+        expect(nodeGroups.edges, params).to.have.deep.members(expectedNodeGroups.edges)
+      } else {
+        expect(nodeGroups.edges, params).to.be.undefined
+      }
 
-    let vFilter
-    let eFilter
-    let pFilter
-    if (useFilters && timeBoundVertices.find(v => v._id === svid)) {
-      const unfilteredTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth,
-        forcedBfs, uniqueVertices, uniqueEdges, edgeCollections)
-
-      vFilter = generateFilters(unfilteredTraversal.vertices)
-      eFilter = generateFilters(unfilteredTraversal.edges)
-      pFilter = generateFilters(unfilteredTraversal.paths)
-    }
-
-    const filteredTraversal = traverseFn(timestamp, svid, minDepth, maxDepth, edgeCollections,
-      { bfs, uniqueVertices, uniqueEdges, vFilter, eFilter, pFilter, returnVertices, returnEdges, returnPaths })
-
-    const params = JSON.stringify(
-      Object.assign({ bfs, forcedBfs, uniqueVertices, uniqueEdges, svid, vFilter, eFilter, pFilter }, combo))
-    expect(filteredTraversal, params).to.be.an.instanceOf(Object)
-    if (returnVertices) {
-      expect(filteredTraversal.vertices, params).to.be.an.instanceOf(Array)
-    }
-    if (returnEdges) {
-      expect(filteredTraversal.edges, params).to.be.an.instanceOf(Array)
-    }
-    if (returnPaths) {
-      expect(filteredTraversal.paths, params).to.be.an.instanceOf(Array)
-    }
-
-    let expectedTraversal
-    if (timeBoundVertices.find(v => v._id === svid)) {
-      expectedTraversal = buildFilteredGraph(svid, timeBoundVertices, timeBoundEdges, minDepth, maxDepth, forcedBfs,
-        uniqueVertices, uniqueEdges, edgeCollections, vFilter, eFilter, pFilter)
-    } else {
-      expectedTraversal = {
-        vertices: [],
-        edges: [],
-        paths: []
+      if (returnPaths) {
+        expect(nodeGroups.paths, params).to.be.an.instanceOf(Array)
+        expect(nodeGroups.paths, params).to.have.deep.members(expectedNodeGroups.paths)
+      } else {
+        expect(nodeGroups.paths, params).to.be.undefined
       }
     }
 
-    if (!returnVertices) {
-      delete expectedTraversal.vertices
+    const maxDepth = minDepth + relDepth
+    const svColl = db._collection(sample(vertexCollNames))
+    const svid = svColl.any()._id
+    const { milestones: tsMilestones, cyGraphs: { milestones: cyMilestones } } = init.getSampleDataRefs()
+    const tsIdx = tsMilestones.findIndex(ts => ts === timestamp)
+    let cy
+    if (tsIdx === -1) {
+      cy = last(cyMilestones)
+    } else {
+      cy = cyMilestones[tsIdx]
     }
-    if (!returnEdges) {
-      delete expectedTraversal.edges
-    }
-    if (!returnPaths) {
-      delete expectedTraversal.paths
-    }
+    const unfilteredNodeGroups = traverse(cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges,
+      edgeCollections)
 
-    expect(Object.keys(filteredTraversal), params).to.have.members(Object.keys(expectedTraversal))
-    for (const key in filteredTraversal) {
-      expect(filteredTraversal[key], params).to.have.deep.members(expectedTraversal[key])
+    let nodeGroups, expectedNodeGroups
+    if (useFilters) {
+      const vFilter = [null, generateFilters(unfilteredNodeGroups.vertices)]
+      const eFilter = [null, generateFilters(unfilteredNodeGroups.edges)]
+      const pFilter = [null, generateFilters(unfilteredNodeGroups.paths)]
+
+      const filterCombos = cartesian({ vFilter, eFilter, pFilter })
+      filterCombos.forEach(filterCombo => {
+        const { vFilter, eFilter, pFilter } = filterCombo
+
+        nodeGroups = traverseFn(timestamp, svid, minDepth, maxDepth, edgeCollections,
+          { bfs, uniqueVertices, uniqueEdges, returnVertices, returnEdges, returnPaths, vFilter, eFilter, pFilter })
+        expectedNodeGroups = traverse(cy, svid, minDepth, maxDepth, false, 'path', 'path', {
+          [lineageCollName]: 'any'
+        }, vFilter, eFilter, pFilter)
+
+        test(nodeGroups, expectedNodeGroups, svid, filterCombo)
+      })
+    } else {
+      nodeGroups = traverseFn(timestamp, svid, minDepth, maxDepth, edgeCollections,
+        { bfs, uniqueVertices, uniqueEdges, returnVertices, returnEdges, returnPaths })
+      expectedNodeGroups = unfilteredNodeGroups
+
+      test(nodeGroups, expectedNodeGroups, svid)
     }
   })
 }
@@ -516,9 +430,9 @@ function traversePostWrapper (timestamp, svid, minDepth, maxDepth, edgeCollectio
 }
 
 module.exports = {
-  removeFreeEdges,
   generateCombos,
   generateOptionCombos,
+  traverse,
   testTraverseSkeletonGraphWithParams,
   testTraverseWithParams,
   traverseHandlerWrapper,

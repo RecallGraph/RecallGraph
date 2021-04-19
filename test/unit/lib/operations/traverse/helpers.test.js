@@ -3,15 +3,14 @@
 const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
 const {
-  testTraverseSkeletonGraphWithParams, generateOptionCombos, generateCombos, removeFreeEdges
+  testTraverseSkeletonGraphWithParams, generateOptionCombos, generateCombos, traverse
 } = require('../../../../helpers/history/traverse')
-const {
-  createNodeBracepath, buildFilteredGraph, getEnds
-} = require('../../../../../lib/operations/traverse/helpers')
-const { db, aql } = require('@arangodb')
-const { shuffle, chain, sample, cloneDeep, stubTrue } = require('lodash')
-const { cartesian, generateFilters } = require('../../../../helpers/util')
-const { parseExpr } = require('../../../../../lib/operations/helpers')
+const { createNodeBracepath, getEnds, buildFilteredPaths } = require('../../../../../lib/operations/traverse/helpers')
+const { db } = require('@arangodb')
+const { sample, last, map, omit, zipObject } = require('lodash')
+const { generateFilters, cartesian } = require('../../../../helpers/util')
+
+const lineageCollName = module.context.collectionName('test_lineage')
 
 describe('Traverse Helpers - getEnds', () => {
   before(init.setup)
@@ -88,113 +87,57 @@ describe('Traverse Helpers - createNodeBracepath', () => {
   })
 })
 
-describe('Traverse Helpers - buildFilteredGraph', () => {
+describe('Traverse Helpers - buildFilteredPaths', () => {
   before(() => init.setup({ ensureSampleDataLoad: true }))
 
   after(init.teardown)
 
   it('should return a connected graph from the provided vertex and edge sets, given a start vertex', () => {
-    const reducer = (acc, { v, e, p }) => {
-      if (!acc.vSet.has(v._id)) {
-        acc.vSet.add(v._id)
-        acc.vertices.push(v)
-      }
-
-      if (e && !acc.eSet.has(e._id)) {
-        acc.eSet.add(e._id)
-        acc.edges.push(e)
-      }
-
-      acc.paths.push(p)
-
-      return acc
-    }
-    const initial = {
-      vSet: new Set(),
-      eSet: new Set(),
-      vertices: [],
-      edges: [],
-      paths: []
+    const vertexCollNames = init.getSampleDataRefs().vertexCollections
+    const cy = last(init.getSampleDataRefs().cyGraphs.milestones)
+    const vertices = cy.nodes().map(v => omit(v.data(), 'id'))
+    const edges = cy.edges().map(e => omit(e.data(), 'id', 'source', 'target'))
+    const built = {
+      vertices: zipObject(map(vertices, '_id'), vertices.map(v => omit(v, 'coll'))),
+      edges: zipObject(map(edges, '_id'), edges.map(e => omit(e, 'coll')))
     }
 
-    const [lineageColl, starsColl, planetsColl, moonsColl] = ['lineage', 'stars', 'planets', 'moons'].map(
-      suffix => db._collection(module.context.collectionName(`test_${suffix}`)))
-    const vertexCollNames = [starsColl, planetsColl, moonsColl].map(coll => coll.name())
-    const edges = shuffle(lineageColl.all().toArray())
-    const vertices = chain([starsColl, planetsColl, moonsColl]).flatMap(coll => coll.all().toArray()).shuffle().value()
-    removeFreeEdges(vertices, edges)
-
-    const combos = generateCombos(['minDepth', 'relDepth', 'bfs', 'uniqueVertices', 'uniqueEdges', 'edgeCollections'])
+    const combos = generateCombos(['minDepth', 'relDepth'])
     combos.forEach(combo => {
-      const { minDepth, relDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections } = combo
+      const { minDepth, relDepth } = combo
       const maxDepth = minDepth + relDepth
-      const svid = sample(vertices)._id
-      const forcedBfs = uniqueVertices === 'global' || bfs
+      const svColl = db._collection(sample(vertexCollNames))
+      const svid = svColl.any()._id
 
-      const queryParts = [
-        aql`
-          let vColls = ${vertexCollNames}
-      
-          for v, e, p in ${minDepth}..${maxDepth}
-        `,
-        aql.literal(`${edgeCollections[lineageColl.name()]} '${svid}'`),
-        aql`
-          ${lineageColl}
-          
-          prune parse_identifier(v).collection not in vColls
-          
-          options { bfs: ${forcedBfs}, uniqueVertices: ${uniqueVertices}, uniqueEdges: ${uniqueEdges} }
-          
-          filter parse_identifier(v).collection in vColls
-          
-          return { v, e, p }
-        `
-      ]
-      const query = aql.join(queryParts, '\n')
-      const result = db._query(query).toArray()
-      const unfilteredGraph = result.reduce(reducer, cloneDeep(initial))
-      const vFilter = [null, generateFilters(unfilteredGraph.vertices)]
-      const eFilter = [null, generateFilters(unfilteredGraph.edges)]
-      const pFilter = [null, generateFilters(unfilteredGraph.paths)]
+      const unfilteredNodeGroups = traverse(cy, svid, minDepth, maxDepth, false, 'path', 'path', {
+        [lineageCollName]: 'any'
+      })
+      const vFilter = [null, generateFilters(unfilteredNodeGroups.vertices)]
+      const eFilter = [null, generateFilters(unfilteredNodeGroups.edges)]
+      const pFilter = [null, generateFilters(unfilteredNodeGroups.paths)]
 
-      const combos = cartesian({ vFilter, eFilter, pFilter })
-      combos.forEach(combo => {
-        const { vFilter, eFilter, pFilter } = combo
-        const vFilterFn = vFilter ? parseExpr(vFilter) : stubTrue
-        const eFilterFn = eFilter ? parseExpr(eFilter) : stubTrue
-        const pFilterFn = pFilter ? parseExpr(pFilter) : stubTrue
+      const filterCombos = cartesian({ vFilter, eFilter, pFilter })
+      filterCombos.forEach(filterCombo => {
+        const { vFilter, eFilter, pFilter } = filterCombo
+        const filteredNodeGroups = traverse(cy, svid, minDepth, maxDepth, false, 'path', 'path', {
+          [lineageCollName]: 'any'
+        }, vFilter, eFilter, pFilter)
+        const skelPaths = filteredNodeGroups.paths.map(path => {
+          const skelPath = {
+            vertices: map(path.vertices, '_id')
+          }
 
-        const filteredGraph = buildFilteredGraph(svid, vertices, edges, minDepth, maxDepth, bfs, uniqueVertices,
-          uniqueEdges, edgeCollections, vFilter, eFilter, pFilter)
+          if (path.edges.length) {
+            skelPath.edges = map(path.edges, '_id')
+          }
 
-        let params = JSON.stringify(
-          {
-            svid,
-            forcedBfs,
-            minDepth,
-            maxDepth,
-            bfs,
-            uniqueVertices,
-            uniqueEdges,
-            edgeCollections,
-            vFilter,
-            eFilter,
-            pFilter
-          })
-        expect(filteredGraph, params).to.be.an.instanceOf(Object)
-        expect(filteredGraph.vertices, params).to.be.an.instanceOf(Array)
-        expect(filteredGraph.edges, params).to.be.an.instanceOf(Array)
-        expect(filteredGraph.paths, params).to.be.an.instanceOf(Array)
+          return skelPath
+        })
 
-        const filteredResult = result.filter(({ v, e, p }) => (vFilterFn(v) && (!e || eFilterFn(e)) && pFilterFn(p)))
-        const expectedGraph = filteredResult.reduce(reducer, cloneDeep(initial))
-        delete expectedGraph.vSet
-        delete expectedGraph.eSet
+        const paths = buildFilteredPaths(skelPaths, built, vFilter, eFilter, pFilter)
 
-        expect(Object.keys(filteredGraph), params).to.have.members(Object.keys(expectedGraph))
-        expect(filteredGraph.vertices, params).to.have.deep.members(expectedGraph.vertices)
-        expect(filteredGraph.edges, params).to.have.deep.members(expectedGraph.edges)
-        expect(filteredGraph.paths, params).to.have.deep.members(expectedGraph.paths)
+        const params = JSON.stringify(Object.assign({}, combo, filterCombo))
+        expect(paths, params).to.deep.equal(filteredNodeGroups.paths)
       })
     })
   })

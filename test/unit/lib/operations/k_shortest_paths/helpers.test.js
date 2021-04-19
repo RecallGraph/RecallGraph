@@ -5,7 +5,7 @@ const { expect } = require('chai')
 const init = require('../../../../helpers/util/init')
 const { db, query } = require('@arangodb')
 const {
-  buildFilteredGraph, removeFreeEdges
+  buildFilteredPaths, removeFreeEdges
 } = require('../../../../../lib/operations/traverse/helpers')
 const { shuffle, chain } = require('lodash')
 
@@ -24,7 +24,7 @@ describe('k Shortest Paths Helpers - buildPaths', () => {
 
     const svid = starsColl.any()._id
 
-    const filteredGraph = buildFilteredGraph(svid, vertices, edges)
+    const filteredGraph = buildFilteredPaths(svid, vertices, edges)
     expect(filteredGraph).to.be.an.instanceOf(Object)
     expect(filteredGraph.vertices).to.be.an.instanceOf(Array)
     expect(filteredGraph.edges).to.be.an.instanceOf(Array)
