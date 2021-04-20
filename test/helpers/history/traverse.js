@@ -172,8 +172,8 @@ function traverse (cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdge
     return { vertices: [], edges: [], paths: [] }
   }
 
-  const vertices = cy.nodes().map(v => omit(v.data(), 'id'))
-  const edges = cy.edges().map(e => omit(e.data(), 'id', 'source', 'target'))
+  const vertices = cy.nodes().map(v => omit(v.data(), 'id', 'coll'))
+  const edges = cy.edges().map(e => omit(e.data(), 'id', 'source', 'target', 'coll'))
   const vMap = zipObject(map(vertices, '_id'), vertices)
   const eMap = zipObject(map(edges, '_id'), edges)
   const traversal = {
