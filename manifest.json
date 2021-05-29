@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json.schemastore.org/foxx-manifest",
+  "$schema": "https://json.schemastore.org/foxx-manifest",
   "name": "RecallGraph",
   "version": "1.0.0",
   "description": "A versioning data store for time-variant graph data",
@@ -7,11 +7,10 @@
     "temporal-graphs",
     "dynamic-networks",
     "variant-graph-data",
-    "data-versioning",
-    "streaming-graph-data"
+    "data-versioning"
   ],
   "engines": {
-    "arangodb": ">=3.5.0"
+    "arangodb": ">=3.6.0"
   },
   "provides": {
     "@recallgraph/core": "1.0.0"

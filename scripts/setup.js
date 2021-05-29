@@ -5,7 +5,16 @@ const gg = require('@arangodb/general-graph')
 const { SERVICE_COLLECTIONS, SERVICE_GRAPHS } = require('../lib/constants')
 const { ensureIndexes } = require('../lib/helpers')
 
-const { events, commands, snapshots, evtSSLinks, snapshotLinks, skeletonVertices, skeletonEdgeHubs, skeletonEdgeSpokes } = SERVICE_COLLECTIONS
+const {
+  events,
+  commands,
+  snapshots,
+  evtSSLinks,
+  snapshotLinks,
+  skeletonVertices,
+  skeletonEdgeHubs,
+  skeletonEdgeSpokes
+} = SERVICE_COLLECTIONS
 const documentCollections = [events, snapshots, skeletonVertices, skeletonEdgeHubs]
 const edgeCollections = [commands, evtSSLinks, snapshotLinks, skeletonEdgeSpokes]
 
