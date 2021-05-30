@@ -71,7 +71,7 @@ jobs:
             'FILES="[\"test/integration/lib/routes/history/show.test.js\"]" NYC_OUT=integration-show-body GREP="Path as body param"',
             'FILES="[\"test/integration/lib/routes/history/traverse.test.js\"]" NYC_OUT=integration-traverse-filters GREP="with filters"',
             'FILES="[\"test/integration/lib/routes/history/traverse.test.js\"]" NYC_OUT=integration-traverse-nofilters GREP="without filters"',
-            'FILES="[\"test/integration/lib/routes/history/kShortestPaths.test.js\"]" NYC_OUT=integration-ksp'
+            'FILES="[\"test/integration/lib/routes/history/kShortestPaths.test.js\"]" NYC_OUT=integration-ksp',
             'FILES="[\"test/integration/lib/routes/document/*.js\", \"test/integration/lib/routes/event/diff.test.js\"]" NYC_OUT=integration-rest',
             'FILES="[\"test/unit/lib/handlers/logHandlers.test.js\"]" NYC_OUT=unit-handlers-log-query GREP="Path as query param"',
             'FILES="[\"test/unit/lib/handlers/logHandlers.test.js\"]" NYC_OUT=unit-handlers-log-body GREP="Path as body param"',
