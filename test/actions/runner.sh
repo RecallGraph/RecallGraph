@@ -18,7 +18,7 @@ while kill -0 ${pid} >/dev/null 2>&1; do
     exit 1
   fi
 
-  minutes=$((minutes+1))
+  minutes=$((minutes + 1))
 
   sleep 60
 done
