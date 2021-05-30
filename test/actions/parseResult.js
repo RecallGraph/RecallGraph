@@ -2,6 +2,7 @@
 
 const readline = require('readline')
 const fs = require('fs')
+const crypto = require('crypto')
 
 const input = []
 const rl = readline.createInterface({
@@ -22,12 +23,20 @@ rl.on('close', function () {
   const exitCode = Math.sign(result.stats.failures)
   const resultCode = (exitCode === 0) ? 'passed' : 'failed'
 
-  let outfile = `./test/reports/report-${process.env.NYC_OUT}-${process.env.TRAVIS_JOB_NUMBER}-${resultCode}.json`
+  const hash = crypto.createHash('sha256')
+  hash.update(process.env.FILES)
+  hash.update(process.env.GREP)
+  hash.update(process.env.ARANGODB_VERSION)
+  hash.update(process.env.GITHUB_RUN_ID)
+  hash.update(process.env.GITHUB_RUN_NUMBER)
+
+  const nycOut = hash.digest()
+  let outfile = `./test/reports/report-${nycOut}-${resultCode}.json`
   fs.writeFileSync(outfile, JSON.stringify(result, null, 2))
   console.log(`Piped test report to ${outfile}`)
 
   if (exitCode === 0) {
-    outfile = `./.nyc_output/coverage-${process.env.NYC_OUT}-${process.env.TRAVIS_JOB_NUMBER}.json`
+    outfile = `./.nyc_output/coverage-${nycOut}.json`
     fs.writeFileSync(outfile, JSON.stringify(json.coverage, null, 2))
 
     console.log(`Piped coverage output to ${outfile}`)

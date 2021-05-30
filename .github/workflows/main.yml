@@ -1,36 +1,202 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
-
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the development branch
   push:
-    #branches: [ development ]
+    branches-ignore:
+      - documentation
   pull_request:
     branches: [ development ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 5'
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test:
     runs-on: ubuntu-latest
+    environment: github-actions
+    env:
+      ARANGO_STORAGE_ENGINE: rocksdb
+      PATH: '$HOME/.local/bin:$PATH'
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      fail-fast: false
+      matrix:
+        arangodb-version:
+          - 3.6-nightly
+          - 3.7-nightly
+          - 3.8-nightly
+        files:
+          - '["test/integration/lib/routes/event/log.test.js"]'
+          - '["test/integration/lib/routes/history/show.test.js"]'
+          - '["test/integration/lib/routes/history/traverse.test.js"]'
+          - '["test/integration/lib/routes/history/kShortestPaths.test.js"]'
+          - '["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js"]'
+          - '["test/unit/lib/handlers/logHandlers.test.js"]'
+          - '["test/unit/lib/handlers/showHandlers.test.js"]'
+          - '["test/unit/lib/handlers/traverseHandlers.test.js"]'
+          - '["test/unit/lib/handlers/kShortestPathsHandlers.test.js"]'
+          - '["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js"]'
+          - '["test/unit/lib/operations/log/index.test.js"]'
+          - '["test/unit/lib/operations/traverse/index.test.js"]'
+          - '["test/unit/lib/operations/k_shortest_paths/index.test.js"]'
+          - '["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/traverse/helpers.test.js", "test/unit/lib/operations/log/helpers.test.js"]'
+        include:
+          - files:
+              - '["test/integration/lib/routes/event/log.test.js"]'
+              - '["test/integration/lib/routes/history/show.test.js"]'
+              - '["test/unit/lib/handlers/logHandlers.test.js"]'
+              - '["test/unit/lib/handlers/showHandlers.test.js"]'
+            grep:
+              - Path as query param
+              - Path as body param
+          - files:
+              - '["test/integration/lib/routes/history/traverse.test.js"]'
+              - '["test/unit/lib/operations/traverse/index.test.js"]'
+            grep:
+              - '[Ww]ith filters'
+              - '[Ww]ithout filters'
+          - files:
+              - '["test/unit/lib/handlers/logHandlers.test.js"]'
+              - '["test/unit/lib/handlers/showHandlers.test.js"]'
+            grep: Provider
+          - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
+            grep:
+              - Handlers.*With Filters
+              - Handlers.*Without Filters
+              - Provider.*With Filters
+              - Provider.*Without Filters
+        env: [
+            'FILES="[\"test/integration/lib/routes/event/log.test.js\"]" NYC_OUT=integration-log-query GREP="Path as query param"',
+            'FILES="[\"test/integration/lib/routes/event/log.test.js\"]" NYC_OUT=integration-log-body GREP="Path as body param"',
+            'FILES="[\"test/integration/lib/routes/history/show.test.js\"]" NYC_OUT=integration-show-query GREP="Path as query param"',
+            'FILES="[\"test/integration/lib/routes/history/show.test.js\"]" NYC_OUT=integration-show-body GREP="Path as body param"',
+            'FILES="[\"test/integration/lib/routes/history/traverse.test.js\"]" NYC_OUT=integration-traverse-filters GREP="with filters"',
+            'FILES="[\"test/integration/lib/routes/history/traverse.test.js\"]" NYC_OUT=integration-traverse-nofilters GREP="without filters"',
+            'FILES="[\"test/integration/lib/routes/history/kShortestPaths.test.js\"]" NYC_OUT=integration-ksp'
+            'FILES="[\"test/integration/lib/routes/document/*.js\", \"test/integration/lib/routes/event/diff.test.js\"]" NYC_OUT=integration-rest',
+            'FILES="[\"test/unit/lib/handlers/logHandlers.test.js\"]" NYC_OUT=unit-handlers-log-query GREP="Path as query param"',
+            'FILES="[\"test/unit/lib/handlers/logHandlers.test.js\"]" NYC_OUT=unit-handlers-log-body GREP="Path as body param"',
+            'FILES="[\"test/unit/lib/handlers/logHandlers.test.js\"]" NYC_OUT=unit-handlers-log-provider GREP="Provider"',
+            'FILES="[\"test/unit/lib/handlers/showHandlers.test.js\"]" NYC_OUT=unit-handlers-show-query GREP="Path as query param"',
+            'FILES="[\"test/unit/lib/handlers/showHandlers.test.js\"]" NYC_OUT=unit-handlers-show-body GREP="Path as body param"',
+            'FILES="[\"test/unit/lib/handlers/showHandlers.test.js\"]" NYC_OUT=unit-handlers-show-provider GREP="Provider"',
+            'FILES="[\"test/unit/lib/handlers/traverseHandlers.test.js\"]" NYC_OUT=unit-handlers-traverse-filters GREP="Handlers.*With Filters"',
+            'FILES="[\"test/unit/lib/handlers/traverseHandlers.test.js\"]" NYC_OUT=unit-handlers-traverse-nofilters GREP="Handlers.*Without Filters"',
+            'FILES="[\"test/unit/lib/handlers/traverseHandlers.test.js\"]" NYC_OUT=unit-handlers-traverse-provider-filters GREP="Provider.*With Filters"',
+            'FILES="[\"test/unit/lib/handlers/traverseHandlers.test.js\"]" NYC_OUT=unit-handlers-traverse-provider-nofilters GREP="Provider.*Without Filters"',
+            'FILES="[\"test/unit/lib/handlers/kShortestPathsHandlers.test.js\"]" NYC_OUT=unit-handlers-ksp',
+            'FILES="[\"test/unit/lib/handlers/createHandlers.test.js\", \"test/unit/lib/handlers/removeHandlers.test.js\", \"test/unit/lib/handlers/replaceHandlers.test.js\", \"test/unit/lib/handlers/updateHandlers.test.js\", \"test/unit/lib/handlers/diffHandlers.test.js\"]" NYC_OUT=unit-handlers-rest',
+            'FILES="[\"test/unit/lib/operations/log/index.test.js\"]" NYC_OUT=unit-operations-log',
+            'FILES="[\"test/unit/lib/operations/traverse/index.test.js\"]" NYC_OUT=unit-operations-traverse-filters GREP="With Filters"',
+            'FILES="[\"test/unit/lib/operations/traverse/index.test.js\"]" NYC_OUT=unit-operations-traverse-nofilters GREP="Without Filters"',
+            'FILES="[\"test/unit/lib/operations/k_shortest_paths/index.test.js\"]" NYC_OUT=unit-operations-ksp',
+            'FILES="[\"test/unit/lib/*.js\", \"test/unit/lib/middleware/*.js\", \"test/unit/lib/operations/*.js\", \"test/unit/lib/operations/commit/*.js\", \"test/unit/lib/operations/diff/*.js\", \"test/unit/lib/operations/show/*.js\", \"test/unit/lib/operations/traverse/helpers.test.js\", \"test/unit/lib/operations/log/helpers.test.js\"]" NYC_OUT=unit-rest'
+        ]
+
+    services:
+      arangodb:
+        image: dockerhub_org/arangodb/arangodb-preview:${{ matrix.arangodb_version }}
+        credentials:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        env:
+          ARANGO_RANDOM_ROOT_PASSWORD: 1
+          ARANGO_STORAGE_ENGINE: ${{ env.ARANGO_STORAGE_ENGINE }}
+          FILES: ${{ matrix.files }}
+          GREP: ${{ matrix.grep }}
+          GITHUB_RUN_ID: ${{ env.GITHUB_RUN_ID }}
+          GITHUB_RUN_NUMBER: ${{ env.GITHUB_RUN_NUMBER }}
+        volumes:
+          - ${{ env.PWD }}:/mnt/evstore
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: Install
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          npm install
+          sudo apt update
+          sudo apt install dos2unix
+
+      - name: Init
+        run: |
+          rm -rf ./.nyc_output/*
+          npx nyc instrument . ./.nyc_output/instrumented
+          cp -r ./.nyc_output/instrumented/lib .
+          export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
+          sleep 60
+          docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/actions/create_db.js
+          docker exec arangodb /bin/sh -c 'dos2unix < /mnt/evstore/test/travis/install.sh |sh -s'
+
+      - name: Test
+        run: dos2unix < ./test/actions/runner.sh |bash -s
+
+      - name: Push Test Reports to S3
+        run: |
+          aws s3 sync ./test/reports/ s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied test reports to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
+
+      - name: Push Coverage Reports to S3
+        if: ${{ success() }}
+        run: |
+          rm -rf ./.nyc_output/instrumented
+          aws s3 sync ./.nyc_output/ s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied coverage reports to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
+
+  analysis:
+    runs-on: ubuntu-latest
+    environment: github-actions
+    needs:
+      - test
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: Prepare Coverage & Lint Reports
+        run: |
+          aws s3 sync s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/ ./.nyc_output/ --exclude '*' --include 'coverage*.json'
+          echo 'Found following files in ./.nyc_output/:'
+          ls -l ./.nyc_output
+          npx nyc merge ./.nyc_output ./.nyc_output/out.json
+          npx nyc report --report-dir=./test/reports -r lcovonly
+          npx eslint ./main.js ./lib/ ./scripts
+            -f json
+            -o ./test/reports/eslint-report.json
+
+      - name: Check Coverage
+        run: npx nyc check-coverage --lines 80 --functions 80 --branches 70
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Push Reports to S3
+        run: |
+          aws s3 sync ./test/reports/ s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied coverage and lint reports to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
+          aws s3 cp ./.nyc_output/out.json s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied merged coverage data to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
