@@ -23,7 +23,9 @@ rl.on('close', function () {
 
   const hash = crypto.createHash('sha256')
   hash.update(process.env.FILES)
-  hash.update(process.env.GREP)
+  if (process.env.GREP) {
+    hash.update(process.env.GREP)
+  }
   hash.update(process.env.ARANGODB_VERSION)
   hash.update(process.env.GITHUB_RUN_ID)
   hash.update(process.env.GITHUB_RUN_NUMBER)
