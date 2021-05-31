@@ -3,4 +3,4 @@
 cd /mnt/evstore
 echo "evpasswd" | foxx run -u evuser -P -D evdb /evstore runTests \
   "{\"files\": ${FILES//"/\\"/}, \"reporter\": \"suite\", \"grep\": \"$GREP\"}" |
-  ./test/actions/parseResult.js
+  node ./test/actions/parseResult.js

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const readline = require('readline')
 const fs = require('fs')
 const crypto = require('crypto')

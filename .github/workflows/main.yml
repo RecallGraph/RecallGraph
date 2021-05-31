@@ -13,8 +13,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment: github-actions
-    env:
-      ARANGO_STORAGE_ENGINE: rocksdb
 
     strategy:
       fail-fast: false
@@ -100,7 +98,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
         env:
           ARANGO_RANDOM_ROOT_PASSWORD: 1
-          ARANGO_STORAGE_ENGINE: ${{ env.ARANGO_STORAGE_ENGINE }}
+          ARANGO_STORAGE_ENGINE: rocksdb
           FILES: ${{ matrix.env.files }}
           GREP: ${{ matrix.env.grep }}
           GITHUB_RUN_ID: ${{ github.run_id }}
@@ -134,7 +132,6 @@ jobs:
           npx nyc instrument . ./.nyc_output/instrumented
           cp -r ./.nyc_output/instrumented/lib .
           export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
-          sleep 60
           docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/actions/create_db.js
           docker exec arangodb /bin/sh -c 'dos2unix < /mnt/evstore/test/travis/install.sh |sh -s'
 
