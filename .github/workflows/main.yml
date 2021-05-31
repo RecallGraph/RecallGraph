@@ -24,73 +24,73 @@ jobs:
           - 3.7-nightly
           - 3.8-nightly
         env:
-          - files: '[\"test/integration/lib/routes/event/log.test.js\"]'
+          - files: '["test/integration/lib/routes/event/log.test.js"]'
             grep: 'Path as query param'
 
-          - files: '[\"test/integration/lib/routes/event/log.test.js\"]'
+          - files: '["test/integration/lib/routes/event/log.test.js"]'
             grep: 'Path as body param'
 
-          - files: '[\"test/integration/lib/routes/history/show.test.js\"]'
+          - files: '["test/integration/lib/routes/history/show.test.js"]'
             grep: 'Path as query param'
 
-          - files: '[\"test/integration/lib/routes/history/show.test.js\"]'
+          - files: '["test/integration/lib/routes/history/show.test.js"]'
             grep: 'Path as body param'
 
-          - files: '[\"test/integration/lib/routes/history/traverse.test.js\"]'
+          - files: '["test/integration/lib/routes/history/traverse.test.js"]'
             grep: 'with filters'
 
-          - files: '[\"test/integration/lib/routes/history/traverse.test.js\"]'
+          - files: '["test/integration/lib/routes/history/traverse.test.js"]'
             grep: 'without filters'
 
-          - files: '[\"test/integration/lib/routes/history/kShortestPaths.test.js\"]'
+          - files: '["test/integration/lib/routes/history/kShortestPaths.test.js"]'
 
-          - files: '[\"test/integration/lib/routes/document/*.js\", \"test/integration/lib/routes/event/diff.test.js\"]'
+          - files: '["test/integration/lib/routes/document/*.js", "test/integration/lib/routes/event/diff.test.js"]'
 
-          - files: '[\"test/unit/lib/handlers/logHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/logHandlers.test.js"]'
             grep: 'Path as query param'
 
-          - files: '[\"test/unit/lib/handlers/logHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/logHandlers.test.js"]'
             grep: 'Path as body param'
 
-          - files: '[\"test/unit/lib/handlers/logHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/logHandlers.test.js"]'
             grep: 'Provider'
 
-          - files: '[\"test/unit/lib/handlers/showHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/showHandlers.test.js"]'
             grep: 'Path as query param'
 
-          - files: '[\"test/unit/lib/handlers/showHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/showHandlers.test.js"]'
             grep: 'Path as body param'
 
-          - files: '[\"test/unit/lib/handlers/showHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/showHandlers.test.js"]'
             grep: 'Provider'
 
-          - files: '[\"test/unit/lib/handlers/traverseHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
             grep: 'Handlers.*With Filters'
 
-          - files: '[\"test/unit/lib/handlers/traverseHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
             grep: 'Handlers.*Without Filters'
 
-          - files: '[\"test/unit/lib/handlers/traverseHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
             grep: 'Provider.*With Filters'
 
-          - files: '[\"test/unit/lib/handlers/traverseHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
             grep: 'Provider.*Without Filters'
 
-          - files: '[\"test/unit/lib/handlers/kShortestPathsHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/kShortestPathsHandlers.test.js"]'
 
-          - files: '[\"test/unit/lib/handlers/createHandlers.test.js\", \"test/unit/lib/handlers/removeHandlers.test.js\", \"test/unit/lib/handlers/replaceHandlers.test.js\", \"test/unit/lib/handlers/updateHandlers.test.js\", \"test/unit/lib/handlers/diffHandlers.test.js\"]'
+          - files: '["test/unit/lib/handlers/createHandlers.test.js", "test/unit/lib/handlers/removeHandlers.test.js", "test/unit/lib/handlers/replaceHandlers.test.js", "test/unit/lib/handlers/updateHandlers.test.js", "test/unit/lib/handlers/diffHandlers.test.js"]'
 
-          - files: '[\"test/unit/lib/operations/log/index.test.js\"]'
+          - files: '["test/unit/lib/operations/log/index.test.js"]'
 
-          - files: '[\"test/unit/lib/operations/traverse/index.test.js\"]'
+          - files: '["test/unit/lib/operations/traverse/index.test.js"]'
             grep: 'With Filters'
 
-          - files: '[\"test/unit/lib/operations/traverse/index.test.js\"]'
+          - files: '["test/unit/lib/operations/traverse/index.test.js"]'
             grep: 'Without Filters'
 
-          - files: '[\"test/unit/lib/operations/k_shortest_paths/index.test.js\"]'
+          - files: '["test/unit/lib/operations/k_shortest_paths/index.test.js"]'
 
-          - files: '[\"test/unit/lib/*.js\", \"test/unit/lib/middleware/*.js\", \"test/unit/lib/operations/*.js\", \"test/unit/lib/operations/commit/*.js\", \"test/unit/lib/operations/diff/*.js\", \"test/unit/lib/operations/show/*.js\", \"test/unit/lib/operations/traverse/helpers.test.js\", \"test/unit/lib/operations/log/helpers.test.js\"]'
+          - files: '["test/unit/lib/*.js", "test/unit/lib/middleware/*.js", "test/unit/lib/operations/*.js", "test/unit/lib/operations/commit/*.js", "test/unit/lib/operations/diff/*.js", "test/unit/lib/operations/show/*.js", "test/unit/lib/operations/traverse/helpers.test.js", "test/unit/lib/operations/log/helpers.test.js"]'
 
     services:
       arangodb:
@@ -106,7 +106,7 @@ jobs:
           GITHUB_RUN_ID: ${{ env.GITHUB_RUN_ID }}
           GITHUB_RUN_NUMBER: ${{ env.GITHUB_RUN_NUMBER }}
         volumes:
-          - '"$PWD":/mnt/evstore'
+          - '$PWD:/mnt/evstore'
 
     steps:
       - uses: actions/checkout@v2
