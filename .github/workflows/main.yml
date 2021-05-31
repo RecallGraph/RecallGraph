@@ -106,7 +106,7 @@ jobs:
           GITHUB_RUN_ID: ${{ env.GITHUB_RUN_ID }}
           GITHUB_RUN_NUMBER: ${{ env.GITHUB_RUN_NUMBER }}
         volumes:
-          - ${{ env.GITHUB_WORKSPACE }}:/mnt/evstore
+          - "${{ env.GITHUB_WORKSPACE }}:/mnt/evstore"
 
     steps:
       - uses: actions/checkout@v2
