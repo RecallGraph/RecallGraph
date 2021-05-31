@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [ development ]
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * 5'
+#   schedule:
+#     - cron: '0 0 * * 5'
 
 jobs:
   test:
@@ -106,7 +106,7 @@ jobs:
           GITHUB_RUN_ID: ${{ env.GITHUB_RUN_ID }}
           GITHUB_RUN_NUMBER: ${{ env.GITHUB_RUN_NUMBER }}
         volumes:
-          - '"$PWD":/mnt/evstore'
+          - ${{ env.GITHUB_WORKSPACE }}:/mnt/evstore
 
     steps:
       - uses: actions/checkout@v2
