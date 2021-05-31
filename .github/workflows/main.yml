@@ -142,14 +142,14 @@ jobs:
       - name: Push Test Reports to S3
         if: ${{ success() || failure() }}
         run: |
-          aws s3 sync ./test/reports/ s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
-          echo "Copied test reports to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
+          aws s3 sync ./test/reports/ s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied test reports to s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
 
       - name: Push Coverage Reports to S3
         run: |
           rm -rf ./.nyc_output/instrumented
-          aws s3 sync ./.nyc_output/ s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
-          echo "Copied coverage reports to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
+          aws s3 sync ./.nyc_output/ s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied coverage reports to s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
 
   analysis:
     runs-on: ubuntu-latest
@@ -174,7 +174,7 @@ jobs:
 
       - name: Prepare Coverage & Lint Reports
         run: |
-          aws s3 sync s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/ ./.nyc_output/ --exclude '*' --include 'coverage*.json'
+          aws s3 sync s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/ ./.nyc_output/ --exclude '*' --include 'coverage*.json'
           echo 'Found following files in ./.nyc_output/:'
           ls -l ./.nyc_output
           npx nyc merge ./.nyc_output ./.nyc_output/out.json
@@ -195,7 +195,7 @@ jobs:
 
       - name: Push Reports to S3
         run: |
-          aws s3 sync ./test/reports/ s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
-          echo "Copied coverage and lint reports to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
-          aws s3 cp ./.nyc_output/out.json s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
-          echo "Copied merged coverage data to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
+          aws s3 sync ./test/reports/ s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied coverage and lint reports to s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
+          aws s3 cp ./.nyc_output/out.json s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
+          echo "Copied merged coverage data to s3://${{ secrets.S3_BUCKET }}/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
