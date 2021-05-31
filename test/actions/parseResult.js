@@ -30,7 +30,7 @@ rl.on('close', function () {
   hash.update(process.env.GITHUB_RUN_ID)
   hash.update(process.env.GITHUB_RUN_NUMBER)
 
-  const nycOut = hash.digest()
+  const nycOut = hash.digest().toString('hex')
   let outfile = `./test/reports/report-${nycOut}-${resultCode}.json`
   fs.writeFileSync(outfile, JSON.stringify(result, null, 2))
   console.log(`Piped test report to ${outfile}`)
