@@ -140,6 +140,7 @@ jobs:
         run: dos2unix < ./test/actions/runner.sh |bash -s
 
       - name: Push Test Reports to S3
+        if: ${{ success() || failure() }}
         run: |
           aws s3 sync ./test/reports/ s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER/
           echo "Copied test reports to s3://$S3_BUCKET/$GITHUB_RUN_ID/$GITHUB_RUN_NUMBER"
