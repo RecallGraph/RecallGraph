@@ -101,6 +101,7 @@ jobs:
           ARANGO_STORAGE_ENGINE: rocksdb
           FILES: ${{ matrix.env.files }}
           GREP: ${{ matrix.env.grep }}
+          ARANGODB_VERSION: ${{ matrix.arangodb-version }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
         volumes:
