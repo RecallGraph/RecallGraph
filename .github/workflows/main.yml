@@ -94,7 +94,7 @@ jobs:
 
     services:
       arangodb:
-        image: arangodb/arangodb-preview:${{ matrix.arangodb_version }}
+        image: arangodb/arangodb-preview:${{ matrix.arangodb-version }}
         credentials:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
