@@ -132,6 +132,7 @@ jobs:
           npx nyc instrument . ./.nyc_output/instrumented
           cp -r ./.nyc_output/instrumented/lib .
           export ARANGO_ROOT_PASSWORD=$(docker logs arangodb |grep 'GENERATED ROOT PASSWORD' |awk '{ print $4 }')
+          sleep 60
           docker exec -i arangodb arangosh --server.password=$ARANGO_ROOT_PASSWORD < ./test/actions/create_db.js
           docker exec arangodb /bin/sh -c 'dos2unix < /mnt/evstore/test/travis/install.sh |sh -s'
 
