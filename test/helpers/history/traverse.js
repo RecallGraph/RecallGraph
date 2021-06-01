@@ -36,8 +36,10 @@ function edgeIsValid (v, e, edgeCollections) {
       return e.source().same(v)
     case 'outbound':
       return e.target().same(v)
-    default:
+    case 'any':
       return true
+    default:
+      throw new Error(`Unknown collection match: ${{ e: e.data(), v: v.data(), edgeCollections, eColl }}`)
   }
 }
 
@@ -373,9 +375,8 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
 
         nodeGroups = traverseFn(timestamp, svid, minDepth, maxDepth, edgeCollections,
           { bfs, uniqueVertices, uniqueEdges, returnVertices, returnEdges, returnPaths, vFilter, eFilter, pFilter })
-        expectedNodeGroups = traverse(cy, svid, minDepth, maxDepth, false, 'path', 'path', {
-          [lineageCollName]: 'any'
-        }, vFilter, eFilter, pFilter)
+        expectedNodeGroups = traverse(cy, svid, minDepth, maxDepth, bfs, uniqueVertices, uniqueEdges, edgeCollections,
+          vFilter, eFilter, pFilter)
 
         test(nodeGroups, expectedNodeGroups, svid, filterCombo)
       })
