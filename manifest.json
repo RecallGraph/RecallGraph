@@ -45,7 +45,7 @@
     "snapshot-intervals": {
       "description": "The interval (number of command hops) between two consecutive snapshots. This can be specified per-collection, apart from a default fallback.",
       "default": {
-        "_default": 5
+        "_default": 10
       },
       "type": "json",
       "required": true
