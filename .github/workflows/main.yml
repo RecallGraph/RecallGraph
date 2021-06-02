@@ -6,13 +6,14 @@ on:
   pull_request:
     branches: [ development ]
   workflow_dispatch:
-#   schedule:
-#     - cron: '0 0 * * 5'
+  schedule:
+    - cron: '0 0 * * 5'
 
 jobs:
   test:
     runs-on: ubuntu-latest
     environment: github-actions
+    continue-on-error: ${{ matrix.arangodb-version == 'devel-nightly' }}
 
     strategy:
       fail-fast: false

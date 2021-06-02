@@ -3,7 +3,7 @@
 const { expect } = require('chai')
 const { db, query } = require('@arangodb')
 const init = require('../util/init')
-const { random, sampleSize, stubTrue, map, isEqual, last, isEmpty, isObject, pick } = require('lodash')
+const { random, sampleSize, stubTrue, map, isEqual, last, isEmpty, isObject, pick, omit } = require('lodash')
 const show = require('../../../lib/operations/show')
 const traverse = require('../../../lib/operations/traverse')
 const { kShortestPaths } = require('../../../lib/operations/k_shortest_paths/helpers')
@@ -103,8 +103,11 @@ function testKShortestPaths (kspFn) {
   const edgeCollections = ['inbound', 'outbound', 'any'].map(dir => ({
     [flights]: dir
   }))
-  const vFilter = [undefined, generateFilters(cy.nodes().map(el => el.data()))]
-  const eFilter = [undefined, generateFilters(cy.edges().map(el => el.data()))]
+  const vFilter = [undefined, generateFilters(cy.nodes().map(el => omit(el.data(), 'id')))]
+  const eFilter = [
+    undefined,
+    generateFilters(cy.edges('[id ^= \'outbound\']').map(el => omit(el.data(), 'id', 'source', 'target')))
+  ]
 
   const combos = cartesian({ skip, limit, edgeCollections, vFilter, eFilter })
   combos.forEach(combo => {
