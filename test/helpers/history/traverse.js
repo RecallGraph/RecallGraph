@@ -365,9 +365,9 @@ function testTraverseWithParams ({ bfs, uniqueVertices, uniqueEdges }, traverseF
 
     let nodeGroups, expectedNodeGroups
     if (useFilters) {
-      const vFilter = [null, generateFilters(unfilteredNodeGroups.vertices)]
-      const eFilter = [null, generateFilters(unfilteredNodeGroups.edges)]
-      const pFilter = [null, generateFilters(unfilteredNodeGroups.paths)]
+      const vFilter = [undefined, generateFilters(unfilteredNodeGroups.vertices)]
+      const eFilter = [undefined, generateFilters(unfilteredNodeGroups.edges)]
+      const pFilter = [undefined, generateFilters(unfilteredNodeGroups.paths)]
 
       const filterCombos = cartesian({ vFilter, eFilter, pFilter })
       filterCombos.forEach(filterCombo => {

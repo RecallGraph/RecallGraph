@@ -20,6 +20,7 @@ jobs:
         arangodb-version:
           - 3.6-nightly
           - 3.7-nightly
+          - devel-nightly
         env:
           - files: '["test/integration/lib/routes/event/log.test.js"]'
             grep: 'Path as query param'
@@ -34,7 +35,10 @@ jobs:
             grep: 'Path as body param'
 
           - files: '["test/integration/lib/routes/history/traverse.test.js"]'
-            grep: 'with filters'
+            grep: 'with filters.*bfs=false'
+
+          - files: '["test/integration/lib/routes/history/traverse.test.js"]'
+            grep: 'with filters.*bfs=true'
 
           - files: '["test/integration/lib/routes/history/traverse.test.js"]'
             grep: 'without filters'
@@ -62,13 +66,19 @@ jobs:
             grep: 'Provider'
 
           - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
-            grep: 'Handlers.*With Filters'
+            grep: 'Handlers.*With Filters.*bfs=false'
+
+          - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
+            grep: 'Handlers.*With Filters.*bfs=true'
 
           - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
             grep: 'Handlers.*Without Filters'
 
           - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
-            grep: 'Provider.*With Filters'
+            grep: 'Provider.*With Filters.*bfs=false'
+
+          - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
+            grep: 'Provider.*With Filters.*bfs=true'
 
           - files: '["test/unit/lib/handlers/traverseHandlers.test.js"]'
             grep: 'Provider.*Without Filters'
@@ -80,7 +90,10 @@ jobs:
           - files: '["test/unit/lib/operations/log/index.test.js"]'
 
           - files: '["test/unit/lib/operations/traverse/index.test.js"]'
-            grep: 'With Filters'
+            grep: 'With Filters.*bfs=false'
+
+          - files: '["test/unit/lib/operations/traverse/index.test.js"]'
+            grep: 'With Filters.*bfs=true'
 
           - files: '["test/unit/lib/operations/traverse/index.test.js"]'
             grep: 'Without Filters'
