@@ -10,7 +10,7 @@ const { removeMultiple } = require('../../../lib/handlers/removeHandlers')
 const purge = require('../../../lib/operations/purge')
 const restore = require('../../../lib/operations/restore')
 const cytoscape = require('cytoscape')
-const { COLL_TYPES_REF, COLLECTION_TYPES, SERVICE_COLLECTIONS } = require('../../../lib/constants')
+const { COLL_TYPES_REF, COLLECTION_TYPES } = require('../../../lib/constants')
 
 const RG2CY_TYPE_MAP = {
   vertex: 'nodes',
@@ -90,16 +90,16 @@ module.exports = function loadSampleData (testDataCollections) {
     'dwarfPlanets', 'lineage')
   const colls = mapValues(sampleDataCollections, collName => db._collection(collName))
   const { rawData, stars, planets, moons, asteroids, comets, dwarfPlanets, lineage } = colls
-  const {
-    events,
-    commands,
-    snapshots,
-    snapshotLinks,
-    evtSSLinks,
-    skeletonEdgeHubs,
-    skeletonEdgeSpokes,
-    skeletonVertices
-  } = mapValues(SERVICE_COLLECTIONS, collName => db._collection(collName))
+  // const {
+  //   events,
+  //   commands,
+  //   snapshots,
+  //   snapshotLinks,
+  //   evtSSLinks,
+  //   skeletonEdgeHubs,
+  //   skeletonEdgeSpokes,
+  //   skeletonVertices
+  // } = mapValues(SERVICE_COLLECTIONS, collName => db._collection(collName))
 
   // Init results
   const results = {
@@ -610,8 +610,8 @@ module.exports = function loadSampleData (testDataCollections) {
     results.vertexCollections = invokeMap(g._vertexCollections(), 'name')
     results.edgeCollections = invokeMap(g._edgeCollections(), 'name')
 
-    results.cyGraphs.eventLog = loadCy([events, commands, snapshots, snapshotLinks, evtSSLinks])
-    results.cyGraphs.skeleton = loadCy([skeletonEdgeHubs, skeletonEdgeSpokes, skeletonVertices])
+    // results.cyGraphs.eventLog = loadCy([events, commands, snapshots, snapshotLinks, evtSSLinks])
+    // results.cyGraphs.skeleton = loadCy([skeletonEdgeHubs, skeletonEdgeSpokes, skeletonVertices])
   }
 
   console.log('Milestones: %o', results.milestones)
