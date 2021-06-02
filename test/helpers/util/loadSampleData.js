@@ -24,7 +24,10 @@ const RG2CY_FIELD_MAP = {
 
 // Private
 function rg2cy (data) {
-  const result = []
+  const result = {
+    nodes: [],
+    edges: []
+  }
 
   for (const el of data) {
     const group = RG2CY_TYPE_MAP[el.type]
@@ -40,7 +43,7 @@ function rg2cy (data) {
       }
       item.coll = item.id.split('/')[0]
 
-      result.push({
+      result[group].push({
         group,
         data: item
       })
@@ -71,7 +74,8 @@ function loadCy (colls) {
 
   const cy = cytoscape()
   cy.startBatch()
-  cy.add(els)
+  cy.add(els.nodes)
+  cy.add(els.edges)
   cy.endBatch()
 
   return cy
