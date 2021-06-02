@@ -111,7 +111,7 @@ describe('Commit Helpers - getTransientOrCreateLatestSnapshot', () => {
 
     expect(ssNode).to.be.an.instanceOf(Object)
     expect(ssData.hopsFromLast).to.equal(2)
-    expect(ssData.prevSSid).to.be.undefined
+    expect(ssData.prevSSid).to.equal(ssNode._id)
   })
 })
 
