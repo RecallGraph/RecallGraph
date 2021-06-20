@@ -9,7 +9,7 @@ It is a [Foxx Microservice](https://www.arangodb.com/why-arangodb/foxx/) for [Ar
 features _VCS-like_ semantics in many parts of its interface, and is backed by a transactional event tracker. It is
 currently being developed and tested on ArangoDB v3.6, with support for v3.7 in the pipeline.
 
-**Example: [A Time-Travelling Mind Map Tool](https://hivemind-git-development-adityamukho.vercel.app/).**
+**Example: [A Time-Travelling Mind Map Tool](https://hivemind.vercel.app/).**
 
 ---
 
