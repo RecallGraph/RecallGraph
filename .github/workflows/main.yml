@@ -21,7 +21,7 @@ jobs:
         arangodb-version:
           - 3.6-nightly
           - 3.7-nightly
-          - devel-nightly
+          - 3.8-nightly
         env:
           - files: '["test/integration/lib/routes/event/log.test.js"]'
             grep: 'Path as query param'
