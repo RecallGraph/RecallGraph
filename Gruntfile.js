@@ -115,7 +115,7 @@ module.exports = function (grunt) {
     installSvcDeps: {
       command: ['build', 'npm', 'install'],
       options: {
-        '--only': 'prod'
+        '--omit': 'dev'
       },
       flags: ['--no-package-lock', '--no-audit', '--prefer-offline']
     },
