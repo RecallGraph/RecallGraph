@@ -23,6 +23,8 @@
 > If you came here looking for a versioned graph store, Minigraf is
 > where that work continues. This repository remains available as-is
 > for reference and for existing ArangoDB 3.x deployments.
+>
+> *Background on the transition: [Minigraf — A Spiritual Successor to RecallGraph](https://adityamukho.com/minigraf-a-spiritual-successor-to-recallgraph).*
 
 # RecallGraph - A versioning data store for time-variant graph data.
 RecallGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone
