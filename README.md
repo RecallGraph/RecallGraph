@@ -1,5 +1,29 @@
 ![Logo](assets/Rg-1-bg.jpg)
 
+> ## 📢 Project status: archived — successor project: [Minigraf](https://github.com/project-minigraf/minigraf)
+>
+> RecallGraph is no longer under active development. The core idea,
+> that graphs should retain every change they have been through, and
+> let you query any past state as easily as the present, is being
+> carried forward in a new project: **[Minigraf](https://github.com/project-minigraf/minigraf)**.
+>
+> Minigraf is a spiritual successor, not a port. It addresses the same
+> problem space with a different technology stack:
+>
+> - **Bi-temporal by design**: both transaction time and valid time.
+>   Valid-time support was on RecallGraph's roadmap but never shipped;
+>   in Minigraf it is first-class.
+> - **Embedded, single-file**: one `.graph` file, no ArangoDB
+>   instance, no Foxx deployment. SQLite-style operational footprint.
+> - **Datalog queries**: recursive rules and point-in-time traversals
+>   as native query operators rather than dedicated REST endpoints.
+> - **Rust core**: runs natively, in WebAssembly, on mobile, and
+>   embedded directly inside application processes.
+>
+> If you came here looking for a versioned graph store, Minigraf is
+> where that work continues. This repository remains available as-is
+> for reference and for existing ArangoDB 3.x deployments.
+
 # RecallGraph - A versioning data store for time-variant graph data.
 RecallGraph is a _versioned-graph_ data store - it retains all changes that its data (vertices and edges) have gone
 through to reach their current state. It supports _point-in-time_ graph traversals, letting the user query any past
